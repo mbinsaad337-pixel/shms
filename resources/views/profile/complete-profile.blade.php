@@ -1,0 +1,836 @@
+@extends('layouts.app')
+@section('title', 'استكمال الملف الشخصي')
+
+@push('styles')
+<style>
+    .section-card { @apply bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-6; }
+    .section-header { @apply flex items-center gap-3 px-6 py-4 border-b border-gray-100; }
+    .section-body { @apply p-6; }
+    .field-label { @apply block text-sm font-bold text-gray-700 font-cairo mb-1.5; }
+    .field-input { @apply w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none font-almarai text-sm transition-all bg-gray-50/50; }
+    .field-select { @apply w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none font-almarai text-sm bg-white transition-all; }
+    .required-star { @apply text-red-500 ml-0.5; }
+    .step-dot { @apply w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all; }
+</style>
+@endpush
+
+@section('content')
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 py-8" dir="rtl">
+    <div class="container mx-auto px-4 max-w-4xl">
+
+        {{-- Header --}}
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 mb-4">
+                <i class="fas fa-id-card text-primary text-2xl"></i>
+            </div>
+            <h1 class="text-2xl font-black text-gray-800 font-cairo">استكمال الملف الشخصي</h1>
+            <p class="text-gray-500 font-almarai text-sm mt-1">يرجى تعبئة جميع البيانات بدقة — ستُراجع من قِبل الإدارة</p>
+        </div>
+
+        {{-- Success Message --}}
+        @if(session('success'))
+        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-6 flex items-center gap-3">
+            <i class="fas fa-check-circle text-emerald-500"></i>
+            <p class="text-emerald-800 font-bold font-cairo text-sm">{{ session('success') }}</p>
+        </div>
+        @endif
+
+        <form action="{{ route('profile.complete.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            @csrf
+
+            {{-- ═══════════════════════════════ Global Errors Alert ═══════════════════════════════ --}}
+            @if($errors->any())
+                <div class="bg-red-50 border-r-4 border-red-500 rounded-2xl p-6 mb-6 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4 text-red-700">
+                        <i class="fas fa-exclamation-triangle text-xl"></i>
+                        <h3 class="font-black font-cairo">يرجى تصحيح الأخطاء التالية قبل المحاولة مرة أخرى:</h3>
+                    </div>
+                    <ul class="list-disc list-inside space-y-1">
+                        @foreach($errors->all() as $error)
+                            <li class="text-red-600 font-almarai text-xs font-bold leading-relaxed">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            {{-- ═══════════════════════════════ 1. المعلومات الشخصية ═══════════════════════════════ --}}
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gradient-to-l from-blue-50 to-indigo-50">
+                    <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center">
+                        <i class="fas fa-user text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-black text-gray-800 font-cairo text-sm">١. المعلومات الشخصية</h2>
+                        <p class="text-gray-400 text-xs font-almarai">البيانات الأساسية للطالب</p>
+                    </div>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">الاسم الرباعي <span class="text-red-500">*</span></label>
+                        <input type="text" name="name_ar" value="{{ old('name_ar', $student->name_ar) }}" required
+                            class="field-input @error('name_ar') border-red-500 @enderror">
+                        @error('name_ar') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">Full Name (English)</label>
+                        <input type="text" name="name_en" value="{{ old('name_en', $student->name_en) }}" dir="ltr"
+                            class="field-input @error('name_en') border-red-500 @enderror" placeholder="As in Passport (Optional)">
+                        @error('name_en') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">اللقب</label>
+                        <input type="text" name="surname" value="{{ old('surname', $student->surname) }}"
+                            class="w-full px-4 py-3 border @error('surname') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="اللقب / الكنية">
+                        @error('surname') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">تاريخ الميلاد <span class="text-red-500">*</span></label>
+                        <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $student->date_of_birth?->format('Y-m-d')) }}" required
+                            class="w-full px-4 py-3 border @error('date_of_birth') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                        @error('date_of_birth') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">مكان الميلاد</label>
+                        <input type="text" name="place_of_birth" value="{{ old('place_of_birth', $student->place_of_birth) }}"
+                            class="w-full px-4 py-3 border @error('place_of_birth') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="المدينة / المحافظة">
+                        @error('place_of_birth') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">المدينة الحالية</label>
+                        <input type="text" name="city" value="{{ old('city', $student->city) }}"
+                            class="w-full px-4 py-3 border @error('city') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="المدينة التي تقيم فيها">
+                        @error('city') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">رقم البطاقة / الجواز</label>
+                        <input type="text" name="id_card_number" value="{{ old('id_card_number', $student->id_card_number) }}"
+                            class="w-full px-4 py-3 border @error('id_card_number') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="رقم الوثيقة">
+                        @error('id_card_number') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">مصدر البطاقة</label>
+                        <input type="text" name="id_card_source" value="{{ old('id_card_source', $student->id_card_source) }}"
+                            class="w-full px-4 py-3 border @error('id_card_source') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="الجهة المُصدِرة">
+                        @error('id_card_source') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">تاريخ البطاقة</label>
+                        <input type="date" name="id_card_date" value="{{ old('id_card_date', $student->id_card_date?->format('Y-m-d')) }}"
+                            class="w-full px-4 py-3 border @error('id_card_date') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                        @error('id_card_date') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">الجنسية <span class="text-red-500">*</span></label>
+                        <input type="text" name="nationality" value="{{ old('nationality', $student->nationality) }}" required
+                            class="w-full px-4 py-3 border @error('nationality') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="يمني / ...">
+                        @error('nationality') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">الحالة الاجتماعية</label>
+                        <select name="marital_status"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-white transition-all">
+                            <option value="">-- اختر --</option>
+                            @foreach(['single'=>'أعزب','married'=>'متزوج','divorced'=>'مطلق','widowed'=>'أرمل'] as $val=>$lbl)
+                                <option value="{{ $val }}" {{ old('marital_status',$student->marital_status)==$val?'selected':'' }}>{{ $lbl }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">عدد أفراد الأسرة المعالة</label>
+                        <input type="number" name="dependents_count" value="{{ old('dependents_count', $student->dependents_count ?? 0) }}" min="0" max="30"
+                            class="w-full px-4 py-3 border @error('dependents_count') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                        @error('dependents_count') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="md:col-span-3">
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-2">الحالة الصحية</label>
+                        <div class="flex gap-6">
+                            @foreach(['good'=>'جيدة','average'=>'متوسطة','weak'=>'ضعيفة'] as $val=>$lbl)
+                            <label class="flex items-center gap-2 cursor-pointer group">
+                                <input type="radio" name="health_status" value="{{ $val }}"
+                                    {{ old('health_status',$student->health_status??'good')==$val?'checked':'' }}
+                                    class="w-4 h-4 text-primary border-gray-300 focus:ring-primary">
+                                <span class="font-almarai text-sm text-gray-700 group-hover:text-primary transition-colors">{{ $lbl }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+                        @error('health_status') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">رقم الجوال <span class="text-red-500">*</span></label>
+                        <input type="tel" name="phone" value="{{ old('phone', $student->phone) }}" required
+                            class="w-full px-4 py-3 border @error('phone') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="07XXXXXXXX">
+                        @error('phone') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">البريد الإلكتروني <span class="text-red-500">*</span></label>
+                        <input type="email" name="email" value="{{ old('email', $student->email) }}" required
+                            class="w-full px-4 py-3 border @error('email') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="student@example.com">
+                        @error('email') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                </div>
+            </div>
+
+            {{-- ═══════════════════════════════ 2. العنوان الدائم ═══════════════════════════════ --}}
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gradient-to-l from-emerald-50 to-teal-50">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center">
+                        <i class="fas fa-map-marker-alt text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-black text-gray-800 font-cairo text-sm">٢. العنوان الدائم</h2>
+                        <p class="text-gray-400 text-xs font-almarai">موقع السكن الأصلي</p>
+                    </div>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">المحافظة</label>
+                        <input type="text" name="governorate" value="{{ old('governorate', $student->governorate) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="المحافظة">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">المديرية</label>
+                        <input type="text" name="district" value="{{ old('district', $student->district) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="المديرية">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">القرية</label>
+                        <input type="text" name="village" value="{{ old('village', $student->village) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="القرية / الحي">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">هاتف المنزل</label>
+                        <input type="tel" name="home_phone" value="{{ old('home_phone', $student->home_phone) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="هاتف ثابت">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">العنوان التفصيلي</label>
+                        <input type="text" name="permanent_address" value="{{ old('permanent_address', $student->permanent_address) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="وصف تفصيلي للعنوان">
+                    </div>
+                </div>
+            </div>
+
+            {{-- ═══════════════════════════════ 3. المؤهل التعليمي ═══════════════════════════════ --}}
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gradient-to-l from-violet-50 to-purple-50">
+                    <div class="w-9 h-9 rounded-xl bg-violet-600 flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-black text-gray-800 font-cairo text-sm">٣. المؤهل التعليمي</h2>
+                        <p class="text-gray-400 text-xs font-almarai">آخر شهادة حصلت عليها</p>
+                    </div>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">آخر شهادة حصل عليها</label>
+                        <input type="text" name="last_certificate" value="{{ old('last_certificate', $student->last_certificate) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="ثانوية عامة / بكالوريوس / ...">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">التخصص</label>
+                        <input type="text" name="last_cert_major" value="{{ old('last_cert_major', $student->last_cert_major) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="التخصص">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">التقدير</label>
+                        <select name="last_cert_grade"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-white transition-all">
+                            <option value="">-- التقدير --</option>
+                            @foreach(['امتياز','ممتاز','جيد جداً','جيد','مقبول','ضعيف'] as $g)
+                                <option value="{{ $g }}" {{ old('last_cert_grade',$student->last_cert_grade)==$g?'selected':'' }}>{{ $g }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">سنة التخرج</label>
+                        <input type="number" name="graduation_year" value="{{ old('graduation_year', $student->graduation_year) }}"
+                            min="1990" max="2030" placeholder="2024"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">المدرسة / الجهة المتخرج منها</label>
+                        <input type="text" name="graduated_school" value="{{ old('graduated_school', $student->graduated_school) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="اسم المدرسة أو الجامعة">
+                    </div>
+                </div>
+            </div>
+
+            {{-- ═══════════════════════════════ 4. معلومات الجامعة الحالية ═══════════════════════════════ --}}
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gradient-to-l from-amber-50 to-orange-50">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500 flex items-center justify-center">
+                        <i class="fas fa-university text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-black text-gray-800 font-cairo text-sm">٤. الجامعة الحالية</h2>
+                        <p class="text-gray-400 text-xs font-almarai">بيانات الدراسة الجامعية الحالية</p>
+                    </div>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">الرقم الجامعي <span class="text-red-500">*</span></label>
+                        <input type="text" name="student_number" value="{{ old('student_number', $student->student_number) }}" required
+                            class="w-full px-4 py-3 border @error('student_number') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all"
+                            placeholder="442XXXXXX">
+                        @error('student_number') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">الجامعة <span class="text-red-500">*</span></label>
+                        <input type="text" name="university" value="{{ old('university', $student->university) }}" required
+                            class="w-full px-4 py-3 border @error('university') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                        @error('university') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">الكلية <span class="text-red-500">*</span></label>
+                        <input type="text" name="college" value="{{ old('college', $student->college) }}" required
+                            class="w-full px-4 py-3 border @error('college') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                        @error('college') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">التخصص <span class="text-red-500">*</span></label>
+                        <input type="text" name="major" value="{{ old('major', $student->major) }}" required
+                            class="w-full px-4 py-3 border @error('major') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                        @error('major') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">المستوى الدراسي <span class="text-red-500">*</span></label>
+                        <select name="academic_level" required
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-white transition-all">
+                            @foreach(['1'=>'الأول','2'=>'الثاني','3'=>'الثالث','4'=>'الرابع','5'=>'الخامس','6'=>'السادس','7'=>'السابع','8'=>'الثامن','superior'=>'دراسات عليا'] as $v=>$l)
+                                <option value="{{ $v }}" {{ old('academic_level',$student->academic_level)==$v?'selected':'' }}>المستوى {{ $l }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">السنة الدراسية الحالية</label>
+                        <input type="text" name="current_academic_year" value="{{ old('current_academic_year', $student->current_academic_year) }}"
+                            placeholder="2024/2025"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">تاريخ الالتحاق</label>
+                        <input type="date" name="enrollment_date" value="{{ old('enrollment_date', $student->enrollment_date?->format('Y-m-d')) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">مدة الدراسة</label>
+                        <input type="text" name="study_duration" value="{{ old('study_duration', $student->study_duration) }}"
+                            placeholder="4 سنوات"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">الفترة المتبقية</label>
+                        <input type="text" name="remaining_period" value="{{ old('remaining_period', $student->remaining_period) }}"
+                            placeholder="سنتان"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">التاريخ المتوقع للتخرج</label>
+                        <input type="date" name="expected_graduation" value="{{ old('expected_graduation', $student->expected_graduation?->format('Y-m-d')) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                    </div>
+                    <div class="md:col-span-3">
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">الأعمال والمهارات التي تجيدها</label>
+                        <textarea name="skills" rows="2"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all resize-none"
+                            placeholder="مثال: الحاسوب، التصوير، الخطابة، الصيانة...">{{ old('skills', $student->skills) }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ═══════════════════════════════ 5. ولي الأمر ═══════════════════════════════ --}}
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gradient-to-l from-rose-50 to-pink-50">
+                    <div class="w-9 h-9 rounded-xl bg-rose-500 flex items-center justify-center">
+                        <i class="fas fa-user-shield text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-black text-gray-800 font-cairo text-sm">٥. ولي الأمر / المسؤول</h2>
+                        <p class="text-gray-400 text-xs font-almarai">الشخص المسؤول عن الطالب</p>
+                    </div>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">الاسم <span class="text-red-500">*</span></label>
+                        <input type="text" name="guardian_name" value="{{ old('guardian_name', $student->guardian_name) }}" required
+                            class="w-full px-4 py-3 border @error('guardian_name') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                        @error('guardian_name') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">صلة القرابة <span class="text-red-500">*</span></label>
+                        <input type="text" name="guardian_relation" value="{{ old('guardian_relation', $student->guardian_relation) }}" required
+                            placeholder="أب / أخ / عم ..."
+                            class="w-full px-4 py-3 border @error('guardian_relation') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                        @error('guardian_relation') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">رقم الهاتف <span class="text-red-500">*</span></label>
+                        <input type="tel" name="guardian_phone" value="{{ old('guardian_phone', $student->guardian_phone) }}" required
+                            class="w-full px-4 py-3 border @error('guardian_phone') border-red-500 @else border-gray-200 @enderror rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                        @error('guardian_phone') <p class="text-red-500 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">المستوى العلمي</label>
+                        <input type="text" name="guardian_education" value="{{ old('guardian_education', $student->guardian_education) }}"
+                            placeholder="جامعي / ثانوي ..."
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">عمله الحالي</label>
+                        <input type="text" name="guardian_job" value="{{ old('guardian_job', $student->guardian_job) }}"
+                            placeholder="مدرس / موظف / تاجر ..."
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                    </div>
+
+                    {{-- Emergency Contact (same section) --}}
+                    <div class="md:col-span-3 pt-3 border-t border-gray-100 mt-2">
+                        <p class="text-xs font-bold text-gray-500 font-cairo uppercase tracking-wide mb-3">جهة اتصال الطوارئ (اختياري - إذا كانت مختلفة)</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">اسم شخص الطوارئ</label>
+                        <input type="text" name="emergency_name" value="{{ old('emergency_name', $student->emergency_name) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">صلة القرابة</label>
+                        <input type="text" name="emergency_relation" value="{{ old('emergency_relation', $student->emergency_relation) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">رقم هاتف الطوارئ</label>
+                        <input type="tel" name="emergency_phone" value="{{ old('emergency_phone', $student->emergency_phone) }}"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                    </div>
+                </div>
+            </div>
+
+            {{-- ═══════════════════════════════ 6. معلومات الأسرة ═══════════════════════════════ --}}
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gradient-to-l from-cyan-50 to-sky-50">
+                    <div class="w-9 h-9 rounded-xl bg-cyan-600 flex items-center justify-center">
+                        <i class="fas fa-users text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-black text-gray-800 font-cairo text-sm">٦. معلومات الأسرة</h2>
+                        <p class="text-gray-400 text-xs font-almarai">تفاصيل الوضع الأسري والمعيشي</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">عدد الذكور</label>
+                            <input type="number" name="family_males" value="{{ old('family_males', $student->family_males ?? 0) }}" min="0" max="30"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">عدد الإناث</label>
+                            <input type="number" name="family_females" value="{{ old('family_females', $student->family_females ?? 0) }}" min="0" max="30"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">متوسط دخل الفرد (ر.ي)</label>
+                            <input type="number" name="family_avg_income" value="{{ old('family_avg_income', $student->family_avg_income) }}" min="0" step="100"
+                                placeholder="0"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai text-sm bg-gray-50/50 transition-all">
+                        </div>
+                    </div>
+
+                    {{-- Workers Table --}}
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <label class="text-sm font-bold text-gray-700 font-cairo">العاملون من أفراد الأسرة</label>
+                            <button type="button" onclick="addWorkerRow()"
+                                class="flex items-center gap-1.5 bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold font-cairo transition-all">
+                                <i class="fas fa-plus text-xs"></i> إضافة
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto rounded-xl border border-gray-200">
+                            <table class="w-full text-sm" id="workersTable">
+                                <thead class="bg-gray-50">
+                                    <tr class="text-center">
+                                        <th class="px-3 py-2.5 font-cairo text-xs text-gray-500 font-bold border-b border-gray-200">م</th>
+                                        <th class="px-3 py-2.5 font-cairo text-xs text-gray-500 font-bold border-b border-gray-200">الاسم</th>
+                                        <th class="px-3 py-2.5 font-cairo text-xs text-gray-500 font-bold border-b border-gray-200">الوظيفة</th>
+                                        <th class="px-3 py-2.5 font-cairo text-xs text-gray-500 font-bold border-b border-gray-200">المؤسسة</th>
+                                        <th class="px-3 py-2.5 font-cairo text-xs text-gray-500 font-bold border-b border-gray-200">الهاتف</th>
+                                        <th class="px-3 py-2.5 font-cairo text-xs text-gray-500 font-bold border-b border-gray-200"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="workersBody">
+                                    @php
+                                        $existingWorkers = $student->family_workers ?? [];
+                                        if (empty($existingWorkers)) $existingWorkers = [['name'=>'','job'=>'','organization'=>'','phone'=>'']];
+                                    @endphp
+                                    @foreach($existingWorkers as $i => $w)
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
+                                        <td class="px-3 py-2 text-center text-gray-400 text-xs font-mono worker-num">{{ $i + 1 }}</td>
+                                        <td class="px-2 py-2"><input type="text" name="workers[{{ $i }}][name]" value="{{ $w['name'] ?? '' }}" placeholder="الاسم" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg font-almarai text-xs focus:ring-1 focus:ring-primary outline-none bg-gray-50/50"></td>
+                                        <td class="px-2 py-2"><input type="text" name="workers[{{ $i }}][job]" value="{{ $w['job'] ?? '' }}" placeholder="الوظيفة" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg font-almarai text-xs focus:ring-1 focus:ring-primary outline-none bg-gray-50/50"></td>
+                                        <td class="px-2 py-2"><input type="text" name="workers[{{ $i }}][organization]" value="{{ $w['organization'] ?? '' }}" placeholder="المؤسسة" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg font-almarai text-xs focus:ring-1 focus:ring-primary outline-none bg-gray-50/50"></td>
+                                        <td class="px-2 py-2"><input type="tel" name="workers[{{ $i }}][phone]" value="{{ $w['phone'] ?? '' }}" placeholder="الهاتف" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg font-almarai text-xs focus:ring-1 focus:ring-primary outline-none bg-gray-50/50"></td>
+                                        <td class="px-2 py-2 text-center"><button type="button" onclick="removeWorkerRow(this)" class="text-red-400 hover:text-red-600 transition-colors"><i class="fas fa-trash-alt text-xs"></i></button></td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-xs text-gray-400 font-almarai mt-2">اترك الحقول فارغة إذا لم يكن هناك عاملون</p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ═══════════════════════════════ 7. المرفقات الثبوتية ═══════════════════════════════ --}}
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gradient-to-l from-indigo-50 to-blue-50">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center">
+                        <i class="fas fa-file-upload text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-black text-gray-800 font-cairo text-sm">٧. المرفقات والمستندات</h2>
+                        <p class="text-gray-400 text-xs font-almarai">يرجى رفع صور واضحة (JPG, PNG) أو ملفات PDF</p>
+                    </div>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {{-- Personal Photo --}}
+                    <div class="space-y-2">
+                        <label class="field-label">الصورة الشخصية <span class="text-red-500">*</span></label>
+                        <div class="relative group">
+                            <input type="file" name="photo" accept=".pdf,image/*"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                onchange="updateFileName(this)">
+                            <div class="flex items-center gap-3 px-4 py-8 border-2 border-dashed border-gray-200 rounded-2xl group-hover:border-primary/50 transition-all bg-gray-50/30 group-hover:bg-primary/5">
+                                <div class="w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-primary shadow-sm">
+                                    <i class="fas fa-user-circle text-xl"></i>
+                                </div>
+                                <div class="flex-1 overflow-hidden">
+                                    <p class="text-xs font-bold text-gray-700 font-cairo truncate file-name">إختر صورة شخصية...</p>
+                                    <p class="text-[10px] text-gray-400 font-almarai mt-0.5">JPG, PNG, PDF (بحد أقصى 10MB)</p>
+                                </div>
+                            </div>
+                        </div>
+                        @if($student->photo)
+                            <p class="text-[10px] text-emerald-600 font-almarai px-2"><i class="fas fa-check-circle"></i> تم رفع ملف مسبقاً</p>
+                        @endif
+                    </div>
+
+                    {{-- National ID --}}
+                    <div class="space-y-2">
+                        <label class="field-label">البطاقة الشخصية / الجواز <span class="text-red-500">*</span></label>
+                        <div class="relative group">
+                            <input type="file" name="id_card_file" accept=".pdf,image/*"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                onchange="updateFileName(this)">
+                            <div class="flex items-center gap-3 px-4 py-8 border-2 border-dashed border-gray-200 rounded-2xl group-hover:border-primary/50 transition-all bg-gray-50/30 group-hover:bg-primary/5">
+                                <div class="w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-primary shadow-sm">
+                                    <i class="fas fa-id-badge text-xl"></i>
+                                </div>
+                                <div class="flex-1 overflow-hidden">
+                                    <p class="text-xs font-bold text-gray-700 font-cairo truncate file-name">إختر ملف البطاقة...</p>
+                                    <p class="text-[10px] text-gray-400 font-almarai mt-0.5">PDF or Image (Max 10MB)</p>
+                                </div>
+                            </div>
+                        </div>
+                        @if($student->id_card_file)
+                            <p class="text-[10px] text-emerald-600 font-almarai px-2"><i class="fas fa-check-circle"></i> تم رفع ملف مسبقاً</p>
+                        @endif
+                    </div>
+
+                    {{-- Certificate --}}
+                    <div class="space-y-2">
+                        <label class="field-label">آخر شهادة دراسية <span class="text-red-500">*</span></label>
+                        <div class="relative group">
+                            <input type="file" name="certificate_file" accept=".pdf,image/*"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                onchange="updateFileName(this)">
+                            <div class="flex items-center gap-3 px-4 py-8 border-2 border-dashed border-gray-200 rounded-2xl group-hover:border-primary/50 transition-all bg-gray-50/30 group-hover:bg-primary/5">
+                                <div class="w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-primary shadow-sm">
+                                    <i class="fas fa-file-contract text-xl"></i>
+                                </div>
+                                <div class="flex-1 overflow-hidden">
+                                    <p class="text-xs font-bold text-gray-700 font-cairo truncate file-name">إختر ملف الشهادة...</p>
+                                    <p class="text-[10px] text-gray-400 font-almarai mt-0.5">PDF or Image (Max 10MB)</p>
+                                </div>
+                            </div>
+                        </div>
+                        @if($student->certificate_file)
+                            <p class="text-[10px] text-emerald-600 font-almarai px-2"><i class="fas fa-check-circle"></i> تم رفع ملف مسبقاً</p>
+                        @endif
+                    </div>
+
+                    {{-- University Card --}}
+                    <div class="space-y-2">
+                        <label class="field-label">البطاقة الجامعية <span class="text-red-500">*</span></label>
+                        <div class="relative group">
+                            <input type="file" name="university_card_file" accept=".pdf,image/*"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                onchange="updateFileName(this)">
+                            <div class="flex items-center gap-3 px-4 py-8 border-2 border-dashed border-gray-200 rounded-2xl group-hover:border-primary/50 transition-all bg-gray-50/30 group-hover:bg-primary/5">
+                                <div class="w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-primary shadow-sm">
+                                    <i class="fas fa-university text-xl"></i>
+                                </div>
+                                <div class="flex-1 overflow-hidden">
+                                    <p class="text-xs font-bold text-gray-700 font-cairo truncate file-name">إختر ملف البطاقة الجامعية...</p>
+                                    <p class="text-[10px] text-gray-400 font-almarai mt-0.5">PDF or Image (Max 10MB)</p>
+                                </div>
+                            </div>
+                        </div>
+                        @if($student->university_card_file)
+                            <p class="text-[10px] text-emerald-600 font-almarai px-2"><i class="fas fa-check-circle"></i> تم رفع ملف مسبقاً</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-l from-gray-800 to-gray-900 rounded-2xl p-6 text-right">
+                <h3 class="text-white font-black font-cairo text-sm mb-3">📋 التعهد والإقرار</h3>
+                <p class="text-gray-300 text-xs font-almarai leading-relaxed mb-4">
+                    أتعهد أنا الموقع أدناه بأن أكون على خلق حسن وتعامل طيب مع الآخرين، وأن أكون مجداً ومجتهداً في دروسي وأن
+                    أتلزم بلوائح وأنظمة المركز والتعامل الحسن مع الإدارة والمحافظة على نظافة المركز وأتحمل مسؤولية أي محتويات
+                    قدمتها وأن ذلك خلاف ما أعلاه دما سلبيه، فإنني حينئذ أتحمل المسؤولية المترتبة على ذلك.
+                </p>
+                <label class="flex items-start gap-3 cursor-pointer group">
+                    <input type="checkbox" name="pledge" required value="1"
+                        class="mt-0.5 w-4 h-4 text-primary border-gray-400 rounded focus:ring-primary @error('pledge') border-red-500 @enderror">
+                    <span class="text-gray-300 text-xs font-almarai leading-relaxed group-hover:text-white transition-colors">
+                        أقر بصحة جميع المعلومات المدخلة وأتعهد بالالتزام باللوائح والأنظمة المعمول بها في المركز. <span class="text-red-400">*</span>
+                    </span>
+                </label>
+                @error('pledge') <p class="text-red-400 text-[10px] font-bold mt-1 font-cairo"><i class="fas fa-exclamation-circle ml-1"></i> {{ $message }}</p> @enderror
+            </div>
+
+            {{-- Submit Button --}}
+            <div class="pb-8">
+                <button type="submit" id="submitBtn"
+                    class="w-full py-4 bg-primary hover:bg-primary/90 text-white rounded-2xl font-black font-cairo text-lg transition-all shadow-xl shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-0.5 transform flex items-center justify-center gap-3">
+                    <i class="fas fa-save text-xl"></i>
+                    حفظ جميع البيانات وإرسالها للمراجعة
+                </button>
+                <p class="text-center text-gray-400 text-xs font-almarai mt-3">
+                    ستُراجَع بياناتك من قِبل الإدارة قبل اعتمادها • الحقول المميزة بـ <span class="text-red-500">*</span> مطلوبة
+                </p>
+            </div>
+
+        </form>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+    let workerIndex = {{ count($student->family_workers ?? [['']]) }};
+    
+    function updateFileName(input) {
+        if (input.files && input.files[0]) {
+            const fileName = input.files[0].name;
+            const label = input.closest('.relative').querySelector('.file-name');
+            if (label) {
+                label.textContent = fileName;
+                label.classList.remove('text-gray-400');
+                label.classList.add('text-primary');
+            }
+        }
+    }
+
+    function addWorkerRow() {
+        const tbody = document.getElementById('workersBody');
+        const row = document.createElement('tr');
+        row.className = 'border-b border-gray-100 hover:bg-gray-50/50 transition-colors';
+        row.innerHTML = `
+            <td class="px-3 py-2 text-center text-gray-400 text-xs font-mono worker-num"></td>
+            <td class="px-2 py-2"><input type="text" name="workers[${workerIndex}][name]" placeholder="الاسم" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg font-almarai text-xs focus:ring-1 focus:ring-primary outline-none bg-gray-50/50"></td>
+            <td class="px-2 py-2"><input type="text" name="workers[${workerIndex}][job]" placeholder="الوظيفة" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg font-almarai text-xs focus:ring-1 focus:ring-primary outline-none bg-gray-50/50"></td>
+            <td class="px-2 py-2"><input type="text" name="workers[${workerIndex}][organization]" placeholder="المؤسسة" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg font-almarai text-xs focus:ring-1 focus:ring-primary outline-none bg-gray-50/50"></td>
+            <td class="px-2 py-2"><input type="tel" name="workers[${workerIndex}][phone]" placeholder="الهاتف" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg font-almarai text-xs focus:ring-1 focus:ring-primary outline-none bg-gray-50/50"></td>
+            <td class="px-2 py-2 text-center"><button type="button" onclick="removeWorkerRow(this)" class="text-red-400 hover:text-red-600 transition-colors"><i class="fas fa-trash-alt text-xs"></i></button></td>
+        `;
+        tbody.appendChild(row);
+        workerIndex++;
+        updateWorkerNumbers();
+    }
+
+    function removeWorkerRow(btn) {
+        const rows = document.querySelectorAll('#workersBody tr');
+        if (rows.length <= 1) return;
+        btn.closest('tr').remove();
+        updateWorkerNumbers();
+    }
+
+    function updateWorkerNumbers() {
+        document.querySelectorAll('#workersBody tr').forEach((row, i) => {
+            const num = row.querySelector('.worker-num');
+            if (num) num.textContent = i + 1;
+        });
+    }
+
+    // --- Ultra-Reliable Auto-Save Draft Feature ---
+    const DRAFT_KEY = 'shms_final_draft_{{ auth()->id() }}';
+    const form = document.querySelector('form');
+
+    const saveIndicator = document.createElement('div');
+    saveIndicator.className = "fixed bottom-4 left-4 bg-navy text-white px-3 py-1.5 rounded-full text-[10px] font-bold font-cairo shadow-2xl z-[9999] transition-opacity opacity-0 flex items-center gap-2";
+    saveIndicator.innerHTML = '<i class="fas fa-sync fa-spin"></i> <span>جاري الحفظ...</span>';
+    document.body.appendChild(saveIndicator);
+
+    function showStatus(text, icon = 'fa-check text-gold') {
+        saveIndicator.style.opacity = '1';
+        saveIndicator.innerHTML = `<i class="fas ${icon}"></i> <span>${text}</span>`;
+        setTimeout(() => { if (saveIndicator.style.opacity === '1' && !saveIndicator.innerHTML.includes('spin')) saveIndicator.style.opacity = '0'; }, 2000);
+    }
+
+    // Restore Values with extra reliability
+    function restoreForm() {
+        const savedDraft = localStorage.getItem(DRAFT_KEY);
+        if (!savedDraft) return;
+
+        try {
+            const data = JSON.parse(savedDraft);
+            let restoredCount = 0;
+
+            // 1. Basic Fields
+            Object.keys(data).forEach(key => {
+                if (key === 'workers') return; // handle separately
+                
+                const value = data[key];
+                if (!value) return; // don't restore empty over defaults
+
+                const inputs = form.querySelectorAll(`[name="${key}"]`);
+                inputs.forEach(input => {
+                    if (input && input.type !== 'file' && !input.readOnly) {
+                        if (input.type === 'radio') {
+                            if (input.value == value) { 
+                                input.checked = true;
+                                restoredCount++;
+                            }
+                        } else if (input.type === 'checkbox') {
+                            input.checked = !!value; 
+                            restoredCount++;
+                        } else {
+                            input.value = value;
+                            restoredCount++;
+                        }
+                        // Important: Trigger events so browser/Vite/Alpine sees the change
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
+                        input.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                });
+            });
+
+            // 2. Dynamic Workers
+            if (data.workers && data.workers.length > 0) {
+                const tbody = document.getElementById('workersBody');
+                tbody.innerHTML = '';
+                data.workers.forEach((worker, i) => {
+                    workerIndex = i;
+                    addWorkerRow();
+                    const row = tbody.lastElementChild;
+                    Object.keys(worker).forEach(wKey => {
+                        const wInput = row.querySelector(`input[name*="[${wKey}]"]`);
+                        if (wInput && worker[wKey]) {
+                            wInput.value = worker[wKey];
+                            wInput.dispatchEvent(new Event('input', { bubbles: true }));
+                            restoredCount++;
+                        }
+                    });
+                });
+            }
+
+            if (restoredCount > 0) {
+                Swal.fire({
+                    toast: true, position: 'top-end', icon: 'success',
+                    title: 'تم استعادة ' + restoredCount + ' حقل بنجاح',
+                    showConfirmButton: false, timer: 3000, timerProgressBar: true,
+                    customClass: { popup: 'font-cairo' }
+                });
+            }
+        } catch (e) { console.error("Restore failed", e); }
+    }
+
+    // Save functionality
+    function saveDraft() {
+        saveIndicator.style.opacity = '1';
+        saveIndicator.innerHTML = '<i class="fas fa-sync fa-spin"></i> <span>جاري الحفظ...</span>';
+        
+        const data = {};
+        const inputs = form.querySelectorAll('input, select, textarea');
+        
+        inputs.forEach(input => {
+            if (input.name && input.type !== 'file' && !input.readOnly && !input.name.startsWith('workers[')) {
+                if (input.type === 'radio' || input.type === 'checkbox') {
+                    if (input.checked) data[input.name] = input.value;
+                } else if (input.value) {
+                    data[input.name] = input.value;
+                }
+            }
+        });
+
+        const workers = [];
+        document.querySelectorAll('#workersBody tr').forEach((row, i) => {
+            const worker = {
+                name: row.querySelector(`input[name*="[name]"]`)?.value,
+                job: row.querySelector(`input[name*="[job]"]`)?.value,
+                organization: row.querySelector(`input[name*="[organization]"]`)?.value,
+                phone: row.querySelector(`input[name*="[phone]"]`)?.value,
+            };
+            if (worker.name) workers.push(worker);
+        });
+        data.workers = workers;
+
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+        showStatus('تم الحفظ');
+    }
+
+    window.addEventListener('load', restoreForm);
+
+    let timeout = null;
+    form.addEventListener('input', (e) => {
+        if (e.target.type === 'file') return;
+        clearTimeout(timeout);
+        timeout = setTimeout(saveDraft, 500);
+    });
+
+    window.addEventListener('beforeunload', saveDraft);
+    
+    form.addEventListener('submit', function(e) {
+        const btn = document.getElementById('submitBtn');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin text-xl"></i> جاري حفظ وإرسال البيانات...';
+        }
+        localStorage.removeItem(DRAFT_KEY);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find global error box or individual field errors
+        const errorElement = document.querySelector('.bg-red-50.border-r-4, .text-red-500.font-bold, .border-red-500');
+        if (errorElement) {
+            setTimeout(() => {
+                errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // If it's an input field error, try to focus the input
+                const input = errorElement.closest('div')?.querySelector('input, select, textarea');
+                if (input) input.focus();
+            }, 500);
+        }
+    });
+</script>
+@endpush

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name') }} - تسجيل الدخول</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Almarai:wght@300;400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        :root {
+            --navy: #004274;
+            --gold: #D4A044;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .bg-navy {
+            background-color: var(--navy);
+        }
+
+        .text-navy {
+            color: var(--navy);
+        }
+
+        .text-gold {
+            color: var(--gold);
+        }
+
+        .border-gold {
+            border-color: var(--gold);
+        }
+
+        .bg-gold {
+            background-color: var(--gold);
+        }
+
+        /* Hero login section */
+        .login-hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #002a50 0%, #004274 60%, #00538f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 3rem 1rem;
+        }
+
+        .login-hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 160, 68, 0.08) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            border-radius: 50%;
+        }
+
+        .login-hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+            bottom: -80px;
+            left: -80px;
+            border-radius: 50%;
+        }
+
+        /* News section */
+        .news-section {
+            background: #f8fafc;
+            padding: 5rem 1.5rem;
+        }
+
+        /* News cards */
+        .news-card {
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 66, 116, 0.06);
+            border: 1px solid #eef2f7;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .news-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0, 66, 116, 0.14);
+        }
+
+        /* Cover container — fixed height wrapper */
+        .news-cover {
+            width: 100%;
+            height: 210px;
+            overflow: hidden;
+            background: #e9f0f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .news-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .news-card:hover .news-cover img {
+            transform: scale(1.06);
+        }
+
+        .read-more-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            padding: 8px 18px;
+            background: #004274;
+            color: white;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            font-family: 'Cairo', sans-serif;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .read-more-btn:hover {
+            background: #D4A044;
+            color: #004274;
+            transform: translateY(-2px);
+        }
+
+        .news-card .cover.placeholder {
+            font-size: 3rem;
+            color: #c8d9e8;
+        }
+
+        /* Scroll indicator */
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(8px);
+            }
+        }
+
+        .bounce {
+            animation: bounce 1.8s ease-in-out infinite;
+        }
+
+        /* News ticker */
+        @keyframes ticker {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .ticker-scroll {
+            animation: ticker 28s linear infinite;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .ticker-scroll:hover {
+            animation-play-state: paused;
+        }
+
+        /* Badge colors */
+        .badge-sports {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .badge-culture {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .badge-achievement {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .badge-general {
+            background: #e0edf7;
+            color: #004274;
+        }
+
+        /* Mobile Global Enhancements */
+        @media (max-width: 768px) {
+            .login-hero {
+                padding: 1.5rem 1rem !important;
+            }
+            .gap-6 {
+                gap: 1rem !important;
+            }
+            img.h-16 {
+                height: 3rem !important;
+            }
+            img.h-14 {
+                height: 2.5rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-cairo antialiased">
+
+    {{-- ═══════════════════════════════════════════ --}}
+    {{-- SECTION 1: Login Hero --}}
+    {{-- ═══════════════════════════════════════════ --}}
+    <section class="login-hero">
+        <div class="w-full max-w-md relative z-10">
+
+            <!-- Logos -->
+            <div class="flex flex-col items-center mb-10">
+                <div class="flex items-center gap-6 mb-5">
+                    <img src="{{ asset('images/logos/scs_logo.png') }}" alt="SCS"
+                        class="h-14 w-auto filter brightness-0 invert">
+                </div>
+                <h1 class="text-xl font-black text-white text-center leading-tight">
+                    منصة إدارة السكنات الطلابية<br>
+                    <span class="text-gold font-almarai text-xs font-bold uppercase tracking-wider">جمعية رعاية طالب العلم</span>
+                </h1>
+            </div>
+
+            <!-- Login Card -->
+            <div class="bg-white p-10 rounded-3xl shadow-2xl border-t-8 border-gold relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 opacity-[0.025]">
+                    <i class="fas fa-shield-alt text-9xl text-navy"></i>
+                </div>
+                @yield('content')
+            </div>
+
+            <!-- Copyright -->
+            <p class="mt-8 text-center text-white/40 text-xs font-almarai">
+                نظام إدارة السكن الطلابي &copy; {{ date('Y') }}<br>
+                <span class="text-[10px] opacity-50">جميع الحقوق محفوظة - جمعية رعاية طالب العلم</span>
+            </p>
+
+            <!-- Scroll Down Hint (shown only when there's news) -->
+            <div id="scrollHint" class="hidden flex-col items-center mt-8 cursor-pointer"
+                onclick="document.getElementById('newsSection').scrollIntoView({behavior:'smooth'})">
+                <p class="text-white/50 text-xs font-almarai mb-2">آخر الأخبار أدناه</p>
+                <div class="bounce text-gold text-xl"><i class="fas fa-chevron-down"></i></div>
+            </div>
+        </div>
+
+        {{-- Moving particles --}}
+        <div class="absolute inset-0 pointer-events-none overflow-hidden">
+            <div class="absolute w-2 h-2 bg-gold/20 rounded-full top-1/4 left-1/4 animate-ping"
+                style="animation-duration:3s"></div>
+            <div class="absolute w-1 h-1 bg-white/10 rounded-full top-3/4 right-1/3 animate-ping"
+                style="animation-duration:4s;animation-delay:1s"></div>
+            <div class="absolute w-1.5 h-1.5 bg-gold/10 rounded-full top-1/2 left-1/6 animate-ping"
+                style="animation-duration:5s;animation-delay:2s"></div>
+        </div>
+    </section>
+
+    {{-- ═══════════════════════════════════════════ --}}
+    {{-- News Ticker Bar --}}
+    {{-- ═══════════════════════════════════════════ --}}
+    <div id="tickerBar" class="hidden bg-navy border-y border-white/10">
+        <div class="flex items-center gap-0">
+            <div class="shrink-0 flex items-center gap-2 bg-gold text-navy px-5 py-2.5 font-black text-xs">
+                <i class="fas fa-satellite-dish animate-pulse"></i>
+                <span>عاجل</span>
+            </div>
+            <div class="overflow-hidden flex-1 py-2" style="height:36px">
+                <div id="tickerContent" class="ticker-scroll gap-10 h-full whitespace-nowrap"></div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ═══════════════════════════════════════════ --}}
+    {{-- SECTION 2: News Feed --}}
+    {{-- ═══════════════════════════════════════════ --}}
+    <section id="newsSection" class="news-section hidden">
+        <div class="max-w-6xl mx-auto">
+
+            <!-- Section Header -->
+            <div class="text-center mb-12">
+                <div
+                    class="inline-flex items-center gap-2 bg-navy/5 text-navy px-5 py-2 rounded-full text-sm font-bold font-cairo mb-4">
+                    <i class="fas fa-newspaper text-gold"></i>
+                    <span>أخبار المراكز السكنية</span>
+                </div>
+                <h2 class="text-4xl font-black text-navy">آخر الأخبار والفعاليات</h2>
+                <p class="text-gray-400 font-almarai mt-3">تابع أحدث أنشطة وأخبار مراكز الإسكان الطلابي</p>
+            </div>
+
+            <!-- News Grid -->
+            <div id="newsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+                <!-- Filled dynamically -->
+                <div class="news-card animate-pulse">
+                    <div class="cover placeholder bg-gray-100"></div>
+                    <div class="p-6 space-y-3">
+                        <div class="h-3 bg-gray-100 rounded w-1/3"></div>
+                        <div class="h-5 bg-gray-100 rounded w-4/5"></div>
+                        <div class="h-3 bg-gray-100 rounded w-full"></div>
+                        <div class="h-3 bg-gray-100 rounded w-2/3"></div>
+                    </div>
+                </div>
+                <div class="news-card animate-pulse hidden md:flex flex-col">
+                    <div class="cover placeholder bg-gray-100"></div>
+                    <div class="p-6 space-y-3">
+                        <div class="h-3 bg-gray-100 rounded w-1/3"></div>
+                        <div class="h-5 bg-gray-100 rounded w-3/4"></div>
+                        <div class="h-3 bg-gray-100 rounded w-full"></div>
+                    </div>
+                </div>
+                <div class="news-card animate-pulse hidden lg:flex flex-col">
+                    <div class="cover placeholder bg-gray-100"></div>
+                    <div class="p-6 space-y-3">
+                        <div class="h-3 bg-gray-100 rounded w-1/4"></div>
+                        <div class="h-5 bg-gray-100 rounded w-4/5"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- Footer --}}
+    <footer id="newsFooter" class="hidden bg-navy py-6 text-center">
+        <p class="text-white/30 text-xs font-almarai">
+            نظام إدارة السكن الطلابي &copy; {{ date('Y') }} — جمعية رعاية طالب العلم
+        </p>
+    </footer>
+
+    <script>
+        const categoryIcons = {
+            sports: { emoji: '⚽', label: 'رياضي', cls: 'badge-sports' },
+            culture: { emoji: '📚', label: 'ثقافي', cls: 'badge-culture' },
+            achievement: { emoji: '🏆', label: 'إنجاز', cls: 'badge-achievement' },
+            general: { emoji: '📰', label: 'عام', cls: 'badge-general' },
+        };
+
+        fetch("{{ route('news.public-feed') }}")
+            .then(r => r.json())
+            .then(items => {
+                if (!items || items.length === 0) return;
+
+                // Show scroll hint
+                document.getElementById('scrollHint').classList.remove('hidden');
+                document.getElementById('scrollHint').classList.add('flex');
+
+                // Show news section & footer
+                document.getElementById('newsSection').classList.remove('hidden');
+                document.getElementById('newsFooter').classList.remove('hidden');
+
+                // ── Ticker ──────────────────────────────
+                const tickerBar = document.getElementById('tickerBar');
+                const tickerContent = document.getElementById('tickerContent');
+                let tickHtml = '';
+                items.forEach(item => {
+                    const info = categoryIcons[item.category] || categoryIcons.general;
+                    tickHtml += `
+                        <span class="inline-flex items-center gap-2 text-white/90 font-almarai text-sm font-bold ml-16">
+                            <span>${info.emoji}</span>
+                            <span style="color:var(--gold)">${item.center?.name ?? ''}</span>
+                            <span class="text-white/40 mx-1">·</span>
+                            <span>${item.title}</span>
+                        </span>
+                        <span class="text-white/15 mx-6 text-lg">◆</span>
+                    `;
+                });
+                tickerContent.innerHTML = tickHtml + tickHtml; // duplicate for loop
+                tickerBar.classList.remove('hidden');
+
+                // ── News Cards ───────────────────────────
+                const grid = document.getElementById('newsGrid');
+                let cardsHtml = '';
+                const baseUrl = "{{ url('/') }}";
+                items.forEach(item => {
+                    const info = categoryIcons[item.category] || categoryIcons.general;
+                    const date = item.published_at
+                        ? new Date(item.published_at).toLocaleDateString('ar-SA', { year:'numeric', month:'long', day: 'numeric' }) 
+                        : '';
+                    const rawText = (item.body || '').replace(/<[^>]*>/g, '');
+                    const excerpt = rawText.substring(0, 130);
+
+                    const coverHtml = item.cover_image
+                        ? `<div class="news-cover"><img src="${baseUrl}/storage/${item.cover_image}" alt="${item.title}" loading="lazy" onerror="this.parentElement.innerHTML='<i class=\'fas fa-image\' style=\'font-size:3rem;color:#c8d9e8\'></i>'"></div>`
+                        : `<div class="news-cover"><i class="fas fa-image" style="font-size:3rem;color:#c8d9e8"></i></div>`;
+
+                    cardsHtml += `
+                        <div class="news-card">
+                            ${coverHtml}
+                            <div style="padding:1.5rem;display:flex;flex-direction:column;flex:1">
+                                <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+                                    <span class="${info.cls}" style="font-size:0.7rem;font-weight:900;padding:3px 10px;border-radius:999px">${info.emoji} ${info.label}</span>
+                                    ${item.center?.name ? `<span style="font-size:0.72rem;color:#9ca3af;font-family:Almarai">${item.center.name}</span>` : ''}
+                                    <span style="font-size:0.68rem;color:#d1d5db;font-family:monospace;margin-right:auto">${date}</span>
+                                </div>
+                                <h3 style="font-size:1.05rem;font-weight:900;color:#004274;line-height:1.4;margin-bottom:8px;font-family:Cairo">${item.title}</h3>
+                                <p style="color:#6b7280;font-size:0.82rem;font-family:Almarai;line-height:1.7;flex:1">${excerpt}${rawText.length > 130 ? '...' : ''}</p>
+                                <a href="${baseUrl}/news/public/${item.id}" class="read-more-btn">
+                                    <i class="fas fa-book-open" style="font-size:0.75rem"></i>
+                                    قراءة المزيد
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML = cardsHtml;
+            })
+            .catch(err => console.error("News Feed Error:", err));
+    </script>
+
+</body>
+
+</html>

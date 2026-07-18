@@ -1,0 +1,344 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\QuranCircle;
+use App\Models\Student;
+use App\Models\User;
+use App\Models\CircleAttendance;
+use App\Models\CircleSession;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as PDF;
+
+class QuranCircleController extends Controller
+{
+    public function index()
+    {
+        $user = Auth::user();
+        $query = QuranCircle::with(['teacher', 'center']);
+
+        // Teachers only see their own circles, unless they have management/report permissions
+        if ($user->hasRole('circle-teacher') && !$user->can('manage-quran-circles') && !$user->can('view-circle-reports')) {
+            $query->where('teacher_id', $user->id);
+        } else {
+            // Managers see all circles in their center
+            $query->where('center_id', $user->center_id);
+        }
+
+        $circles = $query->latest()->paginate(10);
+
+        return view('quran-circles.index', compact('circles'));
+    }
+
+    public function create()
+    {
+        $user = Auth::user();
+        if ($user->hasRole('circle-teacher') && !$user->can('manage-quran-circles')) {
+            abort(403, 'ليس لديك صلاحية لإضافة حلقات جديدة.');
+        }
+
+        $center_id = $user->center_id;
+        $teachers = User::where('center_id', $center_id)
+            ->whereHas('roles', function($q) {
+                $q->whereIn('name', ['circle-teacher', 'supervisor', 'center-manager']);
+            })->get();
+            
+        if ($teachers->isEmpty()) {
+            $teachers = User::where('center_id', $center_id)->get();
+        }
+
+        return view('quran-circles.create', compact('teachers'));
+    }
+
+    public function store(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->hasRole('circle-teacher') && !$user->can('manage-quran-circles')) {
+            abort(403);
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|in:memorization,recitation',
+            'description' => 'nullable|string',
+            'teacher_id' => 'required|exists:users,id',
+        ]);
+
+        QuranCircle::create([
+            'center_id' => Auth::user()->center_id,
+            'teacher_id' => $request->teacher_id,
+            'name' => $request->name,
+            'type' => $request->type,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('quran-circles.index')->with('success', 'تم إنشاء الحلقة بنجاح');
+    }
+
+    public function edit(QuranCircle $quranCircle)
+    {
+        $user = Auth::user();
+        if ($user->hasRole('circle-teacher') && !$user->can('manage-quran-circles')) {
+            abort(403, 'لا يمكنك تعديل بيانات الحلقات.');
+        }
+
+        $this->authorizeAccess($quranCircle);
+        $center_id = $user->center_id;
+        $teachers = User::where('center_id', $center_id)
+            ->whereHas('roles', function($q) {
+                $q->whereIn('name', ['circle-teacher', 'supervisor', 'center-manager']);
+            })->get();
+
+        if ($teachers->isEmpty()) {
+            $teachers = User::where('center_id', $center_id)->get();
+        }
+
+        return view('quran-circles.edit', compact('quranCircle', 'teachers'));
+    }
+
+    public function update(Request $request, QuranCircle $quranCircle)
+    {
+        $user = Auth::user();
+        if ($user->hasRole('circle-teacher') && !$user->can('manage-quran-circles')) {
+            abort(403);
+        }
+
+        $this->authorizeAccess($quranCircle);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|in:memorization,recitation',
+            'description' => 'nullable|string',
+            'teacher_id' => 'required|exists:users,id',
+        ]);
+
+        $quranCircle->update([
+            'name' => $request->name,
+            'type' => $request->type,
+            'description' => $request->description,
+            'teacher_id' => $request->teacher_id,
+        ]);
+
+        return redirect()->route('quran-circles.index')->with('success', 'تم تحديث الحلقة بنجاح');
+    }
+
+    public function show(QuranCircle $quranCircle)
+    {
+        $this->authorizeAccess($quranCircle);
+
+        $quranCircle->load([
+            'students',
+            'sessions' => function ($q) {
+                $q->latest()->take(5);
+            }
+        ]);
+
+        return view('quran-circles.show', compact('quranCircle'));
+    }
+
+    public function students(QuranCircle $quranCircle)
+    {
+        $this->authorizeAccess($quranCircle);
+
+        $currentStudentIds = $quranCircle->students()->pluck('students.id')->toArray();
+
+        // available students in the same center not already in this circle
+        $availableStudents = Student::where('center_id', $quranCircle->center_id)
+            ->whereNotIn('id', $currentStudentIds)
+            ->get();
+
+        return view('quran-circles.students', compact('quranCircle', 'availableStudents'));
+    }
+
+    public function addStudent(Request $request, QuranCircle $quranCircle)
+    {
+        $this->authorizeAccess($quranCircle);
+
+        $request->validate([
+            'student_id' => 'required|exists:students,id',
+        ]);
+
+        $quranCircle->students()->syncWithoutDetaching([$request->student_id]);
+
+        return back()->with('success', 'تم إضافة الطالب للحلقة');
+    }
+
+    public function removeStudent(QuranCircle $quranCircle, Student $student)
+    {
+        $this->authorizeAccess($quranCircle);
+
+        $quranCircle->students()->detach($student->id);
+
+        return back()->with('success', 'تم إزالة الطالب من الحلقة');
+    }
+
+    public function stats()
+    {
+        $user = Auth::user();
+        if (!$user->can('view-circle-reports')) {
+            abort(403);
+        }
+
+        $center_id = $user->center_id;
+
+        // Correct stats logic
+        $totalCircles = QuranCircle::where('center_id', $center_id)->count();
+        $totalSessions = CircleSession::whereHas('circle', function ($q) use ($center_id) {
+            $q->where('center_id', $center_id);
+        })->count();
+
+        // Latest absent records
+        $latestAbsences = CircleAttendance::with(['student', 'session.circle'])
+            ->where('status', 'absent')
+            ->whereHas('session.circle', function ($q) use ($center_id) {
+                $q->where('center_id', $center_id);
+            })
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Most committed (top students with 'present' status)
+        $mostCommitted = CircleAttendance::select('student_id', DB::raw('count(*) as attendance_count'))
+            ->where('status', 'present')
+            ->whereHas('session.circle', function ($q) use ($center_id) {
+                $q->where('center_id', $center_id);
+            })
+            ->groupBy('student_id')
+            ->orderByDesc('attendance_count')
+            ->with('student')
+            ->take(5)
+            ->get();
+
+        // Most absent (top students with 'absent' status) 
+        $mostAbsent = CircleAttendance::select('student_id', DB::raw('count(*) as absence_count'))
+            ->where('status', 'absent')
+            ->whereHas('session.circle', function ($q) use ($center_id) {
+                $q->where('center_id', $center_id);
+            })
+            ->groupBy('student_id')
+            ->orderByDesc('absence_count')
+            ->with('student')
+            ->take(5)
+            ->get();
+
+        return view('quran-circles.stats', compact('totalCircles', 'totalSessions', 'latestAbsences', 'mostCommitted', 'mostAbsent'));
+    }
+
+    public function absentReport(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user->can('view-circle-reports')) {
+            abort(403);
+        }
+
+        $center_id = $user->center_id;
+
+        $query = CircleAttendance::with(['student', 'session.circle'])
+            ->where('status', 'absent')
+            ->whereHas('session.circle', function ($q) use ($center_id) {
+                $q->where('center_id', $center_id);
+            });
+
+        // Optional filters
+        if ($request->circle_id) {
+            $query->whereHas('session', function ($q) use ($request) {
+                $q->where('circle_id', $request->circle_id);
+            });
+        }
+        
+        if ($request->start_date) {
+            $query->whereHas('session', function ($q) use ($request) {
+                $q->where('session_date', '>=', $request->start_date);
+            });
+        }
+
+        if ($request->end_date) {
+            $query->whereHas('session', function ($q) use ($request) {
+                $q->where('session_date', '<=', $request->end_date);
+            });
+        }
+
+        $absences = $query->latest()->paginate(20);
+        $circles = QuranCircle::where('center_id', $center_id)->get();
+
+        return view('quran-circles.reports.absent_students', compact('absences', 'circles'));
+    }
+
+    public function exportAbsentReport(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user->can('view-circle-reports')) {
+            abort(403);
+        }
+
+        $center_id = $user->center_id;
+        $query = CircleAttendance::with(['student', 'session.circle'])
+            ->where('status', 'absent')
+            ->whereHas('session.circle', function ($q) use ($center_id) {
+                $q->where('center_id', $center_id);
+            });
+
+        if ($request->circle_id) {
+            $query->whereHas('session', function ($q) use ($request) {
+                $q->where('circle_id', $request->circle_id);
+            });
+        }
+        
+        if ($request->start_date) {
+            $query->whereHas('session', function ($q) use ($request) {
+                $q->where('session_date', '>=', $request->start_date);
+            });
+        }
+
+        if ($request->end_date) {
+            $query->whereHas('session', function ($q) use ($request) {
+                $q->where('session_date', '<=', $request->end_date);
+            });
+        }
+
+        $absences = $query->get();
+
+        $pdf = PDF::loadView('quran-circles.reports.absent_students_pdf', compact('absences'), [], [
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'margin_top' => 15,
+            'margin_right' => 15,
+            'margin_bottom' => 15,
+            'margin_left' => 15,
+            'default_font' => 'dejavusans'
+        ]);
+
+        return $pdf->stream('absent_students_report_' . date('Y-m-d') . '.pdf');
+    }
+
+    public function destroy(QuranCircle $quran_circle)
+    {
+        $user = Auth::user();
+        if (!$user->can('manage-quran-circles')) {
+            abort(403);
+        }
+
+        $this->authorizeAccess($quran_circle);
+
+        $quran_circle->delete();
+
+        return redirect()->route('quran-circles.index')->with('success', 'تم حذف الحلقة القرآنية بنجاح.');
+    }
+
+    protected function authorizeAccess(QuranCircle $circle)
+    {
+        $user = Auth::user();
+        if ($user->hasRole('super-admin'))
+            return;
+
+        if ($circle->center_id !== $user->center_id)
+            abort(403);
+
+        if ($user->hasRole('circle-teacher') && $circle->teacher_id !== $user->id) {
+            if (!$user->can('view-circle-reports') && !$user->can('manage-quran-circles'))
+                abort(403);
+        }
+    }
+}
