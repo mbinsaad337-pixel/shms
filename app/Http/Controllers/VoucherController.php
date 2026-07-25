@@ -140,7 +140,7 @@ class VoucherController extends Controller
         return view('vouchers.show', compact('voucher'));
     }
 
-    public function exportPdf(Voucher $voucher)
+    public function exportPdf(Voucher $voucher, \App\Services\PdfService $pdfService)
     {
         $voucher->load(['fund', 'targetFund', 'creator', 'approver', 'center']);
 
@@ -153,17 +153,10 @@ class VoucherController extends Controller
 
         $filename = $typeName . '_' . $voucher->voucher_number . '.pdf';
 
-        $pdf = \Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::loadView('vouchers.pdf', compact('voucher'), [], [
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'margin_top' => 20,
-            'margin_right' => 15,
-            'margin_bottom' => 20,
-            'margin_left' => 15,
-            'setAutoTopMargin' => 'pad',
-        ]);
-
-        return $pdf->stream($filename);
+        return $pdfService->stream('pdf.vouchers.show', [
+            'voucher' => $voucher,
+            'number' => $voucher->voucher_number
+        ], str_replace('_', ' ', $typeName), $filename, 'portrait');
     }
     public function destroy(Voucher $voucher)
     {

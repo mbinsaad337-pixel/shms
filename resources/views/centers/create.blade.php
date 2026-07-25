@@ -51,6 +51,15 @@
                         class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-secondary focus:border-secondary"></textarea>
                 </div>
 
+                <div class="mt-4">
+                    <label class="inline-flex items-center cursor-pointer group">
+                        <input type="hidden" name="has_rent" value="0">
+                        <input type="checkbox" name="has_rent" value="1" {{ old('has_rent', true) ? 'checked' : '' }}
+                               class="w-5 h-5 text-gold rounded border-gray-300 focus:ring-gold accent-gold cursor-pointer">
+                        <span class="ml-2 mr-2 text-sm font-bold text-gray-700 font-almarai group-hover:text-gold transition-colors">مبنى مستأجر (يستلزم دفع إيجار)</span>
+                    </label>
+                </div>
+
                 <div class="pt-4 border-t border-gray-100 flex justify-end">
                     <button type="submit" class="btn-secondary px-10 py-3 font-bold">
                         حفظ البيانات

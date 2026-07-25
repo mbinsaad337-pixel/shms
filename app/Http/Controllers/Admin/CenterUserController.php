@@ -36,7 +36,7 @@ class CenterUserController extends Controller
         return view('admin.users.index', compact('users', 'centers'));
     }
 
-    public function exportListPdf(Request $request)
+    public function exportListPdf(Request $request, \App\Services\PdfService $pdfService)
     {
         $query = User::query()->where('id', '!=', auth()->id());
         $user = auth()->user();
@@ -57,7 +57,9 @@ class CenterUserController extends Controller
 
         $users = $query->with('roles')->get();
 
-        return view('admin.users.list-pdf', compact('users', 'centerName'));
+        return $pdfService->stream('pdf.admin.users.list-pdf', [
+            'data' => $users,
+        ], 'تقرير مستخدمي النظام', 'users_list.pdf', 'landscape', ['المركز' => $centerName]);
     }
 
     public function create()

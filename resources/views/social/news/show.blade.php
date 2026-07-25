@@ -104,9 +104,6 @@
                     </div>
 
                     <div class="flex gap-2">
-                        <button onclick="window.print()" class="w-10 h-10 bg-gray-50 text-gray-400 rounded-xl flex items-center justify-center hover:bg-navy hover:text-white transition-all shadow-sm no-print">
-                            <i class="fas fa-print"></i>
-                        </button>
                     </div>
                 </div>
 

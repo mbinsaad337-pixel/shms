@@ -163,6 +163,8 @@
         </div>
     </div>
 
+    @include('partials.pdf_preview')
+
     @livewireScripts
 
     <!-- SweetAlert2 -->
@@ -227,6 +229,33 @@
         });
     </script>
     @endif
+
+    {{-- Notification Bell Alpine Component --}}
+    <script>
+        function notifBell() {
+            return {
+                open: false,
+                count: 0,
+                notices: [],
+                init() {
+                    this.fetchBell();
+                    // Poll every 60 seconds
+                    setInterval(() => this.fetchBell(), 60000);
+                },
+                fetchBell() {
+                    fetch('{{ route('complaints.bell') }}', {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        this.count   = data.count;
+                        this.notices = data.notices;
+                    })
+                    .catch(() => {});
+                }
+            }
+        }
+    </script>
 
     @stack ('scripts')
 </body>

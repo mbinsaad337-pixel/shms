@@ -18,14 +18,14 @@ class ReportController extends Controller
         return view('reports.index');
     }
 
-    public function show(Request $request, $type)
+    public function show(Request $request, $type, \App\Services\PdfService $pdfService)
     {
         $user = auth()->user();
         $centerId = $user->center_id;
         $isExecutive = $user->hasRole('super-admin') || $user->hasRole('executive-manager');
 
         $data = [];
-        $view = "reports.{$type}";
+        $view = "pdf.reports.{$type}";
 
         switch ($type) {
             case 'students':
@@ -33,13 +33,17 @@ class ReportController extends Controller
                 if (!$isExecutive)
                     $query->where('center_id', $centerId);
                 $data = $query->get();
+                return $pdfService->stream($view, ['data' => $data], 'تقرير الطلاب', 'students_report.pdf', 'portrait');
                 break;
+
             case 'violations':
-                $query = Violation::with('student', 'center');
+                $query = Violation::with('student', 'center', 'penalty');
                 if (!$isExecutive)
                     $query->where('center_id', $centerId);
                 $data = $query->get();
+                return $pdfService->stream($view, ['data' => $data], 'تقرير المخالفات', 'violations_report.pdf', 'portrait');
                 break;
+
             case 'funds':
                 $month = (int) ($request->month ?? now()->month);
                 $year  = (int) ($request->year  ?? now()->year);
@@ -58,30 +62,30 @@ class ReportController extends Controller
                     $query->where('center_id', $centerId);
                 }
                 $data = $query->get();
+
+                $settlementBalances = SettlementDetail::whereHas('settlement', function ($q) use ($month, $year) {
+                    $q->where('month', $month)
+                      ->where('year', $year)
+                      ->whereNotIn('status', ['deleted', 'rejected']);
+                })->get()->keyBy('fund_id');
+
+                return $pdfService->stream($view, [
+                    'data' => $data,
+                    'month' => $month,
+                    'year' => $year,
+                    'settlementBalances' => $settlementBalances
+                ], 'تقرير الصناديق', 'funds_report.pdf', 'landscape');
                 break;
+
             case 'vouchers':
                 $query = Voucher::with('center', 'fund')->orderBy('date', 'desc');
                 if (!$isExecutive)
                     $query->where('center_id', $centerId);
                 $data = $query->get();
+                return $pdfService->stream($view, ['data' => $data], 'تقرير السندات', 'vouchers_report.pdf', 'portrait');
                 break;
         }
 
-        if ($type === 'funds') {
-            $month   = (int) ($request->month ?? now()->month);
-            $year    = (int) ($request->year  ?? now()->year);
-            $centers = \App\Models\Center::all();
-
-            // جلب أرصدة التصفية لكل صندوق (جميع الحالات عدا المحذوفة والمرفوضة)
-            $settlementBalances = SettlementDetail::whereHas('settlement', function ($q) use ($month, $year) {
-                $q->where('month', $month)
-                  ->where('year', $year)
-                  ->whereNotIn('status', ['deleted', 'rejected']);
-            })->get()->keyBy('fund_id');
-
-            return view($view, compact('data', 'isExecutive', 'month', 'year', 'centers', 'settlementBalances'));
-        }
-
-        return view($view, compact('data', 'isExecutive'));
+        abort(404, 'Report type not found');
     }
 }

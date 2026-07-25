@@ -71,7 +71,7 @@ class PenaltyController extends Controller
         return back()->with('success', 'تم إلغاء العقوبة بنجاح.');
     }
 
-    public function exportListPdf(Request $request)
+    public function exportListPdf(Request $request, \App\Services\PdfService $pdfService)
     {
         $user = auth()->user();
         $penalties = Penalty::query()
@@ -80,20 +80,8 @@ class PenaltyController extends Controller
             ->latest()
             ->get();
 
-        $pdf = \Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::loadView('penalties.reports.list-pdf', compact('penalties'), [], [
-            'format' => 'A4-L',
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_top' => 15,
-            'margin_bottom' => 15,
-            'auto_language_detection' => true,
-            'temp_dir' => storage_path('app/mpdf'),
-        ]);
-
-        return response()->streamDownload(function () use ($pdf) {
-            echo $pdf->output();
-        }, 'penalties_report_' . now()->format('Y-m-d') . '.pdf', [
-            'Content-Type' => 'application/pdf',
-        ]);
+        return $pdfService->stream('pdf.reports.penalties', [
+            'data' => $penalties,
+        ], 'تقرير العقوبات', 'penalties_report_' . now()->format('Y-m-d') . '.pdf', 'landscape');
     }
 }

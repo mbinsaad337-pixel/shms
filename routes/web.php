@@ -44,6 +44,7 @@ use App\Http\Controllers\MealGroupController;
 
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ComplaintController;
 
 
 Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChanged::class])->group(function () {
@@ -66,6 +67,18 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('reports/{type}', [ReportController::class, 'show'])->name('reports.show');
 
+    // ── Complaints & Internal Notifications ──
+    Route::prefix('complaints')->name('complaints.')->group(function () {
+        Route::get('inbox',          [ComplaintController::class, 'inbox'])->name('inbox');
+        Route::get('sent',           [ComplaintController::class, 'sent'])->name('sent');
+        Route::get('create',         [ComplaintController::class, 'create'])->name('create');
+        Route::post('/',             [ComplaintController::class, 'store'])->name('store');
+        Route::get('{complaint}',    [ComplaintController::class, 'show'])->name('show');
+        Route::post('{complaint}/reply',  [ComplaintController::class, 'reply'])->name('reply');
+        Route::post('{complaint}/delete', [ComplaintController::class, 'destroy'])->name('destroy');
+        Route::get('api/bell',       [ComplaintController::class, 'bellData'])->name('bell');
+    });
+
     // Centers (Super Admin & Executive only)
     Route::middleware('role:super-admin|executive-manager')->group(function () {
         Route::resource('centers', CenterController::class);
@@ -76,6 +89,10 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         Route::get('executive/approvals', [ApprovalController::class, 'index'])->name('executive.approvals');
         Route::post('executive/approvals/budget/{budget}/approve', [ApprovalController::class, 'approveBudget'])->name('executive.budgets.approve');
         Route::post('executive/approvals/settlement/{settlement}/approve', [ApprovalController::class, 'approveSettlement'])->name('executive.settlements.approve');
+
+        // Center Expenses (Rent, Water, Electricity)
+        Route::post('center-expenses/{center_expense}/mark-paid', [\App\Http\Controllers\Admin\CenterExpenseController::class, 'markAsPaid'])->name('center-expenses.mark-paid');
+        Route::resource('center-expenses', \App\Http\Controllers\Admin\CenterExpenseController::class);
     });
 
     // Staff Management for Center Managers & Super Admin
@@ -155,6 +172,7 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         Route::post('settlements/{settlement}/reject', [\App\Http\Controllers\Admin\MonthlySettlementController::class, 'reject'])->name('settlements.reject');
         Route::post('settlements/{settlement}/approve', [\App\Http\Controllers\Admin\MonthlySettlementController::class, 'approve'])->name('settlements.approve');
         Route::post('settlements/{settlement}/recalculate', [\App\Http\Controllers\Admin\MonthlySettlementController::class, 'recalculate'])->name('settlements.recalculate');
+        Route::get('settlements/{settlement}/export-pdf', [\App\Http\Controllers\Admin\MonthlySettlementController::class, 'exportPdf'])->name('settlements.export-pdf');
         Route::resource('settlements', \App\Http\Controllers\Admin\MonthlySettlementController::class);
     });
 
@@ -235,9 +253,11 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         Route::post('budgets/{budget}/submit', [\App\Http\Controllers\Nutrition\FoodBudgetController::class, 'submit'])->name('budgets.submit');
         Route::post('budgets/{budget}/approve', [\App\Http\Controllers\Nutrition\FoodBudgetController::class, 'approve'])->name('budgets.approve');
         Route::post('budgets/{budget}/reject', [\App\Http\Controllers\Nutrition\FoodBudgetController::class, 'reject'])->name('budgets.reject');
+        Route::get('budgets/{budget}/export-pdf', [\App\Http\Controllers\Nutrition\FoodBudgetController::class, 'exportPdf'])->name('budgets.export-pdf');
         Route::resource('budgets', \App\Http\Controllers\Nutrition\FoodBudgetController::class);
 
         // Suppliers (الموردين)
+        Route::get('suppliers/{supplier}/export-pdf', [\App\Http\Controllers\Nutrition\FoodSupplierController::class, 'exportPdf'])->name('suppliers.export-pdf');
         Route::resource('suppliers', \App\Http\Controllers\Nutrition\FoodSupplierController::class);
 
         Route::get('subscriptions/export-pdf', [\App\Http\Controllers\Nutrition\FoodSubscriptionController::class, 'exportPdf'])->name('subscriptions.export-pdf');
@@ -250,16 +270,19 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
 
         // Purchase Invoices (فواتير المشتريات)
         Route::post('invoices/{invoice}/cancel', [\App\Http\Controllers\Nutrition\FoodInvoiceController::class, 'cancel'])->name('invoices.cancel');
+        Route::get('invoices/{invoice}/export-pdf', [\App\Http\Controllers\Nutrition\FoodInvoiceController::class, 'exportPdf'])->name('invoices.export-pdf');
         Route::resource('invoices', \App\Http\Controllers\Nutrition\FoodInvoiceController::class);
 
         // Vouchers (سندات الصرف والقبض)
         Route::post('vouchers/{voucher}/cancel', [\App\Http\Controllers\Nutrition\FoodVoucherController::class, 'cancel'])->name('vouchers.cancel');
+        Route::get('vouchers/{voucher}/export-pdf', [\App\Http\Controllers\Nutrition\FoodVoucherController::class, 'exportPdf'])->name('vouchers.export-pdf');
         Route::resource('vouchers', \App\Http\Controllers\Nutrition\FoodVoucherController::class);
 
         // Monthly Settlements (التصفية الشهرية)
         Route::post('settlements/{settlement}/approve', [\App\Http\Controllers\Nutrition\FoodSettlementController::class, 'approve'])->name('settlements.approve');
         Route::post('settlements/{settlement}/reject', [\App\Http\Controllers\Nutrition\FoodSettlementController::class, 'reject'])->name('settlements.reject');
         Route::post('settlements/{settlement}/recalculate', [\App\Http\Controllers\Nutrition\FoodSettlementController::class, 'recalculate'])->name('settlements.recalculate');
+        Route::get('settlements/{settlement}/export-pdf', [\App\Http\Controllers\Nutrition\FoodSettlementController::class, 'exportPdf'])->name('settlements.export-pdf');
         Route::resource('settlements', \App\Http\Controllers\Nutrition\FoodSettlementController::class);
 
         // Distribution & QR (التوزيع)
@@ -275,10 +298,12 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         Route::resource('schedules', \App\Http\Controllers\Nutrition\MealScheduleController::class)->only(['index', 'store']);
 
         // QR Groups (مجموعات QR - متاح للطلاب)
+        Route::get('qr-groups/{qr_group}/export-pdf', [\App\Http\Controllers\Nutrition\FoodQrGroupController::class, 'exportPdf'])->name('qr-groups.export-pdf');
         Route::resource('qr-groups', \App\Http\Controllers\Nutrition\FoodQrGroupController::class)->only(['index', 'create', 'store', 'show']);
     });
 
     // Student Merged QR Groups (ميزة تجميع رموز QR للطلاب)
+    Route::get('student-qr-groups/{student_qr_group}/export-pdf', [\App\Http\Controllers\StudentQrGroupController::class, 'exportPdf'])->name('student-qr-groups.export-pdf');
     Route::resource('student-qr-groups', \App\Http\Controllers\StudentQrGroupController::class);
     Route::get('student-qr-groups/scan/{token}', [\App\Http\Controllers\StudentQrGroupController::class, 'scan'])->name('student-qr-groups.scan');
 

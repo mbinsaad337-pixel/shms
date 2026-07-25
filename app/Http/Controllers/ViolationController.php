@@ -101,7 +101,7 @@ class ViolationController extends Controller
         $violation->delete();
         return redirect()->route('violations.index')->with('success', 'تم حذف المخالفة بنجاح.');
     }
-    public function exportListPdf(Request $request)
+    public function exportListPdf(Request $request, \App\Services\PdfService $pdfService)
     {
         $user = auth()->user();
         $violations = Violation::query()
@@ -110,41 +110,17 @@ class ViolationController extends Controller
             ->latest()
             ->get();
 
-        $pdf = \Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::loadView('violations.reports.list-pdf', compact('violations'), [], [
-            'format' => 'A4-L',
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_top' => 15,
-            'margin_bottom' => 15,
-            'auto_language_detection' => true,
-            'temp_dir' => storage_path('app/mpdf'),
-        ]);
-
-        return response()->streamDownload(function () use ($pdf) {
-            echo $pdf->output();
-        }, 'violations_report_' . now()->format('Y-m-d') . '.pdf', [
-            'Content-Type' => 'application/pdf',
-        ]);
+        return $pdfService->stream('pdf.reports.violations', [
+            'data' => $violations,
+        ], 'تقرير المخالفات', 'violations_report_' . now()->format('Y-m-d') . '.pdf', 'landscape');
     }
 
-    public function exportPdf(Violation $violation)
+    public function exportPdf(Violation $violation, \App\Services\PdfService $pdfService)
     {
-        $violation->load(['student', 'recordedBy', 'penalty']);
+        $violation->load(['student', 'recordedBy', 'penalty', 'center']);
         
-        $pdf = \Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::loadView('violations.reports.show-pdf', compact('violation'), [], [
-            'format' => 'A4',
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_top' => 15,
-            'margin_bottom' => 15,
-            'auto_language_detection' => true,
-            'temp_dir' => storage_path('app/mpdf'),
-        ]);
-
-        return response()->streamDownload(function () use ($pdf) {
-            echo $pdf->output();
-        }, 'violation_' . $violation->id . '.pdf', [
-            'Content-Type' => 'application/pdf',
-        ]);
+        return $pdfService->stream('pdf.violations.show', [
+            'violation' => $violation,
+        ], 'تقرير تفصيلي للمخالفة', 'violation_' . $violation->id . '.pdf', 'portrait');
     }
 }

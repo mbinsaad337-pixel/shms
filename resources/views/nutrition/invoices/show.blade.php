@@ -17,10 +17,10 @@
                 </div>
             </div>
             <div class="flex gap-2 no-print">
-                <button onclick="window.print()"
+                <a href="{{ route('nutrition.invoices.export-pdf', $invoice) }}"
                     class="inline-flex items-center gap-2 bg-gray-800 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
-                    <i class="fas fa-print"></i> طباعة
-                </button>
+                    <i class="fas fa-file-pdf"></i> تصدير PDF
+                </a>>
                 @if($invoice->status === 'approved')
                     <form action="{{ route('nutrition.invoices.cancel', $invoice) }}" method="POST"
                         onsubmit="return confirm('هل تريد إلغاء هذه الفاتورة؟')">

@@ -1,0 +1,53 @@
+{
+    "php.validate.executablePath": "",
+    "php.validate.run": "onSave",
+    "php.validate.enable": false,
+    "[blade]": {
+        "editor.defaultFormatter": null
+    },
+    "files.associations": {
+        "*.blade.php": "blade"
+    },
+    "intelephense.environment.includePaths": [
+        "vendor/laravel/framework/src/Illuminate/Support/Facades"
+    ],
+    "intelephense.environment.phpVersion": "8.2.0",
+    "php.version": "8.2",
+    "intelephense.files.exclude": [
+        "**/.git/**",
+        "**/node_modules/**",
+        "**/vendor/**",
+        "**/storage/framework/views/**",
+        "**/*.blade.php"
+    ],
+    "intelephense.diagnostics.exclude": [
+        "vendor/**",
+        "storage/framework/views/**",
+        "**/*.blade.php"
+    ],
+    "intelephense.diagnostics.undefinedTypes": false,
+    "intelephense.diagnostics.undefinedFunctions": false,
+    "intelephense.diagnostics.undefinedConstants": false,
+    "intelephense.diagnostics.undefinedClassConstants": false,
+    "intelephense.diagnostics.undefinedMethods": false,
+    "intelephense.diagnostics.undefinedProperties": false,
+    "intelephense.diagnostics.undefinedVariables": false,
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/**": true,
+        "**/vendor/**": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/vendor/**": true
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true
+    }
+}

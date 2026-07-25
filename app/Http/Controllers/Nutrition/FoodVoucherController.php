@@ -104,6 +104,14 @@ class FoodVoucherController extends Controller
         return view('nutrition.vouchers.show', compact('voucher'));
     }
 
+    public function exportPdf(FoodVoucher $voucher, \App\Services\PdfService $pdfService)
+    {
+        $voucher->load(['supplier', 'student', 'creator', 'center']);
+        return $pdfService->stream('pdf.nutrition.vouchers.show', [
+            'voucher' => $voucher,
+        ], 'سند مالي (تغذية)', 'food_voucher_' . $voucher->voucher_number . '.pdf', 'portrait');
+    }
+
     public function cancel(FoodVoucher $voucher)
     {
         if ($voucher->status === 'cancelled') {

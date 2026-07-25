@@ -48,13 +48,13 @@
     @include('partials.pdf_header', [
         'title' => 'سجل العقوبات الانضباطية المسندة',
         'number' => 'PEN-LIST-' . date('Ymd'),
-        'department' => 'إدارة الإسكان وشؤون الطلاب'
+        'department' => 'إدارة المركز وشؤون الطلاب'
     ])
 
     <table>
         <thead>
             <tr>
-                <th style="width: 5%">#</th>
+                <th style="width: 5%">م</th>
                 <th style="width: 20%">الطالب</th>
                 <th style="width: 20%">نوع العقوبة</th>
                 <th style="width: 25%">الوصف</th>

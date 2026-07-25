@@ -72,10 +72,10 @@
             </div>
 
             <div class="mt-6 flex gap-3 no-print">
-                <button onclick="window.print()"
-                    class="flex-1 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-2xl font-bold font-cairo transition-all">
-                    <i class="fas fa-print ml-2"></i> طباعة QR
-                </button>
+                <a href="{{ route('nutrition.qr-groups.export-pdf', $qrGroup) }}"
+                    class="flex-1 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-2xl font-bold font-cairo transition-all text-center">
+                    <i class="fas fa-file-pdf ml-2"></i> تصدير PDF
+                </a>
             </div>
         </div>
     </div>

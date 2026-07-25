@@ -91,6 +91,17 @@ class FoodDashboardController extends Controller
 
         $reports = $query->latest()->paginate(30)->withQueryString();
 
+        if ($request->has('export') && $request->export === 'pdf') {
+            $allReports = $query->latest()->get();
+            $pdfService = app(\App\Services\PdfService::class);
+            return $pdfService->stream('pdf.nutrition.reports.attendance', [
+                'reports' => $allReports,
+                'date' => $request->date ?? today()->toDateString(),
+                'meal_type' => $request->meal_type,
+                'status' => $request->status,
+            ], 'تقارير_حضور_الوجبات', 'attendance_report.pdf', 'portrait');
+        }
+
         return view('nutrition.reports.attendance', compact('reports'));
     }
 }

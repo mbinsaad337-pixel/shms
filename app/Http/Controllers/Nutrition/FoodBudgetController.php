@@ -233,4 +233,13 @@ class FoodBudgetController extends Controller
         return redirect()->route('nutrition.budgets.index')
             ->with('success', 'تم حذف الميزانية (العهدة) بنجاح.');
     }
+
+    public function exportPdf(FoodBudget $budget, \App\Services\PdfService $pdfService)
+    {
+        $budget->load(['lines', 'creator', 'approver']);
+        
+        return $pdfService->stream('pdf.nutrition.budgets.show', [
+            'budget' => $budget,
+        ], 'ميزانية قسم التغذية', 'food_budget_' . $budget->id . '.pdf', 'portrait');
+    }
 }

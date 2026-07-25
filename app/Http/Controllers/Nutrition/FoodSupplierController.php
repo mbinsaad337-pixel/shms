@@ -117,4 +117,50 @@ class FoodSupplierController extends Controller
         return redirect()->route('nutrition.suppliers.index')
             ->with('success', 'تم حذف المورد.');
     }
+
+    public function exportPdf(FoodSupplier $supplier, \App\Services\PdfService $pdfService)
+    {
+        $supplier->load(['invoices.items', 'vouchers']);
+        
+        // Build ledger (statement of account)
+        $invoices = $supplier->invoices()->where('status', 'approved')->orderBy('invoice_date')->get();
+        $vouchers = $supplier->vouchers()->where('status', 'active')->orderBy('voucher_date')->get();
+
+        $ledgerItems = [];
+        foreach ($invoices as $invoice) {
+            $ledgerItems[] = [
+                'date' => $invoice->invoice_date,
+                'type' => 'invoice',
+                'reference' => $invoice->invoice_number,
+                'description' => 'فاتورة مشتريات',
+                'debit' => $invoice->total_amount,
+                'credit' => 0,
+                'item' => $invoice,
+            ];
+        }
+        foreach ($vouchers as $voucher) {
+            $ledgerItems[] = [
+                'date' => $voucher->voucher_date,
+                'type' => 'voucher',
+                'reference' => $voucher->voucher_number,
+                'description' => $voucher->type === 'payment' ? 'سند صرف' : 'سند قبض',
+                'debit' => $voucher->type === 'receipt' ? $voucher->amount : 0,
+                'credit' => $voucher->type === 'payment' ? $voucher->amount : 0,
+                'item' => $voucher,
+            ];
+        }
+        $ledger = collect($ledgerItems)->sortBy('date')->values();
+
+        $runningBalance = 0;
+        $ledger = $ledger->map(function ($row) use (&$runningBalance) {
+            $runningBalance += $row['debit'] - $row['credit'];
+            $row['running_balance'] = $runningBalance;
+            return $row;
+        });
+
+        return $pdfService->stream('pdf.nutrition.suppliers.show', [
+            'supplier' => $supplier,
+            'ledger' => $ledger,
+        ], 'كشف حساب مورد', 'supplier_statement_' . $supplier->id . '.pdf', 'portrait');
+    }
 }

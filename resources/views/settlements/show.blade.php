@@ -47,10 +47,10 @@
                 <i class="fas fa-arrow-right"></i>
                 <span>العودة للتصفيات</span>
             </a>
-            <button onclick="window.print()" class="bg-primary text-white hover:bg-primary-dark px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-bold font-cairo shadow-sm transition-all">
-                <i class="fas fa-print"></i>
-                <span>طباعة التقرير</span>
-            </button>
+            <a href="{{ route('settlements.export-pdf', $settlement) }}" class="bg-primary text-white hover:bg-primary-dark px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-bold font-cairo shadow-sm transition-all">
+                <i class="fas fa-file-pdf"></i>
+                <span>تصدير PDF</span>
+            </a>>
         </div>
     </div>
 

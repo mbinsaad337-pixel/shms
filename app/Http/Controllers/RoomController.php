@@ -117,22 +117,18 @@ class RoomController extends Controller
         return back()->with('error', 'الطالب غير موجود في هذه الغرفة.');
     }
 
-    public function exportPdf(Room $room)
+    public function exportPdf(Room $room, \App\Services\PdfService $pdfService)
     {
         $room->load(['assignments' => function ($q) {
             $q->whereNull('released_at')->with('student');
         }]);
 
-        $pdf = \Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::loadView('rooms.room-pdf', compact('room'), [], [
-            'format' => 'A4-P',
-            'temp_dir' => storage_path('app/mpdf'),
-            'auto_language_detection' => true,
-        ]);
-
-        return $pdf->stream('room_' . $room->room_number . '.pdf');
+        return $pdfService->stream('pdf.rooms.room-pdf', [
+            'room' => $room,
+        ], 'تقرير الغرفة', 'room_' . $room->room_number . '.pdf', 'portrait');
     }
 
-    public function exportListPdf(Request $request)
+    public function exportListPdf(Request $request, \App\Services\PdfService $pdfService)
     {
         $user = auth()->user();
         $query = Room::query()
@@ -146,12 +142,8 @@ class RoomController extends Controller
 
         $rooms = $query->get();
 
-        $pdf = \Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::loadView('rooms.list-pdf', compact('rooms'), [], [
-            'format' => 'A4-L',
-            'temp_dir' => storage_path('app/mpdf'),
-            'auto_language_detection' => true,
-        ]);
-
-        return $pdf->stream('rooms_list_' . now()->format('Y-m-d') . '.pdf');
+        return $pdfService->stream('pdf.rooms.list-pdf', [
+            'data' => $rooms,
+        ], 'تقرير قائمة الغرف', 'rooms_list_' . now()->format('Y-m-d') . '.pdf', 'landscape');
     }
 }

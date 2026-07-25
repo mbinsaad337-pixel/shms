@@ -31,7 +31,7 @@ class ClubController extends Controller
         return view('social.clubs.index', compact('clubs', 'centers'));
     }
 
-    public function exportListPdf(Request $request)
+    public function exportListPdf(Request $request, \App\Services\PdfService $pdfService)
     {
         $user = auth()->user();
         $query = Club::query()->withCount('members')->with('center');
@@ -45,7 +45,9 @@ class ClubController extends Controller
         $clubs = $query->latest()->get();
         $centerName = $user->center_id ? $user->center->name : ($request->filled('center_id') ? \App\Models\Center::find($request->center_id)->name : 'جميع المراكز');
 
-        return view('social.clubs.list-pdf', compact('clubs', 'centerName'));
+        return $pdfService->stream('pdf.social.clubs.list-pdf', [
+            'data' => $clubs,
+        ], 'تقرير الأندية الاجتماعية', 'clubs_list.pdf', 'portrait', ['المركز' => $centerName]);
     }
 
     public function store(Request $request)
@@ -140,12 +142,14 @@ class ClubController extends Controller
         return back()->with('success', 'تم حذف النادي بنجاح.');
     }
 
-    public function exportPdf(Club $club)
+    public function exportPdf(Club $club, \App\Services\PdfService $pdfService)
     {
         $club->load(['members.student', 'center']);
 
         $filename = 'قائمة_أعضاء_' . str_replace(' ', '_', $club->name) . '.pdf';
 
-        return view('social.clubs.pdf', compact('club'));
+        return $pdfService->stream('pdf.social.clubs.show-pdf', [
+            'club' => $club,
+        ], 'تقرير تفاصيل النادي', $filename, 'portrait');
     }
 }

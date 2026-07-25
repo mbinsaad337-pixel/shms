@@ -20,9 +20,9 @@
                         </button>
                     </form>
                 @endif
-                <button onclick="window.print()" class="bg-navy text-white px-6 py-2.5 rounded-xl font-bold font-cairo shadow-lg flex items-center gap-2 hover:bg-navy/90 transition-all">
-                    <i class="fas fa-print"></i> تصدير وطباعة
-                </button>
+                <a href="{{ route('nutrition.settlements.export-pdf', $settlement) }}" class="bg-navy text-white px-6 py-2.5 rounded-xl font-bold font-cairo shadow-lg flex items-center gap-2 hover:bg-navy/90 transition-all">
+                    <i class="fas fa-file-pdf"></i> تصدير PDF
+                </a>
                 <form action="{{ route('nutrition.settlements.destroy', $settlement) }}" method="POST"
                     onsubmit="return confirm('هل أنت متأكد من حذف هذه التصفية نهائياً؟ لا يمكن التراجع.')">
                     @csrf

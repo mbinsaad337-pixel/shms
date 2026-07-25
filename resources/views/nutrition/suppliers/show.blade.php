@@ -19,10 +19,10 @@
                 </div>
             </div>
             <div class="flex gap-2 no-print">
-                <button onclick="window.print()"
+                <a href="{{ route('nutrition.suppliers.export-pdf', $supplier) }}"
                     class="inline-flex items-center gap-2 bg-gray-800 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
-                    <i class="fas fa-print"></i> طباعة
-                </button>
+                    <i class="fas fa-file-pdf"></i> تصدير PDF
+                </a>
                 <a href="{{ route('nutrition.invoices.create') }}?supplier={{ $supplier->id }}"
                     class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
                     <i class="fas fa-receipt"></i> فاتورة جديدة

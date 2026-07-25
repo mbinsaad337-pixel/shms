@@ -16,10 +16,10 @@
                 </div>
             </div>
             <div class="flex gap-2">
-                <button onclick="window.print()"
+                <a href="{{ route('nutrition.vouchers.export-pdf', $voucher) }}"
                     class="w-9 h-9 bg-gray-800 text-white rounded-xl flex items-center justify-center">
-                    <i class="fas fa-print text-sm"></i>
-                </button>
+                    <i class="fas fa-file-pdf text-sm"></i>
+                </a>
                 @if($voucher->status === 'active')
                     <form action="{{ route('nutrition.vouchers.cancel', $voucher) }}" method="POST"
                         onsubmit="return confirm('هل تريد إلغاء هذا السند؟')">

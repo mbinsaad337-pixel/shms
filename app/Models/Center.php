@@ -13,6 +13,7 @@ class Center extends Model
         'email',
         'logo',
         'is_active',
+        'has_rent',
     ];
 
     public function getLogoUrlAttribute()
@@ -47,5 +48,10 @@ class Center extends Model
     public function vouchers()
     {
         return $this->hasMany(Voucher::class);
+    }
+
+    public function expenses()
+    {
+        return $this->hasMany(CenterExpense::class);
     }
 }

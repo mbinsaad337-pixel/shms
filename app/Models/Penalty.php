@@ -30,7 +30,7 @@ class Penalty extends Model
 
     public function violation()
     {
-        return $this->belongsTo(Violation::class);
+        return $this->belongsTo(Violation::class,'violation_id');
     }
 
     public function appliedBy()

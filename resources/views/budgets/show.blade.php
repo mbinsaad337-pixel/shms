@@ -73,13 +73,6 @@
                         {{ $statusInfo['label'] }}
                     </span>
 
-                    {{-- Print Button --}}
-                    <button onclick="window.print()"
-                        class="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-xl text-sm font-bold font-cairo shadow-sm transition-all hover:shadow-md">
-                        <i class="fas fa-print text-gray-500"></i>
-                        طباعة
-                    </button>
-
                     {{-- PDF Export Button --}}
                     <a href="{{ route('budgets.export-pdf', $budget) }}"
                         class="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-bold font-cairo shadow-sm transition-all hover:shadow-md">

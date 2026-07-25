@@ -141,6 +141,8 @@
         </main>
     </div>
 
+    @include('partials.pdf_preview')
+
     @stack ('scripts')
     <script>
         function toggleNutritionSidebar() {

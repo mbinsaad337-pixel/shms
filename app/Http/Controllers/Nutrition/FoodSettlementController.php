@@ -235,4 +235,42 @@ class FoodSettlementController extends Controller
         return redirect()->route('nutrition.settlements.index')
             ->with('success', 'تم حذف التصفية الشهرية بنجاح.');
     }
+
+    public function exportPdf(FoodMonthlySettlement $settlement, \App\Services\PdfService $pdfService)
+    {
+        $settlement->load(['budget', 'creator', 'approver']);
+        $centerId = $settlement->center_id;
+        $month = $settlement->month;
+        $year = $settlement->year;
+
+        $receipts = FoodVoucher::with('student')
+            ->where('center_id', $centerId)
+            ->where('type', 'receipt')
+            ->where('status', 'active')
+            ->whereMonth('voucher_date', $month)
+            ->whereYear('voucher_date', $year)
+            ->get();
+
+        $invoices = FoodPurchaseInvoice::with('supplier')
+            ->where('center_id', $centerId)
+            ->where('status', 'approved')
+            ->whereMonth('invoice_date', $month)
+            ->whereYear('invoice_date', $year)
+            ->get();
+
+        $payments = FoodVoucher::with('supplier')
+            ->where('center_id', $centerId)
+            ->where('type', 'payment')
+            ->where('status', 'active')
+            ->whereMonth('voucher_date', $month)
+            ->whereYear('voucher_date', $year)
+            ->get();
+
+        return $pdfService->stream('pdf.nutrition.settlements.show', [
+            'settlement' => $settlement,
+            'receipts' => $receipts,
+            'invoices' => $invoices,
+            'payments' => $payments,
+        ], 'التصفية المالية لقسم التغذية', 'food_settlement_' . $settlement->id . '.pdf', 'portrait');
+    }
 }

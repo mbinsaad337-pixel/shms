@@ -130,6 +130,14 @@ class FoodInvoiceController extends Controller
         return view('nutrition.invoices.show', compact('invoice'));
     }
 
+    public function exportPdf(FoodPurchaseInvoice $invoice, \App\Services\PdfService $pdfService)
+    {
+        $invoice->load(['supplier', 'items', 'creator', 'center']);
+        return $pdfService->stream('pdf.nutrition.invoices.show', [
+            'invoice' => $invoice,
+        ], 'فاتورة مشتريات (تغذية)', 'food_invoice_' . $invoice->invoice_number . '.pdf', 'portrait');
+    }
+
     public function cancel(FoodPurchaseInvoice $invoice)
     {
         if ($invoice->status === 'cancelled') {

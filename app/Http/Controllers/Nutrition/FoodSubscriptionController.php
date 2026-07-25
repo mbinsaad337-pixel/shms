@@ -38,7 +38,7 @@ class FoodSubscriptionController extends Controller
         return view('nutrition.subscriptions.index', compact('subscriptions', 'stats'));
     }
 
-    public function exportPdf(Request $request)
+    public function exportPdf(Request $request, \App\Services\PdfService $pdfService)
     {
         $centerId = auth()->user()->center_id;
         $query = FoodSubscription::with('student')
@@ -57,13 +57,9 @@ class FoodSubscriptionController extends Controller
 
         $subscriptions = $query->latest()->get();
 
-        $pdf = \Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::loadView('nutrition.subscriptions.pdf', compact('subscriptions'), [], [
-            'format' => 'A4-P',
-            'temp_dir' => storage_path('app/mpdf'),
-            'autoArabic' => true,
-        ]);
-
-        return $pdf->stream('nutrition_subscribers_' . now()->format('Y-m-d') . '.pdf');
+        return $pdfService->stream('pdf.nutrition.subscriptions.list-pdf', [
+            'data' => $subscriptions,
+        ], 'تقرير مشتركي التغذية', 'nutrition_subscribers_' . now()->format('Y-m-d') . '.pdf', 'portrait');
     }
 
     public function create()

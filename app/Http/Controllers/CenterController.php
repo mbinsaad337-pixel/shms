@@ -26,6 +26,7 @@ class CenterController extends Controller
             'phone' => 'nullable|string',
             'email' => 'nullable|email',
             'logo' => 'nullable|image|max:2048',
+            'has_rent' => 'boolean',
         ]);
 
         if ($request->hasFile('logo')) {
@@ -57,6 +58,7 @@ class CenterController extends Controller
             'email' => 'nullable|email',
             'logo' => 'nullable|image|max:2048',
             'is_active' => 'required|boolean',
+            'has_rent' => 'boolean',
         ]);
 
         if ($request->hasFile('logo')) {

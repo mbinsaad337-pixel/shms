@@ -10,7 +10,7 @@ use App\Models\CircleSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as PDF;
+use App\Services\PdfService;
 
 class QuranCircleController extends Controller
 {
@@ -266,7 +266,7 @@ class QuranCircleController extends Controller
         return view('quran-circles.reports.absent_students', compact('absences', 'circles'));
     }
 
-    public function exportAbsentReport(Request $request)
+    public function exportAbsentReport(Request $request, PdfService $pdfService)
     {
         $user = Auth::user();
         if (!$user->can('view-circle-reports')) {
@@ -299,18 +299,13 @@ class QuranCircleController extends Controller
         }
 
         $absences = $query->get();
+        $appliedFilters = [];
+        if ($request->start_date) $appliedFilters['من تاريخ'] = $request->start_date;
+        if ($request->end_date) $appliedFilters['إلى تاريخ'] = $request->end_date;
 
-        $pdf = PDF::loadView('quran-circles.reports.absent_students_pdf', compact('absences'), [], [
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'margin_top' => 15,
-            'margin_right' => 15,
-            'margin_bottom' => 15,
-            'margin_left' => 15,
-            'default_font' => 'dejavusans'
-        ]);
-
-        return $pdf->stream('absent_students_report_' . date('Y-m-d') . '.pdf');
+        return $pdfService->stream('pdf.quran-circles.absent-report', [
+            'data' => $absences,
+        ], 'تقرير الغياب - الحلقات القرآنية', 'absent_students_report_' . date('Y-m-d') . '.pdf', 'portrait', $appliedFilters);
     }
 
     public function destroy(QuranCircle $quran_circle)

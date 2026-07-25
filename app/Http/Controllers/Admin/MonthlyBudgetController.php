@@ -82,23 +82,15 @@ class MonthlyBudgetController extends Controller
         return view('budgets.show', compact('budget'));
     }
 
-    public function exportPdf(MonthlyBudget $budget)
+    public function exportPdf(MonthlyBudget $budget, \App\Services\PdfService $pdfService)
     {
         $budget->load(['items.fund', 'submitter', 'approver', 'center']);
 
         $filename = 'عهدة_' . $budget->center->name . '_' . $budget->month . '_' . $budget->year . '.pdf';
 
-        $pdf = \Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::loadView('budgets.pdf', compact('budget'), [], [
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'margin_top' => 20,
-            'margin_right' => 15,
-            'margin_bottom' => 20,
-            'margin_left' => 15,
-            'setAutoTopMargin' => 'pad',
-        ]);
-
-        return $pdf->download($filename);
+        return $pdfService->stream('pdf.budgets.show', [
+            'budget' => $budget,
+        ], 'طلب عهدة', $filename, 'portrait');
     }
 
     public function confirm(MonthlyBudget $budget)

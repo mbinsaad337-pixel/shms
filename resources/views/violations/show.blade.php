@@ -11,6 +11,11 @@
                 <p class="text-gray-400 font-almarai text-sm mt-2 text-right">متابعة حالة المخالفة المسجلة للطالب: {{ $violation->student->name_ar }}</p>
             </div>
             <div class="flex gap-4">
+                <a href="{{ route('violations.export', $violation->id) }}" target="_blank"
+                    class="px-6 py-3 bg-red-50 text-red-600 rounded-2xl hover:bg-red-500 hover:text-white font-cairo font-bold transition-all flex items-center gap-2 border border-red-100 shadow-sm">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>تصدير تفاصيل المخالفة PDF</span>
+                </a>
                 <a href="{{ route('violations.index') }}"
                     class="px-6 py-3 bg-gray-50 text-navy rounded-2xl hover:bg-gray-100 font-cairo font-bold transition-all flex items-center gap-2 border border-gray-100">
                     <i class="fas fa-arrow-right"></i>

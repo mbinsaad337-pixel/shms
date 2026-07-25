@@ -12,8 +12,8 @@
             <a href="{{ route('nutrition.schedules.index') }}" class="bg-indigo-50 text-indigo-700 px-6 py-3 rounded-2xl font-bold font-cairo hover:bg-indigo-100 transition-all border border-indigo-100 flex items-center gap-2">
                 <i class="fas fa-clock"></i> ضبط مواعيد الوجبات
             </a>
-            <button onclick="window.print()" class="bg-gray-800 text-white px-6 py-3 rounded-2xl font-bold font-cairo hover:bg-gray-900 transition-all shadow-lg flex items-center gap-2">
-                <i class="fas fa-print"></i> طباعة التقرير
+            <button type="button" onclick="window.location.href='{{ url()->current() }}?export=pdf&' + new URLSearchParams(new FormData(document.querySelector('form'))).toString()" class="bg-gray-800 text-white px-6 py-3 rounded-2xl font-bold font-cairo hover:bg-gray-900 transition-all shadow-lg flex items-center gap-2">
+                <i class="fas fa-file-pdf"></i> تصدير PDF
             </a>
         </div>
     </div>

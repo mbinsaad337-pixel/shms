@@ -63,11 +63,11 @@
                                 <span>تعديل بيانات ملفي الشخصي</span>
                             </a>
                         @endif
-                        <button onclick="window.print()"
+                        <a href="{{ route('students.export-pdf', $student) }}"
                             class="inline-flex items-center gap-3 bg-gray-800 text-white px-8 py-3 rounded-2xl hover:bg-gray-900 transition-all font-bold font-cairo shadow-lg transform hover:-translate-y-1 active:scale-95">
-                            <i class="fas fa-print text-lg"></i>
-                            <span>طباعة كرت الباركود</span>
-                        </button>
+                            <i class="fas fa-file-pdf text-lg"></i>
+                            <span>تصدير بطاقة الطالب PDF</span>
+                        </a>
                     </div>
                 </div>
 

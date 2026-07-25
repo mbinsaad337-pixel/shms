@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf;
+
 
 class StudentController extends Controller
 {
@@ -269,7 +269,7 @@ class StudentController extends Controller
         return redirect()->route('students.show', $student)->with('success', 'تم تحديث بيانات الطالب بنجاح.');
     }
 
-    public function exportPdf(Student $student)
+    public function exportPdf(Student $student, \App\Services\PdfService $pdfService)
     {
         $user = auth()->user();
         
@@ -292,27 +292,14 @@ class StudentController extends Controller
             'achievements'
         ]);
 
-        $pdf = LaravelMpdf::loadView('students.pdf', compact('student'), [], [
-            'format' => 'A4',
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_top' => 10,
-            'margin_bottom' => 10,
-            'auto_language_detection' => true,
-            'temp_dir' => storage_path('app/mpdf'),
-        ]);
-
         $filename = 'student_' . $student->student_number . '.pdf';
 
-        return response()->streamDownload(function () use ($pdf) {
-            echo $pdf->output();
-        }, $filename, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-        ]);
+        return $pdfService->stream('pdf.reports.students', [
+            'data' => collect([$student]),
+        ], 'تقرير الطالب', $filename, 'portrait');
     }
 
-    public function exportListPdf(Request $request)
+    public function exportListPdf(Request $request, \App\Services\PdfService $pdfService)
     {
         $user = auth()->user();
         $query = Student::query()
@@ -339,29 +326,19 @@ class StudentController extends Controller
         }
 
         $filters = ['major', 'university', 'college', 'academic_level', 'status', 'nationality'];
+        $appliedFilters = [];
         foreach ($filters as $filter) {
             if ($request->filled($filter)) {
                 $query->where($filter, $request->input($filter));
+                $appliedFilters[$filter] = $request->input($filter);
             }
         }
 
         $students = $query->with(['center'])->latest()->get();
 
-        $pdf = LaravelMpdf::loadView('students.list-pdf', compact('students'), [], [
-            'format' => 'A4-L',
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_top' => 15,
-            'margin_bottom' => 15,
-            'auto_language_detection' => true,
-            'temp_dir' => storage_path('app/mpdf'),
-        ]);
-
-        return response()->streamDownload(function () use ($pdf) {
-            echo $pdf->output();
-        }, 'students_list_' . now()->format('Y-m-d') . '.pdf', [
-            'Content-Type' => 'application/pdf',
-        ]);
+        return $pdfService->stream('pdf.reports.students', [
+            'data' => $students,
+        ], 'تقرير قائمة الطلاب', 'students_list_' . now()->format('Y-m-d') . '.pdf', 'landscape', $appliedFilters);
     }
 
     public function markAsGraduate(Student $student)

@@ -26,10 +26,10 @@
                 </div>
             </div>
             <div class="flex items-center gap-2 no-print">
-                <button onclick="window.print()"
+                <a href="{{ route('nutrition.budgets.export-pdf', $budget) }}"
                     class="inline-flex items-center gap-2 bg-gray-800 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
-                    <i class="fas fa-print"></i> طباعة
-                </button>
+                    <i class="fas fa-file-pdf"></i> تصدير PDF
+                </a>
                 @if ($budget->status === 'draft')
                     <form action="{{ route('nutrition.budgets.submit', $budget) }}" method="POST">
                         @csrf

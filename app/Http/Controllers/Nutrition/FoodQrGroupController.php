@@ -70,4 +70,13 @@ class FoodQrGroupController extends Controller
         $qrGroup->load(['members.student', 'creatorStudent']);
         return view('nutrition.qr_groups.show', compact('qrGroup'));
     }
+
+    public function exportPdf(FoodQrGroup $qrGroup, \App\Services\PdfService $pdfService)
+    {
+        $qrGroup->load(['members.student', 'creatorStudent']);
+        
+        return $pdfService->stream('pdf.nutrition.qr_groups.show', [
+            'qrGroup' => $qrGroup,
+        ], 'رمز QR مجمع للوجبات', 'food_qr_group_' . $qrGroup->id . '.pdf', 'portrait');
+    }
 }

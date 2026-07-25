@@ -141,4 +141,17 @@ class StudentQrGroupController extends Controller
             abort(403);
         }
     }
+
+    public function exportPdf(StudentQrGroup $studentQrGroup, \App\Services\PdfService $pdfService)
+    {
+        $this->authorizeOwner($studentQrGroup);
+        $studentQrGroup->load('students', 'primaryStudent');
+        
+        $qrData = route('student-qr-groups.scan', $studentQrGroup->group_token);
+
+        return $pdfService->stream('pdf.student_qr_groups.show', [
+            'studentQrGroup' => $studentQrGroup,
+            'qrData' => $qrData,
+        ], 'رمز QR مجمع', 'student_qr_group_' . $studentQrGroup->id . '.pdf', 'portrait');
+    }
 }

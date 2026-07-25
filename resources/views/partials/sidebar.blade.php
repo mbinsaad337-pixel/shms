@@ -206,16 +206,58 @@
                 </div>
             @endif
 
+            {{-- Complaints & Internal Notifications --}}
+            @if (auth()->user()->hasAnyRole(['super-admin', 'center-manager', 'executive-manager']))
+                @php
+                    $unreadComplaintsCount = \App\Models\Complaint::where('receiver_id', auth()->id())
+                        ->where('status', 'unread')->count();
+                @endphp
+                <div class="pt-4 pb-2 border-t border-white/5 mt-4">
+                    <p class="px-4 text-[10px] font-bold text-gold/60 uppercase tracking-widest font-cairo mb-2">
+                        الشكاوى والإشعارات
+                    </p>
+                    <a href="{{ route('complaints.inbox') }}"
+                        class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('complaints.*') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5' }} transition-all">
+                        <i class="fas fa-inbox h-5 w-5 ml-3"></i>
+                        <span class="flex-1">صندوق الوارد</span>
+                        @if($unreadComplaintsCount > 0)
+                            <span class="bg-red-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                                {{ $unreadComplaintsCount > 9 ? '9+' : $unreadComplaintsCount }}
+                            </span>
+                        @endif
+                    </a>
+                    <a href="{{ route('complaints.sent') }}"
+                        class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl text-gray-300 hover:bg-white/5 transition-all">
+                        <i class="fas fa-paper-plane h-5 w-5 ml-3 text-gold/50"></i>
+                        المرسلة
+                    </a>
+                    <a href="{{ route('complaints.create') }}"
+                        class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl text-gray-300 hover:bg-white/5 transition-all">
+                        <i class="fas fa-plus-circle h-5 w-5 ml-3 text-gold/50"></i>
+                        إشعار جديد
+                    </a>
+                </div>
+            @endif
+
             @if (auth()->user()->can('view-funds') || auth()->user()->can('view-vouchers') || auth()->user()->can('view-budgets') || auth()->user()->can('view-settlements') || auth()->user()->hasRole('super-admin'))
                 <div class="pt-4 pb-2 border-t border-white/5 mt-4">
                     <p class="px-4 text-[10px] font-bold text-gold/60 uppercase tracking-widest font-cairo mb-2">النظام المالي
                     </p>
 
-                    @if((auth()->user()->can('view-funds') || auth()->user()->can('view-vouchers')) && !auth()->user()->hasRole('super-admin'))
+                    @if(auth()->user()->can('view-vouchers') || auth()->user()->hasRole('super-admin'))
                         <a href="{{ route('vouchers.index') }}"
                             class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('vouchers.*') || request()->routeIs('funds.*') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5 transition' }}">
                             <i class="fas fa-wallet h-5 w-5 ml-3"></i>
                             الصناديق والسندات
+                        </a>
+                    @endif
+
+                    {{-- Center Expenses for GM --}}
+                    @if(auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('executive-manager'))
+                        <a href="{{ route('center-expenses.index') }}"
+                            class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('center-expenses.*') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5 transition' }}">
+                            <i class="fas fa-file-invoice-dollar h-5 w-5 ml-3"></i>
+                            مصروفات المراكز
                         </a>
                     @endif
 

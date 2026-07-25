@@ -26,7 +26,7 @@ class AssetController extends Controller
         return view('assets.index', compact('assets', 'centers'));
     }
 
-    public function exportListPdf(Request $request)
+    public function exportListPdf(Request $request, \App\Services\PdfService $pdfService)
     {
         $centerId = auth()->user()->center_id;
         $query = Asset::query();
@@ -43,7 +43,9 @@ class AssetController extends Controller
         }
 
         $assets = $query->get();
-        return view('assets.list-pdf', compact('assets', 'centerName'));
+        return $pdfService->stream('pdf.assets.list-pdf', [
+            'data' => $assets,
+        ], 'تقرير الأصول والعهد', 'assets_list.pdf', 'landscape', ['المركز' => $centerName]);
     }
 
     public function create()

@@ -162,6 +162,24 @@ class MonthlySettlementController extends Controller
         return view('settlements.show', compact('settlement', 'vouchers'));
     }
 
+    public function exportPdf(MonthlySettlement $settlement, \App\Services\PdfService $pdfService)
+    {
+        $settlement->load(['details.fund', 'submitter', 'approver', 'center']);
+
+        $vouchers = Voucher::with(['creator', 'fund', 'targetFund', 'student'])
+            ->where('center_id', $settlement->center_id)
+            ->whereMonth('date', $settlement->month)
+            ->whereYear('date', $settlement->year)
+            ->get();
+
+        $filename = 'تصفية_' . $settlement->month . '_' . $settlement->year . '.pdf';
+
+        return $pdfService->stream('pdf.settlements.show', [
+            'settlement' => $settlement,
+            'vouchers'   => $vouchers,
+        ], 'تقرير التصفية المالية', $filename, 'portrait');
+    }
+
     public function confirm(MonthlySettlement $settlement)
     {
         if (!auth()->user()->can('confirm-settlements')) {

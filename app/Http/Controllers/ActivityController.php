@@ -6,7 +6,6 @@ use App\Models\Activity;
 use App\Models\ActivityParticipant;
 use App\Models\Student;
 use Illuminate\Http\Request;
-use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf;
 
 class ActivityController extends Controller
 {
@@ -56,7 +55,7 @@ class ActivityController extends Controller
         return view('social.activities.index', compact('activities', 'clubs', 'students', 'centers'));
     }
 
-    public function exportListPdf(Request $request)
+    public function exportListPdf(Request $request, \App\Services\PdfService $pdfService)
     {
         $user = auth()->user();
         $query = Activity::query()->with(['club', 'participants']);
@@ -78,7 +77,9 @@ class ActivityController extends Controller
         $activities = $query->latest()->get();
         $centerName = $user->center_id ? $user->center->name : ($request->filled('center_id') ? \App\Models\Center::find($request->center_id)->name : 'جميع المراكز');
 
-        return view('social.activities.list-pdf', compact('activities', 'centerName'));
+        return $pdfService->stream('pdf.social.activities.list-pdf', [
+            'data' => $activities,
+        ], 'تقرير الفعاليات والأنشطة', 'activities_list.pdf', 'landscape', ['المركز' => $centerName]);
     }
 
     public function store(Request $request)
@@ -203,7 +204,7 @@ class ActivityController extends Controller
         return redirect()->route('activities.index')->with('success', 'تم حذف الفعالية بنجاح.');
     }
 
-    public function exportAbsenteesPdf(Activity $activity)
+    public function exportAbsenteesPdf(Activity $activity, \App\Services\PdfService $pdfService)
     {
         $activity->load(['targetedStudents', 'participants.student']);
         
@@ -212,6 +213,9 @@ class ActivityController extends Controller
             return !in_array($student->id, $participantIds);
         });
 
-        return view('social.activities.absentees-pdf', compact('activity', 'absentees'));
+        return $pdfService->stream('pdf.social.activities.absentees-pdf', [
+            'activity' => $activity,
+            'absentees' => $absentees,
+        ], 'تقرير الغياب عن الفعالية', 'activity_absentees_' . $activity->id . '.pdf', 'portrait');
     }
 }
