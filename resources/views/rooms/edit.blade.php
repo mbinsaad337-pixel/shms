@@ -44,17 +44,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <label class="block text-gray-700 font-cairo font-bold mb-2">المبنى</label>
-                        <input type="text" name="building" value="{{ $room->building }}" required placeholder="أ"
+                        <input type="text" name="building" value="{{ $room->building }}" placeholder="أ"
                             class="w-full px-5 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none font-almarai transition-all">
                     </div>
                     <div>
                         <label class="block text-gray-700 font-cairo font-bold mb-2">الطابق</label>
-                        <input type="text" name="floor" value="{{ $room->floor }}" required placeholder="الأول"
+                        <input type="text" name="floor" value="{{ $room->floor }}" placeholder="الأول"
                             class="w-full px-5 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none font-almarai transition-all">
                     </div>
                     <div>
                         <label class="block text-gray-700 font-cairo font-bold mb-2">السعة الاستيعابية</label>
-                        <input type="number" name="capacity" value="{{ $room->capacity }}" required min="1" placeholder="4"
+                        <input type="number" name="capacity" value="{{ $room->capacity }}" min="1" placeholder="4"
                             class="w-full px-5 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none font-almarai transition-all">
                     </div>
                 </div>

@@ -14,6 +14,7 @@ class Room extends Model
         'floor',
         'capacity',
         'status',
+        'type',
         'notes',
     ];
 

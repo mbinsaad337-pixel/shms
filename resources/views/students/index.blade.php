@@ -55,6 +55,19 @@
                 </div>
 
                 <div>
+                    <label for="program_id" class="block text-xs font-bold text-gray-700 mb-2 font-cairo">البرنامج</label>
+                    <select name="program_id" id="program_id"
+                        class="w-full rounded-xl border-gray-100 focus:border-gold focus:ring-gold transition-all text-xs md:text-sm bg-gray-50/50">
+                        <option value="">جميع البرامج</option>
+                        @foreach ($programs ?? [] as $program)
+                            <option value="{{ $program->id }}" {{ request('program_id') == $program->id ? 'selected' : '' }}>
+                                {{ $program->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
                     <label for="university" class="block text-xs font-bold text-gray-700 mb-2 font-cairo">الجامعة</label>
                     <select name="university" id="university"
                         class="w-full rounded-xl border-gray-100 focus:border-gold focus:ring-gold transition-all text-xs md:text-sm bg-gray-50/50">
@@ -168,7 +181,12 @@
                                         alt="">
                                 </div>
                                 <div class="mr-4">
-                                    <div class="text-sm font-bold text-gray-900">{{ $student->name_ar }}</div>
+                                    <div class="text-sm font-bold text-gray-900 flex items-center gap-2">
+                                        {{ $student->name_ar }}
+                                        @if($student->program)
+                                            <x-program-badge :program="$student->program" />
+                                        @endif
+                                    </div>
                                     <div class="text-sm text-gray-500">{{ $student->phone }}</div>
                                 </div>
                             </div>
@@ -270,16 +288,26 @@
                 @csrf
                 
                 <div>
+                    <label class="block text-sm font-bold text-gray-700 font-cairo mb-2">الفئة المستهدفة (البرنامج)</label>
+                    <select name="program_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 font-almarai focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-right">
+                        <option value="all">جميع البرامج (جميع الطلاب)</option>
+                        @foreach ($programs ?? [] as $program)
+                            <option value="{{ $program->id }}">{{ $program->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
                     <label class="block text-sm font-bold text-gray-700 font-cairo mb-2">مبلغ الرسوم السنوية</label>
                     <div class="relative">
                         <input type="number" name="amount" min="0" step="0.01" required
-                            placeholder="أدخل مبلغ الرسوم السنوية لتعميمه على جميع الطلاب (غير الخريجين والمغادرين)"
+                            placeholder="أدخل مبلغ الرسوم السنوية لتعميمه على الفئة المحددة"
                             class="w-full bg-gray-50 border border-gray-200 rounded-xl pr-12 p-4 font-almarai focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-left" dir="ltr">
                         <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
                             <i class="fas fa-coins text-gray-400"></i>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-400 mt-2 font-almarai leading-relaxed"><i class="fas fa-info-circle ml-1"></i> سيتم تطبيق هذا المبلغ على جميع الطلاب المسجلين والمقيمين الحاليين.</p>
+                    <p class="text-xs text-gray-400 mt-2 font-almarai leading-relaxed"><i class="fas fa-info-circle ml-1"></i> سيتم تطبيق هذا المبلغ على جميع الطلاب المسجلين والمقيمين الحاليين في البرنامج المحدد.</p>
                 </div>
 
                 <div class="flex gap-4 pt-4 border-t border-gray-50">

@@ -44,7 +44,7 @@
                                 get filteredItems() {
                                     if(this.search.length < 2) return [];
                                     return this.items.filter(i => 
-                                        (i.name.includes(this.search) || i.num.toString().includes(this.search)) && 
+                                        ((i.name && i.name.includes(this.search)) || (i.num && i.num.toString().includes(this.search))) && 
                                         !this.selected.includes(i.id)
                                     ).slice(0, 5)
                                 },

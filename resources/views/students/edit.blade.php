@@ -60,6 +60,17 @@
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
                         </div>
 
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">البرنامج التابع له *</label>
+                            <select name="program_id" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none bg-white">
+                                @foreach($programs ?? [] as $program)
+                                    <option value="{{ $program->id }}" {{ old('program_id', $student->program_id) == $program->id ? 'selected' : '' }}>
+                                        {{ $program->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <div class="md:col-span-3">
                             <label class="block text-gray-700 font-bold mb-2">Full Name (English)</label>
                             <input type="text" name="name_en" value="{{ old('name_en', $student->name_en) }}" dir="ltr"

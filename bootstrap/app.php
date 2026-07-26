@@ -12,11 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role'               => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission'         => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-            'active' => \App\Http\Middleware\CheckUserActive::class,
-            'nutrition.check' => \App\Http\Middleware\CheckFoodSubscriptionStatus::class,
+            'active'             => \App\Http\Middleware\CheckUserActive::class,
+            'nutrition.check'    => \App\Http\Middleware\CheckFoodSubscriptionStatus::class,
+            'program.feature'    => \App\Http\Middleware\CheckProgramFeature::class,
         ]);
         
         $middleware->web(append: [

@@ -45,9 +45,9 @@ class RoomController extends Controller
         $validated = $request->validate([
             'room_number' => 'required|string',
             'apartment' => 'nullable|string',
-            'building' => 'required|string',
-            'floor' => 'required|string',
-            'capacity' => 'required|integer|min:1',
+            'building' => 'nullable|string',
+            'floor' => 'nullable|string',
+            'capacity' => 'nullable|integer|min:1',
             'type' => 'required|in:residential,study_hall,activity_hall,other',
         ]);
 
@@ -75,9 +75,9 @@ class RoomController extends Controller
         $validated = $request->validate([
             'room_number' => 'required|string',
             'apartment' => 'nullable|string',
-            'building' => 'required|string',
-            'floor' => 'required|string',
-            'capacity' => 'required|integer|min:1',
+            'building' => 'nullable|string',
+            'floor' => 'nullable|string',
+            'capacity' => 'nullable|integer|min:1',
             'type' => 'required|in:residential,study_hall,activity_hall,other',
             'status' => 'required|in:available,maintenance,closed',
         ]);

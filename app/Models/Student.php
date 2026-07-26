@@ -10,7 +10,7 @@ class Student extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'center_id', 'student_number', 'national_id',
+        'user_id', 'center_id', 'program_id', 'student_number', 'national_id',
         'name_ar', 'name_en', 'surname',
         'date_of_birth', 'place_of_birth',
         'id_card_number', 'id_card_source', 'id_card_date', 'id_card_file',
@@ -59,6 +59,11 @@ class Student extends Model
     public function center()
     {
         return $this->belongsTo(Center::class);
+    }
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
     }
 
     public function roomAssignments()
@@ -156,5 +161,47 @@ class Student extends Model
     public function scopeActive($query)
     {
         return $query->where('status', 'active');
+    }
+
+    // ──────────────────────────────────────────────
+    // Program Scopes
+    // ──────────────────────────────────────────────
+
+    public function scopeAcademic($query)
+    {
+        return $query->whereHas('program', fn ($q) => $q->where('code', 'academic'));
+    }
+
+    public function scopeCooperative($query)
+    {
+        return $query->whereHas('program', fn ($q) => $q->where('code', 'cooperative'));
+    }
+
+    public function scopeByProgram($query, string $code)
+    {
+        return $query->whereHas('program', fn ($q) => $q->where('code', $code));
+    }
+
+    // ──────────────────────────────────────────────
+    // Program Feature Helpers
+    // ──────────────────────────────────────────────
+
+    /**
+     * التحقق من دعم ميزة معينة بناءً على برنامج الطالب.
+     * المفاتيح: activities | attendance | violations | evaluation | quran_circle | leaves
+     */
+    public function allows(string $feature): bool
+    {
+        return $this->program?->allows($feature) ?? false;
+    }
+
+    public function isAcademic(): bool
+    {
+        return $this->program?->code === 'academic';
+    }
+
+    public function isCooperative(): bool
+    {
+        return $this->program?->code === 'cooperative';
     }
 }

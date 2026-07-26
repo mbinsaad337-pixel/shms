@@ -51,7 +51,11 @@ class StudentController extends Controller
             }
         }
 
-        $students = $query->with(['center', 'user'])
+        if ($request->filled('program_id')) {
+            $query->where('program_id', $request->program_id);
+        }
+
+        $students = $query->with(['center', 'user', 'program'])
             ->latest()
             ->paginate(20)
             ->withQueryString();
@@ -72,24 +76,29 @@ class StudentController extends Controller
             $filterOptions['centers'] = Center::all();
         }
 
+        // Programs Filter Options
+        $filterOptions['programs'] = \App\Models\Program::active()->get();
+
         return view('students.index', array_merge(compact('students'), $filterOptions));
     }
 
     public function create()
     {
-        return view('students.create');
+        $programs = \App\Models\Program::active()->get();
+        return view('students.create', compact('programs'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name_ar' => 'required|string|max:255',
-            'email' => 'nullable|email|unique:users,email',
-            'username' => 'required|string|unique:users,username',
-            'temp_password' => 'required|string|min:6',
-            'phone' => 'required|string|max:20',
-            'national_id' => 'nullable|string|unique:students,national_id',
+            'name_ar'        => 'required|string|max:255',
+            'email'          => 'nullable|email|unique:users,email',
+            'username'       => 'required|string|unique:users,username',
+            'temp_password'  => 'required|string|min:6',
+            'phone'          => 'required|string|max:20',
+            'national_id'    => 'nullable|string|unique:students,national_id',
             'student_number' => 'nullable|string|unique:students,student_number',
+            'program_id'     => 'required|exists:programs,id',
         ]);
 
         return DB::transaction(function () use ($validated, $request) {
@@ -115,16 +124,17 @@ class StudentController extends Controller
 
             // Create Student record
             $student = Student::create([
-                'user_id' => $user->id,
-                'center_id' => $center_id,
-                'name_ar' => $validated['name_ar'],
-                'phone' => $validated['phone'],
-                'email' => $validated['email'] ?? null,
-                'national_id' => $validated['national_id'] ?? null,
+                'user_id'        => $user->id,
+                'center_id'      => $center_id,
+                'program_id'     => $validated['program_id'],
+                'name_ar'        => $validated['name_ar'],
+                'phone'          => $validated['phone'],
+                'email'          => $validated['email'] ?? null,
+                'national_id'    => $validated['national_id'] ?? null,
                 'student_number' => $validated['student_number'] ?? null,
-                'annual_fees' => $request->annual_fees ?? 0,
-                'barcode' => 'ST-' . strtoupper(Str::random(8)),
-                'status' => 'registered',
+                'annual_fees'    => $request->annual_fees ?? 0,
+                'barcode'        => 'ST-' . strtoupper(Str::random(8)),
+                'status'         => 'registered',
             ]);
 
             // Build WhatsApp welcome message
@@ -175,6 +185,7 @@ class StudentController extends Controller
         // Load relationships
         $student->load([
             'center',
+            'program',
             'roomAssignments.room',
             'violations.recordedBy',
             'penalties.appliedBy',
@@ -199,7 +210,8 @@ class StudentController extends Controller
     }
     public function edit(Student $student)
     {
-        return view('students.edit', compact('student'));
+        $programs = \App\Models\Program::active()->get();
+        return view('students.edit', compact('student', 'programs'));
     }
 
     public function update(Request $request, Student $student)
@@ -221,6 +233,7 @@ class StudentController extends Controller
             'family_females' => 'nullable|integer|min:0',
             'family_avg_income' => 'nullable|numeric|min:0',
             'dependents_count' => 'nullable|integer|min:0',
+            'program_id' => 'nullable|exists:programs,id',
         ]);
 
         $studentData = $request->only([
@@ -233,7 +246,7 @@ class StudentController extends Controller
             'last_certificate', 'graduated_school', 'last_cert_major', 'graduation_year', 'last_cert_grade',
             'guardian_name', 'guardian_relation', 'guardian_phone', 'guardian_job', 'guardian_education',
             'family_males', 'family_females', 'family_avg_income', 'dependents_count',
-            'emergency_name', 'emergency_relation', 'emergency_phone', 'skills'
+            'emergency_name', 'emergency_relation', 'emergency_phone', 'skills', 'program_id'
         ]);
         $student->update($studentData);
         
@@ -530,6 +543,7 @@ class StudentController extends Controller
 
         $validated = $request->validate([
             'amount' => 'required|numeric|min:0',
+            'program_id' => 'required',
         ]);
 
         $query = Student::query()
@@ -540,9 +554,17 @@ class StudentController extends Controller
             $query->where('center_id', $user->center_id);
         }
 
+        if ($validated['program_id'] !== 'all') {
+            $query->where('program_id', $validated['program_id']);
+            $programName = \App\Models\Program::find($validated['program_id'])->name ?? 'المحدد';
+            $msgTarget = "طلاب البرنامج " . $programName;
+        } else {
+            $msgTarget = "جميع الطلاب";
+        }
+
         $query->update(['annual_fees' => $validated['amount']]);
 
-        return redirect()->route('students.index')->with('success', 'تم تعميم الرسوم السنوية (' . number_format($validated['amount'], 2) . ') على جميع الطلاب بنجاح.');
+        return redirect()->route('students.index')->with('success', 'تم تعميم الرسوم السنوية (' . number_format($validated['amount'], 2) . ') على ' . $msgTarget . ' بنجاح.');
     }
 
     public function destroy(Student $student)

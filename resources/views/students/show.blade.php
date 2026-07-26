@@ -39,41 +39,45 @@
                 <div class="flex flex-wrap gap-3 items-center justify-between whitespace-nowrap">
                     <div class="flex flex-wrap gap-2">
                         <!-- Behavioral Actions -->
-                        <div class="relative group">
-                            <button class="bg-navy text-white px-6 py-3 rounded-xl hover:bg-navy/90 font-bold font-cairo shadow-lg flex items-center gap-3 transition-all">
-                                <i class="fas fa-gavel text-gold"></i>
-                                <span>إجراء إداري</span>
-                                <i class="fas fa-chevron-down text-[10px] opacity-50"></i>
-                            </button>
-                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 hidden group-hover:block z-50">
-                                <button onclick="openViolationModal()" class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-50">
-                                    <i class="fas fa-exclamation-triangle text-red-500 w-5"></i> تسجيل مخالفة
+                        @if($student->allows('violations'))
+                            <div class="relative group">
+                                <button class="bg-navy text-white px-6 py-3 rounded-xl hover:bg-navy/90 font-bold font-cairo shadow-lg flex items-center gap-3 transition-all">
+                                    <i class="fas fa-gavel text-gold"></i>
+                                    <span>إجراء إداري</span>
+                                    <i class="fas fa-chevron-down text-[10px] opacity-50"></i>
                                 </button>
-                                <button onclick="openCommitmentModal()" class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-50">
-                                    <i class="fas fa-file-contract text-orange-500 w-5"></i> تسجيل تعهد
-                                </button>
-                                <button onclick="openPenaltyModal()" class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                                    <i class="fas fa-ban text-red-700 w-5"></i> تطبيق عقوبة
-                                </button>
+                                <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 hidden group-hover:block z-50">
+                                    <button onclick="openViolationModal()" class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-50">
+                                        <i class="fas fa-exclamation-triangle text-red-500 w-5"></i> تسجيل مخالفة
+                                    </button>
+                                    <button onclick="openCommitmentModal()" class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-50">
+                                        <i class="fas fa-file-contract text-orange-500 w-5"></i> تسجيل تعهد
+                                    </button>
+                                    <button onclick="openPenaltyModal()" class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                                        <i class="fas fa-ban text-red-700 w-5"></i> تطبيق عقوبة
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         <!-- Presence Actions -->
-                        <div class="relative group">
-                            <button class="bg-navy text-white px-6 py-3 rounded-xl hover:bg-navy/90 font-bold font-cairo shadow-lg flex items-center gap-3 transition-all">
-                                <i class="fas fa-user-clock text-gold"></i>
-                                <span>الحضور والغياب</span>
-                                <i class="fas fa-chevron-down text-[10px] opacity-50"></i>
-                            </button>
-                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 hidden group-hover:block z-50">
-                                <button onclick="openAbsenceModal()" class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-50">
-                                    <i class="fas fa-calendar-times text-orange-600 w-5"></i> تسجيل غياب
+                        @if($student->allows('attendance'))
+                            <div class="relative group">
+                                <button class="bg-navy text-white px-6 py-3 rounded-xl hover:bg-navy/90 font-bold font-cairo shadow-lg flex items-center gap-3 transition-all">
+                                    <i class="fas fa-user-clock text-gold"></i>
+                                    <span>الحضور والغياب</span>
+                                    <i class="fas fa-chevron-down text-[10px] opacity-50"></i>
                                 </button>
-                                <button onclick="openLeaveModal()" class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                                    <i class="fas fa-plane-departure text-blue-600 w-5"></i> تسجيل استئذان
-                                </button>
+                                <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 hidden group-hover:block z-50">
+                                    <button onclick="openAbsenceModal()" class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-50">
+                                        <i class="fas fa-calendar-times text-orange-600 w-5"></i> تسجيل غياب
+                                    </button>
+                                    <button onclick="openLeaveModal()" class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                                        <i class="fas fa-plane-departure text-blue-600 w-5"></i> تسجيل استئذان
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         @if ($currentRoom)
                             <button onclick="openTransferModal()" class="bg-gold text-navy px-6 py-3 rounded-xl hover:bg-gold/90 font-bold font-cairo shadow-lg flex items-center gap-2 transition-all">
@@ -148,6 +152,9 @@
 
                 <div class="relative z-10 flex-1 text-center md:text-right">
                     <div class="inline-block bg-navy/10 text-navy px-4 py-1.5 rounded-full text-[10px] font-black font-cairo mb-3">طالب سكن | {{ $student->center->name }}</div>
+                    @if($student->program)
+                        <div class="inline-block mb-3 ml-2"><x-program-badge :program="$student->program" /></div>
+                    @endif
                     <div class="inline-block bg-gold/10 text-gold px-4 py-1.5 rounded-full text-[10px] font-black font-mono mb-3 mr-2">{{ $student->barcode }}</div>
                     <h1 class="text-4xl font-black text-navy font-cairo mb-2">{{ $student->name_ar }}</h1>
                     <div class="flex flex-wrap justify-center md:justify-start gap-5 text-gray-500 font-almarai text-sm mt-4">
@@ -288,6 +295,7 @@
                     </div>
 
                     <!-- Violations & Penalties -->
+                    @if($student->allows('violations'))
                     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
                         <h3 class="text-xl font-bold font-cairo text-gray-800 mb-6 flex justify-between items-center">
                             <span><i class="fas fa-exclamation-triangle text-red-500 ml-2"></i> سجل المخالفات والعقوبات</span>
@@ -308,8 +316,10 @@
                             </table>
                         </div>
                     </div>
+                    @endif
 
                     <!-- Grades & Achievements -->
+                    @if($student->allows('evaluation'))
                     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
                         <div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold font-cairo text-navy"><i class="fas fa-scroll text-gold ml-2"></i> بيان الدرجات والإنجازات</h3><a href="{{ route('student-grades.index', ['student_id' => $student->id]) }}" class="text-xs text-primary font-bold">عرض الكل</a></div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -322,6 +332,7 @@
                             @endif
                         </div>
                     </div>
+                    @endif
                 </div>
 
                 <!-- Left Column (Metadata) -->

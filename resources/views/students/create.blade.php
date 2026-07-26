@@ -14,12 +14,27 @@
             <form action="{{ route('students.store') }}" method="POST" class="p-10 space-y-6">
                 @csrf
 
-                <div>
-                    <label class="block text-gray-700 font-cairo font-bold mb-2">اسم الطالب (عربي) <span class="text-red-500">*</span></label>
-                    <input type="text" name="name_ar" value="{{ old('name_ar') }}" required
-                        class="w-full px-5 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none font-almarai transition-all"
-                        placeholder="الاسم الثلاثي">
-                    @error('name_ar') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-700 font-cairo font-bold mb-2">اسم الطالب (عربي) <span class="text-red-500">*</span></label>
+                        <input type="text" name="name_ar" value="{{ old('name_ar') }}" required
+                            class="w-full px-5 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none font-almarai transition-all"
+                            placeholder="الاسم الثلاثي">
+                        @error('name_ar') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-cairo font-bold mb-2">البرنامج التابع له <span class="text-red-500">*</span></label>
+                        <select name="program_id" required class="w-full px-5 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai bg-white transition-all">
+                            <option value="">اختر البرنامج...</option>
+                            @foreach($programs ?? [] as $program)
+                                <option value="{{ $program->id }}" {{ old('program_id') == $program->id ? 'selected' : '' }}>
+                                    {{ $program->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('program_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

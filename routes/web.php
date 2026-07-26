@@ -94,6 +94,9 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         // Center Expenses (Rent, Water, Electricity)
         Route::post('center-expenses/{center_expense}/mark-paid', [\App\Http\Controllers\Admin\CenterExpenseController::class, 'markAsPaid'])->name('center-expenses.mark-paid');
         Route::resource('center-expenses', \App\Http\Controllers\Admin\CenterExpenseController::class);
+
+        // ── Programs Management (إدارة البرامج) ──
+        Route::resource('programs', \App\Http\Controllers\ProgramController::class)->only(['index', 'create', 'store', 'edit', 'update']);
     });
 
     // Staff Management for Center Managers & Super Admin
