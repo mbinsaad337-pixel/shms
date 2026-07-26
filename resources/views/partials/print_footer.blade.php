@@ -22,7 +22,7 @@
     </div>
 
     <div class="footer-system-stamp">
-        <p>صدر من منصة إدارة السكنات الطلابية - جمعية رعاية طالب العلم - {{ date('Y-m-d H:i:s') }}</p>
+        <p>صدر من منصة إدارة المراكز الطلابية - جمعية رعاية طالب العلم - {{ date('Y-m-d H:i:s') }}</p>
         <p class="page-numbering text-left">صفحة <span class="page-count"></span></p>
     </div>
 </div>

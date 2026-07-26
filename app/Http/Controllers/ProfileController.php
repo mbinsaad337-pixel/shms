@@ -211,4 +211,45 @@ class ProfileController extends Controller
 
         return redirect()->route('dashboard')->with('success', 'تم حفظ بياناتك بنجاح، بانتظار موافقة الإدارة.');
     }
+
+    public function autoSaveProfile(Request $request)
+    {
+        $user = auth()->user();
+        $student = $user->student;
+
+        if (!$student) {
+            return response()->json(['success' => false, 'message' => 'Student record not found.'], 404);
+        }
+
+        // We only validate the fields that are sent.
+        $data = $request->except(['_token', '_method', 'photo', 'id_card_file', 'certificate_file', 'university_card_file', 'workers']);
+
+        // Handle family workers if sent
+        if ($request->has('workers')) {
+            $familyWorkers = [];
+            foreach ($request->input('workers', []) as $w) {
+                if (!empty($w['name'])) {
+                    $familyWorkers[] = [
+                        'name'         => $w['name'] ?? '',
+                        'job'          => $w['job'] ?? '',
+                        'organization' => $w['organization'] ?? '',
+                        'phone'        => $w['phone'] ?? '',
+                    ];
+                }
+            }
+            $data['family_workers'] = $familyWorkers ?: null;
+        }
+
+        // Handle step progress
+        if ($request->has('profile_step')) {
+            $data['profile_step'] = $request->input('profile_step');
+        }
+        if ($request->has('profile_completion')) {
+            $data['profile_completion'] = $request->input('profile_completion');
+        }
+
+        $student->update($data);
+
+        return response()->json(['success' => true, 'message' => 'تم الحفظ بنجاح']);
+    }
 }

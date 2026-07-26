@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>منصة إدارة السكنات الطلابية - جمعية رعاية طالب العلم</title>
+    <title>منصة إدارة المراكز الطلابية - جمعية رعاية طالب العلم</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
@@ -230,7 +230,7 @@
                 class="h-24 mx-auto mb-8 opacity-20 filter grayscale" alt="">
             <h2 class="text-3xl font-black text-navy mb-6">هل أنت مستعد لتنظيم سكنك؟</h2>
             <p class="text-gray-500 font-almarai mb-10 text-lg">
-                انضم الآن لمئات الطلاب والمسؤولين الذين يعتمدون على منصة إدارة السكنات الطلابية - جمعية رعاية طالب العلم
+                انضم الآن لمئات الطلاب والمسؤولين الذين يعتمدون على منصة إدارة المراكز الطلابية - جمعية رعاية طالب العلم
                 لإدارة شؤونهم السكنية والمالية بكل سهولة
                 واحترافية.
             </p>
@@ -249,7 +249,7 @@
                 <img src="{{ asset('images/logos/alawayil_logo.png') }}" class="h-8" alt="">
                 <img src="{{ asset('images/logos/scs_logo.png') }}" class="h-8" alt="">
                 <span class="text-xs font-bold text-navy mr-4">جميع الحقوق محفوظة &copy; {{ date('Y') }} لمنصة إدارة
-                    السكنات الطلابية - جمعية رعاية طالب العلم</span>
+                    المراكز الطلابية - جمعية رعاية طالب العلم</span>
             </div>
             <div class="flex gap-6 text-gray-400">
                 <a href="#" class="hover:text-navy"><i class="fab fa-facebook-f"></i></a>

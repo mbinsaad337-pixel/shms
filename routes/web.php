@@ -59,6 +59,7 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
     Route::post('profile/change-password', [ProfileController::class, 'updatePassword'])->name('profile.change_password.update');
     Route::get('profile/complete', [ProfileController::class, 'showCompleteProfile'])->name('profile.complete.view');
     Route::post('profile/complete', [ProfileController::class, 'updateProfile'])->name('profile.complete.update');
+    Route::put('profile/autosave', [ProfileController::class, 'autoSaveProfile'])->name('profile.complete.autosave');
 
     // Applied middleware only to dashboard for now to avoid global lockout issues
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');

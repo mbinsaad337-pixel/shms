@@ -10,7 +10,7 @@ class PdfService
     /**
      * System name displayed in headers/footers.
      */
-    protected string $systemName = 'نظام إدارة السكنات الطلابية';
+    protected string $systemName = 'نظام إدارة المراكز الطلابية';
 
     /**
      * System version displayed in footers.

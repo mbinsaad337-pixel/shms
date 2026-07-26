@@ -12,7 +12,7 @@
             <h2 class="org-main-ar">جمعية رعاية طالب العلم</h2>
             <h3 class="center-sub-ar">{{ auth()->user()->center?->name ?? 'مركز الأوائل الجامعي' }}</h3>
             <div class="h-accent-gold"></div>
-            <p class="dept-label">{{ $department ?? 'الإدارة المركزية - منصة إدارة السكنات الطلابية' }}</p>
+            <p class="dept-label">{{ $department ?? 'الإدارة المركزية - منصة إدارة المراكز الطلابية' }}</p>
         </div>
 
         <!-- Center: Branding Logos -->

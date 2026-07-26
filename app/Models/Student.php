@@ -35,7 +35,8 @@ class Student extends Model
         'family_males', 'family_females', 'family_avg_income', 'family_workers',
         // System
         'barcode', 'status', 'annual_fees', 'registration_date',
-        'is_profile_approved', 'can_edit_profile', 'is_graduate'
+        'is_profile_approved', 'can_edit_profile', 'is_graduate',
+        'profile_step', 'profile_completion'
     ];
 
     protected $casts = [

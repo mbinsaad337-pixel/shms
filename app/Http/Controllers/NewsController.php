@@ -205,7 +205,7 @@ class NewsController extends Controller
         \App\Models\NewsComment::create([
             'news_id' => $news->id,
             'user_id' => auth()->id(),
-            'content' => $request->content,
+            'content' => $request->input('content'),
         ]);
 
         return back()->with('success', 'تم إضافة التعليق بنجاح.');

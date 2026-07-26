@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{ $reportTitle ?? 'تقرير' }} - {{ $systemName ?? 'نظام إدارة السكنات الطلابية' }}</title>
+    <title>{{ $reportTitle ?? 'تقرير' }} - {{ $systemName ?? 'نظام إدارة المراكز الطلابية' }}</title>
     <style>
         body {
             font-family: 'sans-serif';
@@ -372,7 +372,7 @@
         <table class="footer-table">
             <tr>
                 <td class="footer-right">
-                    {{ $systemName ?? 'نظام إدارة السكنات الطلابية' }} | {{ $systemVersion ?? 'Version 1.0' }}
+                    {{ $systemName ?? 'نظام إدارة المراكز الطلابية' }} | {{ $systemVersion ?? 'Version 1.0' }}
                 </td>
                 <td class="footer-center">
                     صفحة <span class="mpdf_pagenumber"></span> من <span class="mpdf_nbpages"></span>
@@ -412,7 +412,7 @@
 
                 {{-- CENTER: System Name + Report Title --}}
                 <td class="header-center">
-                    <div class="system-name">{{ $systemName ?? 'نظام إدارة السكنات الطلابية' }}</div>
+                    <div class="system-name">{{ $systemName ?? 'نظام إدارة المراكز الطلابية' }}</div>
                     <div class="report-title-small">{{ $reportTitle ?? 'تقرير' }}</div>
                 </td>
 

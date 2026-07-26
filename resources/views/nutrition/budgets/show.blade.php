@@ -82,6 +82,30 @@
             </div>
         </div>
 
+        <!-- Supplier Totals Card -->
+        @php
+            $supplierTotals = collect($budget->lines)->groupBy('supplier_name')->map(function ($lines) {
+                return $lines->sum('total');
+            });
+        @endphp
+        @if($supplierTotals->count() > 0)
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+            <div class="px-6 py-4 border-b border-gray-100 bg-slate-50 flex items-center justify-between">
+                <h3 class="font-bold text-gray-800 font-cairo"><i class="fas fa-truck text-primary ml-2"></i>إجمالي المبالغ حسب المورد</h3>
+            </div>
+            <div class="p-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                @foreach($supplierTotals as $supplierName => $total)
+                    @if(!empty($supplierName))
+                    <div class="border border-gray-100 rounded-xl p-3 flex flex-col items-center justify-center bg-gray-50/50">
+                        <span class="text-xs font-bold text-gray-500 font-cairo text-center mb-1">{{ $supplierName }}</span>
+                        <span class="font-black text-navy font-mono">{{ number_format($total, 2) }} <span class="text-[10px] text-gray-400 font-cairo">ر.ي</span></span>
+                    </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         <!-- Rejection Reason -->
         @if ($budget->status === 'rejected' && $budget->rejection_reason)
             <div class="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6">

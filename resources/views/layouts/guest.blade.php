@@ -253,7 +253,7 @@
                         class="h-14 w-auto filter brightness-0 invert">
                 </div>
                 <h1 class="text-xl font-black text-white text-center leading-tight">
-                    منصة إدارة السكنات الطلابية<br>
+                    منصة إدارة المراكز الطلابية<br>
                     <span class="text-gold font-almarai text-xs font-bold uppercase tracking-wider">جمعية رعاية طالب العلم</span>
                 </h1>
             </div>
