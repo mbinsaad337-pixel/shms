@@ -88,4 +88,8 @@ class FoodMonthlySettlement extends Model
         ];
         return $months[$this->month] ?? $this->month;
     }
+//     public function details()
+// {
+//     return $this->hasMany(FoodMonthlySettlementDetail::class, 'settlement_id');
+// }
 }

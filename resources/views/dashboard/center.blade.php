@@ -5,7 +5,7 @@
 @section('content')
     <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-            <h1 class="text-2xl md:text-3xl font-black text-primary font-cairo">مركز: {{ auth()->user()->center->name ?? 'غير محدد' }}
+            <h1 class="text-2xl md:text-3xl font-black text-primary font-cairo">لوحة تحكم: {{ auth()->user()->center->name ?? 'غير محدد' }}
             </h1>
             <p class="text-gray-500 font-almarai text-xs md:text-sm mt-1">متابعة العمليات التشغيلية اليومية وإدارة موارد المركز.</p>
         </div>
@@ -13,7 +13,8 @@
             <span
                 class="whitespace-nowrap bg-gold/10 text-gold border border-gold/20 px-4 py-2 rounded-xl text-xs md:text-sm font-bold font-almarai shadow-sm">
                 <i class="fas fa-shield-alt ml-1"></i>
-                {{ auth()->user()->getRoleNames()->first() }}
+                مدير المركز
+                {{-- {{ auth()->user()->getRoleNames()->first() }} --}}
             </span>
         </div>
     </div>
@@ -71,7 +72,7 @@
             </div>
         @endcan
 
-        @can('view-students')
+        {{-- @can('view-students')
             <!-- On Leave -->
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
                 <div class="flex items-center justify-between font-cairo">
@@ -82,6 +83,36 @@
                     </div>
                     <div class="bg-navy/5 p-4 rounded-2xl text-navy">
                         <i class="fas fa-walking text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        @endcan --}}
+
+        @can('view-students')
+            <!-- Academic Students -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                <div class="flex items-center justify-between font-cairo">
+                    <div>
+                        <p class="text-xs text-gray-500 font-bold mb-1">الطلاب الأكاديميون</p>
+                        <h3 class="text-3xl font-bold text-blue-600">{{ number_format($stats['academic_students_count']) }}</h3>
+                        <p class="text-xs text-gray-400 mt-1">برنامج أكاديمي</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-2xl text-blue-600">
+                        <i class="fas fa-graduation-cap text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cooperative Students -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
+                <div class="flex items-center justify-between font-cairo">
+                    <div>
+                        <p class="text-xs text-gray-500 font-bold mb-1">الطلاب التعاونيون</p>
+                        <h3 class="text-3xl font-bold text-emerald-600">{{ number_format($stats['cooperative_students_count']) }}</h3>
+                        <p class="text-xs text-gray-400 mt-1">برنامج تعاوني</p>
+                    </div>
+                    <div class="bg-emerald-50 p-4 rounded-2xl text-emerald-600">
+                        <i class="fas fa-handshake text-2xl"></i>
                     </div>
                 </div>
             </div>
@@ -112,7 +143,7 @@
                         <h3 class="text-2xl font-bold text-navy font-almarai">
                             {{ number_format($stats['center_funds'], 0) }}
                         </h3>
-                        <p class="text-xs text-gray-400 mt-1">ريال سعودي</p>
+                        <p class="text-xs text-gray-400 mt-1">ريال يمني</p>
                     </div>
                     <div class="bg-gold/10 p-4 rounded-2xl text-gold">
                         <i class="fas fa-wallet text-2xl"></i>
@@ -120,6 +151,7 @@
                 </div>
             </div>
         @endcan
+        
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">

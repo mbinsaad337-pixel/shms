@@ -147,6 +147,12 @@ class DashboardController extends Controller
             'pending_approval' => Student::where('center_id', $centerId)->where('is_profile_approved', false)->count(),
             'on_leave_count' => Leave::whereHas('student', fn($q) => $q->where('center_id', $centerId))
                 ->whereNull('actual_return_date')->count(),
+            'academic_students_count' => Student::where('center_id', $centerId)
+                ->whereHas('program', fn($q) => $q->where('code', 'academic'))
+                ->count(),
+            'cooperative_students_count' => Student::where('center_id', $centerId)
+                ->whereHas('program', fn($q) => $q->where('code', 'cooperative'))
+                ->count(),
         ];
 
         $stats['remaining_seats'] = $stats['total_capacity'] - $stats['occupied_seats'];
