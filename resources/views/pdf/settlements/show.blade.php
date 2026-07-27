@@ -14,7 +14,7 @@
             <div class="stat-value text-danger">{{ number_format($settlement->total_spent, 2) }} <span class="stat-unit">ر.ي</span></div>
         </td>
         <td class="stat-card" style="border-bottom: 3px solid #15803d;">
-            <div class="stat-label">الرصيد الختامي المتبقي</div>
+            <div class="stat-label">الرصيد الختامية11 المتبقي</div>
             <div class="stat-value text-success">{{ number_format($settlement->total_remaining, 2) }} <span class="stat-unit">ر.ي</span></div>
         </td>
         <td class="stat-card">
