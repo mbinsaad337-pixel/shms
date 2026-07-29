@@ -174,10 +174,14 @@
         </div>
     </div>
 
+@endsection
+
+@push('modals')
     <!-- Plan Activity Modal -->
-    <div id="planModal" class="fixed inset-0 bg-navy/60 backdrop-blur-sm hidden items-start justify-center z-[1000] p-4 overflow-y-auto">
+    <div id="planModal" class="fixed inset-0 bg-navy/60 backdrop-blur-sm hidden z-[1000] overflow-y-auto">
+        <div class="min-h-full flex items-start justify-center p-6 py-8">
         <div
-            class="bg-white rounded-[2.5rem] p-8 md:p-10 max-w-5xl w-full shadow-2xl transform transition-all border-t-8 border-navy relative my-8 max-h-none overflow-visible">
+            class="bg-white rounded-[2.5rem] p-8 md:p-10 max-w-5xl w-full shadow-2xl transform transition-all border-t-8 border-navy relative">
             <div class="flex items-center justify-between mb-8 border-b border-gray-50 pb-6">
                 <div class="flex items-center gap-5">
                     <div class="w-14 h-14 bg-navy/5 rounded-2xl flex items-center justify-center text-navy">
@@ -311,6 +315,7 @@
                         class="flex-1 bg-gray-100 text-gray-400 py-5 rounded-2xl font-bold font-cairo hover:bg-gray-200 transition-colors">إلغاء</button>
                 </div>
             </form>
+        </div>
         </div>
     </div>
 
@@ -482,16 +487,30 @@
 
         function showModal(id) {
             const m = document.getElementById(id);
+            // Teleport modal to body on first use to escape overflow parents
+            if (m.parentElement !== document.body) {
+                document.body.appendChild(m);
+            }
             m.classList.remove('hidden');
-            m.classList.add('flex');
+            if (id === 'planModal') {
+                m.style.display = 'block';
+                m.scrollTop = 0;
+            } else {
+                m.classList.add('flex');
+            }
             document.body.style.overflow = 'hidden';
+            const main = document.getElementById('mainContent');
+            if (main) main.style.overflow = 'hidden';
         }
 
         function hideModal(id) {
             const m = document.getElementById(id);
             m.classList.add('hidden');
+            m.style.display = '';
             m.classList.remove('flex');
             document.body.style.overflow = 'auto';
+            const main = document.getElementById('mainContent');
+            if (main) main.style.overflow = '';
         }
     </script>
-@endsection
+@endpush
