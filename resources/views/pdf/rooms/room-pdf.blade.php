@@ -10,7 +10,7 @@
                 <tr>
                     <td class="col-right">
                         <div class="detail-row">
-                            <div class="detail-label">رقم الغرفة</div>
+                            <div class="detail-label">رقم5 الغرفة</div>
                             <div class="detail-value large">{{ $room->room_number }}</div>
                         </div>
                         <div class="detail-row">
@@ -35,7 +35,7 @@
                         <div class="detail-row">
                             <div class="detail-label">الحالة</div>
                             <div class="detail-value">
-                                @if($room->status === 'available')
+                                @if ($room->status === 'available')
                                     <span class="badge badge-success">متاحة</span>
                                 @elseif($room->status === 'maintenance')
                                     <span class="badge badge-warning">صيانة</span>
@@ -51,27 +51,29 @@
     </div>
 
     {{-- Current Residents --}}
-    @if($room->assignments && $room->assignments->count() > 0)
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th class="text-center">#</th>
-                <th>اسم الطالب</th>
-                <th class="text-center">الرقم الجامعي</th>
-                <th class="text-center">تاريخ التسكين</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($room->assignments as $i => $assignment)
+    @if ($room->assignments && $room->assignments->count() > 0)
+        <table class="data-table">
+            <thead>
                 <tr>
-                    <td class="text-center">{{ $i + 1 }}</td>
-                    <td class="font-bold">{{ $assignment->student->name_ar ?? '—' }}</td>
-                    <td class="text-center font-mono">{{ $assignment->student->student_number ?? '—' }}</td>
-                    <td class="text-center font-mono">{{ $assignment->assigned_at ? \Carbon\Carbon::parse($assignment->assigned_at)->format('Y-m-d') : '—' }}</td>
+                    <th class="text-center">#</th>
+                    <th>اسم الطالب</th>
+                    <th class="text-center">الرقم الجامعي</th>
+                    <th class="text-center">تاريخ التسكين</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($room->assignments as $i => $assignment)
+                    <tr>
+                        <td class="text-center">{{ $i + 1 }}</td>
+                        <td class="font-bold">{{ $assignment->student->name_ar ?? '—' }}</td>
+                        <td class="text-center font-mono">{{ $assignment->student->student_number ?? '—' }}</td>
+                        <td class="text-center font-mono">
+                            {{ $assignment->assigned_at ? \Carbon\Carbon::parse($assignment->assigned_at)->format('Y-m-d') : '—' }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     @else
         <div style="text-align: center; padding: 20px; color: #94a3b8;">
             لا يوجد طلاب مسكنين حالياً في هذه الغرفة
