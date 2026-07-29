@@ -133,7 +133,7 @@
             @include ('partials.topbar')
 
             <!-- Page Content -->
-            <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none p-6">
+            <main id="mainContent" class="flex-1 relative z-0 overflow-y-auto focus:outline-none p-6">
                 <!-- Alerts -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
                     @if (session('success'))
@@ -257,6 +257,7 @@
         }
     </script>
 
+    @stack('modals')
     @stack ('scripts')
 </body>
 
