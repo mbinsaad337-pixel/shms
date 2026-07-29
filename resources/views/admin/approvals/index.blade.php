@@ -36,7 +36,7 @@
                         </thead>
                         <tbody>
                             @if(is_countable($pendingBudgets) ? count($pendingBudgets) > 0 : (method_exists($pendingBudgets, 'count') ? $pendingBudgets->count() > 0 : !empty($pendingBudgets)))
-    @foreach($pendingBudgets as $budget)
+                                      @foreach($pendingBudgets as $budget)
                                 <tr class="border-b hover:bg-gray-50">
                                     <td class="py-4 font-almarai">{{ $budget->center->name }}</td>
                                     <td class="py-4 font-almarai">{{ $budget->month }}/{{ $budget->year }}</td>
