@@ -10,7 +10,7 @@
         @csrf
 
         <div>
-            <label for="email" class="block text-sm font-black text-navy mb-2 font-cairo">البريد الإلكتروني أو اسم
+            <label for="email" class="block text-sm font-black text-navy mb-2 font-cairo">البريد أو اسم
                 المستخدم</label>
             <div class="relative">
                 <i class="fas fa-user absolute right-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
