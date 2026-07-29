@@ -225,7 +225,7 @@
                         @if($currentSettlementStatus->status == 'approved')
                             تم الاعتماد النهائي لتصفية هذا الشهر
                         @elseif($currentSettlementStatus->status == 'confirmed')
-                            تم تأكيد التصفية وبانتظار الاعتماد النهائي من المدير العام
+                            تم تأكيد التصفية وبانتظار الاعتماد النهائي من مدير قسم المراكز الطلابية
                         @elseif($currentSettlementStatus->status == 'returned')
                             تمت إعادة التصفية للمراجعة (بإمكانك إعادة الرفع الآن)
                         @elseif($currentSettlementStatus->status == 'rejected')

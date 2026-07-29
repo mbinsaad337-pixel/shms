@@ -97,7 +97,7 @@
         </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">اعتمده / المدير العام</div>
+            <div class="sign-title">اعتمده /مدير قسم المراكز الطلابية</div>
             <div class="sign-name">{{ $budget->approver->name ?? '-' }}</div>
         </td>
     </tr>

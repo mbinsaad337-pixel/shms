@@ -180,7 +180,7 @@
                                 $statusLabels = [
                                     'draft' => 'مسودة',
                                     'submitted' => 'قيد مراجعة المدير',
-                                    'confirmed' => 'بانتظار المدير العام',
+                                    'confirmed' => 'بانتظار مدير قسم المراكز الطلابية',
                                     'approved' => 'تم الاعتماد النهائي',
                                     'rejected' => 'مرفوض',
                                 ];
@@ -272,7 +272,7 @@
             </td>
             <td>
                 <div class="signature-line"></div>
-                <strong>المدير العام / المعتمد</strong><br>
+                <strong>مدير قسم المراكز الطلابية / المعتمد</strong><br>
                 {{ $budget->approver->name ?? '-' }}
             </td>
         </tr>

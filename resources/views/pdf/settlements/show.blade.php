@@ -57,9 +57,11 @@
                         <div style="font-size: 11px; font-weight: bold; color: #b91c1c;">-{{ number_format($detail->total_expense, 2) }}</div>
                     </td>
                     <td style="width: 15%; text-align: left; border: none;">
-                            <div style="font-size: 8px; color: #64748b; text-align: center;margin-bottom: 4px;مناولة">الرصيد الختامي</div>
-                            <div style="font-size: 11px; font-weight: bold; color: #0f172a; text-align: center;">{{ number_format($detail->closing_balance, 2) }}</div>
-                        </div>
+                            <div style="font-size: 8px; color: #64748b; text-align: center;margin-bottom: 4px;">الرصيد الختامي</div>
+<div
+    style="font-size: 11px; font-weight: bold; text-align: center; color: {{ $detail->closing_balance < 0 ? '#dc2626' : '#000000' }};">
+    {{ number_format($detail->closing_balance, 2) }}
+</div>                        </div>
                     </td>
                 </tr>
             </table>
@@ -138,7 +140,7 @@
         </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">الاعتماد النهائي / المدير العام</div>
+            <div class="sign-title">الاعتماد النهائي / مدير قسم المراكز الطلابية</div>
             <div class="sign-name">{{ $settlement->approver->name ?? '-' }}</div>
         </td>
     </tr>

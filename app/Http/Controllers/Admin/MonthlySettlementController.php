@@ -246,7 +246,7 @@ class MonthlySettlementController extends Controller
     public function destroy(MonthlySettlement $settlement)
     {
         if ($settlement->status === 'approved' && !auth()->user()->hasRole('super-admin')) {
-            return back()->with('error', 'لا يمكن حذف تصفية معتمدة نهائياً إلا من خلال المدير العام.');
+            return back()->with('error', 'لا يمكن حذف تصفية معتمدة نهائياً إلا من خلال مدير قسم المراكز الطلابية.');
         }
 
         // Only owner or admin can delete

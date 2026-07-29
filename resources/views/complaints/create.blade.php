@@ -29,7 +29,7 @@
                         <option value="{{ $user->id }}" {{ old('receiver_id') == $user->id ? 'selected' : '' }}>
                             {{ $user->name }}
                             @if($user->center) — {{ $user->center->name }} @endif
-                            ({{ $user->getRoleNames()->first() === 'super-admin' ? 'المدير العام' : ($user->getRoleNames()->first() === 'center-manager' ? 'مدير مركز' : $user->getRoleNames()->first()) }})
+                            ({{ $user->getRoleNames()->first() === 'super-admin' ? ' مدير قسم المراكز الطلابية' : ($user->getRoleNames()->first() === 'center-manager' ? 'مدير مركز' : $user->getRoleNames()->first()) }})
                         </option>
                     @endforeach
                 </select>

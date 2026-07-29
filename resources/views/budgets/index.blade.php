@@ -65,7 +65,7 @@
                                     @php
                                         $statuses = [
                                             'submitted' => ['label' => 'قيد مراجعة المدير', 'color' => 'bg-yellow-100 text-yellow-700'],
-                                            'confirmed' => ['label' => 'بانتظار المدير العام', 'color' => 'bg-blue-100 text-blue-700'],
+                                            'confirmed' => ['label' => 'بانتظار مدير قسم المراكز الطلابية', 'color' => 'bg-blue-100 text-blue-700'],
                                             'approved' => ['label' => 'تم الاعتماد النهائي', 'color' => 'bg-green-100 text-green-700'],
                                             'rejected' => ['label' => 'مرفوض', 'color' => 'bg-red-100 text-red-700'],
                                         ];

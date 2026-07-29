@@ -95,7 +95,7 @@
                             }
 
                             $roleTranslations = [
-                                'super-admin' => 'المدير العام',
+                                'super-admin' => 'مدير قسم المراكز الطلابية',
                                 'executive-manager' => 'المدير التنفيذي',
                                 'center-manager' => 'مدير المركز',
                                 'housing-manager' => 'مشرف الطلاب',

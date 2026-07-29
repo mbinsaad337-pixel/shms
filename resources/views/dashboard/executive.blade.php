@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ' لوحة تحكم : فسم ادارة المراكز الطلابية')
+@section('title', ' لوحة تحكم : قسم ادارة المراكز الطلابية')
 
 @section('content')
     <div class="mb-8 flex justify-between items-center bg-white p-6 rounded-2xl border-l-8 border-gold shadow-sm">

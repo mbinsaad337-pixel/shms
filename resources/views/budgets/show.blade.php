@@ -63,7 +63,7 @@
                         $statuses = [
                             'draft' => ['label' => 'مسودة', 'color' => 'bg-gray-100 text-gray-700'],
                             'submitted' => ['label' => 'قيد مراجعة المدير', 'color' => 'bg-yellow-100 text-yellow-700'],
-                            'confirmed' => ['label' => 'بانتظار المدير العام', 'color' => 'bg-blue-100 text-blue-700'],
+                            'confirmed' => ['label' => 'بانتظار مدير قسم المراكز الطلابي ', 'color' => 'bg-blue-100 text-blue-700'],
                             'approved' => ['label' => 'تم الاعتماد النهائي', 'color' => 'bg-green-100 text-green-700'],
                             'rejected' => ['label' => 'مرفوض', 'color' => 'bg-red-100 text-red-700'],
                         ];

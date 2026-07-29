@@ -66,7 +66,7 @@
         </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">اعتمده / المدير العام</div>
+            <div class="sign-title">اعتمده /  مدير قسم المراكز الطلابية</div>
         </td>
     </tr>
 </table>

@@ -263,7 +263,7 @@
                     @csrf
                     <button type="submit" class="bg-green-600 text-white hover:bg-green-700 px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-bold font-cairo shadow-sm transition-all">
                         <i class="fas fa-stamp"></i>
-                        <span>اعتماد نهائي (المدير العام)</span>
+                        <span>اعتماد نهائي ( مدير قسم المراكز الطلابية )</span>
                     </button>
                 </form>
             @endif
@@ -305,7 +305,7 @@
         @elseif($settlement->status === 'confirmed')
             <div class="bg-blue-50 border border-blue-100 rounded-2xl p-6 flex items-center gap-4">
                 <i class="fas fa-info-circle text-blue-500 text-2xl"></i>
-                <div class="text-blue-700 font-almarai text-sm">بانتظار الاعتماد النهائي من المدير العام.</div>
+                <div class="text-blue-700 font-almarai text-sm">بانتظار الاعتماد النهائي من مدير قسم المراكز الطلابية .</div>
             </div>
         @endif
     </div>
