@@ -159,29 +159,74 @@
                 "{{ $fund->id }}": {{ (float)$fund->balance }},
             @endforeach
         };
-
         function checkBalance() {
-            const type = typeSelect.value;
-            const fundId = fundSelect.value;
-            const amount = parseFloat(amountInput.value) || 0;
-            const balance = fundBalances[fundId] || 0;
+    const type = typeSelect.value;
+    const fundId = fundSelect.value;
+    const amount = parseFloat(amountInput.value) || 0;
+    const balance = parseFloat(fundBalances[fundId]) || 0;
 
-            // Remove existing warnings
-            amountInput.classList.remove('border-red-500', 'bg-red-50');
-            const existingError = document.getElementById('balance-error');
-            if (existingError) existingError.remove();
+    // إزالة التنبيه السابق
+    amountInput.classList.remove(
+        'border-red-500',
+        'bg-red-50',
+        'border-yellow-500',
+        'bg-yellow-50'
+    );
 
-            if (['payment', 'salary', 'transfer'].includes(type) && amount > balance) {
-                amountInput.classList.add('border-red-500', 'bg-red-50');
-                const errorDiv = document.createElement('div');
-                errorDiv.id = 'balance-error';
-                errorDiv.className = 'text-red-500 text-xs mt-2 font-almarai font-bold';
-                errorDiv.innerText = '⚠️ الرصيد غير كافٍ! الرصيد المتاح: ' + balance.toLocaleString() + ' ر.ي';
-                amountInput.parentNode.appendChild(errorDiv);
-                return false;
-            }
-            return true;
-        }
+    const existingError = document.getElementById('balance-error');
+    if (existingError) existingError.remove();
+
+    if (['payment', 'salary', 'transfer'].includes(type) && amount > balance) {
+
+        const deficit = amount - balance;
+        const newBalance = balance - amount; // سيكون سالباً
+
+        amountInput.classList.add('border-yellow-500', 'bg-yellow-50');
+
+        const warning = document.createElement('div');
+        warning.id = 'balance-error';
+        warning.className =
+            'text-yellow-700 text-xs mt-2 font-almarai font-bold leading-6';
+
+        warning.innerHTML = `
+            ⚠️ تنبيه: هذه العملية ستؤدي إلى عجز في الصندوق.<br>
+            الرصيد الحالي: <strong>${balance.toLocaleString()} ر.ي</strong><br>
+            قيمة العجز: <strong style="color:#dc2626;">-${deficit.toLocaleString()} ر.ي</strong><br>
+            الرصيد بعد الحفظ:
+            <strong style="color:#dc2626;">${newBalance.toLocaleString()} ر.ي</strong>
+        `;
+
+        amountInput.parentNode.appendChild(warning);
+
+        // السماح بالحفظ
+        return true;
+    }
+
+    return true;
+}
+
+        // function checkBalance() {
+        //     const type = typeSelect.value;
+        //     const fundId = fundSelect.value;
+        //     const amount = parseFloat(amountInput.value) || 0;
+        //     const balance = fundBalances[fundId] || 0;
+
+        //     // Remove existing warnings
+        //     amountInput.classList.remove('border-red-500', 'bg-red-50');
+        //     const existingError = document.getElementById('balance-error');
+        //     if (existingError) existingError.remove();
+
+        //     if (['payment', 'salary', 'transfer'].includes(type) && amount > balance) {
+        //         amountInput.classList.add('border-red-500', 'bg-red-50');
+        //         const errorDiv = document.createElement('div');
+        //         errorDiv.id = 'balance-error';
+        //         errorDiv.className = 'text-red-500 text-xs mt-2 font-almarai font-bold';
+        //         errorDiv.innerText = '⚠️ الرصيد غير كافٍ! الرصيد المتاح: ' + balance.toLocaleString() + ' ر.ي';
+        //         amountInput.parentNode.appendChild(errorDiv);
+        //         return false;
+        //     }
+        //     return true;
+        // }
 
         typeSelect.addEventListener('change', function () {
             const val = this.value;

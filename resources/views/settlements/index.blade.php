@@ -142,7 +142,7 @@
                                                                 <th class="px-6 py-3 font-cairo">رقم السند</th>
                                                                 <th class="px-6 py-3 font-cairo">التاريخ</th>
                                                                 <th class="px-6 py-3 font-cairo">النوع</th>
-                                                                <th class="px-6 py-3 font-cairo">من/إلى</th>
+                                                                <th class="px-6 py-3 font-cairo">مناولة</th>
                                                                 <th class="px-6 py-3 font-cairo">المبلغ (ر.ي)</th>
                                                                 <th class="px-6 py-3 font-cairo text-center">المتبقي</th>
                                                                 <th class="px-6 py-3 font-cairo">البيان</th>
@@ -333,7 +333,7 @@
                                                     <th class="px-6 py-3 font-cairo">رقم السند</th>
                                                     <th class="px-6 py-3 font-cairo">التاريخ</th>
                                                     <th class="px-6 py-3 font-cairo">النوع</th>
-                                                    <th class="px-6 py-3 font-cairo">من/إلى</th>
+                                                    <th class="px-6 py-3 font-cairo">مناولة</th>
                                                     <th class="px-6 py-3 font-cairo">المبلغ (ر.ي)</th>
                                                     <th class="px-6 py-3 font-cairo text-center">المتبقي</th>
                                                     <th class="px-6 py-3 font-cairo">البيان</th>

@@ -7,7 +7,14 @@
         <div class="flex justify-between items-center mb-8">
             <div>
                 <h2 class="text-3xl font-bold text-primary font-cairo">إدارة مدراء المراكز الطلابية</h2>
-                <p class="text-gray-500 font-almarai mt-1">إضافة، تعديل، ومتابعة مدراء المواقع.</p>
+                <p class="text-gray-500 font-almarai mt-1">
+                    @if($selectedCenter)
+                        مدراء مركز: <span class="font-bold text-primary">{{ $selectedCenter->name }}</span>
+                        <a href="{{ route('managers.index') }}" class="mr-2 text-sm font-bold text-gold hover:underline">عرض جميع المدراء</a>
+                    @else
+                        إضافة، تعديل، ومتابعة مدراء المواقع.
+                    @endif
+                </p>
             </div>
             <a href="{{ route('managers.create') }}"
                 class="bg-secondary hover:bg-orange-600 text-white px-6 py-3 rounded-xl shadow-lg font-cairo transition-all transform hover:scale-105 active:scale-95">

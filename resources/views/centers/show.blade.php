@@ -53,7 +53,7 @@
                 <i class="fas fa-users-cog text-2xl"></i>
             </div>
             <h3 class="text-gray-400 font-bold font-cairo mb-1">الطاقم الإداري</h3>
-            <p class="text-4xl font-black text-navy">{{ $center->users_count }}</p>
+            <p class="text-4xl font-black text-navy">{{ $center->staff_count }}</p>
         </div>
 
         <!-- Details Column -->
@@ -102,22 +102,29 @@
             <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 space-y-4">
                 <h3 class="text-lg font-bold text-navy font-cairo mb-4 border-b border-gray-50 pb-4">إجراءات سريعة</h3>
                 
-                <button class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gold/10 hover:text-navy rounded-2xl transition-all group font-almarai">
+                <a href="{{ route('centers.export-pdf', $center) }}" class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gold/10 hover:text-navy rounded-2xl transition-all group font-almarai">
                     <span class="font-bold">تصدير إحصائيات المركز</span>
                     <i class="fas fa-file-pdf opacity-50 group-hover:opacity-100"></i>
-                </button>
+                </a>
+                <a href="{{route('admin.users.index', ['center_id' => $center->id])}}" class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gold/10 hover:text-navy rounded-2xl transition-all group font-almarai">
+                  <span class="font-bold">طاقم عمل المركز</span>
+                    <i class="fas fa-users-cog opacity-50 group-hover:opacity-100"></i>
+                </a>
 
-                <button class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gold/10 hover:text-navy rounded-2xl transition-all group font-almarai">
+                {{-- <a href="{{ route('managers.index', ['center_id' => $center->id]) }}" class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gold/10 hover:text-navy rounded-2xl transition-all group font-almarai">
                     <span class="font-bold">عرض مدراء المركز</span>
                     <i class="fas fa-users-cog opacity-50 group-hover:opacity-100"></i>
-                </button>
+                </a> --}}
 
-                @if($center->is_active)
-                    <button class="w-full flex items-center justify-between p-4 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-2xl transition-all group font-almarai">
-                        <span class="font-bold">إيقاف المركز مؤقتاً</span>
-                        <i class="fas fa-power-off opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                {{-- <form action="{{ route('centers.toggle-status', $center) }}" method="POST"
+                    onsubmit="return confirm('{{ $center->is_active ? 'هل أنت متأكد من إيقاف المركز؟' : 'هل تريد تفعيل المركز؟' }}')">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="w-full flex items-center justify-between p-4 rounded-2xl transition-all group font-almarai {{ $center->is_active ? 'bg-red-50 text-red-600 hover:bg-red-600 hover:text-white' : 'bg-green-50 text-green-700 hover:bg-green-600 hover:text-white' }}">
+                        <span class="font-bold">{{ $center->is_active ? 'إيقاف المركز' : 'تفعيل المركز' }}</span>
+                        <i class="fas fa-power-off opacity-50 group-hover:opacity-100 transition-opacity"></i>
                     </button>
-                @endif
+                </form> --}}
             </div>
         </div>
     </div>

@@ -1,6 +1,8 @@
+
 @extends('pdf.layouts.master')
 
 @section('content')
+
 
 {{-- Overview Stats --}}
 <table class="stats-row" style="margin-bottom: 25px;">
@@ -14,7 +16,7 @@
             <div class="stat-value text-danger">{{ number_format($settlement->total_spent, 2) }} <span class="stat-unit">ر.ي</span></div>
         </td>
         <td class="stat-card" style="border-bottom: 3px solid #15803d;">
-            <div class="stat-label">الرصيد الختامية11 المتبقي</div>
+            <div class="stat-label">الرصيد الختامي المتبقي</div>
             <div class="stat-value text-success">{{ number_format($settlement->total_remaining, 2) }} <span class="stat-unit">ر.ي</span></div>
         </td>
         <td class="stat-card">
@@ -40,23 +42,22 @@
                 <tr>
                     <td style="width: 40%; border: none;">
                         <span style="font-size: 13px; font-weight: bold; color: #004274;">{{ $detail->fund->name }}</span><br>
-                        <span style="font-size: 9px; color: #64748b;">{{ $fundVouchers->count() }} حركة مالية مسجلة</span>
+                        <span style="font-size: 9px; color: #64748b;margin-bottom: 4px;">{{ $fundVouchers->count() }} حركة مالية مسجلة</span>
                     </td>
                     <td style="width: 15%; text-align: center; border: none;">
-                        <div style="font-size: 8px; color: #64748b;">الرصيد الافتتاحي</div>
+                        <div style="font-size: 8px; color: #64748b;margin-bottom: 4px;">الرصيد الافتتاحي</div>
                         <div style="font-size: 11px; font-weight: bold; color: #334155;">{{ number_format($detail->opening_balance, 2) }}</div>
                     </td>
                     <td style="width: 15%; text-align: center; border: none;">
-                        <div style="font-size: 8px; color: #15803d;">إجمالي المقبوضات</div>
+                        <div style="font-size: 8px; color: #15803d;margin-bottom: 4px;">إجمالي المقبوضات</div>
                         <div style="font-size: 11px; font-weight: bold; color: #15803d;">+{{ number_format($detail->total_income, 2) }}</div>
                     </td>
                     <td style="width: 15%; text-align: center; border: none;">
-                        <div style="font-size: 8px; color: #b91c1c;">إجمالي المصروفات</div>
+                        <div style="font-size: 8px; color: #b91c1c;margin-bottom: 4px;">إجمالي المصروفات</div>
                         <div style="font-size: 11px; font-weight: bold; color: #b91c1c;">-{{ number_format($detail->total_expense, 2) }}</div>
                     </td>
                     <td style="width: 15%; text-align: left; border: none;">
-                        <div style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; display: inline-block;">
-                            <div style="font-size: 8px; color: #64748b; text-align: center;">الرصيد الختامي</div>
+                            <div style="font-size: 8px; color: #64748b; text-align: center;margin-bottom: 4px;مناولة">الرصيد الختامي</div>
                             <div style="font-size: 11px; font-weight: bold; color: #0f172a; text-align: center;">{{ number_format($detail->closing_balance, 2) }}</div>
                         </div>
                     </td>
@@ -72,7 +73,7 @@
                         <th>التاريخ</th>
                         <th>النوع</th>
                         <th>المبلغ (ر.ي)</th>
-                        <th>من / إلى</th>
+                        <th>مناولة</th>
                         <th>البيان</th>
                     </tr>
                 </thead>

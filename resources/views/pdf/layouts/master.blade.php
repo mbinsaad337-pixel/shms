@@ -393,11 +393,11 @@
                     @php
                         $scsLogoPath    = public_path('images/logos/scs_logo.png');
                         $scsLogoData    = file_exists($scsLogoPath) ? base64_encode(file_get_contents($scsLogoPath)) : '';
-
                         $center         = auth()->user()->center ?? null;
+                        
                         $centerLogoPath = ($center && $center->logo && file_exists(storage_path('app/public/' . $center->logo)))
                             ? storage_path('app/public/' . $center->logo)
-                            : public_path('images/logos/alawayil_logo.png');
+                            :null;
                         $centerLogoData = file_exists($centerLogoPath) ? base64_encode(file_get_contents($centerLogoPath)) : '';
                         $centerLogoExt  = pathinfo($centerLogoPath, PATHINFO_EXTENSION);
                     @endphp
@@ -463,7 +463,7 @@
     {{-- ════ FILTERS ════ --}}
     @if(!empty($filters) && count($filters) > 0)
     <div class="filters-section">
-        <div class="filters-title">معلومات التقرير والفلاتر المطبّقة</div>
+        <div class="filters-title">معلومات التقرير </div>
         <table class="filters-grid">
             @foreach(array_chunk($filters, 2, true) as $row)
             <tr>

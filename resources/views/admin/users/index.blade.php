@@ -44,6 +44,9 @@
                         <th class="px-6 py-4">الموظف</th>
                         <th class="px-6 py-4">البريد الإلكتروني</th>
                         <th class="px-6 py-4">الدور الوظيفي</th>
+                        <th class="px-6 py-4">المركز</th>
+                        
+                    
                         <th class="px-6 py-4 text-center">الحالة</th>
                         @if(!auth()->user()->hasRole('super-admin'))
                             <th class="px-6 py-4 text-center">الإجراءات</th>
@@ -65,6 +68,11 @@
                                     {{ \App\Helpers\PermissionTranslationHelper::translateRole($user->getRoleNames()->first()) }}
                                 </span>
                             </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="px-3 py-1.5 rounded-xl text-[10px] font-black bg-blue-50 text-gray-500 font-cairo">
+                                    {{ $user->center ? $user->center->name : 'غير محدد' }}
+                                </span>
                             <td class="px-6 py-4 text-center">
                                 <span
                                     class="px-3 py-1.5 rounded-xl text-[10px] font-black {{ $user->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} font-cairo">

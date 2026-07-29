@@ -55,10 +55,10 @@
                 </div>
 
                 <div>
-                    <label for="program_id" class="block text-xs font-bold text-gray-700 mb-2 font-cairo">البرنامج</label>
+                    <label for="program_id" class="block text-xs font-bold text-gray-700 mb-2 font-cairo">نظام التسكين</label>
                     <select name="program_id" id="program_id"
                         class="w-full rounded-xl border-gray-100 focus:border-gold focus:ring-gold transition-all text-xs md:text-sm bg-gray-50/50">
-                        <option value="">جميع البرامج</option>
+                        <option value="">جميع الانظمة</option>
                         @foreach ($programs ?? [] as $program)
                             <option value="{{ $program->id }}" {{ request('program_id') == $program->id ? 'selected' : '' }}>
                                 {{ $program->name }}
@@ -307,8 +307,7 @@
                             <i class="fas fa-coins text-gray-400"></i>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-400 mt-2 font-almarai leading-relaxed"><i class="fas fa-info-circle ml-1"></i> سيتم تطبيق هذا المبلغ على جميع الطلاب المسجلين والمقيمين الحاليين في البرنامج المحدد.</p>
-                </div>
+                    <p class="text-xs text-gray-400 mt-2 font-almarai leading-relaxed"><i class="fas fa-info-circle ml-1"></i> سيتم تطبيق هذا المبلغ على جميع الطلاب المسجلين والمقيمين الحاليين 
 
                 <div class="flex gap-4 pt-4 border-t border-gray-50">
                     <button type="submit"

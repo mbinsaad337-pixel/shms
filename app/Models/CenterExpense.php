@@ -57,6 +57,7 @@ class CenterExpense extends Model
             'rent'        => 'fa-building',
             'water'       => 'fa-tint',
             'electricity' => 'fa-bolt',
+            'internet'    => 'fa-wifi',
             default       => 'fa-money-bill',
         };
     }
@@ -67,6 +68,7 @@ class CenterExpense extends Model
             'rent'        => 'text-purple-600 bg-purple-100',
             'water'       => 'text-blue-600 bg-blue-100',
             'electricity' => 'text-yellow-600 bg-yellow-100',
+            'internet'    => 'text-cyan-600 bg-cyan-100',
             default       => 'text-gray-600 bg-gray-100',
         };
     }

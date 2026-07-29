@@ -19,11 +19,11 @@
             <div>
                 <label class="block text-sm font-bold text-navy font-cairo mb-2">نوع المصروف <span class="text-red-500">*</span></label>
                 <select name="type" x-model="type" required class="w-full px-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50 font-almarai text-sm focus:ring-4 focus:ring-navy/10 focus:border-navy transition-all @error('type') border-red-500 @enderror">
-                    <option value="rent">إيجار سكن</option>
-                    <option value="water">فاتورة ماء</option>
-                    <option value="electricity">فاتورة كهرباء</option>
-                    <option value="internet">فاتورة انترنت</option>
-                    <option value="other">مصروفات اخرى</option>
+                    <option value="rent" {{ old('type', 'rent') === 'rent' ? 'selected' : '' }}>إيجار سكن</option>
+                    <option value="water" {{ old('type') === 'water' ? 'selected' : '' }}>فاتورة ماء</option>
+                    <option value="electricity" {{ old('type') === 'electricity' ? 'selected' : '' }}>فاتورة كهرباء</option>
+                    <option value="internet" {{ old('type') === 'internet' ? 'selected' : '' }}>فاتورة إنترنت</option>
+                    <option value="other" {{ old('type') === 'other' ? 'selected' : '' }}>مصروفات أخرى</option>
                 </select>
                 @error('type')<p class="text-red-500 text-xs mt-1 font-almarai">{{ $message }}</p>@enderror
             </div>

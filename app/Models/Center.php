@@ -30,6 +30,14 @@ class Center extends Model
         return $this->hasMany(User::class);
     }
 
+    /**
+     * حسابات الموظفين التابعة للمركز، باستثناء حسابات الطلاب.
+     */
+    public function staff()
+    {
+        return $this->users()->doesntHave('student');
+    }
+
     public function students()
     {
         return $this->hasMany(Student::class);

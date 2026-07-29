@@ -87,7 +87,7 @@
                             <th class="px-6 py-4 font-cairo text-sm">رقم السند</th>
                             <th class="px-6 py-4 font-cairo text-sm">نوع السند</th>
                             <th class="px-6 py-4 font-cairo text-sm">المبلغ</th>
-                            <th class="px-6 py-4 font-cairo text-sm">من/إلى</th>
+                            <th class="px-6 py-4 font-cairo text-sm">مناولة</th>
                             <th class="px-6 py-4 font-cairo text-sm">الصندوق</th>
                             <th class="px-6 py-4 font-cairo text-sm">التاريخ</th>
                             <th class="px-6 py-4 font-cairo text-sm text-center">المتبقي</th>

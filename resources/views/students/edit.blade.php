@@ -61,7 +61,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-gray-700 font-bold mb-2">البرنامج التابع له *</label>
+                            <label class="block text-gray-700 font-bold mb-2">نظام التسكين التابع له *</label>
                             <select name="program_id" required class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none bg-white">
                                 @foreach($programs ?? [] as $program)
                                     <option value="{{ $program->id }}" {{ old('program_id', $student->program_id) == $program->id ? 'selected' : '' }}>

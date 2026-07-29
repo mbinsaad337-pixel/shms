@@ -9,7 +9,7 @@ class CenterController extends Controller
 {
     public function index()
     {
-        $centers = Center::withCount(['students', 'rooms', 'users'])->get();
+        $centers = Center::withCount(['students', 'rooms', 'staff'])->get();
         return view('centers.index', compact('centers'));
     }
 
@@ -45,8 +45,30 @@ class CenterController extends Controller
 
     public function show(Center $center)
     {
-        $center->loadCount(['students', 'rooms', 'users']);
+        $center->loadCount(['students', 'rooms', 'staff']);
         return view('centers.show', compact('center'));
+    }
+
+    public function exportPdf(Center $center, \App\Services\PdfService $pdfService)
+    {
+        $center->loadCount(['students', 'rooms', 'staff']);
+
+        return $pdfService->stream(
+            'pdf.centers.statistics',
+            compact('center'),
+            'تقرير إحصائيات المركز - ' . $center->name,
+            'center_statistics_' . $center->id . '.pdf'
+        );
+    }
+
+    public function toggleStatus(Center $center)
+    {
+        $center->update(['is_active' => ! $center->is_active]);
+
+        return redirect()->route('centers.show', $center)->with(
+            'success',
+            $center->is_active ? 'تم تفعيل المركز بنجاح.' : 'تم إيقاف المركز بنجاح.'
+        );
     }
 
     public function update(Request $request, Center $center)

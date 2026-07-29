@@ -52,7 +52,7 @@ class CenterExpenseController extends Controller
     {
         $request->validate([
             'center_id' => 'required|exists:centers,id',
-            'type' => 'required|in:rent,water,electricity',
+            'type' => 'required|in:rent,water,electricity,internet,other',
             'amount' => 'required|numeric|min:0.01',
             'due_date' => 'required|date',
             'month' => 'required|integer|min:1|max:12',
@@ -95,7 +95,7 @@ class CenterExpenseController extends Controller
     {
         $request->validate([
             'center_id' => 'required|exists:centers,id',
-            'type' => 'required|in:rent,water,electricity',
+            'type' => 'required|in:rent,water,electricity,internet,other',
             'amount' => 'required|numeric|min:0.01',
             'due_date' => 'required|date',
             'month' => 'required|integer|min:1|max:12',

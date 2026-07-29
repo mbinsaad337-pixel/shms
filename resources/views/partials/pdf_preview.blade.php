@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="flex shrink-0 items-center gap-2">
-                <a id="pdfPreviewDownload" href="#" download
+                <a id="pdfPreviewDownload" href="#" download data-pdf-preview-download
                     class="inline-flex items-center gap-2 rounded-lg bg-navy px-3 py-2 font-cairo text-xs font-bold text-white transition hover:bg-[#083358] focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2">
                     <i class="fas fa-download"></i>
                     <span class="hidden sm:inline">حفظ الملف</span>
@@ -36,7 +36,7 @@
             <div id="pdfPreviewError" class="absolute inset-0 z-10 hidden flex-col items-center justify-center gap-3 bg-slate-100 px-6 text-center text-slate-600">
                 <i class="fas fa-triangle-exclamation text-2xl text-amber-500" aria-hidden="true"></i>
                 <p class="font-cairo text-sm font-bold">تعذّرت معاينة الملف داخل المتصفح.</p>
-                <a id="pdfPreviewErrorDownload" href="#" download class="font-cairo text-sm font-bold text-navy underline">حفظ الملف لفتحه</a>
+                <a id="pdfPreviewErrorDownload" href="#" download data-pdf-preview-download class="font-cairo text-sm font-bold text-navy underline">حفظ الملف لفتحه</a>
             </div>
             <iframe id="pdfPreviewFrame" class="h-full w-full border-0" title="معاينة ملف PDF" src="about:blank"></iframe>
         </div>
@@ -54,6 +54,9 @@
         let trigger = null;
 
         function isPdfExport(link) {
+            // Do not intercept the download actions inside the preview dialog.
+            if (link.dataset.pdfPreviewDownload !== undefined) return false;
+
             if (link.dataset.pdfPreview !== undefined) return true;
             try {
                 const url = new URL(link.href, window.location.href);

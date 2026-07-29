@@ -82,6 +82,8 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
 
     // Centers (Super Admin & Executive only)
     Route::middleware('role:super-admin|executive-manager')->group(function () {
+        Route::get('centers/{center}/export-pdf', [CenterController::class, 'exportPdf'])->name('centers.export-pdf');
+        Route::patch('centers/{center}/toggle-status', [CenterController::class, 'toggleStatus'])->name('centers.toggle-status');
         Route::resource('centers', CenterController::class);
         Route::resource('managers', CenterManagerController::class);
         Route::post('managers/{manager}/toggle', [CenterManagerController::class, 'toggleStatus'])->name('managers.toggle');

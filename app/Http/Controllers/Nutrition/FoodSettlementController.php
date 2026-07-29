@@ -238,7 +238,7 @@ class FoodSettlementController extends Controller
 
     public function exportPdf(FoodMonthlySettlement $settlement, \App\Services\PdfService $pdfService)
     {
-        $settlement->load(['budget', 'creator', 'approver']);
+       $settlement->load(['budget', 'creator', 'approver', 'details']);
         $centerId = $settlement->center_id;
         $month = $settlement->month;
         $year = $settlement->year;

@@ -297,19 +297,79 @@ class StudentController extends Controller
 
         $student->load([
             'center',
+            'program',
+            'user',
             'roomAssignments.room',
+            'activeRoomAssignment.room',
             'mealSubscription',
-            'violations',
-            'leaves',
+            'foodSubscriptions',
+            'violations.recordedBy',
+            'penalties.appliedBy',
+            'leaves.approvedBy',
+            'absences',
             'grades',
-            'achievements'
+            'achievements',
+            'quranCircles',
+            'circleAttendances',
+            'vouchers' => fn($q) => $q->latest(),
         ]);
 
-        $filename = 'student_' . $student->student_number . '.pdf';
+        // تحويل الصور إلى base64 لتضمينها في PDF
+        $photoBase64 = $this->imageToBase64($student->photo);
+        $idCardFileBase64 = $this->imageToBase64($student->id_card_file);
+        $certificateFileBase64 = $this->imageToBase64($student->certificate_file);
+        $universityCardFileBase64 = $this->imageToBase64($student->university_card_file);
 
-        return $pdfService->stream('pdf.reports.students', [
-            'data' => collect([$student]),
-        ], 'تقرير الطالب', $filename, 'portrait');
+        // توليد باركود QR كـ base64
+        $barcodeBase64 = null;
+        if ($student->barcode) {
+            try {
+                $qrSvg = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')
+                    ->size(150)
+                    ->generate($student->barcode);
+                $barcodeBase64 = 'data:image/svg+xml;base64,' . base64_encode($qrSvg);
+            } catch (\Exception $e) {
+                $barcodeBase64 = null;
+            }
+        }
+
+        // حساب الإحصائيات المالية
+        $totalPaid = $student->vouchers()->where('type', 'receipt')->where('status', 'approved')->sum('amount');
+        $remainingFees = max(0, (float) $student->annual_fees - $totalPaid);
+
+        $filename = 'student_profile_' . $student->student_number . '.pdf';
+
+        return $pdfService->stream('pdf.reports.student-profile', [
+            'student' => $student,
+            'photoBase64' => $photoBase64,
+            'idCardFileBase64' => $idCardFileBase64,
+            'certificateFileBase64' => $certificateFileBase64,
+            'universityCardFileBase64' => $universityCardFileBase64,
+            'barcodeBase64' => $barcodeBase64,
+            'totalPaid' => $totalPaid,
+            'remainingFees' => $remainingFees,
+        ], 'ملف الطالب الكامل', $filename, 'portrait');
+    }
+
+    /**
+     * تحويل مسار الصورة إلى base64 لتضمينها في PDF
+     */
+    private function imageToBase64(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+
+        $fullPath = storage_path('app/public/' . $path);
+
+        if (!file_exists($fullPath)) {
+            return null;
+        }
+
+        $mimeType = mime_content_type($fullPath);
+        $data = file_get_contents($fullPath);
+
+        return 'data:' . $mimeType . ';base64,' . base64_encode($data);
     }
 
     public function exportListPdf(Request $request, \App\Services\PdfService $pdfService)

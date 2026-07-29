@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('center_expenses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('center_id')->constrained()->cascadeOnDelete();
-            $table->enum('type', ['rent', 'water', 'electricity'])->comment('نوع المصروف: إيجار، ماء، كهرباء');
+            $table->enum('type', ['rent', 'water', 'electricity', 'internet', 'other'])->comment('نوع المصروف: إيجار سكن، فاتورة ماء، فاتورة كهرباء، فاتورة إنترنت، مصروفات أخرى');
             $table->decimal('amount', 10, 2)->comment('المبلغ المستحق');
             $table->date('due_date')->comment('تاريخ الاستحقاق');
             $table->date('payment_date')->nullable()->comment('تاريخ الدفع الفعلي');

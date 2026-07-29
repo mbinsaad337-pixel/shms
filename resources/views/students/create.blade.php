@@ -24,9 +24,9 @@
                     </div>
 
                     <div>
-                        <label class="block text-gray-700 font-cairo font-bold mb-2">البرنامج التابع له <span class="text-red-500">*</span></label>
+                        <label class="block text-gray-700 font-cairo font-bold mb-2">نظام التسكين التابع له <span class="text-red-500">*</span></label>
                         <select name="program_id" required class="w-full px-5 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-almarai bg-white transition-all">
-                            <option value="">اختر البرنامج...</option>
+                            <option value="">اختر نظام التسكين...</option>
                             @foreach($programs ?? [] as $program)
                                 <option value="{{ $program->id }}" {{ old('program_id') == $program->id ? 'selected' : '' }}>
                                     {{ $program->name }}

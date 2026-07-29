@@ -10,10 +10,22 @@ use Illuminate\Support\Facades\Hash;
 
 class CenterManagerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $managers = User::role('center-manager')->with('center')->get();
-        return view('admin.managers.index', compact('managers'));
+        $validated = $request->validate([
+            'center_id' => 'nullable|integer|exists:centers,id',
+        ]);
+
+        $selectedCenter = isset($validated['center_id'])
+            ? Center::findOrFail($validated['center_id'])
+            : null;
+
+        $managers = User::role('center-manager')
+            ->with('center')
+            ->when($selectedCenter, fn ($query) => $query->where('center_id', $selectedCenter->id))
+            ->get();
+
+        return view('admin.managers.index', compact('managers', 'selectedCenter'));
     }
 
     public function create()

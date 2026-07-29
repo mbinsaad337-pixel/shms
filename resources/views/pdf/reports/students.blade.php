@@ -9,6 +9,7 @@
             <th>الرقم الجامعي</th>
             <th>المركز</th>
             <th>الغرفة</th>
+            <th>البرنامج</th>
             <th>المستوى الدراسي</th>
             <th class="text-center">الحالة</th>
         </tr>
@@ -23,6 +24,7 @@
                 <span class="badge badge-primary">{{ $student->center->name }}</span>
             </td>
             <td>{{ $student->room->room_number ?? '---' }}</td>
+            <td>{{ $student->program->name ?? '---' }}</td>
             <td>{{ $student->academic_level ?? '---' }}</td>
             <td class="text-center">
                 @php

@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'لوحة تحكم المدير العام')
+@section('title', ' لوحة تحكم : فسم ادارة المراكز الطلابية')
 
 @section('content')
     <div class="mb-8 flex justify-between items-center bg-white p-6 rounded-2xl border-l-8 border-gold shadow-sm">
         <div>
             <h1 class="text-3xl font-black text-navy font-cairo">نظرة عامة شاملة</h1>
-            <p class="text-gray-400 font-almarai text-sm mt-1">متابعة الأداء العام لكافة المراكز الطلابية والعمليات المالية</p>
+            <p class="text-gray-400 font-almarai text-sm mt-1">متابعة الأداء العام لكافة المراكز الطلابية</p>
         </div>
         <div class="flex gap-4">
             <div class="bg-navy/5 px-6 py-3 rounded-2xl border border-navy/10 flex items-center gap-3">
@@ -113,7 +113,6 @@
                         <i class="fas fa-shield-alt text-orange-500"></i>
                         <span>قيد المراجعة والاعتماد</span>
                     </h2>
-                    <span class="text-[10px] bg-white px-2 py-1 rounded-lg border text-gray-500 font-bold">عناصر حرجة</span>
                 </div>
                 <div class="p-6 overflow-y-auto max-h-[600px] flex flex-col gap-4">
                     @php
@@ -128,23 +127,25 @@
                                 $centerName = $item['center']['name'] ?? 'مركز غير معروف';
                                 $amount = $isBudget ? ($item['total_amount'] ?? 0) : ($item['total_spent'] ?? 0);
                             @endphp
+                          <a href="{{ $isBudget ? route('budgets.show', $item['id']) : route('settlements.show', $item['id']) }}" 
+                                           class="text-[10px] font-bold text-{{ $color }}-600 hover:underline">   
+                                    
                             <div class="p-4 bg-gray-50 border border-gray-100 rounded-2xl transition-all hover:bg-white hover:shadow-md hover:border-{{ $color }}-200 relative group">
                                 <div class="flex items-center justify-between mb-2">
                                     <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-{{ $color }}-100 text-{{ $color }}-700 uppercase tracking-tighter">
                                         {{ $typeLabel }}
                                     </span>
-                                    <span class="text-[9px] text-gray-400 font-bold">#{{ $item['id'] }}</span>
                                 </div>
                                 <h4 class="text-sm font-bold text-gray-800 font-cairo mb-1 truncate">{{ $centerName }}</h4>
                                 <div class="flex justify-between items-end">
                                     <div>
-                                        <p class="text-[10px] text-gray-400 font-almarai italic mb-2">المبلغ: {{ number_format($amount, 2) }} ر.ي</p>
-                                        <a href="{{ $isBudget ? route('budgets.show', $item['id']) : route('settlements.show', $item['id']) }}" 
-                                           class="text-[10px] font-bold text-{{ $color }}-600 hover:underline">مراجعة والبت في الطلب ←</a>
+                                        <p class="text-[10px] text-gray-500 mb-2">المبلغ: {{ number_format($amount, 2) }} ر.ي</p>
+                                        
                                     </div>
                                     <span class="text-[9px] text-gray-400">{{ \Carbon\Carbon::parse($item['created_at'])->diffForHumans() }}</span>
                                 </div>
                             </div>
+                             </a>
                         @endforeach
                     @else
                         <div class="text-center py-12 flex flex-col items-center">

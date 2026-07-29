@@ -95,7 +95,7 @@
                     <div>
                         <p class="text-xs text-gray-500 font-bold mb-1">الطلاب الأكاديميون</p>
                         <h3 class="text-3xl font-bold text-blue-600">{{ number_format($stats['academic_students_count']) }}</h3>
-                        <p class="text-xs text-gray-400 mt-1">برنامج أكاديمي</p>
+                        <p class="text-xs text-gray-400 mt-1">نظام التسكين الأكاديمي</p>
                     </div>
                     <div class="bg-blue-50 p-4 rounded-2xl text-blue-600">
                         <i class="fas fa-graduation-cap text-2xl"></i>
@@ -109,7 +109,7 @@
                     <div>
                         <p class="text-xs text-gray-500 font-bold mb-1">الطلاب التعاونيون</p>
                         <h3 class="text-3xl font-bold text-emerald-600">{{ number_format($stats['cooperative_students_count']) }}</h3>
-                        <p class="text-xs text-gray-400 mt-1">برنامج تعاوني</p>
+                        <p class="text-xs text-gray-400 mt-1">نظام التسكين التعاوني</p>
                     </div>
                     <div class="bg-emerald-50 p-4 rounded-2xl text-emerald-600">
                         <i class="fas fa-handshake text-2xl"></i>

@@ -33,9 +33,11 @@
                 <label class="block text-xs font-bold text-navy font-cairo mb-2">نوع المصروف</label>
                 <select name="type" class="w-full px-4 py-2.5 rounded-xl border border-gray-100 bg-gray-50 font-almarai text-sm focus:ring-2 focus:ring-navy/10 focus:border-navy transition-all">
                     <option value="">الكل</option>
-                    <option value="rent" {{ request('type') === 'rent' ? 'selected' : '' }}>إيجار</option>
-                    <option value="water" {{ request('type') === 'water' ? 'selected' : '' }}>ماء</option>
-                    <option value="electricity" {{ request('type') === 'electricity' ? 'selected' : '' }}>كهرباء</option>
+                    <option value="rent" {{ request('type') === 'rent' ? 'selected' : '' }}>إيجار سكن</option>
+                    <option value="water" {{ request('type') === 'water' ? 'selected' : '' }}>فاتورة ماء</option>
+                    <option value="electricity" {{ request('type') === 'electricity' ? 'selected' : '' }}>فاتورة كهرباء</option>
+                    <option value="internet" {{ request('type') === 'internet' ? 'selected' : '' }}>فاتورة إنترنت</option>
+                    <option value="other" {{ request('type') === 'other' ? 'selected' : '' }}>مصروفات أخرى</option>
                 </select>
             </div>
             <div>

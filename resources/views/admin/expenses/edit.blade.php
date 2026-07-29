@@ -23,8 +23,8 @@
                     <option value="rent">إيجار سكن</option>
                     <option value="water">فاتورة ماء</option>
                     <option value="electricity">فاتورة كهرباء</option>
-                    <option value="internet">فاتورة انترنت</option>
-                    <option value="other">مصروفات اخرى</option>
+                    <option value="internet">فاتورة إنترنت</option>
+                    <option value="other">مصروفات أخرى</option>
                 </select>
                 @error('type')<p class="text-red-500 text-xs mt-1 font-almarai">{{ $message }}</p>@enderror
             </div>

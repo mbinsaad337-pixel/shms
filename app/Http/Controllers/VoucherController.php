@@ -80,11 +80,7 @@ class VoucherController extends Controller
         ]);
 
         $fund = Fund::findOrFail($validated['fund_id']);
-        if (in_array($validated['type'], ['payment', 'salary', 'transfer'])) {
-            if ((float)$fund->balance < (float)$validated['amount']) {
-                return back()->withErrors(['amount' => 'عذراً، رصيد الصندوق غير كافٍ. الرصيد المتاح حالياً هو: ' . number_format($fund->balance, 2) . ' ر.ي'])->withInput();
-            }
-        }
+      
 
         $prefix = [
             'receipt' => 'RV',
