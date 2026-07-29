@@ -43,16 +43,23 @@
     <tr>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">أعده / مسؤول الأنشطة</div>
-            <div class="sign-name">{{ $exportUser ?? '' }}</div>
+            <div class="sign-title"> مسؤول الأنشطة</div>
+            <div class="sign-name">
+                @php
+                      $Activty_manager = \App\Models\User::role('social-manager')->where('center_id',$activity->center_id)->first();
+                @endphp
+                {{ $Activty_manager->name ?? '---' }}
+            </div>
         </td>
+        
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">راجعه / المسؤول الإداري</div>
-        </td>
-        <td>
-            <div class="sign-line"></div>
-            <div class="sign-title">اعتمده / مدير المركز</div>
+            <div class="sign-title"> مدير المركز</div>
+            <div class="sign-name">
+                @php
+                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$activity->center_id)->first();
+                @endphp
+                {{ $center_manager->name ?? '---' }}
         </td>
     </tr>
 </table>
