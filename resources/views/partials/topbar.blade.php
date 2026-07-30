@@ -102,7 +102,7 @@
                                 'financial-manager' => 'المسؤول المالي',
                                 'inventory-manager' => 'مسؤول العهدة',
                                 'nutrition-manager' => 'مسؤول التغذية',
-                                'social-manager' => 'المسؤول الاجتماعي',
+                                'social-manager' => 'مسؤول الأنشطة',
                                 'transport-manager' => 'مسؤول النقل',
                                 'student' => 'طالب',
                                 'circle-teacher' => 'مدرس حلقة',

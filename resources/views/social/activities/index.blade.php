@@ -36,7 +36,7 @@
 
         <!-- Filters Section -->
         <div class="bg-white p-6 rounded-3xl shadow-sm mb-8 border border-gray-100">
-            <form action="{{ route('activities.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+            <form action="{{ route('activities.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-6 items-end">
                 @if (isset($centers) && count($centers) > 0)
                 <div>
                     <label class="block text-xs font-bold text-gray-400 mb-2 uppercase font-cairo">المركز / السكن</label>
@@ -58,11 +58,22 @@
                         class="w-full bg-gray-50 border-0 rounded-xl p-3 text-sm focus:ring-2 focus:ring-gold/20 font-almarai">
                 </div>
 
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-2 uppercase font-cairo">فئة النشاط</label>
+                    <select name="category" onchange="this.form.submit()"
+                        class="w-full bg-gray-50 border-0 rounded-xl p-3 text-sm focus:ring-2 focus:ring-gold/20 font-almarai">
+                        <option value="">جميع الفئات</option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat }}" {{ request('category') == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <div class="flex items-center gap-2">
                     <button type="submit" class="flex-1 bg-navy text-white p-3 rounded-xl font-bold font-cairo hover:bg-navy/90 transition-all shadow-md">
                         <i class="fas fa-filter text-gold ml-1"></i> عرض
                     </button>
-                    @if(request()->anyFilled(['center_id', 'month']))
+                    @if(request()->anyFilled(['center_id', 'month', 'category']))
                         <a href="{{ route('activities.index') }}" class="w-12 h-11 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-100 transition-all border border-red-100" title="إعادة تعيين">
                             <i class="fas fa-times"></i>
                         </a>
@@ -71,102 +82,131 @@
             </form>
         </div>
 
-        <!-- Activities Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @if(is_countable($activities) ? count($activities) > 0 : (method_exists($activities, 'count') ? $activities->count() > 0 : !empty($activities)))
-                @foreach($activities as $activity)
-                <div
-                    class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden card-premium group h-full flex flex-col">
-                    <div class="relative h-48 bg-navy/5 overflow-hidden flex items-center justify-center p-8">
-                        @if($activity->club?->logo)
-                            <img src="{{ asset('storage/' . $activity->club->logo) }}" alt="Club Logo"
-                                class="w-24 h-24 object-contain opacity-80 group-hover:scale-110 transition-transform duration-500">
-                        @else
-                            <i
-                                class="fas fa-users-viewfinder text-6xl text-navy/10 group-hover:scale-110 transition-transform duration-500"></i>
-                        @endif
-
-                        <div class="absolute top-6 left-6">
-                            <span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest
-                                        @if($activity->status == 'planned') bg-blue-100 text-blue-700 
-                                        @elseif($activity->status == 'active') bg-green-100 text-green-700
-                                        @else bg-gray-100 text-gray-500 @endif">
-                                {{ $activity->status == 'planned' ? 'مجدولة' : ($activity->status == 'active' ? 'مستمرة' : 'منتهية') }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="p-8 flex-grow">
-                        <div class="mb-4">
-                            <span
-                                class="text-gold font-bold text-xs uppercase font-cairo block mb-1 tracking-wider">{{ $activity->club->name ?? 'نادي عام' }}</span>
-                            <h2
-                                class="text-2xl font-black text-navy font-cairo leading-tight group-hover:text-gold transition-colors">
-                                {{ $activity->name }}</h2>
-                        </div>
-
-                        <div class="space-y-3 mb-8">
-                            <div class="flex items-start gap-3 text-gray-500 font-almarai text-sm">
-                                <i class="fas fa-calendar-alt text-navy w-4 mt-0.5"></i>
-                                <div>
-                                    <span class="block">{{ $activity->start_date->format('Y/m/d') }}</span>
-                                    @if($activity->end_date && $activity->end_date != $activity->start_date)
-                                        <span class="text-xs text-gray-400">إلى {{ $activity->end_date->format('Y/m/d') }}</span>
+        <!-- Activities Table -->
+        <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden mb-8">
+            <div class="p-0 overflow-x-auto">
+                <table class="w-full text-right">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-100">
+                            <th class="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest font-cairo whitespace-nowrap">اسم النشاط</th>
+                            <th class="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest font-cairo whitespace-nowrap">الجهة / المكان</th>
+                            <th class="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest font-cairo whitespace-nowrap">الزمان</th>
+                            <th class="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest font-cairo whitespace-nowrap text-center">المستهدفون / المشاركون</th>
+                            <th class="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest font-cairo whitespace-nowrap text-center">الحالة</th>
+                            <th class="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest font-cairo whitespace-nowrap text-center">إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        @if(is_countable($activities) ? count($activities) > 0 : (method_exists($activities, 'count') ? $activities->count() > 0 : !empty($activities)))
+                            @foreach($activities as $activity)
+                            <tr class="hover:bg-gray-50/50 transition-colors group">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        @if($activity->club?->logo)
+                                            <img src="{{ asset('storage/' . $activity->club->logo) }}" class="w-10 h-10 rounded-xl object-contain bg-white shadow-sm border border-gray-50" alt="logo">
+                                        @else
+                                            <div class="w-10 h-10 rounded-xl bg-navy/5 flex items-center justify-center text-navy/40">
+                                                <i class="fas fa-users-viewfinder"></i>
+                                            </div>
+                                        @endif
+                                        <div>
+                                            <a href="{{ route('activities.show', $activity->id) }}" class="text-sm font-black text-navy font-cairo hover:text-gold transition-colors block">{{ $activity->name }}</a>
+                                            @if($activity->category)
+                                                <span class="inline-block mt-1 px-2 py-0.5 bg-gold/10 text-gold rounded text-[10px] font-bold font-cairo">{{ $activity->category }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-xs font-bold text-gray-500 font-almarai mb-1"><i class="fas fa-building text-gold/50 ml-1"></i>{{ $activity->club->name ?? 'نادي عام' }}</div>
+                                    <div class="text-xs text-gray-400 font-almarai"><i class="fas fa-location-dot text-navy/50 ml-1"></i>{{ $activity->location }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-xs font-bold text-gray-500 font-almarai mb-1"><i class="fas fa-calendar-alt text-navy/50 ml-1"></i>{{ $activity->start_date->format('Y/m/d') }}</div>
+                                    @if($activity->start_time)
+                                        <div class="text-[10px] text-gray-400 font-mono"><i class="fas fa-clock text-navy/50 ml-1"></i>{{ $activity->start_time }}</div>
                                     @endif
-                                </div>
-                            </div>
-                            @if($activity->start_time)
-                            <div class="flex items-center gap-3 text-gray-500 font-almarai text-sm">
-                                <i class="fas fa-clock text-navy w-4"></i>
-                                <span>{{ $activity->start_time }} @if($activity->end_time) - {{ $activity->end_time }} @endif</span>
-                            </div>
-                            @endif
-                            <div class="flex items-center gap-3 text-gray-500 font-almarai text-sm">
-                                <i class="fas fa-location-dot text-navy w-4"></i>
-                                <span>{{ $activity->location }}</span>
-                            </div>
-                            <div class="flex items-center gap-3 text-gray-500 font-almarai text-sm">
-                                <i class="fas fa-users text-navy w-4"></i>
-                                <span>{{ $activity->participants->count() }} / {{ $activity->targetedStudents->count() > 0 ? $activity->targetedStudents->count() : ($activity->max_participants ?? '∞') }}
-                                    مشارك</span>
-                            </div>
-                        </div>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="inline-flex flex-col items-center">
+                                        <span class="text-sm font-black text-navy">{{ $activity->participants->count() }} <span class="text-xs text-gray-400 font-normal">/ {{ $activity->targetedStudents->count() > 0 ? $activity->targetedStudents->count() : ($activity->max_participants ?? '∞') }}</span></span>
+                                        @if($activity->target_audience)
+                                            <span class="text-[10px] text-gray-400 font-almarai mt-1">{{ $activity->target_audience }}</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    @if(!auth()->user()->hasRole('super-admin') && !auth()->user()->hasRole('activity-assistant'))
+                                    <form action="{{ route('activities.update-status', $activity->id) }}" method="POST" class="inline-block relative">
+                                        @csrf
+                                        @method('PATCH')
+                                        <select name="status" onchange="this.form.submit()" class="text-[11px] font-bold rounded-lg border-0 py-1.5 pl-6 pr-3 cursor-pointer focus:ring-0 appearance-none
+                                            @if($activity->status == 'planned') bg-blue-50 text-blue-700 
+                                            @elseif($activity->status == 'active') bg-green-50 text-green-700
+                                            @elseif($activity->status == 'cancelled') bg-red-50 text-red-700
+                                            @else bg-gray-50 text-gray-500 @endif">
+                                            <option value="planned" {{ $activity->status == 'planned' ? 'selected' : '' }}>مجدولة</option>
+                                            <option value="active" {{ $activity->status == 'active' ? 'selected' : '' }}>مستمرة</option>
+                                            <option value="finished" {{ $activity->status == 'finished' ? 'selected' : '' }}>منتهية</option>
+                                            <option value="cancelled" {{ $activity->status == 'cancelled' ? 'selected' : '' }}>ملغاة</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down absolute left-2 top-1/2 -translate-y-1/2 text-[8px] pointer-events-none opacity-50"></i>
+                                    </form>
+                                    @else
+                                    <span class="px-3 py-1.5 rounded-lg text-[11px] font-black
+                                            @if($activity->status == 'planned') bg-blue-50 text-blue-700 
+                                            @elseif($activity->status == 'active') bg-green-50 text-green-700
+                                            @elseif($activity->status == 'cancelled') bg-red-50 text-red-700
+                                            @else bg-gray-50 text-gray-500 @endif">
+                                        {{ $activity->status == 'planned' ? 'مجدولة' : ($activity->status == 'active' ? 'مستمرة' : ($activity->status == 'cancelled' ? 'ملغاة' : 'منتهية')) }}
+                                    </span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex items-center justify-center gap-2">
+                                        @if(auth()->user()->can('register-activities'))
+                                            <button onclick="openRegisterModal({{ $activity->id }}, '{{ addslashes($activity->name) }}')"
+                                                class="w-8 h-8 rounded-lg bg-gray-50 text-navy hover:bg-navy hover:text-white transition-all flex items-center justify-center" title="تسجيل حضور">
+                                                <i class="fas fa-user-plus text-xs"></i>
+                                            </button>
+                                        @endif
+                                        
+                                        <a href="{{ route('activities.show', $activity->id) }}"
+                                            class="w-8 h-8 rounded-lg bg-navy/5 text-navy hover:bg-navy hover:text-white transition-all flex items-center justify-center" title="عرض التفاصيل">
+                                            <i class="fas fa-eye text-xs"></i>
+                                        </a>
 
-                        <div class="mt-auto border-t border-gray-50 pt-6 flex gap-3">
-                            @if(auth()->user()->can('register-activities'))
-                                <button onclick="openRegisterModal({{ $activity->id }}, '{{ $activity->name }}')"
-                                    class="flex-1 bg-gray-50 text-navy py-3.5 rounded-xl font-bold font-cairo hover:bg-navy hover:text-white transition-all text-sm flex items-center justify-center gap-2">
-                                    <i class="fas fa-user-plus text-xs"></i>
-                                    <span>تسجيل حضور</span>
-                                </button>
-                            @endif
-                            
-                            @if(!auth()->user()->hasRole('super-admin') && !auth()->user()->hasRole('activity-assistant'))
-                                <a href="{{ route('activities.edit', $activity->id) }}"
-                                    class="w-10 h-10 bg-gold/10 text-gold rounded-xl flex items-center justify-center hover:bg-gold hover:text-white transition-all"
-                                    title="تعديل الفعالية">
-                                    <i class="fas fa-edit text-xs"></i>
-                                </a>
-                            @endif
-                                <a href="{{ route('activities.show', $activity->id) }}"
-                                    class="w-10 h-10 bg-navy/5 text-navy rounded-xl flex items-center justify-center hover:bg-navy hover:text-white transition-all"
-                                    title="عرض التفاصيل">
-                                    <i class="fas fa-eye text-xs"></i>
-                                </a>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            @else
-                <div
-                    class="col-span-full bg-white rounded-[3rem] p-20 text-center border-2 border-dashed border-gray-100 shadow-sm">
-                    <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-icons text-4xl text-gray-200"></i>
-                    </div>
-                    <h3 class="text-2xl font-black text-navy font-cairo">لا توجد فعاليات مجدولة</h3>
-                    <p class="text-gray-400 font-almarai mt-2">ابدأ بجدولة أولى فعالياتك الاجتماعية للأندية والمراكز</p>
-                </div>
-            @endif
+                                        @if(!auth()->user()->hasRole('super-admin') && !auth()->user()->hasRole('activity-assistant'))
+                                            <a href="{{ route('activities.edit', $activity->id) }}"
+                                                class="w-8 h-8 rounded-lg bg-gold/10 text-gold hover:bg-gold hover:text-white transition-all flex items-center justify-center" title="تعديل الفعالية">
+                                                <i class="fas fa-edit text-xs"></i>
+                                            </a>
+                                            <form action="{{ route('activities.destroy', $activity->id) }}" method="POST" class="inline-block" onsubmit="return confirm('هل أنت متأكد من حذف هذه الفعالية؟ سيتم حذف جميع سجلات الحضور الخاصة بها.')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center" title="حذف الفعالية">
+                                                    <i class="fas fa-trash-alt text-xs"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="6" class="px-6 py-16 text-center">
+                                    <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-icons text-3xl text-gray-300"></i>
+                                    </div>
+                                    <h3 class="text-xl font-black text-navy font-cairo">لا توجد فعاليات مجدولة</h3>
+                                    <p class="text-gray-400 font-almarai text-sm mt-2">ابدأ بجدولة أولى فعالياتك الاجتماعية للأندية والمراكز</p>
+                                </td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="mt-10">
@@ -189,7 +229,7 @@
                     </div>
                     <div>
                         <h2 class="text-2xl font-black font-cairo text-navy">جدولة فعالية جديدة</h2>
-                        <p class="text-gray-400 font-almarai text-sm italic">يرجى تعبئة بيانات الفعالية والطلاب المستهدفين</p>
+                        <p class="text-gray-400 font-almarai text-sm ">يرجى تعبئة بيانات الفعالية والطلاب المستهدفين</p>
                     </div>
                 </div>
                 <button onclick="closePlanModal()" class="text-gray-400 hover:text-red-500 transition-colors">
@@ -249,8 +289,21 @@
                         <input type="time" name="end_time"
                             class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-center font-mono transition-all">
                     </div>
+                    <div>
+                        <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">المستهدفين
+                            </label>
+                        <input type="text" name="target_audience" placeholder="مثال: طلاب السنة الأولى"
+                            class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right transition-all font-almarai">
+                    </div>
 
-
+                    <div>
+                        <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">فئة النشاط 
+                            <span class="text-gray-400 font-normal text-xs">(اختياري)</span>
+                        </label>
+                        <input type="text" id="plan_category" name="category" placeholder="مثال: أنشطة شهر يناير"
+                            class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right transition-all font-almarai">
+                        <p class="text-xs text-gray-400 mt-1 font-almarai">يُملأ تلقائياً عند اختيار التاريخ</p>
+                    </div>
 
                 </div>
 
@@ -484,6 +537,23 @@
                 document.getElementById('target_club').checked = false;
             }
         }
+
+        // Auto-fill category based on start_date
+        document.addEventListener('DOMContentLoaded', function() {
+            const startDateInput = document.querySelector('input[name="start_date"]');
+            if (startDateInput) {
+                startDateInput.addEventListener('change', function() {
+                    const categoryInput = document.getElementById('plan_category');
+                    if (this.value && categoryInput && !categoryInput.value) {
+                        const date = new Date(this.value);
+                        const arabicMonths = ['يناير','فبراير','مارس','أبريل','مايو','يونيو',
+                                             'يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+                        const monthName = arabicMonths[date.getMonth()];
+                        categoryInput.value = 'أنشطة شهر ' + monthName;
+                    }
+                });
+            }
+        });
 
         function showModal(id) {
             const m = document.getElementById(id);

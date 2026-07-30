@@ -10,6 +10,7 @@ class Activity extends Model
         'center_id',
         'club_id',
         'name',
+        'category',
         'description',
         'start_date',
         'end_date',

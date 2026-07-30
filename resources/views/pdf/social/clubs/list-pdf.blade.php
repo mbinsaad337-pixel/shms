@@ -42,9 +42,9 @@
             <div class="sign-title">أعده / مسؤول الأنشطة</div>
             <div class="sign-name">
                 @php
-                      $Activty_manager = \App\Models\User::role('social-manager')->where('center_id',$club->center_id)->first();
+                      $Activty_manager = \App\Models\User::role('social-manager')->where('center_id',$club->center_id)->get();
                 @endphp
-                {{ $Activty_manager->name ?? '---' }}
+                {{ $Activty_manager->count() === 1 ? $Activty_manager->first()->name : '' }}
             </div>
         </td>
         
@@ -53,9 +53,9 @@
             <div class="sign-title"> مدير المركز</div>
             <div class="sign-name">
                 @php
-                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$club->center_id)->first();
+                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$club->center_id)->get();
                 @endphp
-                {{ $center_manager->name ?? '---' }}
+                {{ $center_manager->count() ===1 ? $center_manager->first()->name : '' }}
             </div>
         </td>
     </tr>

@@ -11,17 +11,18 @@
                 <p class="text-gray-400 font-almarai text-sm mt-2">إدارة الأندية التخصصية والأنشطة الطلابية المستمرة</p>
             </div>
             <div class="flex gap-4">
-                <a href="{{ route('clubs.export-list', request()->all()) }}" target="_blank"
-                    class="px-6 py-4 bg-white text-navy border-2 border-navy/10 rounded-2xl hover:bg-navy/5 font-cairo font-bold transition-all flex items-center gap-2 shadow-sm">
-                    <i class="fas fa-print"></i>
-                    <span>طباعة</span>
-                </a>
+                
                 <a href="{{ route('activities.index') }}"
                     class="px-6 py-4 bg-gray-50 text-navy rounded-2xl hover:bg-gray-100 font-cairo font-bold transition-all flex items-center gap-2 border border-gray-100">
                     <i class="fas fa-arrow-right"></i>
                     <span>سجل الفعاليات</span>
                 </a>
                 @if (!auth()->user()->hasRole('super-admin'))
+                    <a href="{{ route('clubs.export-list', request()->all()) }}" target="_blank"
+                    class="px-6 py-4 bg-white text-navy border-2 border-navy/10 rounded-2xl hover:bg-navy/5 font-cairo font-bold transition-all flex items-center gap-2 shadow-sm">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>تصدير Pdf</span>
+                    </a>
                     <button onclick="openClubModal()"
                         class="px-8 py-4 bg-navy text-white rounded-2xl hover:bg-navy/90 shadow-xl font-cairo font-bold transition-all transform hover:-translate-y-1 flex items-center gap-3 group">
                         <i class="fas fa-plus-circle text-gold group-hover:rotate-90 transition-transform"></i>
