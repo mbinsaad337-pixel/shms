@@ -89,9 +89,13 @@
                         <div class="absolute top-6 left-6">
                             <span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest
                                         @if($activity->status == 'planned') bg-blue-100 text-blue-700 
-                                        @elseif($activity->status == 'active') bg-green-100 text-green-700
-                                        @else bg-gray-100 text-gray-500 @endif">
-                                {{ $activity->status == 'planned' ? 'مجدولة' : ($activity->status == 'active' ? 'مستمرة' : 'منتهية') }}
+                                        @elseif($activity->status == 'published') bg-green-100 text-green-700
+                                        @elseif($activity->status == 'completed') bg-purple-100 text-purple-700
+                                        @else bg-red-100 text-red-500 @endif">
+                                @if($activity->status == 'planned') مجدولة
+                                @elseif($activity->status == 'published') منشورة
+                                @elseif($activity->status == 'completed') مكتملة
+                                @else ملغاة @endif
                             </span>
                         </div>
                     </div>

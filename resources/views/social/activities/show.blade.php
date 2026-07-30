@@ -92,7 +92,10 @@
                             <div>
                                 <span class="block text-xs text-gray-400 font-bold uppercase font-cairo">الحالة</span>
                                 <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs font-black uppercase tracking-wider">
-                                    {{ $activity->status == 'planned' ? 'مجدولة' : ($activity->status == 'active' ? 'مستمرة' : 'منتهية') }}
+                                    @if($activity->status == 'planned') مجدولة
+                                    @elseif($activity->status == 'published') منشورة
+                                    @elseif($activity->status == 'completed') مكتملة
+                                    @else ملغاة @endif
                                 </span>
                             </div>
                         </div>

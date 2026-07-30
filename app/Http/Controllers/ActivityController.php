@@ -173,7 +173,7 @@ class ActivityController extends Controller
             'target_student_ids' => 'nullable|array',
             'target_student_ids.*' => 'exists:students,id',
             'target_club_members' => 'nullable|boolean',
-            'status' => 'required|in:planned,active,finished'
+            'status' => 'required|in:planned,published,completed,cancelled'
         ]);
 
         $activity->update(array_merge($request->only([

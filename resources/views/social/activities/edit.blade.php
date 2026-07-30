@@ -52,8 +52,9 @@
                         <select name="status" required
                             class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right transition-all font-almarai">
                             <option value="planned" {{ $activity->status == 'planned' ? 'selected' : '' }}>مجدولة (مخطط لها)</option>
-                            <option value="active" {{ $activity->status == 'active' ? 'selected' : '' }}>مستمرة (نشطة)</option>
-                            <option value="finished" {{ $activity->status == 'finished' ? 'selected' : '' }}>منتهية</option>
+                            <option value="published" {{ $activity->status == 'published' ? 'selected' : '' }}>منشورة (نشطة)</option>
+                            <option value="completed" {{ $activity->status == 'completed' ? 'selected' : '' }}>مكتملة</option>
+                            <option value="cancelled" {{ $activity->status == 'cancelled' ? 'selected' : '' }}>ملغاة</option>
                         </select>
                     </div>
 
