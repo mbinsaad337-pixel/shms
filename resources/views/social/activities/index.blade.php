@@ -106,7 +106,7 @@
                                 الزمان</th>
                             <th
                                 class="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest font-cairo whitespace-nowrap text-center">
-                                المستهدفون / المشاركون</th>
+                                المستهدفون</th>
                             <th
                                 class="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest font-cairo whitespace-nowrap text-center">
                                 الحالة</th>
@@ -184,17 +184,17 @@
                                                 <select name="status" onchange="this.form.submit()"
                                                     class="text-[11px] font-bold rounded-lg border-0 py-1.5 pl-6 pr-3 cursor-pointer focus:ring-0 appearance-none
                                             @if ($activity->status == 'planned') bg-blue-50 text-blue-700 
-                                            @elseif($activity->status == 'active') bg-green-50 text-green-700
+                                            @elseif($activity->status == 'published') bg-green-50 text-green-700
                                             @elseif($activity->status == 'cancelled') bg-red-50 text-red-700
                                             @else bg-gray-50 text-gray-500 @endif">
                                                     <option value="planned"
                                                         {{ $activity->status == 'planned' ? 'selected' : '' }}>مجدولة
                                                     </option>
-                                                    <option value="active"
-                                                        {{ $activity->status == 'active' ? 'selected' : '' }}>مستمرة
+                                                    <option value="published"
+                                                        {{ $activity->status == 'published' ? 'selected' : '' }}>مستمرة
                                                     </option>
-                                                    <option value="finished"
-                                                        {{ $activity->status == 'finished' ? 'selected' : '' }}>منتهية
+                                                    <option value="completed"
+                                                        {{ $activity->status == 'completed' ? 'selected' : '' }}>منتهية
                                                     </option>
                                                     <option value="cancelled"
                                                         {{ $activity->status == 'cancelled' ? 'selected' : '' }}>ملغاة
@@ -207,10 +207,10 @@
                                             <span
                                                 class="px-3 py-1.5 rounded-lg text-[11px] font-black
                                             @if ($activity->status == 'planned') bg-blue-50 text-blue-700 
-                                            @elseif($activity->status == 'active') bg-green-50 text-green-700
+                                            @elseif($activity->status == 'published') bg-green-50 text-green-700
                                             @elseif($activity->status == 'cancelled') bg-red-50 text-red-700
                                             @else bg-gray-50 text-gray-500 @endif">
-                                                {{ $activity->status == 'planned' ? 'مجدولة' : ($activity->status == 'active' ? 'مستمرة' : ($activity->status == 'cancelled' ? 'ملغاة' : 'منتهية')) }}
+                                                {{ $activity->status == 'planned' ? 'مجدولة' : ($activity->status == 'published' ? 'مستمرة' : ($activity->status == 'cancelled' ? 'ملغاة' : 'منتهية')) }}
                                             </span>
                                         @endif
                                     </td>

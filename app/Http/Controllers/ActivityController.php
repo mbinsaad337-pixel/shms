@@ -203,7 +203,7 @@ class ActivityController extends Controller
             'target_student_ids' => 'nullable|array',
             'target_student_ids.*' => 'exists:students,id',
             'target_club_members' => 'nullable|boolean',
-            'status' => 'required|in:planned,active,finished',
+            'status' => 'required|in:planned,published,completed,cancelled',
             'target_audience' => 'nullable|string',
             'category' => 'nullable|string|max:255',
         ]);
@@ -232,7 +232,7 @@ class ActivityController extends Controller
     public function updateStatus(Request $request, Activity $activity)
     {
         $validated = $request->validate([
-            'status' => 'required|in:planned,active,finished,cancelled',
+            'status' => 'required|in:planned,published,completed,cancelled',
         ]);
 
         $activity->update(['status' => $validated['status']]);

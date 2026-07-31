@@ -126,7 +126,6 @@
                             </div>
                         </div>
                     @endif
-
                     <!-- Actions -->
                     <div class="flex flex-col gap-3">
                         @if($budget->status === 'submitted' && auth()->user()->can('confirm-budgets'))

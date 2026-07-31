@@ -17,6 +17,8 @@
         </div>
     </div>
 
+    
+
     <!-- Stats Overview Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div class="bg-white p-6 rounded-2xl shadow-sm border-b-4 border-navy">
@@ -59,6 +61,7 @@
             <p class="text-4xl font-black text-navy font-cairo">{{ $mostAbsent->sum('absence_count') }}</p>
         </div>
     </div>
+    
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Most Committed Students -->
