@@ -11,7 +11,23 @@
                 <p class="text-gray-400 font-almarai text-sm mt-2 text-right">نادي: {{ $activity->club->name ?? 'نادي عام' }}</p>
             </div>
             <div class="flex gap-4">
-                @if(!auth()->user()->hasRole('super-admin'))
+                @if(!auth()->user()->hasRole('super-admin') && !auth()->user()->hasRole('activity-assistant'))
+                <form action="{{ route('activities.update-status', $activity->id) }}" method="POST" class="relative">
+                    @csrf
+                    @method('PATCH')
+                    <select name="status" onchange="this.form.submit()" class="pl-10 pr-6 py-3 bg-white rounded-2xl font-cairo font-bold transition-all border border-gray-200 shadow-sm appearance-none cursor-pointer focus:ring-0
+                        @if($activity->status == 'planned') text-blue-700 
+                        @elseif($activity->status == 'active') text-green-700
+                        @elseif($activity->status == 'cancelled') text-red-700
+                        @else text-gray-500 @endif">
+                        <option value="planned" {{ $activity->status == 'planned' ? 'selected' : '' }}>مجدولة</option>
+                        <option value="active" {{ $activity->status == 'active' ? 'selected' : '' }}>مستمرة</option>
+                        <option value="finished" {{ $activity->status == 'finished' ? 'selected' : '' }}>منتهية</option>
+                        <option value="cancelled" {{ $activity->status == 'cancelled' ? 'selected' : '' }}>ملغاة</option>
+                    </select>
+                    <i class="fas fa-chevron-down absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"></i>
+                </form>
+
                 <a href="{{ route('activities.edit', $activity->id) }}"
                     class="px-6 py-3 bg-gold/10 text-gold rounded-2xl hover:bg-gold hover:text-white font-cairo font-bold transition-all flex items-center gap-2 border border-gold/10 shadow-sm">
                     <i class="fas fa-edit"></i>
@@ -42,7 +58,7 @@
                                 <span class="text-navy font-black text-sm">
                                     {{ $activity->start_date?->format('Y-m-d') }}
                                     @if($activity->end_date && $activity->end_date != $activity->start_date)
-                                         - {{ $activity->end_date->format('Y-m-d') }}
+                                         - {{ $activity->end_date?->format('Y-m-d') }}
                                     @endif
                                 </span>
                             </div>
@@ -98,6 +114,13 @@
                                     @else ملغاة @endif
                                 </span>
                             </div>
+                            <div>
+                                <span class="block text-xs text-gray-400 font-bold uppercase font-cairo">الجمهور المستهدف</span>
+                                <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs font-black uppercase tracking-wider">
+                                    {{ $activity->target_audience ?? 'غير محدد' }}
+                                </span>
+                            </div>
+                            
                         </div>
                     </div>
 
@@ -172,7 +195,7 @@
                                         </td>
                                         <td class="px-8 py-5 text-center">
                                             <span class="px-3 py-1.5 bg-green-50 text-green-600 rounded-lg text-xs font-black font-mono">
-                                                {{ $participant->registered_at->format('H:i:s') }}
+                                                {{ $participant->registered_at?->format('H:i:s') ?? '--:--:--' }}
                                             </span>
                                         </td>
                                     </tr>

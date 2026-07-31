@@ -1,6 +1,12 @@
+
 @extends('pdf.layouts.master')
 
 @section('content')
+
+use Illuminate\Support\Facades\DB;
+
+
+
 
 <div class="detail-card">
     <div class="detail-card-header">تفاصيل النادي</div>
@@ -10,12 +16,9 @@
                 <td class="col-right">
                     <div class="detail-row">
                         <div class="detail-label">اسم النادي</div>
-                        <div class="detail-value text-navy">{{ $club->name }}</div>
+                        <span class="detail-value text-navy"><h3>{{ $club->name }}</h3></span>
                     </div>
-                    <div class="detail-row">
-                        <div class="detail-label">التصنيف</div>
-                        <div class="detail-value">{{ $club->category }}</div>
-                    </div>
+                    
                 </td>
                 <td class="col-spacer"></td>
                 <td class="col-left">
@@ -30,11 +33,6 @@
                 </td>
             </tr>
         </table>
-        
-        <div class="detail-row" style="margin-top: 10px;">
-            <div class="detail-label">وصف النادي</div>
-            <div class="detail-value text-sm" style="font-weight: normal; line-height: 1.6;">{{ $club->description }}</div>
-        </div>
     </div>
 </div>
 
@@ -44,7 +42,6 @@
     <thead>
         <tr>
             <th style="width: 5%;">#</th>
-            <th>الرقم الجامعي</th>
             <th>اسم الطالب</th>
             <th>الصفة في النادي</th>
             <th class="text-center">تاريخ الانضمام</th>
@@ -54,7 +51,6 @@
         @foreach($club->members as $index => $member)
         <tr>
             <td class="text-center">{{ $index + 1 }}</td>
-            <td class="font-mono">{{ $member->student->university_id ?? '---' }}</td>
             <td class="font-bold">{{ $member->student->name_ar ?? '---' }}</td>
             <td>
                 @php
@@ -84,22 +80,33 @@
     <tr>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">أعده / مسؤول الأنشطة</div>
-            <div class="sign-name">{{ $exportUser ?? '' }}</div>
-        </td>
-        <td>
-            <div class="sign-line"></div>
-            <div class="sign-title">توقيع / قائد النادي</div>
+            <div class="sign-title"> مسؤول الأنشطة </div>
             <div class="sign-name">
                 @php
-                    $leader = $club->members->where('role', 'leader')->first();
+                      $Activty_manager = \App\Models\User::role('social-manager')->where('center_id',$club->center_id)->get();
                 @endphp
-                {{ $leader->student->name_ar ?? '---' }}
+                {{ $Activty_manager->count() ===1 ? $Activty_manager->first()->name : null }}
             </div>
         </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">اعتمده / مدير المركز</div>
+            <div class="sign-title"> قائد النادي</div>
+            <div class="sign-name">
+                @php
+                    $leader = $club->members->where('role','رئيس النادي')->first();
+                @endphp
+                {{ $leader ? $leader->student->name_ar : null }}
+            </div>
+        </td>
+        <td>
+            <div class="sign-line"></div>
+            <div class="sign-title"> مدير المركز</div>
+            <div class="sign-name">
+                @php
+                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$club->center_id)->get();
+                @endphp
+                {{ $center_manager->count() ===1 ? $center_manager->first()->name : null }}
+            </div>
         </td>
     </tr>
 </table>

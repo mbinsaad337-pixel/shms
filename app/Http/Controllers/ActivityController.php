@@ -31,6 +31,11 @@ class ActivityController extends Controller
             }
         }
 
+        // Category Filter
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
         $activities = $query->latest()->paginate(20)->withQueryString();
 
         $centers = [];
@@ -52,7 +57,18 @@ class ActivityController extends Controller
                 ->get();
         }
 
-        return view('social.activities.index', compact('activities', 'clubs', 'students', 'centers'));
+        // Fetch distinct categories for filter dropdown
+        $categoryQuery = Activity::query();
+        if ($user->center_id) {
+            $categoryQuery->where('center_id', $user->center_id);
+        }
+        $categories = $categoryQuery->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+
+        return view('social.activities.index', compact('activities', 'clubs', 'students', 'centers', 'categories'));
     }
 
     public function exportListPdf(Request $request, \App\Services\PdfService $pdfService)
@@ -74,12 +90,24 @@ class ActivityController extends Controller
             }
         }
 
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
         $activities = $query->latest()->get();
         $centerName = $user->center_id ? $user->center->name : ($request->filled('center_id') ? \App\Models\Center::find($request->center_id)->name : 'جميع المراكز');
 
+        $extraInfo = ['المركز' => $centerName];
+        if ($request->filled('month')) {
+            $extraInfo['الشهر'] = \Carbon\Carbon::createFromFormat('Y-m', $request->month)->translatedFormat('F Y');
+        }
+        if ($request->filled('category')) {
+            $extraInfo['الفئة'] = $request->category;
+        }
+
         return $pdfService->stream('pdf.social.activities.list-pdf', [
             'data' => $activities,
-        ], 'تقرير الفعاليات والأنشطة', 'activities_list.pdf', 'landscape', ['المركز' => $centerName]);
+        ], 'تقرير الفعاليات والأنشطة', 'activities_list.pdf', 'landscape', $extraInfo);
     }
 
     public function store(Request $request)
@@ -96,10 +124,12 @@ class ActivityController extends Controller
             'target_student_ids' => 'nullable|array',
             'target_student_ids.*' => 'exists:students,id',
             'target_club_members' => 'nullable|boolean',
+            'target_audience' => 'nullable|string',
+            'category' => 'nullable|string|max:255',
         ]);
 
         $activity = Activity::create(array_merge($request->only([
-            'club_id', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'location'
+            'club_id', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'location', 'target_audience', 'category'
         ]), [
             'center_id' => auth()->user()->center_id,
             'created_by' => auth()->id(),
@@ -173,11 +203,13 @@ class ActivityController extends Controller
             'target_student_ids' => 'nullable|array',
             'target_student_ids.*' => 'exists:students,id',
             'target_club_members' => 'nullable|boolean',
-            'status' => 'required|in:planned,published,completed,cancelled'
+            'status' => 'required|in:planned,active,finished',
+            'target_audience' => 'nullable|string',
+            'category' => 'nullable|string|max:255',
         ]);
 
         $activity->update(array_merge($request->only([
-            'club_id', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'location', 'status'
+            'club_id', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'location', 'status', 'target_audience', 'category'
         ])));
 
         if ($request->target_all_students) {
@@ -195,6 +227,17 @@ class ActivityController extends Controller
         $activity->update(['max_participants' => $activity->targetedStudents->count()]);
 
         return redirect()->route('activities.show', $activity->id)->with('success', 'تم تحديث الفعالية بنجاح.');
+    }
+
+    public function updateStatus(Request $request, Activity $activity)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:planned,active,finished,cancelled',
+        ]);
+
+        $activity->update(['status' => $validated['status']]);
+
+        return back()->with('success', 'تم تحديث حالة الفعالية بنجاح.');
     }
 
     public function destroy(Activity $activity)

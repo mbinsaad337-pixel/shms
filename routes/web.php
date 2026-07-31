@@ -201,6 +201,7 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         Route::delete('clubs/{club}/members/{student}', [ClubController::class, 'removeMember'])->name('clubs.members.remove');
 
         Route::post('activities/{activity}/register', [ActivityController::class, 'register'])->name('activities.register');
+        Route::patch('activities/{activity}/status', [ActivityController::class, 'updateStatus'])->name('activities.update-status');
         Route::get('activities/{activity}/export-absentees', [ActivityController::class, 'exportAbsenteesPdf'])->name('activities.export-absentees');
         Route::get('activities/export/list', [ActivityController::class, 'exportListPdf'])->name('activities.export-list');
         Route::resource('activities', ActivityController::class);
