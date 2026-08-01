@@ -78,7 +78,7 @@
     @include('partials.pdf_header', [
         'title' => 'سجل الطلاب (جديد)',
         'number' => 'STU-LIST-' . date('Ymd'),
-        'department' => 'إدارة الإسكان وشؤون الطلاب'
+        'department' => 'إدارة الإسكان وشؤون الطلاب',
     ])
 
     <table>
@@ -95,7 +95,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($students as $index => $student)
+            @foreach ($students as $index => $student)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td style="text-align: right;">{{ $student?->name_ar ?? 'غير معروف' }}</td>
@@ -105,16 +105,16 @@
                     <td>{{ $student?->university }}</td>
                     <td>{{ $student?->major }}</td>
                     <td>
-                        @if(auth()->user()->hasRole('super-admin'))
+                        @if (auth()->user()->hasRole('super-admin'))
                             {{ $student?->center?->name ?? 'غير محدد' }}
                         @else
                             <span class="status-{{ $student?->status }}">
-                                @if($student?->status == 'residing') 
+                                @if ($student?->status == 'residing')
                                     مقيم
                                 @elseif($student?->status == 'registered')
-                                    {{ $student?->is_profile_approved ? 'تم الحجز' : 'حجز مبدئي' }}
-                                @else 
-                                    غادر 
+                                    {{ $student?->is_profile_approved ? 'مقيم' : 'حجز مبدئي' }}
+                                @else
+                                    غادر
                                 @endif
                             </span>
                         @endif

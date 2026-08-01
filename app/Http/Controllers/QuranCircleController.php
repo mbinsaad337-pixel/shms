@@ -174,7 +174,7 @@ class QuranCircleController extends Controller
         return back()->with('success', 'تم إزالة الطالب من الحلقة');
     }
 
-    public function stats()
+    public function stats(Request $request)
     {
         $user = Auth::user();
         if (!$user->can('view-circle-reports')) {
@@ -182,19 +182,48 @@ class QuranCircleController extends Controller
         }
 
         $center_id = $user->center_id;
+        $circles = QuranCircle::where('center_id', $center_id)->get();
 
-        // Correct stats logic
-        $totalCircles = QuranCircle::where('center_id', $center_id)->count();
-        $totalSessions = CircleSession::whereHas('circle', function ($q) use ($center_id) {
-            $q->where('center_id', $center_id);
-        })->count();
+        // Build date/circle scoping closure for sessions
+        $sessionScope = function ($q) use ($center_id, $request) {
+            $q->whereHas('circle', function ($cq) use ($center_id, $request) {
+                $cq->where('center_id', $center_id);
+                if ($request->filled('circle_id')) {
+                    $cq->where('id', $request->circle_id);
+                }
+            });
+            if ($request->filled('start_date')) {
+                $q->where('session_date', '>=', $request->start_date);
+            }
+            if ($request->filled('end_date')) {
+                $q->where('session_date', '<=', $request->end_date);
+            }
+        };
+
+        // Total circles (not affected by date range, only by circle filter)
+        if ($request->filled('circle_id')) {
+            $totalCircles = QuranCircle::where('center_id', $center_id)->where('id', $request->circle_id)->count();
+        } else {
+            $totalCircles = QuranCircle::where('center_id', $center_id)->count();
+        }
+
+        // Total sessions in scope
+        $totalSessions = CircleSession::where($sessionScope)->count();
+
+        // Total attendance records in scope
+        $totalPresent = CircleAttendance::where('status', 'present')
+            ->whereHas('session', $sessionScope)->count();
+        $totalAbsent = CircleAttendance::where('status', 'absent')
+            ->whereHas('session', $sessionScope)->count();
+        $totalAttendanceRecords = $totalPresent + $totalAbsent;
+        $commitmentRate = $totalAttendanceRecords > 0
+            ? round(($totalPresent / $totalAttendanceRecords) * 100)
+            : 0;
 
         // Latest absent records
         $latestAbsences = CircleAttendance::with(['student', 'session.circle'])
             ->where('status', 'absent')
-            ->whereHas('session.circle', function ($q) use ($center_id) {
-                $q->where('center_id', $center_id);
-            })
+            ->whereHas('session', $sessionScope)
             ->latest()
             ->take(5)
             ->get();
@@ -202,9 +231,7 @@ class QuranCircleController extends Controller
         // Most committed (top students with 'present' status)
         $mostCommitted = CircleAttendance::select('student_id', DB::raw('count(*) as attendance_count'))
             ->where('status', 'present')
-            ->whereHas('session.circle', function ($q) use ($center_id) {
-                $q->where('center_id', $center_id);
-            })
+            ->whereHas('session', $sessionScope)
             ->groupBy('student_id')
             ->orderByDesc('attendance_count')
             ->with('student')
@@ -214,16 +241,161 @@ class QuranCircleController extends Controller
         // Most absent (top students with 'absent' status) 
         $mostAbsent = CircleAttendance::select('student_id', DB::raw('count(*) as absence_count'))
             ->where('status', 'absent')
-            ->whereHas('session.circle', function ($q) use ($center_id) {
-                $q->where('center_id', $center_id);
-            })
+            ->whereHas('session', $sessionScope)
             ->groupBy('student_id')
             ->orderByDesc('absence_count')
             ->with('student')
             ->take(5)
             ->get();
 
-        return view('quran-circles.stats', compact('totalCircles', 'totalSessions', 'latestAbsences', 'mostCommitted', 'mostAbsent'));
+        // Per-circle breakdown
+        $circleStats = [];
+        $targetCircles = $request->filled('circle_id')
+            ? $circles->where('id', $request->circle_id)
+            : $circles;
+
+        foreach ($targetCircles as $circle) {
+            $circleSessions = CircleSession::where('circle_id', $circle->id);
+            if ($request->filled('start_date')) {
+                $circleSessions->where('session_date', '>=', $request->start_date);
+            }
+            if ($request->filled('end_date')) {
+                $circleSessions->where('session_date', '<=', $request->end_date);
+            }
+            $sessionIds = $circleSessions->pluck('id');
+
+            $cPresent = CircleAttendance::whereIn('session_id', $sessionIds)->where('status', 'present')->count();
+            $cAbsent = CircleAttendance::whereIn('session_id', $sessionIds)->where('status', 'absent')->count();
+            $cTotal = $cPresent + $cAbsent;
+
+            $circleStats[] = [
+                'circle' => $circle,
+                'sessions_count' => $sessionIds->count(),
+                'students_count' => $circle->students()->count(),
+                'present_count' => $cPresent,
+                'absent_count' => $cAbsent,
+                'rate' => $cTotal > 0 ? round(($cPresent / $cTotal) * 100) : 0,
+            ];
+        }
+
+        return view('quran-circles.stats', compact(
+            'totalCircles', 'totalSessions', 'totalPresent', 'totalAbsent',
+            'commitmentRate', 'latestAbsences', 'mostCommitted', 'mostAbsent',
+            'circles', 'circleStats'
+        ));
+    }
+
+    public function exportStats(Request $request, PdfService $pdfService)
+    {
+        $user = Auth::user();
+        if (!$user->can('view-circle-reports')) {
+            abort(403);
+        }
+
+        $center_id = $user->center_id;
+        $allCircles = QuranCircle::where('center_id', $center_id)->get();
+
+        $sessionScope = function ($q) use ($center_id, $request) {
+            $q->whereHas('circle', function ($cq) use ($center_id, $request) {
+                $cq->where('center_id', $center_id);
+                if ($request->filled('circle_id')) {
+                    $cq->where('id', $request->circle_id);
+                }
+            });
+            if ($request->filled('start_date')) {
+                $q->where('session_date', '>=', $request->start_date);
+            }
+            if ($request->filled('end_date')) {
+                $q->where('session_date', '<=', $request->end_date);
+            }
+        };
+
+        if ($request->filled('circle_id')) {
+            $totalCircles = 1;
+        } else {
+            $totalCircles = $allCircles->count();
+        }
+
+        $totalSessions = CircleSession::where($sessionScope)->count();
+        $totalPresent = CircleAttendance::where('status', 'present')->whereHas('session', $sessionScope)->count();
+        $totalAbsent = CircleAttendance::where('status', 'absent')->whereHas('session', $sessionScope)->count();
+        $totalAttendanceRecords = $totalPresent + $totalAbsent;
+        $commitmentRate = $totalAttendanceRecords > 0 ? round(($totalPresent / $totalAttendanceRecords) * 100) : 0;
+
+        // Most committed
+        $mostCommitted = CircleAttendance::select('student_id', DB::raw('count(*) as attendance_count'))
+            ->where('status', 'present')
+            ->whereHas('session', $sessionScope)
+            ->groupBy('student_id')
+            ->orderByDesc('attendance_count')
+            ->with('student')
+            ->take(10)
+            ->get();
+
+        // Most absent
+        $mostAbsent = CircleAttendance::select('student_id', DB::raw('count(*) as absence_count'))
+            ->where('status', 'absent')
+            ->whereHas('session', $sessionScope)
+            ->groupBy('student_id')
+            ->orderByDesc('absence_count')
+            ->with('student')
+            ->take(10)
+            ->get();
+
+        // Per-circle breakdown
+        $circleStats = [];
+        $targetCircles = $request->filled('circle_id')
+            ? $allCircles->where('id', $request->circle_id)
+            : $allCircles;
+
+        foreach ($targetCircles as $circle) {
+            $circleSessions = CircleSession::where('circle_id', $circle->id);
+            if ($request->filled('start_date')) {
+                $circleSessions->where('session_date', '>=', $request->start_date);
+            }
+            if ($request->filled('end_date')) {
+                $circleSessions->where('session_date', '<=', $request->end_date);
+            }
+            $sessionIds = $circleSessions->pluck('id');
+            $cPresent = CircleAttendance::whereIn('session_id', $sessionIds)->where('status', 'present')->count();
+            $cAbsent = CircleAttendance::whereIn('session_id', $sessionIds)->where('status', 'absent')->count();
+            $cTotal = $cPresent + $cAbsent;
+
+            $circleStats[] = [
+                'name' => $circle->name,
+                'teacher' => $circle->teacher->name ?? '—',
+                'type' => $circle->type == 'memorization' ? 'تحفيظ' : 'تلاوة',
+                'sessions_count' => $sessionIds->count(),
+                'students_count' => $circle->students()->count(),
+                'present_count' => $cPresent,
+                'absent_count' => $cAbsent,
+                'rate' => $cTotal > 0 ? round(($cPresent / $cTotal) * 100) : 0,
+            ];
+        }
+
+        $appliedFilters = [];
+        if ($request->filled('circle_id')) {
+            $circleName = $allCircles->firstWhere('id', $request->circle_id)?->name ?? '';
+            $appliedFilters['الحلقة'] = $circleName;
+        }
+        if ($request->start_date) $appliedFilters['من تاريخ'] = $request->start_date;
+        if ($request->end_date) $appliedFilters['إلى تاريخ'] = $request->end_date;
+
+        $stats = [
+            'إجمالي الحلقات' => $totalCircles,
+            'إجمالي الجلسات' => $totalSessions,
+            'نسبة الالتزام' => $commitmentRate . '%',
+            'إجمالي الغيابات' => $totalAbsent,
+        ];
+
+        return $pdfService->stream('pdf.quran-circles.stats-report', [
+            'data' => $circleStats,
+            'mostCommitted' => $mostCommitted,
+            'mostAbsent' => $mostAbsent,
+            'totalPresent' => $totalPresent,
+            'totalAbsent' => $totalAbsent,
+            'commitmentRate' => $commitmentRate,
+        ], 'تقرير إحصائيات الحلقات القرآنية', 'quran_circles_stats_' . date('Y-m-d') . '.pdf', 'portrait', $appliedFilters, $stats);
     }
 
     public function absentReport(Request $request)

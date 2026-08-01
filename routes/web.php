@@ -244,6 +244,7 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
 
         // Statistics
         Route::get('quran-circles-stats', [\App\Http\Controllers\QuranCircleController::class, 'stats'])->name('quran-circles.stats');
+        Route::get('quran-circles-export-stats', [\App\Http\Controllers\QuranCircleController::class, 'exportStats'])->name('quran-circles.export-stats');
         Route::get('quran-circles-absent-report', [\App\Http\Controllers\QuranCircleController::class, 'absentReport'])->name('quran-circles.absent-report');
         Route::get('quran-circles-export-absent-report', [\App\Http\Controllers\QuranCircleController::class, 'exportAbsentReport'])->name('quran-circles.export-absent-report');
     });

@@ -151,7 +151,7 @@
     @include('partials.pdf_header', [
         'title' => 'ملف بيانات طالب',
         'number' => $student->university_id ?? $student->barcode,
-        'department' => 'شؤون الطلاب - ' . ($student->center->name ?? 'المركز')
+        'department' => 'شؤون الطلاب - ' . ($student->center->name ?? 'المركز'),
     ])
 
     <!-- المعلومات الأساسية والصورة -->
@@ -182,10 +182,10 @@
                             <td class="value">{{ $student->student_number }}</td>
                             <td class="label">حالة السكن:</td>
                             <td class="value">
-                                @if($student->status == 'residing')
+                                @if ($student->status == 'residing')
                                     مقيم
                                 @elseif($student->status == 'registered')
-                                    {{ $student->is_profile_approved ? 'تم الحجز' : 'حجز مبدئي' }}
+                                    {{ $student->is_profile_approved ? 'مقيم' : 'حجز مبدئي' }}
                                 @elseif($student->status == 'left')
                                     غادر
                                 @elseif($student->status == 'graduated')
@@ -202,9 +202,13 @@
             </td>
             <td style="width: 25%; text-align: left;">
                 @php
-                    $photoPath = $student->photo ? $student->photo : ($student->user->avatar ? $student->user->avatar : null);
+                    $photoPath = $student->photo
+                        ? $student->photo
+                        : ($student->user->avatar
+                            ? $student->user->avatar
+                            : null);
                 @endphp
-                @if($photoPath && file_exists(storage_path('app/public/' . $photoPath)))
+                @if ($photoPath && file_exists(storage_path('app/public/' . $photoPath)))
                     <img src="{{ storage_path('app/public/' . $photoPath) }}" class="student-photo">
                 @else
                     <div class="photo-placeholder">لا توجد صورة رسمية</div>
@@ -232,24 +236,24 @@
     </div>
 
     <!-- Grades -->
-    @if($student->grades->count() > 0)
-    <div class="section-box">
-        <div class="section-header">بيان الدرجات</div>
-        <table class="data-table" style="text-align: center;">
-            <tr style="background-color: #f1f5f9;">
-                <td class="value">العام الأكاديمي</td>
-                <td class="value">الفصل الدراسي</td>
-                <td class="value">المعدل / النسبة</td>
-            </tr>
-            @foreach($student->grades as $grade)
-            <tr>
-                <td>{{ $grade->academic_year }}</td>
-                <td>{{ $grade->semester }}</td>
-                <td style="color: #2f855a;">{{ number_format($grade->gpa_percentage, 2) }}%</td>
-            </tr>
-            @endforeach
-        </table>
-    </div>
+    @if ($student->grades->count() > 0)
+        <div class="section-box">
+            <div class="section-header">بيان الدرجات</div>
+            <table class="data-table" style="text-align: center;">
+                <tr style="background-color: #f1f5f9;">
+                    <td class="value">العام الأكاديمي</td>
+                    <td class="value">الفصل الدراسي</td>
+                    <td class="value">المعدل / النسبة</td>
+                </tr>
+                @foreach ($student->grades as $grade)
+                    <tr>
+                        <td>{{ $grade->academic_year }}</td>
+                        <td>{{ $grade->semester }}</td>
+                        <td style="color: #2f855a;">{{ number_format($grade->gpa_percentage, 2) }}%</td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
     @endif
 
     <div class="section-box">
@@ -259,9 +263,11 @@
                 <td class="label">الغرفة:</td>
                 <td class="value" colspan="3">
                     @php $assignment = $student->roomAssignments->where('released_at', null)->first(); @endphp
-                    @if($assignment)
+                    @if ($assignment)
                         مبنى: {{ $assignment->room->building }} | رقم الغرفة: {{ $assignment->room->room_number }}
-                        @if($assignment->room->apartment) | شقة: {{ $assignment->room->apartment }} @endif
+                        @if ($assignment->room->apartment)
+                            | شقة: {{ $assignment->room->apartment }}
+                        @endif
                     @else
                         غير مسكن
                     @endif
@@ -275,30 +281,31 @@
             </tr>
             <tr>
                 <td class="label">جوال الطوارئ:</td>
-                <td class="value" colspan="3" dir="ltr" style="color: #e53e3e;">{{ $student->emergency_phone }}</td>
+                <td class="value" colspan="3" dir="ltr" style="color: #e53e3e;">
+                    {{ $student->emergency_phone }}</td>
             </tr>
         </table>
     </div>
 
     <!-- Violations -->
-    @if($student->violations->count() > 0)
-    <div class="section-box">
-        <div class="section-header">السجل السلوكي والمخالفات</div>
-        <table class="data-table">
-            <tr style="background-color: #f1f5f9;">
-                <td class="value">التاريخ</td>
-                <td class="value">نوع المخالفة</td>
-                <td class="value">الإجراء المتخذ</td>
-            </tr>
-            @foreach($student->violations as $violation)
-            <tr>
-                <td>{{ $violation->violation_date->format('Y-m-d') }}</td>
-                <td>{{ $violation->type }}</td>
-                <td>{{ $violation->penalty ? 'تمت العقوبة' : 'بانتظار الإجراء' }}</td>
-            </tr>
-            @endforeach
-        </table>
-    </div>
+    @if ($student->violations->count() > 0)
+        <div class="section-box">
+            <div class="section-header">السجل السلوكي والمخالفات</div>
+            <table class="data-table">
+                <tr style="background-color: #f1f5f9;">
+                    <td class="value">التاريخ</td>
+                    <td class="value">نوع المخالفة</td>
+                    <td class="value">الإجراء المتخذ</td>
+                </tr>
+                @foreach ($student->violations as $violation)
+                    <tr>
+                        <td>{{ $violation->violation_date->format('Y-m-d') }}</td>
+                        <td>{{ $violation->type }}</td>
+                        <td>{{ $violation->penalty ? 'تمت العقوبة' : 'بانتظار الإجراء' }}</td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
     @endif
 
     <div class="footer">
@@ -306,4 +313,5 @@
     </div>
 
 </body>
+
 </html>
