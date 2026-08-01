@@ -171,13 +171,14 @@
             </div>
 
             {{-- Tips --}}
-            <div class="bg-gradient-to-br from-navy to-blue-900 rounded-2xl p-6 text-white">
+          
+        </div> 
+         <div class="bg-gradient-to-br from-navy to-blue-900 rounded-2xl p-6 text-black/90 shadow-lg shadow-navy/20">
                 <i class="fas fa-lightbulb text-gold text-2xl mb-3"></i>
-                <h3 class="font-bold font-cairo mb-2">تلميح</h3>
-                <p class="text-white/70 text-sm font-almarai leading-relaxed">
+                <h3 class="font-bold font-cairo mb-2 text-gold">تلميح</h3>
+                <p class=" text-sm font-bold leading-relaxed">
                     الأخبار التي تنشرها ستظهر تلقائياً في شريط الأخبار أسفل صفحة تسجيل الدخول ليطلع عليها جميع المستخدمين.
                 </p>
             </div>
-        </div>
     </div>
 @endsection

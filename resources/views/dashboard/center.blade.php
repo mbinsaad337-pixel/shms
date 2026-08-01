@@ -16,7 +16,6 @@
                 class="whitespace-nowrap bg-gold/10 text-gold border border-gold/20 px-4 py-2 rounded-xl text-xs md:text-sm font-bold font-almarai shadow-sm">
                 <i class="fas fa-shield-alt ml-1"></i>
                 مدير المركز
-                {{-- {{ auth()->user()->getRoleNames()->first() }} --}}
             </span>
         </div>
     </div>

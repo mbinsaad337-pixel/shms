@@ -17,12 +17,12 @@
                     @method('PATCH')
                     <select name="status" onchange="this.form.submit()" class="pl-10 pr-6 py-3 bg-white rounded-2xl font-cairo font-bold transition-all border border-gray-200 shadow-sm appearance-none cursor-pointer focus:ring-0
                         @if($activity->status == 'planned') text-blue-700 
-                        @elseif($activity->status == 'active') text-green-700
+                        @elseif($activity->status == 'published') text-green-700
                         @elseif($activity->status == 'cancelled') text-red-700
                         @else text-gray-500 @endif">
                         <option value="planned" {{ $activity->status == 'planned' ? 'selected' : '' }}>مجدولة</option>
-                        <option value="active" {{ $activity->status == 'active' ? 'selected' : '' }}>مستمرة</option>
-                        <option value="finished" {{ $activity->status == 'finished' ? 'selected' : '' }}>منتهية</option>
+                        <option value="published" {{ $activity->status == 'published' ? 'selected' : '' }}>مستمرة</option>
+                        <option value="completed" {{ $activity->status == 'completed' ? 'selected' : '' }}>منتهية</option>
                         <option value="cancelled" {{ $activity->status == 'cancelled' ? 'selected' : '' }}>ملغاة</option>
                     </select>
                     <i class="fas fa-chevron-down absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"></i>

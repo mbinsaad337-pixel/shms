@@ -3,15 +3,16 @@
 @section('content')
 <table class="data-table">
     <thead>
+        
         <tr>
             <th style="width: 5%;">#</th>
             <th>اسم الفعالية</th>
             <th>النادي المنظم</th>
             <th>المكان</th>
             <th class="text-center">تاريخ البداية</th>
-            
-            <th class="text-center">عدد المشاركين</th>
-            th
+            <th class="text-center">تاريخ النهاية</th>
+            <th class="text-center">المستهدفون</th>
+            <th class="text-center">الحالة</th>
         </tr>
     </thead>
     <tbody>
@@ -21,11 +22,21 @@
             <td class="font-bold">{{ $activity->name }}</td>
             <td>{{ $activity->club->name ?? '---' }}</td>
             <td>{{ $activity->location }}</td>
-            <td class="text-center font-mono text-sm">{{ $activity->start_date instanceof \Carbon\Carbon ? $activity->start_date->format('Y/m/d') : $activity->start_date }}</td>
-            td
-            <td class="text-center font-mono font-bold">{{ $activity->participants->count() }}</td>
-            
+            <td class="text-center font-mono text-sm">
+                {{ $activity->start_date instanceof \Carbon\Carbon ? $activity->start_date->format('Y/m/d') : $activity->start_date }}
+                @if($activity->start_time) <br><span class="text-xs text-gray-500">{{ $activity->start_time }}</span> @endif
             </td>
+            <td class="text-center font-mono text-sm">
+                {{ $activity->end_date ? ($activity->end_date instanceof \Carbon\Carbon ? $activity->end_date->format('Y/m/d') : $activity->end_date) : '---' }}
+                @if($activity->end_time) <br><span class="text-xs text-gray-500">{{ $activity->end_time }}</span> @endif
+            </td>
+           <td class="text-center font-mono text-sm">{{ $activity->target_audience ?? '---' }}</td>
+            <td class="text-center font-mono text-sm">
+                {{ $activity->status == 'planned' ? 'مجدولة' : ($activity->status == 'published' ? 'مستمرة' : ($activity->status == 'cancelled' ? 'ملغاة' : 'منتهية')) }}
+            </td>
+
+            
+            
         </tr>
         @endforeach
     </tbody>

@@ -135,7 +135,7 @@
 
             @if (auth()->user()->can('view-activities') || auth()->user()->can('view-quran-circles') || auth()->user()->hasRole('circle-teacher'))
                 <div class="pt-4 pb-2">
-                    <p class="px-4 text-[10px] font-bold text-gold/60 uppercase tracking-widest font-cairo mb-2">قسم الشؤون الاجتماعية</p>
+                    <p class="px-4 text-[10px] font-bold text-gold/60 uppercase tracking-widest font-cairo mb-2">قسم الأنشطة </p>
 
                     @can ('view-activities')
                         <a href="{{ route('activities.index') }}"

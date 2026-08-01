@@ -22,6 +22,7 @@
         </div>
     </div>
 
+<<<<<<< HEAD
     {{-- Filters Card --}}
     <div class="bg-white p-6 rounded-2xl shadow-sm mb-8 font-cairo">
         <div class="flex items-center gap-2 mb-4">
@@ -86,6 +87,9 @@
             </div>
         @endif
     </div>
+=======
+    
+>>>>>>> e9e9069573e04f702d2855bdf1d4268d3998a876
 
     <!-- Stats Overview Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -130,6 +134,7 @@
             <p class="text-4xl font-black text-navy font-cairo">{{ $totalAbsent }}</p>
         </div>
     </div>
+    
 
     {{-- Per-Circle Breakdown Table --}}
     @if(count($circleStats) > 0)
