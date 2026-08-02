@@ -249,7 +249,7 @@
                     @endif
 
                     @if (isset($pending_approvals['leaves']) && auth()->user()->can('manage-leaves'))
-                        <a href="{{ route('leaves.index') }}"
+                        <a href="{{ route('administrative.index', ['tab' => 'leaves']) }}"
                             class="bg-teal-50/50 hover:bg-teal-50 p-4 rounded-2xl flex items-center justify-between border border-teal-100 transition-colors group">
                             <div>
                                 <p class="text-[11px] text-teal-600 font-bold mb-1 font-cairo">استئذانات</p>
@@ -420,28 +420,27 @@
                                 </button>
                                 <div id="adminMenu"
                                     class="absolute right-0 left-0 top-full mt-2 hidden z-50 animate-fade-in-down">
-                                    <div
-                                        class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden font-cairo ring-1 ring-black ring-opacity-5">
-                                        <button onclick="openViolationModal()"
-                                            class="w-full text-right px-6 py-4 hover:bg-navy/5 text-navy font-bold border-b border-gray-50 flex items-center gap-3 transition-colors">
-                                            <i class="fas fa-exclamation-triangle text-red-500 w-5"></i> تسجيل مخالفة
-                                        </button>
-                                        <button onclick="openCommitmentModal()"
-                                            class="w-full text-right px-6 py-4 hover:bg-gold/5 text-navy font-bold border-b border-gray-50 flex items-center gap-3 transition-colors">
-                                            <i class="fas fa-file-contract text-gold w-5"></i> تسجيل تعهد
-                                        </button>
-                                        <button onclick="openPenaltyModal()"
-                                            class="w-full text-right px-6 py-4 hover:bg-navy/5 text-navy font-bold border-b border-gray-50 flex items-center gap-3 transition-colors">
-                                            <i class="fas fa-ban text-red-700 w-5"></i> تطبيق عقوبة
-                                        </button>
-                                        <button onclick="openAbsenceModal()"
-                                            class="w-full text-right px-6 py-4 hover:bg-navy/5 text-navy font-bold border-b border-gray-50 flex items-center gap-3 transition-colors">
-                                            <i class="fas fa-calendar-times text-navy w-5"></i> تسجيل غياب
-                                        </button>
-                                        <button onclick="openLeaveModal()"
-                                            class="w-full text-right px-6 py-4 hover:bg-navy/5 text-navy font-bold flex items-center gap-3 transition-colors">
-                                            <i class="fas fa-plane-departure text-navy w-5"></i> تسجيل استئذان
-                                        </button>
+                                    <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden font-cairo ring-1 ring-black ring-opacity-5">
+                                        <a href="{{ route('administrative.index', ['tab' => 'violations']) }}"
+                                            class="block w-full text-right px-6 py-4 hover:bg-navy/5 text-navy font-bold border-b border-gray-50 transition-colors">
+                                            <i class="fas fa-exclamation-triangle text-red-500 w-5 inline-block"></i> تسجيل مخالفة
+                                        </a>
+                                        <a href="{{ route('administrative.index', ['tab' => 'commitments']) }}"
+                                            class="block w-full text-right px-6 py-4 hover:bg-gold/5 text-navy font-bold border-b border-gray-50 transition-colors">
+                                            <i class="fas fa-file-contract text-gold w-5 inline-block"></i> تسجيل تعهد
+                                        </a>
+                                        <a href="{{ route('administrative.index', ['tab' => 'penalties']) }}"
+                                            class="block w-full text-right px-6 py-4 hover:bg-navy/5 text-navy font-bold border-b border-gray-50 transition-colors">
+                                            <i class="fas fa-ban text-red-700 w-5 inline-block"></i> تطبيق عقوبة
+                                        </a>
+                                        <a href="{{ route('administrative.index', ['tab' => 'absences']) }}"
+                                            class="block w-full text-right px-6 py-4 hover:bg-navy/5 text-navy font-bold border-b border-gray-50 transition-colors">
+                                            <i class="fas fa-calendar-times text-navy w-5 inline-block"></i> تسجيل غياب
+                                        </a>
+                                        <a href="{{ route('administrative.index', ['tab' => 'leaves']) }}"
+                                            class="block w-full text-right px-6 py-4 hover:bg-navy/5 text-navy font-bold transition-colors">
+                                            <i class="fas fa-plane-departure text-navy w-5 inline-block"></i> تسجيل استئذان
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -574,27 +573,7 @@
     </div>{{-- end violations/absences grid --}}
 
     <!-- Active Activities -->
-    <div class="bg-primary rounded-3xl p-8 text-white shadow-lg shadow-blue-900/20 mb-8">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-bold font-cairo">الأنشطة المخطط لها</h2>
-            <i class="fas fa-calendar-alt opacity-50 text-xl"></i>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            @if ($active_activities->count() > 0)
-                @foreach ($active_activities as $activity)
-                    <div
-                        class="bg-white/10 rounded-2xl p-4 border border-white/10 hover:bg-white/20 transition-all cursor-pointer">
-                        <h4 class="font-bold font-almarai">{{ $activity->name }}</h4>
-                        <p class="text-xs opacity-70 mt-1 font-almarai italic">
-                            {{ \Carbon\Carbon::parse($activity->activity_date)->format('Y/m/d') }}
-                        </p>
-                    </div>
-                @endforeach
-            @else
-                <p class="text-sm opacity-60 font-almarai">لا توجد أنشطة قادمة مخطط لها.</p>
-            @endif
-        </div>
-    </div>
+    
 @endsection
 
 @push('scripts')
@@ -931,7 +910,7 @@
                                     <label class="flex items-center cursor-pointer">
                                         <input type="checkbox" name="requires_guardian_signature" value="1"
                                             class="rounded text-orange-600">
-                                        <span class="mr-2 text-sm font-bold font-cairo">توقيع ولي الأمر</span>
+                                        <span class="mr-2 text-sm font-bold font-cairo">التوقيع </span>
                                     </label>
                                 </div>
                             </div>

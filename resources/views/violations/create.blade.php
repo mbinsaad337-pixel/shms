@@ -7,7 +7,7 @@
         <div class="max-w-4xl mx-auto">
             <!-- Header -->
             <div class="mb-8 flex items-center gap-4">
-                <a href="{{ route('violations.index') }}" 
+                <a href="{{ route('administrative.index', ['tab' => 'violations']) }}" 
                    class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all">
                     <i class="fas fa-chevron-right"></i>
                 </a>
@@ -233,7 +233,7 @@
                         <i class="fas fa-check-double"></i>
                         <span>اعتماد وتسجيل المخالفة</span>
                     </button>
-                    <a href="{{ route('violations.index') }}" 
+                    <a href="{{ route('administrative.index', ['tab' => 'violations']) }}" 
                        class="px-16 py-6 bg-white text-gray-400 font-black font-cairo rounded-[2.5rem] border border-gray-100 hover:bg-gray-50 transition-all text-lg">
                         تراجع
                     </a>

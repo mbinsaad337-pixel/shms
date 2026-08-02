@@ -31,6 +31,7 @@ use App\Http\Controllers\PenaltyController;
 use App\Http\Controllers\CommitmentController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\AbsenceController;
+use App\Http\Controllers\AdministrativeController;
 use App\Http\Controllers\FundController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\MealSubscriptionController;
@@ -138,9 +139,36 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
 
         Route::get('penalties/export/list', [PenaltyController::class, 'exportListPdf'])->name('penalties.export-list');
         Route::resource('penalties', PenaltyController::class);
-        Route::resource('commitments', CommitmentController::class);
-        Route::resource('leaves', LeaveController::class);
-        Route::resource('absences', AbsenceController::class);
+
+        // ── Unified Administrative Actions Hub ──────────────────
+        Route::get('administrative', [AdministrativeController::class, 'index'])->name('administrative.index');
+
+        // Commitments
+        Route::post('commitments', [CommitmentController::class, 'store'])->name('commitments.store');
+        Route::get('commitments/{commitment}/edit', [CommitmentController::class, 'edit'])->name('commitments.edit');
+        Route::put('commitments/{commitment}', [CommitmentController::class, 'update'])->name('commitments.update');
+        Route::post('commitments/{commitment}/delete', [CommitmentController::class, 'destroy'])->name('commitments.destroy');
+        Route::get('commitments/{commitment}/export', [CommitmentController::class, 'exportPdf'])->name('commitments.export');
+        Route::get('commitments/export/list', [CommitmentController::class, 'exportListPdf'])->name('commitments.export-list');
+
+        // Absences
+        Route::post('absences', [AbsenceController::class, 'store'])->name('absences.store');
+        Route::get('absences/{absence}/edit', [AbsenceController::class, 'edit'])->name('absences.edit');
+        Route::put('absences/{absence}', [AbsenceController::class, 'update'])->name('absences.update');
+        Route::post('absences/{absence}/delete', [AbsenceController::class, 'destroy'])->name('absences.destroy');
+        Route::get('absences/export/list', [AbsenceController::class, 'exportListPdf'])->name('absences.export-list');
+
+        // Leaves (Istizhan)
+        Route::post('leaves/cutoff', [LeaveController::class, 'updateCutoffTime'])->name('leaves.cutoff');
+        Route::post('leaves', [LeaveController::class, 'store'])->name('leaves.store');
+        Route::get('leaves/{leave}/edit', [LeaveController::class, 'edit'])->name('leaves.edit');
+        Route::put('leaves/{leave}', [LeaveController::class, 'update'])->name('leaves.update');
+        Route::post('leaves/{leave}/delete', [LeaveController::class, 'destroy'])->name('leaves.destroy');
+        Route::post('leaves/{leave}/approve', [LeaveController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/reject', [LeaveController::class, 'reject'])->name('leaves.reject');
+        Route::post('leaves/{leave}/return', [LeaveController::class, 'return'])->name('leaves.return');
+        Route::post('leaves/{leave}/convert-violation', [LeaveController::class, 'convertToViolation'])->name('leaves.convert-violation');
+        Route::get('leaves/export/list', [LeaveController::class, 'exportListPdf'])->name('leaves.export-list');
     });
 
     // Rooms
@@ -321,6 +349,10 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
 
         // Quran Circles
         Route::get('my-quran-circles', [\App\Http\Controllers\Student\QuranCircleController::class, 'index'])->name('student.quran-circles.index');
+
+        // Leave / Istizhan Requests (Student submits -> Supervisor approves)
+        Route::get('my-leave-requests', [\App\Http\Controllers\Student\LeaveRequestController::class, 'index'])->name('student.leave-requests.index');
+        Route::post('my-leave-requests', [\App\Http\Controllers\Student\LeaveRequestController::class, 'store'])->name('student.leave-requests.store');
     });
 
     // Student Grades & Achievements

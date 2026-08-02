@@ -47,7 +47,7 @@ class PenaltyController extends Controller
             ]);
         }
 
-        return redirect()->route('penalties.index')->with('success', 'تم تطبيق العقوبات بنجاح.');
+        return redirect()->route('administrative.index', ['tab' => 'penalties'])->with('success', 'تم تطبيق العقوبات بنجاح.');
     }
     public function create()
     {
@@ -74,11 +74,21 @@ class PenaltyController extends Controller
     public function exportListPdf(Request $request, \App\Services\PdfService $pdfService)
     {
         $user = auth()->user();
-        $penalties = Penalty::query()
+        $query = Penalty::query()
             ->whereHas('student', fn($q) => $q->when($user->center_id, fn($sq) => $sq->where('center_id', $user->center_id)))
-            ->with(['student', 'violation', 'appliedBy'])
-            ->latest()
-            ->get();
+            ->with(['student', 'violation', 'appliedBy']);
+
+        if ($request->filled('student_id')) {
+            $query->whereHas('student', fn($q) => $q->where('id', $request->student_id));
+        }
+        if ($request->filled('date_from')) {
+            $query->whereDate('start_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('start_date', '<=', $request->date_to);
+        }
+
+        $penalties = $query->latest()->get();
 
         return $pdfService->stream('pdf.reports.penalties', [
             'data' => $penalties,

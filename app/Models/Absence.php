@@ -9,6 +9,7 @@ class Absence extends Model
     protected $fillable = [
         'student_id',
         'date',
+        'absence_type',
         'has_excuse',
         'excuse_type',
         'notes',
@@ -18,6 +19,13 @@ class Absence extends Model
     protected $casts = [
         'date' => 'date',
         'has_excuse' => 'boolean',
+    ];
+
+    public static $absenceTypeLabels = [
+        'housing' => 'غياب سكن',
+        'quran' => 'غياب حلقة قرآنية',
+        'activity' => 'غياب نشاط',
+        'other' => 'غياب آخر',
     ];
 
     public function student()

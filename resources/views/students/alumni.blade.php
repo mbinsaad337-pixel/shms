@@ -100,13 +100,24 @@
                     </select>
                 </div>
 
+                <div>
+                    <label for="graduation_year" class="block text-sm font-bold text-gray-700 mb-2 font-cairo">عام التخرج</label>
+                    <select name="graduation_year" id="graduation_year"
+                        class="w-full rounded-xl border-gray-200 focus:border-primary focus:ring-primary shadow-sm bg-gray-50/50">
+                        <option value="">جميع الأعوام</option>
+                        @foreach ($graduation_years as $v)
+                            <option value="{{ $v }}" {{ request('graduation_year') == $v ? 'selected' : '' }}>{{ $v }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <div class="flex gap-2">
                     <button type="submit"
                         class="flex-1 bg-navy text-white py-2.5 rounded-xl font-bold font-cairo shadow-md hover:bg-navy/90 transition-all flex items-center justify-center gap-2">
                         <i class="fas fa-filter text-xs text-gold"></i>
                         <span>تطبيق الفلترة</span>
                     </button>
-                    @if (request()->anyFilled(['search', 'major', 'university', 'college', 'academic_level', 'nationality']))
+                    @if (request()->anyFilled(['search', 'major', 'university', 'college', 'academic_level', 'nationality', 'graduation_year']))
                         <a href="{{ route('students.alumni') }}"
                             class="bg-gray-100 text-gray-700 px-4 py-2.5 rounded-xl font-bold font-cairo hover:bg-gray-200 transition-all text-sm flex items-center">
                             إعادة تعيين
@@ -125,7 +136,9 @@
                     <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">الرقم الجامعي</th>
                     <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">الجامعة</th>
                     <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">التخصص</th>
-                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">السكن السابق</th>
+                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">السكن</th>
+                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">البرنامج</th>
+                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">عام التخرج</th>
                     <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">الإجراءات</th>
                 </tr>
             </thead>
@@ -158,6 +171,12 @@
                             <span class="text-sm font-bold text-navy font-cairo">
                                 {{ $student->center->name ?? 'غير محدد' }}
                             </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">
+                            {{ $student->program->name ?? '---' }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-mono text-sm font-bold text-gray-700">
+                            {{ $student->graduation_year ?? '---' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <a href="{{ route('students.show', $student) }}"

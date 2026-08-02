@@ -88,7 +88,7 @@ class ViolationController extends Controller
             \App\Models\CircleAttendance::whereIn('id', $validated['circle_attendance_id'])->update(['is_handled' => true]);
         }
 
-        return redirect()->route('violations.index')->with('success', 'تم تسجيل المخالفة بنجاح.');
+        return redirect()->route('administrative.index', ['tab' => 'violations'])->with('success', 'تم تسجيل المخالفة بنجاح.');
     }
     public function show(Violation $violation)
     {
@@ -99,16 +99,29 @@ class ViolationController extends Controller
     public function destroy(Violation $violation)
     {
         $violation->delete();
-        return redirect()->route('violations.index')->with('success', 'تم حذف المخالفة بنجاح.');
+        return back()->with('success', 'تم حذف المخالفة بنجاح.');
     }
     public function exportListPdf(Request $request, \App\Services\PdfService $pdfService)
     {
         $user = auth()->user();
-        $violations = Violation::query()
+        $query = Violation::query()
             ->when($user->center_id, fn($q) => $q->where('center_id', $user->center_id))
-            ->with(['student', 'recordedBy'])
-            ->latest()
-            ->get();
+            ->with(['student', 'recordedBy']);
+
+        if ($request->filled('student_id')) {
+            $query->where('student_id', $request->student_id);
+        }
+        if ($request->filled('date_from')) {
+            $query->whereDate('violation_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('violation_date', '<=', $request->date_to);
+        }
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        $violations = $query->latest()->get();
 
         return $pdfService->stream('pdf.reports.violations', [
             'data' => $violations,
