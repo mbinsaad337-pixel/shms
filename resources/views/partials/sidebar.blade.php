@@ -42,6 +42,13 @@
                         <i class="fas fa-user-shield h-5 w-5 ml-3"></i>
                         إدارة مدراء المراكز
                     </a>
+                    @if(auth()->user()->hasAnyRole(['super-admin', 'executive-manager']))
+                        <a href="{{ route('media-officers.index') }}"
+                            class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('media-officers.*') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5' }} transition-all">
+                            <i class="fas fa-bullhorn h-5 w-5 ml-3"></i>
+                            إدارة مسؤولي الإعلام
+                        </a>
+                    @endif
                 </div>
             @endcan
 
@@ -137,7 +144,7 @@
                 @endif
             @endcan
 
-            @if (auth()->user()->can('view-activities') || auth()->user()->can('view-quran-circles') || auth()->user()->hasRole('circle-teacher'))
+            @if (auth()->user()->can('view-activities') || auth()->user()->can('view-quran-circles') || auth()->user()->hasRole('circle-teacher') || auth()->user()->can('manage-news') || auth()->user()->hasRole('media-officer'))
                 <div class="pt-4 pb-2">
                     <p class="px-4 text-[10px] font-bold text-gold/60 uppercase tracking-widest font-cairo mb-2">قسم الأنشطة </p>
 
@@ -157,11 +164,29 @@
                     @endcan
 
                     @can ('manage-news')
-                        @if(!auth()->user()->hasRole('super-admin'))
-                            <a href="{{ route('news.index') }}"
-                                class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('news.*') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5' }} transition-all">
-                                <i class="fas fa-newspaper h-5 w-5 ml-3"></i>
-                                إدارة الأخبار والإعلانات
+                        <a href="{{ route('news.index') }}"
+                            class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('news.index') || request()->routeIs('news.show') || request()->routeIs('news.create') || request()->routeIs('news.edit') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5' }} transition-all">
+                            <i class="fas fa-newspaper h-5 w-5 ml-3"></i>
+                            إدارة الأخبار والإعلانات
+                        </a>
+
+                        @if(auth()->user()->hasRole(['super-admin', 'media-officer']))
+                            @php
+                                if (\Illuminate\Support\Facades\Schema::hasColumn('news', 'status')) {
+                                    $sidebarPendingNewsCount = \App\Models\News::where('status', 'pending')->orWhere(function($q){ $q->where('is_published', false)->where('status', '!=', 'rejected'); })->count();
+                                } else {
+                                    $sidebarPendingNewsCount = \App\Models\News::where('is_published', false)->count();
+                                }
+                            @endphp
+                            <a href="{{ route('news.pending') }}"
+                                class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('news.pending') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5' }} transition-all">
+                                <i class="fas fa-bullhorn h-5 w-5 ml-3 text-amber-400"></i>
+                                <span class="flex-1">اعتمادات مسؤول الإعلام</span>
+                                @if($sidebarPendingNewsCount > 0)
+                                    <span class="bg-amber-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                                        {{ $sidebarPendingNewsCount }}
+                                    </span>
+                                @endif
                             </a>
                         @endif
                     @endcan

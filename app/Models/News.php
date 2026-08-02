@@ -16,6 +16,8 @@ class News extends Model
         'cover_image',
         'gallery',
         'category',
+        'status',
+        'rejection_reason',
         'is_published',
         'published_at',
     ];
@@ -70,5 +72,42 @@ class News extends Model
             'achievement' => 'gold',
             default => 'navy',
         };
+    }
+
+    public function isPending(): bool
+    {
+        return ($this->status ?? 'pending') === 'pending' && !$this->is_published;
+    }
+
+    public function isApproved(): bool
+    {
+        return ($this->status ?? 'approved') === 'approved' || $this->is_published;
+    }
+
+    public function isRejected(): bool
+    {
+        return ($this->status ?? '') === 'rejected';
+    }
+
+    public function getStatusLabel(): string
+    {
+        if ($this->isRejected()) {
+            return 'مرفوض';
+        }
+        if ($this->isApproved() || $this->is_published) {
+            return 'منشور (معتمد)';
+        }
+        return 'في الانتظار';
+    }
+
+    public function getStatusBadgeClass(): string
+    {
+        if ($this->isRejected()) {
+            return 'bg-rose-100 text-rose-700 border-rose-200';
+        }
+        if ($this->isApproved() || $this->is_published) {
+            return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+        }
+        return 'bg-amber-100 text-amber-700 border-amber-200';
     }
 }
