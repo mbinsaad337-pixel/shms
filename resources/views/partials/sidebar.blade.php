@@ -281,8 +281,8 @@
                         </a>
                     @endif
 
-                    <a href="{{ route('reports.show', 'funds') }}"
-                        class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('reports.*') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5 transition' }}">
+                    <a href="{{ route('reports.funds.view') }}"
+                        class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('reports.funds.*') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5 transition' }}">
                         <i class="fas fa-file-invoice-dollar h-5 w-5 ml-3"></i>
                         تقرير أرصدة الصناديق
                     </a>

@@ -50,21 +50,21 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">تاريخ المغادرة <span class="text-red-500">*</span></label>
-                            <input type="date" name="departure_date" value="{{ date('Y-m-d') }}" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none focus:ring-2 focus:ring-navy/10">
+                            <input type="date" name="departure_date" value="{{ date('Y-m-d') }}" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none focus:ring-2 focus:ring-navy/10">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">وقت المغادرة</label>
-                            <input type="time" name="departure_time" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none focus:ring-2 focus:ring-navy/10">
+                            <input type="time" name="departure_time" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none focus:ring-2 focus:ring-navy/10">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">تاريخ العودة المتوقع</label>
-                            <input type="date" name="expected_return_date" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none focus:ring-2 focus:ring-navy/10">
+                            <input type="date" name="expected_return_date" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none focus:ring-2 focus:ring-navy/10">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">وقت العودة المتوقع</label>
-                            <input type="time" name="expected_return_time" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none focus:ring-2 focus:ring-navy/10">
+                            <input type="time" name="expected_return_time" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none focus:ring-2 focus:ring-navy/10">
                         </div>
                     </div>
                     <div>
@@ -94,7 +94,7 @@
                 </div>
                 <form action="{{ route('leaves.cutoff') }}" method="POST" class="flex items-center gap-2">
                     @csrf
-                    <input type="time" name="leave_cutoff_time" value="{{ ($center && $center->leave_cutoff_time) ? \Carbon\Carbon::parse($center->leave_cutoff_time)->format('H:i') : '' }}" class="px-3 py-2 rounded-xl border border-indigo-200 bg-white text-sm font-mono outline-none focus:ring-2 focus:ring-indigo/20">
+                    <input type="time" name="leave_cutoff_time" value="{{ ($center && $center->leave_cutoff_time) ? \Carbon\Carbon::parse($center->leave_cutoff_time)->format('H:i') : '' }}" class="px-3 py-2 rounded-xl border border-indigo-200 bg-white text-sm   outline-none focus:ring-2 focus:ring-indigo/20">
                     <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold font-cairo text-sm hover:bg-indigo-700 transition-all shadow-sm">
                         حفظ الوقت
                     </button>
@@ -199,9 +199,9 @@
                                     <span class="px-2 py-1 rounded-lg text-xs font-black {{ $typeColors[$l->type] ?? 'bg-gray-100 text-gray-600' }}">{{ $typeLabels[$l->type] ?? $l->type }}</span>
                                 </td>
                                 <td class="px-4 py-4 text-center">
-                                    <span class="text-xs font-mono text-gray-600">{{ $l->departure_date->format('Y-m-d') }}</span>
+                                    <span class="text-xs   text-gray-600">{{ $l->departure_date->format('Y-m-d') }}</span>
                                     @if($l->departure_time)
-                                    <span class="block text-[10px] text-gray-400 font-mono">{{ $l->departure_time }}</span>
+                                    <span class="block text-[10px] text-gray-400  ">{{ $l->departure_time }}</span>
                                     @endif
                                 </td>
                                 <td class="px-4 py-4 text-center">

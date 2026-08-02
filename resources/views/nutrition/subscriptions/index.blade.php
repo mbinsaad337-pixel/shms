@@ -26,15 +26,15 @@
         <!-- Stats -->
         <div class="grid grid-cols-3 gap-6 mb-8">
             <div class="card-premium p-6 text-center border-b-4 border-b-green-500">
-                <p class="text-4xl font-black text-navy font-mono">{{ $stats['active'] }}</p>
+                <p class="text-4xl font-black text-navy  ">{{ $stats['active'] }}</p>
                 <p class="text-[10px] font-black text-gray-400 font-cairo mt-2 uppercase tracking-widest">مشترك فعال</p>
             </div>
             <div class="card-premium p-6 text-center border-b-4 border-b-red-500">
-                <p class="text-4xl font-black text-red-600 font-mono">{{ $stats['suspended'] }}</p>
+                <p class="text-4xl font-black text-red-600  ">{{ $stats['suspended'] }}</p>
                 <p class="text-[10px] font-black text-gray-400 font-cairo mt-2 uppercase tracking-widest">مشترك موقوف</p>
             </div>
             <div class="card-premium p-6 text-center border-b-4 border-b-gray-400">
-                <p class="text-4xl font-black text-gray-400 font-mono">{{ $stats['expired'] }}</p>
+                <p class="text-4xl font-black text-gray-400  ">{{ $stats['expired'] }}</p>
                 <p class="text-[10px] font-black text-gray-400 font-cairo mt-2 uppercase tracking-widest">اشتراك منتهي</p>
             </div>
         </div>
@@ -83,23 +83,23 @@
                             <tr class="hover:bg-gray-50/50 transition-colors">
                                 <td class="px-5 py-4">
                                     <p class="font-bold text-gray-800 font-cairo text-sm">{{ $sub->student?->name_ar ?? 'طالب غير موجود' }}</p>
-                                    <p class="text-xs text-gray-400 font-mono">{{ $sub->student?->university_id }}</p>
+                                    <p class="text-xs text-gray-400  ">{{ $sub->student?->university_id }}</p>
                                 </td>
                                 <td class="px-5 py-4 text-center">
                                     <span class="text-xs font-bold font-cairo px-2 py-1 bg-purple-50 text-purple-700 rounded-lg">
                                         {{ $sub->getTypeLabel() }}
                                     </span>
                                 </td>
-                                <td class="px-5 py-4 text-center font-mono text-gray-600 text-xs">
+                                <td class="px-5 py-4 text-center   text-gray-600 text-xs">
                                     {{ $sub->start_date->format('Y-m-d') }}<br>→ {{ $sub->end_date->format('Y-m-d') }}
                                 </td>
-                                <td class="px-5 py-4 text-center font-mono text-gray-700">{{ $sub->days_count }}</td>
-                                <td class="px-5 py-4 text-center font-bold text-red-600 font-mono">
+                                <td class="px-5 py-4 text-center   text-gray-700">{{ $sub->days_count }}</td>
+                                <td class="px-5 py-4 text-center font-bold text-red-600  ">
                                     {{ number_format($sub->total_due, 2) }}</td>
-                                <td class="px-5 py-4 text-center font-bold text-green-600 font-mono">
+                                <td class="px-5 py-4 text-center font-bold text-green-600  ">
                                     {{ number_format($sub->total_paid, 2) }}</td>
                                 <td
-                                    class="px-5 py-4 text-center font-bold font-mono {{ $balance >= 0 ? 'text-green-700' : 'text-red-600' }}">
+                                    class="px-5 py-4 text-center font-bold   {{ $balance >= 0 ? 'text-green-700' : 'text-red-600' }}">
                                     {{ number_format($balance, 2) }}
                                 </td>
                                 <td class="px-5 py-4 text-center">
@@ -230,7 +230,7 @@
                 <div class="mb-4">
                     <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">المبلغ (ر.ي)</label>
                     <input type="number" name="amount" step="0.01" min="0.01" id="paymentAmount"
-                        class="w-full border border-gray-200 rounded-xl px-4 py-3 font-mono text-lg font-bold focus:ring-2 focus:ring-green-400">
+                        class="w-full border border-gray-200 rounded-xl px-4 py-3   text-lg font-bold focus:ring-2 focus:ring-green-400">
                     <p id="remainingBalance" class="text-xs text-gray-400 font-cairo mt-1"></p>
                 </div>
                 <div class="flex gap-3 justify-end">

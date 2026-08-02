@@ -81,12 +81,12 @@
                                 <div>
                                     <label class="block text-sm font-bold text-gray-600 font-cairo mb-2">من تاريخ <span class="text-red-500">*</span></label>
                                     <input type="date" name="start_date" id="startDate" required onchange="calculatePreview()"
-                                        class="w-full border border-gray-200 rounded-xl px-3 py-3 font-mono text-sm focus:ring-2 focus:ring-navy transition-all">
+                                        class="w-full border border-gray-200 rounded-xl px-3 py-3   text-sm focus:ring-2 focus:ring-navy transition-all">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold text-gray-600 font-cairo mb-2">إلى تاريخ <span class="text-red-500">*</span></label>
                                     <input type="date" name="end_date" id="endDate" required onchange="calculatePreview()"
-                                        class="w-full border border-gray-200 rounded-xl px-3 py-3 font-mono text-sm focus:ring-2 focus:ring-navy transition-all">
+                                        class="w-full border border-gray-200 rounded-xl px-3 py-3   text-sm focus:ring-2 focus:ring-navy transition-all">
                                 </div>
                             </div>
 
@@ -95,11 +95,11 @@
                                 <ul class="space-y-3 text-sm font-cairo">
                                     <li class="flex justify-between items-center">
                                         <span class="text-gray-600 flex items-center gap-2"><i class="fas fa-calendar-times text-red-400"></i> آخر موعد للدفع:</span>
-                                        <span class="font-bold text-red-600 font-mono" id="previewLastPayment">غير محدد</span>
+                                        <span class="font-bold text-red-600  " id="previewLastPayment">غير محدد</span>
                                     </li>
                                     <li class="flex justify-between items-center">
                                         <span class="text-gray-600 flex items-center gap-2"><i class="fas fa-tags text-gold"></i> قيمة الاشتراك المطلوبة:</span>
-                                        <span class="font-black text-navy text-lg font-mono"><span id="previewTotal">0</span> <span class="text-xs text-gray-500">ر.ي</span></span>
+                                        <span class="font-black text-navy text-lg  "><span id="previewTotal">0</span> <span class="text-xs text-gray-500">ر.ي</span></span>
                                     </li>
                                 </ul>
                             </div>
@@ -151,13 +151,13 @@
                                         <td class="px-6 py-4 text-center">
                                             <span class="text-xs font-bold px-3 py-1 bg-purple-50 text-purple-700 rounded-lg font-cairo">{{ $sub->getTypeLabel() }}</span>
                                         </td>
-                                        <td class="px-6 py-4 text-center font-mono text-xs text-gray-600">
+                                        <td class="px-6 py-4 text-center   text-xs text-gray-600">
                                             {{ $sub->start_date->format('Y-m-d') }}<br>
                                             <span class="text-gray-400 text-[10px]">إلى</span><br>
                                             {{ $sub->end_date->format('Y-m-d') }}
                                         </td>
                                         <td class="px-6 py-4 text-center">
-                                            <p class="font-bold text-navy font-mono">{{ number_format($sub->total_due, 2) }} <span class="text-[10px] text-gray-400 font-cairo">ر.ي</span></p>
+                                            <p class="font-bold text-navy  ">{{ number_format($sub->total_due, 2) }} <span class="text-[10px] text-gray-400 font-cairo">ر.ي</span></p>
                                             @if($sub->total_paid > 0)
                                                 <p class="text-[10px] text-emerald-600 font-bold font-almarai mt-1">مدفوع: {{ number_format($sub->total_paid, 2) }}</p>
                                             @endif
@@ -229,14 +229,14 @@
                     <tbody class="divide-y divide-gray-50">
                         @foreach($vouchers as $voucher)
                             <tr class="hover:bg-gray-50/30 transition-colors">
-                                <td class="px-6 py-4 font-mono font-bold text-navy text-sm">
+                                <td class="px-6 py-4   font-bold text-navy text-sm">
                                     {{ $voucher->voucher_number }}
                                 </td>
-                                <td class="px-6 py-4 font-mono text-gray-600 text-sm">
+                                <td class="px-6 py-4   text-gray-600 text-sm">
                                     {{ $voucher->voucher_date->format('Y-m-d') }}
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="font-bold text-emerald-600 font-mono">{{ number_format($voucher->amount, 2) }}</span>
+                                    <span class="font-bold text-emerald-600  ">{{ number_format($voucher->amount, 2) }}</span>
                                     <span class="text-[10px] text-gray-400 font-cairo">ر.ي</span>
                                 </td>
                                 <td class="px-6 py-4 text-gray-700 text-sm font-almarai leading-relaxed">

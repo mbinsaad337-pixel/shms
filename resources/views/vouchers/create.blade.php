@@ -75,7 +75,7 @@
                             <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">المبلغ
                                 (ر.ي)</label>
                             <input type="number" name="amount" step="0.01" placeholder="0.00" required
-                                class="w-full px-5 py-4 rounded-2xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none font-mono text-xl font-bold text-primary bg-gray-50/50 text-center">
+                                class="w-full px-5 py-4 rounded-2xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none   text-xl font-bold text-primary bg-gray-50/50 text-center">
                         </div>
                     </div>
 

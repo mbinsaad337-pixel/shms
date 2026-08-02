@@ -191,7 +191,7 @@
                         <div class="inline-block mb-3 ml-2"><x-program-badge :program="$student->program" /></div>
                     @endif
                     <div
-                        class="inline-block bg-gold/10 text-gold px-4 py-1.5 rounded-full text-[10px] font-black font-mono mb-3 mr-2">
+                        class="inline-block bg-gold/10 text-gold px-4 py-1.5 rounded-full text-[10px] font-black   mb-3 mr-2">
                         {{ $student->barcode }}</div>
                     <h1 class="text-4xl font-black text-navy font-cairo mb-2">{{ $student->name_ar }}</h1>
                     <div
@@ -212,7 +212,7 @@
                         {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(110)->generate($student->barcode) !!}
                         <div class="flex items-center gap-2 mt-1">
                             <code id="studentBarcodeVal"
-                                class="text-[9px] text-navy font-mono bg-blue-50 px-2 py-0.5 rounded">{{ $student->barcode }}</code>
+                                class="text-[9px] text-navy   bg-blue-50 px-2 py-0.5 rounded">{{ $student->barcode }}</code>
                             <button onclick="copyBarcode('studentBarcodeVal')"
                                 class="text-navy hover:text-gold transition-colors text-xs"><i
                                     class="fas fa-copy"></i></button>
@@ -278,7 +278,7 @@
                                                     غائب
                                                 @endif
                                             </span>
-                                            <span class="text-[10px] text-gray-400 font-mono">{{ $meal->time }}</span>
+                                            <span class="text-[10px] text-gray-400  ">{{ $meal->time }}</span>
                                         </div>
                                         @if (auth()->user()->hasRole('student') && $meal->can_edit)
                                             <div class="mt-3 flex gap-1">
@@ -334,7 +334,7 @@
                                     {{ $student->date_of_birth?->format('Y-m-d') }}</td>
                                 <th class="text-right text-gray-400 font-normal py-3 border-b border-gray-50 px-4">رقم
                                     البطاقة:</th>
-                                <td class="text-right font-bold text-gray-800 py-3 border-b border-gray-50 font-mono">
+                                <td class="text-right font-bold text-gray-800 py-3 border-b border-gray-50  ">
                                     {{ $student->id_card_number }}</td>
                             </tr>
                             <tr>
@@ -344,7 +344,7 @@
                                     {{ $student->health_status == 'good' ? 'سليم' : 'بحاجة لمتابعة' }}</td>
                                 <th class="text-right text-gray-400 font-normal py-3 border-b border-gray-50 px-4">فصيلة
                                     الدم:</th>
-                                <td class="text-right font-bold text-amber-600 font-mono py-3 border-b border-gray-50">
+                                <td class="text-right font-bold text-amber-600   py-3 border-b border-gray-50">
                                     {{ $student->blood_type ?? '-' }}</td>
                             </tr>
                             <tr>
@@ -412,7 +412,7 @@
                                         @if ($student->violations->count() > 0)
                                             @foreach ($student->violations as $violation)
                                                 <tr class="border-b border-gray-50 hover:bg-gray-50">
-                                                    <td class="px-4 py-4 text-gray-500 font-mono">
+                                                    <td class="px-4 py-4 text-gray-500  ">
                                                         {{ $violation->violation_date->format('Y/m/d') }}</td>
                                                     <td class="px-4 py-4 font-bold text-gray-800">{{ $violation->type }}
                                                     </td>
@@ -447,7 +447,7 @@
                                         <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100">
                                             <p class="text-xs font-bold text-gray-800">{{ $grade->semester }} -
                                                 {{ $grade->academic_year }}</p>
-                                            <p class="text-lg font-black text-emerald-600 font-mono">
+                                            <p class="text-lg font-black text-emerald-600  ">
                                                 {{ number_format($grade->gpa_percentage, 2) }}%</p>
                                         </div>
                                     @endforeach
@@ -470,7 +470,7 @@
                             <tr>
                                 <th class="text-right text-gray-400 font-normal py-2 border-b border-gray-50">رقم القيد:
                                 </th>
-                                <td class="text-left font-bold text-gray-800 py-2 border-b border-gray-50 font-mono">
+                                <td class="text-left font-bold text-gray-800 py-2 border-b border-gray-50  ">
                                     {{ $student->university_id }}</td>
                             </tr>
                             <tr>
@@ -549,7 +549,7 @@
                             </tr>
                             <tr>
                                 <th class="text-right text-gray-400 font-normal py-2">رقم الهاتف:</th>
-                                <td class="text-left font-bold text-red-900 font-mono py-2" dir="ltr">
+                                <td class="text-left font-bold text-red-900   py-2" dir="ltr">
                                     {{ $student->emergency_phone ?? '-' }}</td>
                             </tr>
                         </table>

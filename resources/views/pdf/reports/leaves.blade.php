@@ -24,11 +24,11 @@
                 @php $typeLabels = ['temporary'=>'مؤقت','vacation'=>'إجازة','medical'=>'طبي','lateness'=>'تأخير']; @endphp
                 {{ $typeLabels[$leave->type] ?? $leave->type }}
             </td>
-            <td class="text-center font-mono text-sm">
+            <td class="text-center   text-sm">
                 {{ $leave->departure_date->format('Y/m/d') }}<br>
                 {{ $leave->departure_time ?? '' }}
             </td>
-            <td class="text-center font-mono text-sm">
+            <td class="text-center   text-sm">
                 {{ $leave->expected_return_date ? $leave->expected_return_date->format('Y/m/d') : '---' }}<br>
                 {{ $leave->expected_return_time ?? '' }}
             </td>

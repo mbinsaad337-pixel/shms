@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            <p class="font-mono text-xs text-gray-300 mt-2 no-print">{{ $qrGroup->qr_code }}</p>
+            <p class="  text-xs text-gray-300 mt-2 no-print">{{ $qrGroup->qr_code }}</p>
             <p class="font-cairo text-sm text-gray-500 mt-3">
                 <i class="fas fa-calendar-day ml-1"></i>صالح في: {{ $qrGroup->valid_date->format('Y-m-d') }}
             </p>
@@ -57,7 +57,7 @@
                             </div>
                             <div class="flex-1">
                                 <p class="font-bold text-gray-800 font-cairo text-sm">{{ $member->student?->name_ar ?? 'طالب غير موجود' }}</p>
-                                <p class="text-[10px] text-gray-400 font-mono">{{ $member->student?->university_id }}</p>
+                                <p class="text-[10px] text-gray-400  ">{{ $member->student?->university_id }}</p>
                             </div>
                             @if($member->subscription)
                                 <span

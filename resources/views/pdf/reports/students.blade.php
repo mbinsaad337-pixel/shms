@@ -26,7 +26,7 @@
         <tr>
             <td class="text-center">{{ $index + 1 }}</td>
             <td class="font-bold">{{ $student->name_ar }}</td>
-            <td class="font-mono">{{ $student->university_id }}</td>
+            <td class=" ">{{ $student->university_id }}</td>
             <td>
                 <span class="badge badge-primary">{{ $student->center->name }}</span>
             </td>
@@ -34,7 +34,7 @@
                 <td>{{ $student->major ?? '---' }}</td>
                 <td>{{ $student->university ?? '---' }}</td>
                 <td>{{ $student->program->name ?? '---' }}</td>
-                <td class="text-center font-mono font-bold">{{ $student->graduation_year ?? '---' }}</td>
+                <td class="text-center   font-bold">{{ $student->graduation_year ?? '---' }}</td>
             @else
                 <td>{{ $student->room->room_number ?? '---' }}</td>
                 <td>{{ $student->program->name ?? '---' }}</td>

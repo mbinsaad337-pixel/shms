@@ -62,21 +62,21 @@
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">تاريخ المغادرة <span class="text-red-500">*</span></label>
-                    <input type="date" name="departure_date" value="{{ date('Y-m-d') }}" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none focus:ring-2 focus:ring-navy/10">
+                    <input type="date" name="departure_date" value="{{ date('Y-m-d') }}" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none focus:ring-2 focus:ring-navy/10">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">وقت المغادرة</label>
-                    <input type="time" name="departure_time" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none focus:ring-2 focus:ring-navy/10">
+                    <input type="time" name="departure_time" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none focus:ring-2 focus:ring-navy/10">
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">تاريخ العودة المتوقع</label>
-                    <input type="date" name="expected_return_date" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none focus:ring-2 focus:ring-navy/10">
+                    <input type="date" name="expected_return_date" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none focus:ring-2 focus:ring-navy/10">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">وقت العودة المتوقع</label>
-                    <input type="time" name="expected_return_time" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none focus:ring-2 focus:ring-navy/10">
+                    <input type="time" name="expected_return_time" class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none focus:ring-2 focus:ring-navy/10">
                 </div>
             </div>
             <div class="md:col-span-2">
@@ -126,12 +126,12 @@
                             <span class="px-2.5 py-1 rounded-lg text-xs font-black {{ $typeColors[$l->type] ?? 'bg-gray-100 text-gray-600' }}">{{ $typeLabels[$l->type] ?? $l->type }}</span>
                         </td>
                         <td class="px-5 py-4 text-center">
-                            <span class="text-xs font-mono text-gray-600">{{ $l->departure_date->format('Y-m-d') }}</span>
+                            <span class="text-xs   text-gray-600">{{ $l->departure_date->format('Y-m-d') }}</span>
                             @if($l->departure_time)<span class="block text-[10px] text-gray-400">{{ $l->departure_time }}</span>@endif
                         </td>
                         <td class="px-5 py-4 text-center">
                             @if($l->expected_return_date)
-                            <span class="text-xs font-mono text-gray-600">{{ $l->expected_return_date->format('Y-m-d') }}</span>
+                            <span class="text-xs   text-gray-600">{{ $l->expected_return_date->format('Y-m-d') }}</span>
                             @if($l->expected_return_time)<span class="block text-[10px] text-gray-400">{{ $l->expected_return_time }}</span>@endif
                             @else
                             <span class="text-xs text-gray-400">---</span>

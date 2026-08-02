@@ -92,7 +92,7 @@
                                                 <div>
                                                     <p class="font-black text-navy font-cairo group-hover:text-gold transition-colors">
                                                         {{ $member->student->name_ar }}</p>
-                                                    <p class="text-xs text-gray-400 font-mono tracking-wider">
+                                                    <p class="text-xs text-gray-400   tracking-wider">
                                                         {{ $member->student->barcode }}</p>
                                                 </div>
                                             </div>

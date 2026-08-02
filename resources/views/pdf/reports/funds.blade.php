@@ -30,16 +30,16 @@
                     @endphp
                     <tr>
                         <td class="font-bold">{{ $fund->name }}</td>
-                        <td class="text-center font-bold font-mono text-navy">{{ number_format($approvedBalance, 2) }}</td>
-                        <td class="text-center font-bold font-mono text-success">{{ number_format($fund->balance, 2) }}</td>
-                        <td class="text-center font-mono">
+                        <td class="text-center font-bold   text-navy">{{ number_format($approvedBalance, 2) }}</td>
+                        <td class="text-center font-bold   text-success">{{ number_format($fund->balance, 2) }}</td>
+                        <td class="text-center  ">
                             @if($settlementClosing !== null)
                                 <span class="font-bold" style="color: #c2410c;">{{ number_format($settlementClosing, 2) }}</span>
                             @else
                                 <span class="text-muted">لا تصفية</span>
                             @endif
                         </td>
-                        <td class="text-center font-mono text-sm">{{ $month }} / {{ $year }}</td>
+                        <td class="text-center   text-sm">{{ $month }} / {{ $year }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -57,7 +57,7 @@
     <tr>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">أعده / المحاسب المالي</div>
+            <div class="sign-title">أعده / هعهعه المالي</div>
             <div class="sign-name">{{ $exportUser ?? '' }}</div>
         </td>
         <td>

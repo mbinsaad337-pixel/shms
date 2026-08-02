@@ -95,11 +95,11 @@
                                     <div class="w-full md:w-64 bg-white p-6 rounded-2xl border border-red-100 shadow-sm space-y-4">
                                         <div class="flex flex-col">
                                             <span class="text-[10px] text-gray-400 font-bold font-cairo uppercase">تاريخ البدء</span>
-                                            <span class="text-navy font-black text-xs font-mono">{{ $violation->penalty->start_date?->format('Y-m-d') ?? '---' }}</span>
+                                            <span class="text-navy font-black text-xs  ">{{ $violation->penalty->start_date?->format('Y-m-d') ?? '---' }}</span>
                                         </div>
                                         <div class="flex flex-col">
                                             <span class="text-[10px] text-gray-400 font-bold font-cairo uppercase">تاريخ الانتهاء</span>
-                                            <span class="text-red-600 font-black text-xs font-mono">{{ $violation->penalty->end_date?->format('Y-m-d') ?? 'مفتوح' }}</span>
+                                            <span class="text-red-600 font-black text-xs  ">{{ $violation->penalty->end_date?->format('Y-m-d') ?? 'مفتوح' }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -142,12 +142,12 @@
                                                     <div class="flex-1">
                                                         <span class="block text-[10px] text-gray-400 font-bold mb-1 text-right">من</span>
                                                         <input type="date" name="start_date" 
-                                                            class="w-full px-5 py-3 rounded-xl border-2 border-gray-100 bg-white focus:border-red-300 outline-none font-mono text-xs">
+                                                            class="w-full px-5 py-3 rounded-xl border-2 border-gray-100 bg-white focus:border-red-300 outline-none   text-xs">
                                                     </div>
                                                     <div class="flex-1">
                                                         <span class="block text-[10px] text-gray-400 font-bold mb-1 text-right">إلى</span>
                                                         <input type="date" name="end_date" 
-                                                            class="w-full px-5 py-3 rounded-xl border-2 border-gray-100 bg-white focus:border-red-300 outline-none font-mono text-xs">
+                                                            class="w-full px-5 py-3 rounded-xl border-2 border-gray-100 bg-white focus:border-red-300 outline-none   text-xs">
                                                     </div>
                                                 </div>
                                             </div>
@@ -204,7 +204,7 @@
                                             </div>
 
                                             <div class="p-3 bg-white/80 backdrop-blur-sm border-t border-gray-50">
-                                                <span class="text-[10px] text-gray-400 font-mono font-bold truncate block">
+                                                <span class="text-[10px] text-gray-400   font-bold truncate block">
                                                     {{ basename($attachment) }}
                                                 </span>
                                             </div>
@@ -237,7 +237,7 @@
                         </div>
                         <div class="flex flex-col">
                             <span class="text-lg font-bold font-almarai leading-tight">{{ $violation->student->name_ar }}</span>
-                            <span class="text-xs font-mono font-bold opacity-60 tracking-widest mt-1">{{ $violation->student->student_number }}</span>
+                            <span class="text-xs   font-bold opacity-60 tracking-widest mt-1">{{ $violation->student->student_number }}</span>
                         </div>
                     </div>
 
@@ -256,7 +256,7 @@
                         </div>
                         <div>
                             <span class="block text-[10px] text-gray-400 font-bold font-cairo uppercase">تاريخ المخالفة</span>
-                            <span class="text-navy font-black text-sm font-mono">{{ $violation->violation_date->format('Y-m-d') }}</span>
+                            <span class="text-navy font-black text-sm  ">{{ $violation->violation_date->format('Y-m-d') }}</span>
                         </div>
                     </div>
 
@@ -276,7 +276,7 @@
                         </div>
                         <div>
                             <span class="block text-[10px] text-gray-400 font-bold font-cairo uppercase">تاريخ التسجيل</span>
-                            <span class="text-navy font-black text-xs font-mono">{{ $violation->created_at->format('Y-m-d H:i') }}</span>
+                            <span class="text-navy font-black text-xs  ">{{ $violation->created_at->format('Y-m-d H:i') }}</span>
                         </div>
                     </div>
 

@@ -165,7 +165,7 @@
                                     <tr class="hover:bg-gray-50/50 transition-colors">
                                         <td class="px-8 py-5 font-bold text-gray-800 font-almarai">{{ $absence->student->name_ar }}
                                         </td>
-                                        <td class="px-8 py-5 text-sm font-mono text-gray-500">
+                                        <td class="px-8 py-5 text-sm   text-gray-500">
                                             {{ $absence->date->format('Y-m-d') }}
                                         </td>
                                         <td class="px-8 py-5">
@@ -212,13 +212,13 @@
                                     <tr class="hover:bg-gray-50/50 transition-colors">
                                         <td class="px-8 py-5">
                                             <div class="font-bold text-gray-800 font-almarai">{{ $absence->student->name_ar }}</div>
-                                            <div class="text-[10px] text-gray-400 font-mono">{{ $absence->student->barcode }}</div>
+                                            <div class="text-[10px] text-gray-400  ">{{ $absence->student->barcode }}</div>
                                         </td>
                                         <td class="px-8 py-5">
                                             <div class="text-sm font-bold text-navy font-cairo">
                                                 {{ $absence->session->circle->name }}
                                             </div>
-                                            <div class="text-xs text-gray-500 font-mono mt-1">
+                                            <div class="text-xs text-gray-500   mt-1">
                                                 {{ optional($absence->session->session_date)->format('Y-m-d') }}
                                             </div>
                                         </td>

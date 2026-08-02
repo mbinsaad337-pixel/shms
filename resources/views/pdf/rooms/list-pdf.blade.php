@@ -38,8 +38,8 @@
                     <td>{{ $room->apartment ?? '—' }}</td>
                     <td class="text-center">{{ $room->floor ?? '—' }}</td>
                     <td class="text-center font-bold">{{ $room->capacity }}</td>
-                    <td class="text-center font-mono">{{ $room->students_count ?? 0 }}</td>
-                    <td class="text-center font-mono text-success">{{ $room->capacity - ($room->students_count ?? 0) }}</td>
+                    <td class="text-center  ">{{ $room->students_count ?? 0 }}</td>
+                    <td class="text-center   text-success">{{ $room->capacity - ($room->students_count ?? 0) }}</td>
                     <td class="text-center">
                         @if($room->status === 'available')
                             <span class="badge badge-success">متاحة</span>

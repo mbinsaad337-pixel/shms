@@ -8,11 +8,11 @@
     <table style="width: 100%; border: none; margin-bottom: 20px;">
         <tr>
             <td style="width: 50%;"><strong>اسم الطالب:</strong> {{ $commitment->student->name_ar }}</td>
-            <td style="width: 50%;"><strong>رقم الطالب:</strong> <span class="font-mono">{{ $commitment->student->student_number }}</span></td>
+            <td style="width: 50%;"><strong>رقم الطالب:</strong> <span class=" ">{{ $commitment->student->student_number }}</span></td>
         </tr>
         <tr>
             <td><strong>المركز:</strong> {{ $commitment->student->center->name ?? '' }}</td>
-            <td><strong>التاريخ:</strong> <span class="font-mono">{{ $commitment->date->format('Y/m/d') }}</span></td>
+            <td><strong>التاريخ:</strong> <span class=" ">{{ $commitment->date->format('Y/m/d') }}</span></td>
         </tr>
     </table>
 

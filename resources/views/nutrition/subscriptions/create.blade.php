@@ -35,32 +35,32 @@
                                 class="text-red-500">*</span></label>
                         <input type="date" name="start_date" id="startDate" required value="{{ date('Y-m-01') }}"
                             onchange="calcDays()"
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-2 focus:ring-navy">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-navy">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">إلى تاريخ <span
                                 class="text-red-500">*</span></label>
                         <input type="date" name="end_date" id="endDate" required value="{{ date('Y-m-t') }}"
                             onchange="calcDays()"
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-2 focus:ring-navy">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-navy">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">عدد الأيام <span
                                 class="text-red-500">*</span></label>
                         <input type="number" name="days_count" id="daysCount" required min="1" value="{{ date('t') }}"
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-2 focus:ring-navy">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-navy">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5" id="rateLabel">قيمة الاشتراك اليومي (ر.ي)</label>
                         <input type="number" name="daily_rate" id="dailyRate" step="0.01" min="0" required
                             onchange="calcTotal()" oninput="calcTotal()"
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-2 focus:ring-navy"
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-navy"
                             placeholder="0.00">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5 font-red-hue">آخر يوم للدفع (من الميزانية)</label>
                         <input type="date" name="last_payment_date" id="lastPaymentDate" readonly
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-0 bg-gray-50 text-red-600 cursor-not-allowed">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-0 bg-gray-50 text-red-600 cursor-not-allowed">
                     </div>
                     <div class="md:col-span-3">
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">الميزانية المرتبطة</label>
@@ -108,7 +108,7 @@
                                     class="w-4 h-4 text-navy rounded border-gray-300 focus:ring-navy">
                                 <div>
                                     <p class="font-bold text-gray-800 font-cairo text-sm leading-tight">{{ $student->name_ar }}</p>
-                                    <p class="text-xs text-gray-400 font-mono">{{ $student->university_id }}</p>
+                                    <p class="text-xs text-gray-400  ">{{ $student->university_id }}</p>
                                 </div>
                             </label>
                         @endforeach

@@ -18,7 +18,7 @@
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">تاريخ ووقت البداية</div>
-                        <div class="detail-value font-mono">{{ $activity->start_date }} {{ $activity->start_time ? ' - ' . $activity->start_time : '' }}</div>
+                        <div class="detail-value  ">{{ $activity->start_date }} {{ $activity->start_time ? ' - ' . $activity->start_time : '' }}</div>
                     </div>
                 </td>
                 <td class="col-spacer"></td>
@@ -29,11 +29,11 @@
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">الطلاب المستهدفين</div>
-                        <div class="detail-value font-mono">{{ $activity->targetedStudents->count() }} طالب</div>
+                        <div class="detail-value  ">{{ $activity->targetedStudents->count() }} طالب</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">الطلاب الغائبين</div>
-                        <div class="detail-value font-mono text-danger">{{ count($absentees) }} طالب</div>
+                        <div class="detail-value   text-danger">{{ count($absentees) }} طالب</div>
                     </div>
                 </td>
             </tr>
@@ -58,11 +58,11 @@
         @foreach($absentees as $index => $student)
         <tr>
             <td class="text-center">{{ $index + 1 }}</td>
-            <td class="font-mono">{{ $student->university_id }}</td>
+            <td class=" ">{{ $student->university_id }}</td>
             <td class="font-bold">{{ $student->name_ar }}</td>
             <td>{{ $student->academic_level ?? '---' }}</td>
-            <td class="text-center font-mono">{{ $student->room->room_number ?? '---' }}</td>
-            <td class="font-mono" dir="ltr">{{ $student->phone }}</td>
+            <td class="text-center  ">{{ $student->room->room_number ?? '---' }}</td>
+            <td class=" " dir="ltr">{{ $student->phone }}</td>
         </tr>
         @endforeach
         
@@ -78,17 +78,24 @@
     <tr>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">أعده / مسؤول الأنشطة</div>
-            <div class="sign-name">{{ $exportUser ?? '' }}</div>
+            <div class="sign-title">مسؤول الأنشطة</div>
+            <div class="sign-name">
+                @php
+                      $Activty_manager = \App\Models\User::role('social-manager')->where('center_id',$activity->center_id)->get();
+                @endphp
+                {{ $Activty_manager->count() ===1 ? $Activty_manager->first()->name : '' }}
+            </div>
         </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">راجعه / المسؤول الإداري</div>
-        </td>
-        <td>
-            <div class="sign-line"></div>
-            <div class="sign-title">اعتمده / مدير المركز</div>
-        </td>
+            <div class="sign-title">مدير المركز</div>
+            <div class="sign-name">
+                @php
+                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$activity->center_id)->get();
+                @endphp
+                {{ $center_manager->count() ===1 ? $center_manager->first()->name : '' }}
+            </div>
+        
     </tr>
 </table>
 @endsection

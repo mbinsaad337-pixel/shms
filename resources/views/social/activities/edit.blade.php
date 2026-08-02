@@ -62,13 +62,13 @@
                     <div class="lg:col-span-1">
                         <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">من تاريخ</label>
                         <input type="date" name="start_date" value="{{ $activity->start_date?->format('Y-m-d') }}" required
-                            class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right font-mono transition-all">
+                            class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right   transition-all">
                     </div>
 
                     <div class="lg:col-span-1">
                         <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">إلى تاريخ</label>
                         <input type="date" name="end_date" value="{{ $activity->end_date?->format('Y-m-d') }}"
-                            class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right font-mono transition-all">
+                            class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right   transition-all">
                     </div>
 
                     <div class="lg:col-span-2">
@@ -81,13 +81,13 @@
                     <div class="lg:col-span-2">
                         <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">من الساعة</label>
                         <input type="time" name="start_time" value="{{ $activity->start_time }}"
-                            class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-center font-mono transition-all">
+                            class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-center   transition-all">
                     </div>
 
                     <div class="lg:col-span-2">
                         <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">إلى الساعة</label>
                         <input type="time" name="end_time" value="{{ $activity->end_time }}"
-                            class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-center font-mono transition-all">
+                            class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-center   transition-all">
                     </div>
                 </div>
 
@@ -127,7 +127,7 @@
                                                 class="w-7 h-7 rounded-lg border-gray-300 text-gold focus:ring-gold transition-transform group-hover:scale-110">
                                             <div class="flex flex-col text-right">
                                                 <span class="text-base font-black text-navy group-hover:text-gold transition-colors">{{ $student->name_ar }}</span>
-                                                <span class="text-xs text-gray-400 font-mono tracking-widest">{{ $student->student_number }}</span>
+                                                <span class="text-xs text-gray-400   tracking-widest">{{ $student->student_number }}</span>
                                             </div>
                                         </div>
                                     </label>

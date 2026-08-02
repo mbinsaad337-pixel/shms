@@ -66,8 +66,8 @@
                     <tr>
                         <td class="text-center">{{ $i + 1 }}</td>
                         <td class="font-bold">{{ $assignment->student->name_ar ?? '—' }}</td>
-                        <td class="text-center font-mono">{{ $assignment->student->student_number ?? '—' }}</td>
-                        <td class="text-center font-mono">
+                        <td class="text-center  ">{{ $assignment->student->student_number ?? '—' }}</td>
+                        <td class="text-center  ">
                             {{ $assignment->assigned_at ? \Carbon\Carbon::parse($assignment->assigned_at)->format('Y-m-d') : '—' }}
                         </td>
                     </tr>

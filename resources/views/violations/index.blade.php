@@ -22,12 +22,12 @@
                 <div>
                     <label class="block text-xs font-bold text-gray-400 mb-2 font-cairo mr-2">من تاريخ</label>
                     <input type="date" name="date_from" value="{{ request('date_from') }}"
-                        class="w-full px-5 py-3 rounded-xl border border-gray-100 bg-gray-50 text-navy font-mono text-sm focus:ring-2 focus:ring-navy/5 outline-none">
+                        class="w-full px-5 py-3 rounded-xl border border-gray-100 bg-gray-50 text-navy   text-sm focus:ring-2 focus:ring-navy/5 outline-none">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-400 mb-2 font-cairo mr-2">إلى تاريخ</label>
                     <input type="date" name="date_to" value="{{ request('date_to') }}"
-                        class="w-full px-5 py-3 rounded-xl border border-gray-100 bg-gray-50 text-navy font-mono text-sm focus:ring-2 focus:ring-navy/5 outline-none">
+                        class="w-full px-5 py-3 rounded-xl border border-gray-100 bg-gray-50 text-navy   text-sm focus:ring-2 focus:ring-navy/5 outline-none">
                 </div>
                 <div class="flex gap-2">
                     <button type="submit"
@@ -119,7 +119,7 @@
                                                 <span
                                                     class="text-navy font-bold font-almarai">{{ $violation->student->name_ar }}</span>
                                                 <span
-                                                    class="text-[10px] text-gray-400 font-mono tracking-widest">{{ $violation->student->student_number }}</span>
+                                                    class="text-[10px] text-gray-400   tracking-widest">{{ $violation->student->student_number }}</span>
                                             </div>
                                         </div>
                                     </td>
@@ -148,7 +148,7 @@
                                         </span>
                                     </td>
                                     <td class="px-8 py-6 text-center">
-                                        <span class="text-xs font-black text-gray-500 font-mono">
+                                        <span class="text-xs font-black text-gray-500  ">
                                             {{ $violation->violation_date->format('Y-m-d') }}
                                         </span>
                                     </td>

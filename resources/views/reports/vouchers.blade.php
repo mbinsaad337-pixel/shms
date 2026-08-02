@@ -37,7 +37,7 @@
                 <tbody class="divide-y divide-gray-100">
                     @foreach($data as $voucher)
                         <tr class="hover:bg-blue-50/30 transition-colors">
-                            <td class="px-6 py-4 font-mono font-bold text-primary">{{ $voucher->voucher_number }}</td>
+                            <td class="px-6 py-4   font-bold text-primary">{{ $voucher->voucher_number }}</td>
                             <td class="px-6 py-4 font-almarai">{{ $voucher->center->name }}</td>
                             <td class="px-6 py-4">
                                 <span

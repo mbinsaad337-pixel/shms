@@ -73,7 +73,7 @@
                         <tr class="hover:bg-gray-50/50 transition-colors">
                             <td class="px-6 py-4 text-sm font-bold text-navy">{{ $absence->student->name_ar }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $absence->session->circle->name }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600 font-mono">{{ $absence->session->session_date }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600  ">{{ $absence->session->session_date }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $absence->student->personal_phone ?? '---' }}</td>
                             <td class="px-6 py-4">
                                 <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">غائب</span>

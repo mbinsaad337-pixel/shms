@@ -54,7 +54,13 @@
                     </tr>
                 </thead>
                 <tbody>
+
                     @foreach($users as $user)
+
+                      @if($user->hasRole('student'))
+                        @continue
+                      @endif
+
                         <tr class="border-b border-gray-100 hover:bg-blue-50/30 transition-colors">
                             <td class="px-5 py-4 text-sm">
                                 <p class="text-gray-900 font-almarai">{{ $user->name }}</p>

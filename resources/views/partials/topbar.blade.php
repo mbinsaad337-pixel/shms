@@ -62,7 +62,7 @@
                                 <div class="flex-1 min-w-0">
                                     <p class="text-xs font-bold text-navy font-cairo truncate" x-text="n.subject"></p>
                                     <p class="text-[10px] text-gray-400 font-almarai" x-text="'من: ' + n.from"></p>
-                                    <p class="text-[10px] text-gray-300 font-mono" x-text="n.time"></p>
+                                    <p class="text-[10px] text-gray-300  " x-text="n.time"></p>
                                 </div>
                                 <span class="w-2 h-2 bg-blue-500 rounded-full shrink-0 mt-2"></span>
                             </a>

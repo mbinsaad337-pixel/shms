@@ -20,8 +20,8 @@
             <td class="font-bold">{{ $voucher->supervisor->name ?? '---' }}</td>
             <td>{{ $voucher->center->name ?? '---' }}</td>
             <td>{{ $voucher->type == 'cash' ? 'نقدية' : 'عينية' }}</td>
-            <td class="font-bold font-mono text-navy">{{ number_format($voucher->amount, 2) }}</td>
-            <td class="text-center font-mono text-sm">{{ $voucher->date instanceof \Carbon\Carbon ? $voucher->date->format('Y/m/d') : $voucher->date }}</td>
+            <td class="font-bold   text-navy">{{ number_format($voucher->amount, 2) }}</td>
+            <td class="text-center   text-sm">{{ $voucher->date instanceof \Carbon\Carbon ? $voucher->date->format('Y/m/d') : $voucher->date }}</td>
             <td class="text-center">
                 @php
                     $statusMap = [

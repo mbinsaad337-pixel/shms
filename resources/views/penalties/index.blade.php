@@ -63,7 +63,7 @@
                                             </div>
                                             <div class="flex flex-col">
                                                 <span class="text-navy font-bold font-almarai">{{ $penalty->student->name_ar }}</span>
-                                                <span class="text-[10px] text-gray-400 font-mono tracking-widest">{{ $penalty->student->student_number }}</span>
+                                                <span class="text-[10px] text-gray-400   tracking-widest">{{ $penalty->student->student_number }}</span>
                                             </div>
                                         </div>
                                     </td>
@@ -89,7 +89,7 @@
                                             <span class="text-xs text-gray-400 italic">بدون مخالفة مسجلة</span>
                                         @endif
                                     </td>
-                                    <td class="px-8 py-6 text-center font-mono text-[10px] text-gray-500">
+                                    <td class="px-8 py-6 text-center   text-[10px] text-gray-500">
                                         {{ $penalty->start_date?->format('Y-m-d') ?? '---' }} <br>
                                         <span class="text-red-400">{{ $penalty->end_date?->format('Y-m-d') ?? 'مفتوح' }}</span>
                                     </td>

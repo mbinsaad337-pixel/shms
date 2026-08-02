@@ -28,7 +28,7 @@
                         {{ $typeLabel }}
                     </h1>
                     <div class="flex items-center gap-3 mt-1">
-                        <span class="text-gray-500 font-mono text-sm">#{{ $voucher->voucher_number }}</span>
+                        <span class="text-gray-500   text-sm">#{{ $voucher->voucher_number }}</span>
                         <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
                         <span class="text-gray-500 text-sm font-almarai">{{ $voucher->date->format('Y-m-d') }}</span>
                     </div>
@@ -52,7 +52,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-b border-gray-50">
                 <div class="p-6 border-l border-gray-50 last:border-0">
                     <p class="text-sm text-gray-400 font-almarai mb-1">المبلغ الإجمالي</p>
-                    <p class="text-2xl font-bold text-gray-800 font-mono">
+                    <p class="text-2xl font-bold text-gray-800  ">
                         {{ number_format($voucher->amount, 2) }}
                         <span class="text-sm text-gray-500 font-cairo">ر.ي</span>
                     </p>
@@ -173,7 +173,7 @@
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-sm text-gray-500 font-almarai">تاريخ الإنشاء</span>
-                                    <span class="text-sm font-bold text-gray-800 font-mono">{{ $voucher->created_at->format('Y-m-d H:i') }}</span>
+                                    <span class="text-sm font-bold text-gray-800  ">{{ $voucher->created_at->format('Y-m-d H:i') }}</span>
                                 </div>
                             </div>
                         </div>

@@ -190,11 +190,11 @@
                                                 <span class="text-navy font-bold font-almarai">{{ $participant->student->name_ar }}</span>
                                             </div>
                                         </td>
-                                        <td class="px-8 py-5 text-gray-500 font-mono text-sm tracking-widest">
+                                        <td class="px-8 py-5 text-gray-500   text-sm tracking-widest">
                                             {{ $participant->student->student_number }}
                                         </td>
                                         <td class="px-8 py-5 text-center">
-                                            <span class="px-3 py-1.5 bg-green-50 text-green-600 rounded-lg text-xs font-black font-mono">
+                                            <span class="px-3 py-1.5 bg-green-50 text-green-600 rounded-lg text-xs font-black  ">
                                                 {{ $participant->registered_at?->format('H:i:s') ?? '--:--:--' }}
                                             </span>
                                         </td>
@@ -305,7 +305,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="px-8 py-5 text-gray-500 font-mono text-sm tracking-widest">
+                                                <td class="px-8 py-5 text-gray-500   text-sm tracking-widest">
                                                     {{ $student->student_number }}
                                                 </td>
                                             </tr>

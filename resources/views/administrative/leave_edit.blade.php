@@ -43,22 +43,22 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">تاريخ المغادرة</label>
-                    <input type="date" name="departure_date" value="{{ old('departure_date', $leave->departure_date->format('Y-m-d')) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none">
+                    <input type="date" name="departure_date" value="{{ old('departure_date', $leave->departure_date->format('Y-m-d')) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">وقت المغادرة</label>
-                    <input type="time" name="departure_time" value="{{ old('departure_time', $leave->departure_time ? \Carbon\Carbon::parse($leave->departure_time)->format('H:i') : '') }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none">
+                    <input type="time" name="departure_time" value="{{ old('departure_time', $leave->departure_time ? \Carbon\Carbon::parse($leave->departure_time)->format('H:i') : '') }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none">
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">تاريخ العودة المتوقع</label>
-                    <input type="date" name="expected_return_date" value="{{ old('expected_return_date', $leave->expected_return_date ? $leave->expected_return_date->format('Y-m-d') : '') }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none">
+                    <input type="date" name="expected_return_date" value="{{ old('expected_return_date', $leave->expected_return_date ? $leave->expected_return_date->format('Y-m-d') : '') }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">وقت العودة المتوقع</label>
-                    <input type="time" name="expected_return_time" value="{{ old('expected_return_time', $leave->expected_return_time ? \Carbon\Carbon::parse($leave->expected_return_time)->format('H:i') : '') }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none">
+                    <input type="time" name="expected_return_time" value="{{ old('expected_return_time', $leave->expected_return_time ? \Carbon\Carbon::parse($leave->expected_return_time)->format('H:i') : '') }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none">
                 </div>
             </div>
 

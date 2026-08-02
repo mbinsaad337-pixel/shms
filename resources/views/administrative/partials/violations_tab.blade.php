@@ -78,7 +78,7 @@
                                 <div class="w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center text-red-600 font-bold text-xs">{{ mb_substr($v->student->name_ar ?? '?', 0, 1) }}</div>
                                 <div>
                                     <p class="font-bold text-navy font-almarai text-sm">{{ $v->student->name_ar ?? '---' }}</p>
-                                    <p class="text-[10px] text-gray-400 font-mono">{{ $v->student->student_number ?? '' }}</p>
+                                    <p class="text-[10px] text-gray-400  ">{{ $v->student->student_number ?? '' }}</p>
                                 </div>
                             </div>
                         </td>
@@ -92,7 +92,7 @@
                             @endphp
                             <span class="px-2.5 py-1 rounded-lg text-xs font-black {{ $sev[$v->severity][0] ?? 'bg-gray-100 text-gray-600' }}">{{ $sev[$v->severity][1] ?? $v->severity }}</span>
                         </td>
-                        <td class="px-5 py-4 text-center"><span class="text-xs font-mono text-gray-500">{{ $v->violation_date->format('Y-m-d') }}</span></td>
+                        <td class="px-5 py-4 text-center"><span class="text-xs   text-gray-500">{{ $v->violation_date->format('Y-m-d') }}</span></td>
                         <td class="px-5 py-4 text-center"><span class="text-xs font-bold text-navy font-cairo">{{ $v->recordedBy->name ?? '---' }}</span></td>
                         <td class="px-5 py-4 text-center">
                             <div class="flex items-center justify-center gap-1.5">

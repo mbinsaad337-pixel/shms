@@ -50,7 +50,7 @@
                                         </div>
                                         <div>
                                             <p class="text-sm font-bold text-gray-900 font-cairo">{{ $achievement->student->name_ar }}</p>
-                                            <p class="text-[10px] text-gray-400 font-mono italic">#{{ $achievement->student->student_number }}</p>
+                                            <p class="text-[10px] text-gray-400   italic">#{{ $achievement->student->student_number }}</p>
                                         </div>
                                     </div>
                                 </td>
@@ -73,7 +73,7 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-center whitespace-nowrap">
-                                    <span class="text-[11px] text-gray-400 font-mono">{{ $achievement->created_at->format('Y/m/d') }}</span>
+                                    <span class="text-[11px] text-gray-400  ">{{ $achievement->created_at->format('Y/m/d') }}</span>
                                 </td>
                                 <td class="px-6 py-4 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center gap-2">

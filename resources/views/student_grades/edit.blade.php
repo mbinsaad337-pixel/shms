@@ -42,7 +42,7 @@
                             </a>
                         </div>
                    </div>
-                   <p class="text-[10px] text-gray-400 font-mono mt-3 text-center">تاريخ الرفع: {{ $studentGrade->created_at->format('Y/m/d H:i') }}</p>
+                   <p class="text-[10px] text-gray-400   mt-3 text-center">تاريخ الرفع: {{ $studentGrade->created_at->format('Y/m/d H:i') }}</p>
                 </div>
             </div>
 

@@ -74,7 +74,7 @@
                         <div class="md:col-span-3">
                             <label class="block text-gray-700 font-bold mb-2">Full Name (English)</label>
                             <input type="text" name="name_en" value="{{ old('name_en', $student->name_en) }}" dir="ltr"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-left font-mono">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-left  ">
                         </div>
 
                         <div>
@@ -132,13 +132,13 @@
                         <div>
                             <label class="block text-gray-700 font-bold mb-2">رقم الهوية الوطنية / الإقامة *</label>
                             <input type="text" name="national_id" value="{{ old('national_id', $student->national_id) }}" required
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-mono">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none  ">
                         </div>
 
                         <div>
                             <label class="block text-gray-700 font-bold mb-2">رقم البطاقة الشخصية (إن وجد)</label>
                             <input type="text" name="id_card_number" value="{{ old('id_card_number', $student->id_card_number) }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-mono">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none  ">
                         </div>
 
                         <div>
@@ -166,19 +166,19 @@
                         <div>
                             <label class="block text-gray-700 font-bold mb-2">رقم الجوال *</label>
                             <input type="text" name="phone" value="{{ old('phone', $student->phone) }}" required dir="ltr"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none font-mono text-left">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none   text-left">
                         </div>
 
                         <div>
                             <label class="block text-gray-700 font-bold mb-2">البريد الإلكتروني</label>
                             <input type="email" name="email" value="{{ old('email', $student->email ?? ($student->user->email ?? '')) }}" dir="ltr"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none font-mono text-left">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none   text-left">
                         </div>
 
                         <div>
                             <label class="block text-gray-700 font-bold mb-2">تلفون المنزل (إن وجد)</label>
                             <input type="text" name="home_phone" value="{{ old('home_phone', $student->home_phone) }}" dir="ltr"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none font-mono text-left">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 outline-none   text-left">
                         </div>
 
                         <div>
@@ -217,7 +217,7 @@
                         <div>
                             <label class="block text-gray-700 font-bold mb-2">الرقم الجامعي</label>
                             <input type="text" name="student_number" value="{{ old('student_number', $student->student_number) }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-mono">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none  ">
                         </div>
 
                         <div>
@@ -325,7 +325,7 @@
                         <div>
                             <label class="block text-gray-700 font-bold mb-2">رقم هاتف ولي الأمر</label>
                             <input type="text" name="guardian_phone" value="{{ old('guardian_phone', $student->guardian_phone) }}" dir="ltr"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none font-mono text-left">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none   text-left">
                         </div>
 
                         <div>
@@ -365,7 +365,7 @@
                                     @php $workers = old('workers', $student->family_workers ?? []); @endphp
                                     @forelse($workers as $index => $worker)
                                         <tr class="border-b border-gray-50 hover:bg-gray-50/50">
-                                            <td class="p-2 text-center text-gray-400 font-mono worker-num">{{ $loop->iteration }}</td>
+                                            <td class="p-2 text-center text-gray-400   worker-num">{{ $loop->iteration }}</td>
                                             <td class="p-2"><input type="text" name="workers[{{ $index }}][name]" value="{{ $worker['name'] ?? '' }}" class="w-full px-2 py-1.5 border border-gray-100 rounded-lg outline-none focus:ring-1 focus:ring-cyan-300"></td>
                                             <td class="p-2"><input type="text" name="workers[{{ $index }}][job]" value="{{ $worker['job'] ?? '' }}" class="w-full px-2 py-1.5 border border-gray-100 rounded-lg outline-none focus:ring-1 focus:ring-cyan-300"></td>
                                             <td class="p-2"><input type="text" name="workers[{{ $index }}][organization]" value="{{ $worker['organization'] ?? '' }}" class="w-full px-2 py-1.5 border border-gray-100 rounded-lg outline-none focus:ring-1 focus:ring-cyan-300"></td>
@@ -404,7 +404,7 @@
                         <div>
                             <label class="block text-gray-700 font-bold mb-2">رقم هاتف الطوارئ</label>
                             <input type="text" name="emergency_phone" value="{{ old('emergency_phone', $student->emergency_phone) }}" dir="ltr"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-300 outline-none font-mono text-left">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-300 outline-none   text-left">
                         </div>
                     </div>
                 </div>
@@ -434,7 +434,7 @@
                         <div>
                             <label class="block text-gray-700 font-bold mb-2">اسم المستخدم (للدخول)</label>
                             <input type="text" name="username" value="{{ old('username', $student->user->username) }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none font-mono bg-gray-50" readonly>
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary outline-none   bg-gray-50" readonly>
                             <p class="text-xs text-gray-400 mt-1">اسم المستخدم لا يمكن تعديله حالياً</p>
                         </div>
 
@@ -481,7 +481,7 @@
         const row = document.createElement('tr');
         row.className = 'border-b border-gray-50 hover:bg-gray-50/50';
         row.innerHTML = `
-            <td class="p-2 text-center text-gray-400 font-mono worker-num"></td>
+            <td class="p-2 text-center text-gray-400   worker-num"></td>
             <td class="p-2"><input type="text" name="workers[${workerIndex}][name]" class="w-full px-2 py-1.5 border border-gray-100 rounded-lg outline-none focus:ring-1 focus:ring-cyan-300"></td>
             <td class="p-2"><input type="text" name="workers[${workerIndex}][job]" class="w-full px-2 py-1.5 border border-gray-100 rounded-lg outline-none focus:ring-1 focus:ring-cyan-300"></td>
             <td class="p-2"><input type="text" name="workers[${workerIndex}][organization]" class="w-full px-2 py-1.5 border border-gray-100 rounded-lg outline-none focus:ring-1 focus:ring-cyan-300"></td>

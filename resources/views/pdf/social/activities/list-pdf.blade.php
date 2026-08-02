@@ -22,16 +22,16 @@
             <td class="font-bold">{{ $activity->name }}</td>
             <td>{{ $activity->club->name ?? '---' }}</td>
             <td>{{ $activity->location }}</td>
-            <td class="text-center font-mono text-sm">
+            <td class="text-center   text-sm">
                 {{ $activity->start_date instanceof \Carbon\Carbon ? $activity->start_date->format('Y/m/d') : $activity->start_date }}
                 @if($activity->start_time) <br><span class="text-xs text-gray-500">{{ $activity->start_time }}</span> @endif
             </td>
-            <td class="text-center font-mono text-sm">
+            <td class="text-center   text-sm">
                 {{ $activity->end_date ? ($activity->end_date instanceof \Carbon\Carbon ? $activity->end_date->format('Y/m/d') : $activity->end_date) : '---' }}
                 @if($activity->end_time) <br><span class="text-xs text-gray-500">{{ $activity->end_time }}</span> @endif
             </td>
-           <td class="text-center font-mono text-sm">{{ $activity->target_audience ?? '---' }}</td>
-            <td class="text-center font-mono text-sm">
+           <td class="text-center   text-sm">{{ $activity->target_audience ?? '---' }}</td>
+            <td class="text-center   text-sm">
                 {{ $activity->status == 'planned' ? 'مجدولة' : ($activity->status == 'published' ? 'مستمرة' : ($activity->status == 'cancelled' ? 'ملغاة' : 'منتهية')) }}
             </td>
 

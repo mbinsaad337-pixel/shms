@@ -63,7 +63,7 @@
                     <h3 class="text-3xl font-black text-navy">{{ number_format($stats['total_liquidity'], 0) }} <span class="text-xs font-normal text-gray-400 font-cairo">ر.ي</span></h3>
                 </div>
             </div>
-            <p class="text-[10px] text-gray-500 mt-4 font-almarai italic">إجمالي الأرصدة المتوفرة في كافة الصناديق</p>
+            <p class="text-[10px] text-gray-500 mt-4  ">إجمالي الأرصدة المتوفرة في كافة الصناديق</p>
         </div>
 
         {{-- Pending Approvals --}}

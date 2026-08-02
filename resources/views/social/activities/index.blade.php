@@ -158,7 +158,7 @@
                                                 class="fas fa-calendar-alt text-navy/50 ml-1"></i>{{ $activity->start_date->format('Y/m/d') }}
                                         </div>
                                         @if ($activity->start_time)
-                                            <div class="text-[10px] text-gray-400 font-mono"><i
+                                            <div class="text-[10px] text-gray-400  "><i
                                                     class="fas fa-clock text-navy/50 ml-1"></i>{{ $activity->start_time }}
                                             </div>
                                         @endif
@@ -327,14 +327,14 @@
                         <div>
                             <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">من تاريخ</label>
                             <input type="date" name="start_date" required
-                                class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right font-mono transition-all">
+                                class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right   transition-all">
                         </div>
 
                         <div>
                             <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">إلى تاريخ
                                 (اختياري)</label>
                             <input type="date" name="end_date"
-                                class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right font-mono transition-all">
+                                class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right   transition-all">
                         </div>
 
                         <div>
@@ -348,13 +348,13 @@
                         <div>
                             <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">من الساعة</label>
                             <input type="time" name="start_time"
-                                class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-center font-mono transition-all">
+                                class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-center   transition-all">
                         </div>
 
                         <div>
                             <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">إلى الساعة</label>
                             <input type="time" name="end_time"
-                                class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-center font-mono transition-all">
+                                class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-center   transition-all">
                         </div>
                         <div>
                             <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">المستهدفين
@@ -419,7 +419,7 @@
                                                     <span
                                                         class="text-sm font-black text-navy group-hover:text-gold transition-colors">{{ $student->name_ar }}</span>
                                                     <span
-                                                        class="text-[10px] text-gray-400 font-mono tracking-widest">{{ $student->student_number }}</span>
+                                                        class="text-[10px] text-gray-400   tracking-widest">{{ $student->student_number }}</span>
                                                 </div>
                                             </div>
                                             <div
@@ -497,7 +497,7 @@
                         الرقم الجامعي</label>
                     <input type="text" name="barcode" id="barcodeInput" required autofocus
                         placeholder="قم بمسح الباركود..."
-                        class="w-full px-5 py-6 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-8 focus:ring-gold/5 focus:border-gold outline-none text-center font-black text-2xl tracking-widest text-navy transition-all font-mono">
+                        class="w-full px-5 py-6 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-8 focus:ring-gold/5 focus:border-gold outline-none text-center font-black text-2xl tracking-widest text-navy transition-all  ">
                     <div class="absolute left-4 top-[60px] text-gray-300">
                         <i class="fas fa-keyboard"></i>
                     </div>

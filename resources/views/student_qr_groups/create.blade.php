@@ -90,7 +90,7 @@
 
                             <div class="w-full relative">
                                 <input type="text" id="manualCodeInput"
-                                    class="w-full focus:ring-navy focus:border-navy border-gray-300 rounded-xl font-mono text-center p-4 mb-4 text-sm"
+                                    class="w-full focus:ring-navy focus:border-navy border-gray-300 rounded-xl   text-center p-4 mb-4 text-sm"
                                     placeholder="مثال: 95RZIKReI1r...">
                                 <button type="button" onclick="processManualEntry()"
                                     class="w-full bg-navy hover:bg-sky-900 text-white font-bold py-3.5 rounded-xl font-cairo transition-all shadow-md">
@@ -105,7 +105,7 @@
                                 ليتم اختياره تلقائياً</p>
                             <div
                                 class="bg-black/60 rounded-xl px-4 py-2 text-center mt-1 min-h-[3rem] flex items-center justify-center">
-                                <p class="text-[10px] text-gray-500 font-mono">آخر قراءة: <span id="debugText"
+                                <p class="text-[10px] text-gray-500  ">آخر قراءة: <span id="debugText"
                                         class="text-yellow-400">—</span></p>
                             </div>
                         </div>

@@ -54,7 +54,7 @@
                                      {{ $grade->semester }}
                                  </span>
                                  @if($grade->gpa_percentage)
-                                     <span class="text-emerald-500 font-mono font-bold">{{ number_format($grade->gpa_percentage, 2) }}%</span>
+                                     <span class="text-emerald-500   font-bold">{{ number_format($grade->gpa_percentage, 2) }}%</span>
                                  @endif
                             </div>
                             <h4 class="font-bold text-gray-800 font-cairo">{{ $grade->academic_year ?? 'السنة الدراسية غير محددة' }}</h4>

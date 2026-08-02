@@ -31,16 +31,16 @@
                     @if ($invoices->count() > 0)
                         @foreach ($invoices as $invoice)
                                 <tr class="hover:bg-gray-50/50 transition-colors">
-                                    <td class="px-5 py-4 font-mono font-bold text-gray-700 text-sm">{{ $invoice->invoice_number }}</td>
+                                    <td class="px-5 py-4   font-bold text-gray-700 text-sm">{{ $invoice->invoice_number }}</td>
                                     <td class="px-5 py-4 font-cairo font-bold text-gray-800 text-sm">{{ $invoice->supplier->name }}</td>
-                                    <td class="px-5 py-4 text-center font-mono text-gray-600 text-sm">
+                                    <td class="px-5 py-4 text-center   text-gray-600 text-sm">
                                         {{ $invoice->invoice_date->format('Y-m-d') }}</td>
                                     <td class="px-5 py-4 text-center">
                                         <span class="px-2 py-0.5 rounded-md text-[10px] font-bold {{ $invoice->payment_type === 'cash' ? 'bg-green-50 text-green-600 border border-green-200' : 'bg-orange-50 text-orange-600 border border-orange-200' }}">
                                             {{ $invoice->payment_type_label }}
                                         </span>
                                     </td>
-                                    <td class="px-5 py-4 text-center font-bold text-orange-600 font-mono text-sm">
+                                    <td class="px-5 py-4 text-center font-bold text-orange-600   text-sm">
                                         {{ number_format($invoice->total_amount, 2) }} ر.ي</td>
                                     <td class="px-5 py-4 text-center">
                                         <span

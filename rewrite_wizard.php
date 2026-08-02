@@ -23,7 +23,7 @@ $progress_bar_ui = <<<HTML
         <div class="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <div class="flex justify-between items-end mb-2">
                 <span class="text-sm font-black text-gray-700 font-cairo">نسبة الإنجاز</span>
-                <span class="text-lg font-black text-primary font-mono" id="completionPercentage">0%</span>
+                <span class="text-lg font-black text-primary  " id="completionPercentage">0%</span>
             </div>
             <div class="progress-bar-bg">
                 <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>

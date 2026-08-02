@@ -18,7 +18,7 @@
                     <td class="text-center">{{ $i + 1 }}</td>
                     <td class="font-bold">{{ $absence->student->name_ar ?? '—' }}</td>
                     <td>{{ $absence->session->circle->name ?? '—' }}</td>
-                    <td class="text-center font-mono">{{ $absence->session->session_date ?? '—' }}</td>
+                    <td class="text-center  ">{{ $absence->session->session_date ?? '—' }}</td>
                     <td class="text-sm">{{ $absence->notes ?? '—' }}</td>
                 </tr>
             @empty

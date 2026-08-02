@@ -23,7 +23,7 @@
         <form action="{{ route('nutrition.attendance-reports') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
             <div>
                 <label class="block text-xs font-bold text-gray-400 mb-2 font-cairo">التاريخ</label>
-                <input type="date" name="date" value="{{ request('date', today()->toDateString()) }}" class="w-full bg-gray-50 border-gray-100 rounded-xl focus:ring-primary focus:border-primary font-mono">
+                <input type="date" name="date" value="{{ request('date', today()->toDateString()) }}" class="w-full bg-gray-50 border-gray-100 rounded-xl focus:ring-primary focus:border-primary  ">
             </div>
             <div>
                 <label class="block text-xs font-bold text-gray-400 mb-2 font-cairo">الوجبة</label>
@@ -76,7 +76,7 @@
                                     </div>
                                     <div>
                                         <p class="font-bold text-gray-800 font-cairo">{{ $report->student?->name_ar ?? 'طالب غير موجود' }}</p>
-                                        <p class="text-xs text-gray-400 font-mono">{{ $report->student?->university_id }}</p>
+                                        <p class="text-xs text-gray-400  ">{{ $report->student?->university_id }}</p>
                                     </div>
                                 </div>
                             </td>
@@ -99,7 +99,7 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-8 py-5 font-mono text-gray-400 text-sm">
+                            <td class="px-8 py-5   text-gray-400 text-sm">
                                 {{ $report->updated_at->format('H:i:s') }}
                             </td>
                         </tr>
@@ -128,7 +128,7 @@
         <div class="bg-gradient-to-br from-yellow-50 to-orange-50 border border-yellow-100 p-8 rounded-[2rem] flex items-center justify-between">
             <div>
                 <p class="text-yellow-800 font-bold font-cairo mb-1">إجمالي المتأخرين اليوم</p>
-                <p class="text-3xl font-black text-yellow-900 font-mono">
+                <p class="text-3xl font-black text-yellow-900  ">
                     {{ \App\Models\FoodAttendanceReport::where('meal_date', today())->where('status', 'late')->count() }}
                 </p>
             </div>
@@ -139,7 +139,7 @@
         <div class="bg-gradient-to-br from-red-50 to-rose-50 border border-red-100 p-8 rounded-[2rem] flex items-center justify-between">
             <div>
                 <p class="text-red-800 font-bold font-cairo mb-1">إجمالي الغائبين اليوم</p>
-                <p class="text-3xl font-black text-red-900 font-mono">
+                <p class="text-3xl font-black text-red-900  ">
                     {{ \App\Models\FoodAttendanceReport::where('meal_date', today())->where('status', 'absent')->count() }}
                 </p>
             </div>

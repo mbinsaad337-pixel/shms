@@ -78,7 +78,7 @@
                                             </div>
                                             <div>
                                                 <p class="text-sm font-bold text-gray-900 font-cairo">{{ $grade->student->name_ar }}</p>
-                                                <p class="text-[10px] text-gray-400 font-mono italic">#{{ $grade->student->student_number }}</p>
+                                                <p class="text-[10px] text-gray-400   italic">#{{ $grade->student->student_number }}</p>
                                             </div>
                                         </div>
                                     </td>
@@ -87,7 +87,7 @@
                                             {{ $grade->semester }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-center whitespace-nowrap font-mono font-bold text-gray-700">
+                                    <td class="px-6 py-4 text-center whitespace-nowrap   font-bold text-gray-700">
                                         @if($grade->gpa_percentage)
                                             <span class="text-emerald-600">{{ number_format($grade->gpa_percentage, 2) }}%</span>
                                         @else

@@ -23,12 +23,12 @@
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">رقم التواصل</label>
                         <input type="text" name="phone" value="{{ old('phone') }}" dir="ltr"
-                            class="w-full border border-gray-200 rounded-xl px-4 py-3 font-mono focus:ring-2 focus:ring-orange-400">
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3   focus:ring-2 focus:ring-orange-400">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">البريد الإلكتروني</label>
                         <input type="email" name="email" value="{{ old('email') }}"
-                            class="w-full border border-gray-200 rounded-xl px-4 py-3 font-mono focus:ring-2 focus:ring-orange-400">
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3   focus:ring-2 focus:ring-orange-400">
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">العنوان</label>
@@ -38,7 +38,7 @@
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">الرقم الضريبي</label>
                         <input type="text" name="tax_number" value="{{ old('tax_number') }}"
-                            class="w-full border border-gray-200 rounded-xl px-4 py-3 font-mono focus:ring-2 focus:ring-orange-400">
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3   focus:ring-2 focus:ring-orange-400">
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">ملاحظات</label>

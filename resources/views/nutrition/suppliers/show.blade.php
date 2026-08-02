@@ -14,7 +14,7 @@
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 font-cairo">كشف حساب: {{ $supplier->name }}</h2>
                     @if($supplier->phone)
-                        <p class="text-gray-400 text-sm font-mono" dir="ltr">{{ $supplier->phone }}</p>
+                        <p class="text-gray-400 text-sm  " dir="ltr">{{ $supplier->phone }}</p>
                     @endif
                 </div>
             </div>
@@ -35,12 +35,12 @@
             @php $net = $supplier->balance_debit - $supplier->balance_credit; @endphp
             <div class="bg-red-50 border border-red-100 rounded-2xl p-5 text-center">
                 <p class="text-[10px] font-bold text-red-400 uppercase font-cairo mb-1">مدين (يستحقه)</p>
-                <p class="text-3xl font-black text-red-700 font-mono">{{ number_format($supplier->balance_debit, 2) }}</p>
+                <p class="text-3xl font-black text-red-700  ">{{ number_format($supplier->balance_debit, 2) }}</p>
                 <p class="text-xs text-red-400 font-cairo">ر.ي</p>
             </div>
             <div class="bg-green-50 border border-green-100 rounded-2xl p-5 text-center">
                 <p class="text-[10px] font-bold text-green-500 uppercase font-cairo mb-1">دائن (مدفوع له)</p>
-                <p class="text-3xl font-black text-green-700 font-mono">{{ number_format($supplier->balance_credit, 2) }}
+                <p class="text-3xl font-black text-green-700  ">{{ number_format($supplier->balance_credit, 2) }}
                 </p>
                 <p class="text-xs text-green-400 font-cairo">ر.ي</p>
             </div>
@@ -51,7 +51,7 @@
                     {{ $net > 0 ? 'مستحق عليك' : ($net < 0 ? 'زيادة مدفوعة' : 'متوازن') }}
                 </p>
                 <p
-                    class="text-3xl font-black font-mono {{ $net > 0 ? 'text-orange-700' : ($net < 0 ? 'text-blue-700' : 'text-gray-500') }}">
+                    class="text-3xl font-black   {{ $net > 0 ? 'text-orange-700' : ($net < 0 ? 'text-blue-700' : 'text-gray-500') }}">
                     {{ number_format(abs($net), 2) }}</p>
                 <p class="text-xs font-cairo {{ $net > 0 ? 'text-orange-400' : 'text-blue-400' }}">ر.ي</p>
             </div>
@@ -78,9 +78,9 @@
                     @if(is_countable($ledger) ? count($ledger) > 0 : (method_exists($ledger, 'count') ? $ledger->count() > 0 : !empty($ledger)))
     @foreach($ledger as $row)
                         <tr class="hover:bg-gray-50/50 {{ $row['type'] === 'invoice' ? '' : 'bg-green-50/30' }}">
-                            <td class="px-4 py-3 font-mono text-gray-600 text-sm">
+                            <td class="px-4 py-3   text-gray-600 text-sm">
                                 {{ \Carbon\Carbon::parse($row['date'])->format('Y-m-d') }}</td>
-                            <td class="px-4 py-3 font-mono text-gray-700 text-sm font-bold">{{ $row['reference'] }}</td>
+                            <td class="px-4 py-3   text-gray-700 text-sm font-bold">{{ $row['reference'] }}</td>
                             <td class="px-4 py-3 font-cairo text-gray-600 text-sm flex items-center gap-2">
                                 @if($row['type'] === 'invoice')
                                     <span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span>
@@ -89,12 +89,12 @@
                                 @endif
                                 {{ $row['description'] }}
                             </td>
-                            <td class="px-4 py-3 text-center font-mono font-bold text-red-600">
+                            <td class="px-4 py-3 text-center   font-bold text-red-600">
                                 {{ $row['debit'] > 0 ? number_format($row['debit'], 2) : '—' }}</td>
-                            <td class="px-4 py-3 text-center font-mono font-bold text-green-600">
+                            <td class="px-4 py-3 text-center   font-bold text-green-600">
                                 {{ $row['credit'] > 0 ? number_format($row['credit'], 2) : '—' }}</td>
                             <td
-                                class="px-4 py-3 text-center font-mono font-bold {{ $row['running_balance'] > 0 ? 'text-orange-600' : ($row['running_balance'] < 0 ? 'text-blue-600' : 'text-gray-400') }}">
+                                class="px-4 py-3 text-center   font-bold {{ $row['running_balance'] > 0 ? 'text-orange-600' : ($row['running_balance'] < 0 ? 'text-blue-600' : 'text-gray-400') }}">
                                 {{ number_format(abs($row['running_balance']), 2) }}
                                 @if($row['running_balance'] != 0)
                                     <span class="text-[9px] font-cairo">{{ $row['running_balance'] > 0 ? 'د' : 'د' }}</span>
@@ -113,9 +113,9 @@
                     <tfoot class="bg-gray-50 border-t-2 border-gray-200">
                         <tr>
                             <td colspan="3" class="px-4 py-3 text-right font-black text-gray-700 font-cairo">الإجمالي</td>
-                            <td class="px-4 py-3 text-center font-black text-red-700 font-mono">
+                            <td class="px-4 py-3 text-center font-black text-red-700  ">
                                 {{ number_format($ledger->sum('debit'), 2) }}</td>
-                            <td class="px-4 py-3 text-center font-black text-green-700 font-mono">
+                            <td class="px-4 py-3 text-center font-black text-green-700  ">
                                 {{ number_format($ledger->sum('credit'), 2) }}</td>
                             <td></td>
                         </tr>

@@ -21,7 +21,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">تاريخ الغياب <span class="text-red-500">*</span></label>
-                    <input type="date" name="date" value="{{ date('Y-m-d') }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none focus:ring-2 focus:ring-navy/10">
+                    <input type="date" name="date" value="{{ date('Y-m-d') }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none focus:ring-2 focus:ring-navy/10">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">نوع الغياب</label>
@@ -124,11 +124,11 @@
                                     <div class="w-8 h-8 bg-navy/5 rounded-lg flex items-center justify-center text-navy font-bold text-xs">{{ mb_substr($a->student->name_ar ?? '?', 0, 1) }}</div>
                                     <div>
                                         <p class="font-bold text-navy font-almarai text-sm">{{ $a->student->name_ar ?? '---' }}</p>
-                                        <p class="text-[10px] text-gray-400 font-mono">{{ $a->student->student_number ?? '' }}</p>
+                                        <p class="text-[10px] text-gray-400  ">{{ $a->student->student_number ?? '' }}</p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-5 py-4 text-center"><span class="text-xs font-mono text-gray-500">{{ $a->date->format('Y-m-d') }}</span></td>
+                            <td class="px-5 py-4 text-center"><span class="text-xs   text-gray-500">{{ $a->date->format('Y-m-d') }}</span></td>
                             <td class="px-5 py-4 text-center">
                                 @php $typeLabels = ['housing'=>'سكن','quran'=>'حلقة قرآنية','activity'=>'نشاط','other'=>'آخر']; @endphp
                                 <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-gray-100 text-gray-600">{{ $typeLabels[$a->absence_type] ?? ($a->absence_type ?? 'عام') }}</span>

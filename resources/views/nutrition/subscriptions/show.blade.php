@@ -13,7 +13,7 @@
                 </a>
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 font-cairo">{{ $subscription->student?->name_ar ?? 'طالب غير موجود' }}</h2>
-                    <p class="text-gray-400 font-mono text-sm">{{ $subscription->student?->university_id }}</p>
+                    <p class="text-gray-400   text-sm">{{ $subscription->student?->university_id }}</p>
                 </div>
             </div>
             <div class="flex gap-2">
@@ -29,12 +29,12 @@
             @php $balance = $subscription->total_paid - $subscription->total_due; @endphp
             <div class="bg-red-50 border border-red-100 rounded-2xl p-5 text-center">
                 <p class="text-[10px] font-bold text-red-400 uppercase font-cairo mb-1">مدين (يستحق)</p>
-                <p class="text-3xl font-black text-red-700 font-mono">{{ number_format($subscription->total_due, 2) }}</p>
+                <p class="text-3xl font-black text-red-700  ">{{ number_format($subscription->total_due, 2) }}</p>
                 <p class="text-xs text-red-400 font-cairo">ر.ي</p>
             </div>
             <div class="bg-green-50 border border-green-100 rounded-2xl p-5 text-center">
                 <p class="text-[10px] font-bold text-green-500 uppercase font-cairo mb-1">دائن (مدفوع)</p>
-                <p class="text-3xl font-black text-green-700 font-mono">{{ number_format($subscription->total_paid, 2) }}
+                <p class="text-3xl font-black text-green-700  ">{{ number_format($subscription->total_paid, 2) }}
                 </p>
                 <p class="text-xs text-green-400 font-cairo">ر.ي</p>
             </div>
@@ -44,7 +44,7 @@
                     class="text-[10px] font-bold {{ $balance >= 0 ? 'text-blue-400' : 'text-orange-400' }} uppercase font-cairo mb-1">
                     {{ $balance >= 0 ? 'رصيد دائن' : 'رصيد مدين' }}
                 </p>
-                <p class="text-3xl font-black {{ $balance >= 0 ? 'text-blue-700' : 'text-orange-700' }} font-mono">
+                <p class="text-3xl font-black {{ $balance >= 0 ? 'text-blue-700' : 'text-orange-700' }}  ">
                     {{ number_format(abs($balance), 2) }}
                 </p>
                 <p class="text-xs {{ $balance >= 0 ? 'text-blue-400' : 'text-orange-400' }} font-cairo">ر.ي</p>
@@ -71,31 +71,31 @@
                 </div>
                 <div>
                     <p class="text-gray-400 font-cairo text-xs mb-1">عدد الأيام</p>
-                    <p class="font-bold text-gray-800 font-mono">{{ $subscription->days_count }} يوم</p>
+                    <p class="font-bold text-gray-800  ">{{ $subscription->days_count }} يوم</p>
                 </div>
                 <div>
                     <p class="text-gray-400 font-cairo text-xs mb-1">من</p>
-                    <p class="font-mono text-gray-700">{{ $subscription->start_date->format('Y-m-d') }}</p>
+                    <p class="  text-gray-700">{{ $subscription->start_date->format('Y-m-d') }}</p>
                 </div>
                 <div>
                     <p class="text-gray-400 font-cairo text-xs mb-1">إلى</p>
-                    <p class="font-mono text-gray-700">{{ $subscription->end_date->format('Y-m-d') }}</p>
+                    <p class="  text-gray-700">{{ $subscription->end_date->format('Y-m-d') }}</p>
                 </div>
                 <div>
                     <p class="text-gray-400 font-cairo text-xs mb-1">اشتراك يومي</p>
-                    <p class="font-bold font-mono text-gray-800">{{ number_format($subscription->daily_rate, 2) }} ر.ي</p>
+                    <p class="font-bold   text-gray-800">{{ number_format($subscription->daily_rate, 2) }} ر.ي</p>
                 </div>
                 @if ($subscription->last_payment_date)
                     <div>
                         <p class="text-gray-400 font-cairo text-xs mb-1">آخر يوم للدفع</p>
-                        <p class="font-mono text-orange-600 font-bold">{{ $subscription->last_payment_date->format('Y-m-d') }}
+                        <p class="  text-orange-600 font-bold">{{ $subscription->last_payment_date->format('Y-m-d') }}
                         </p>
                     </div>
                 @endif
                 @if ($subscription->qr_code)
                     <div class="md:col-span-2">
                         <p class="text-gray-400 font-cairo text-xs mb-1">رمز QR</p>
-                        <p class="font-mono text-gray-400 text-xs break-all">{{ $subscription->qr_code }}</p>
+                        <p class="  text-gray-400 text-xs break-all">{{ $subscription->qr_code }}</p>
                     </div>
                 @endif
             </div>
@@ -126,11 +126,11 @@
                     @if ($subscription->distributions->count() > 0))
     @foreach ($subscription->distributions->sortByDesc('distributed_at')->take(20) as $d)
                         <tr class="hover:bg-gray-50/50">
-                            <td class="px-5 py-3 font-mono text-gray-600 text-sm">{{ $d->distributed_at->format('Y-m-d H:i') }}
+                            <td class="px-5 py-3   text-gray-600 text-sm">{{ $d->distributed_at->format('Y-m-d H:i') }}
                             </td>
                             <td class="px-5 py-3 text-center font-cairo text-sm">{{ $d->getMealTypeLabel() }}</td>
                             <td class="px-5 py-3 text-center font-cairo text-sm text-gray-500">{{ $d->getTypeLabel() }}</td>
-                            <td class="px-5 py-3 text-center font-mono text-gray-500 text-sm">{{ $d->dish_number ?? '—' }}</td>
+                            <td class="px-5 py-3 text-center   text-gray-500 text-sm">{{ $d->dish_number ?? '—' }}</td>
                         </tr>
                         @endforeach
 @else

@@ -30,7 +30,7 @@
                 @endphp
                 {{ $penaltyTypes[$penalty->type] ?? $penalty->type }}
             </td>
-            <td class="text-center font-mono text-sm">{{ $penalty->created_at->format('Y/m/d') }}</td>
+            <td class="text-center   text-sm">{{ $penalty->created_at->format('Y/m/d') }}</td>
             <td class="text-center text-sm">{{ $penalty->appliedBy->name ?? 'النظام' }}</td>
         </tr>
         @endforeach

@@ -69,7 +69,7 @@
 
                 {{-- Meta --}}
                 <div class="shrink-0 text-left">
-                    <div class="text-[11px] text-gray-400 font-mono mb-1">{{ $complaint->created_at->diffForHumans() }}</div>
+                    <div class="text-[11px] text-gray-400   mb-1">{{ $complaint->created_at->diffForHumans() }}</div>
                     @if($complaint->attachment)
                         <div class="flex items-center gap-1 text-[10px] text-gray-400">
                             <i class="fas {{ $complaint->attachment_type === 'pdf' ? 'fa-file-pdf text-red-400' : 'fa-image text-blue-400' }}"></i>

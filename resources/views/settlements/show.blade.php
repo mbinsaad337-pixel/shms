@@ -18,7 +18,7 @@
                 <div class="flex items-center gap-3 mt-1">
                     <span class="text-gray-500 text-sm font-almarai">المركز: {{ $settlement->center->name }}</span>
                     <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
-                    <span class="text-gray-500 font-mono text-sm">#{{ str_pad($settlement->id, 5, '0', STR_PAD_LEFT) }}</span>
+                    <span class="text-gray-500   text-sm">#{{ str_pad($settlement->id, 5, '0', STR_PAD_LEFT) }}</span>
                     <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
                     <span class="bg-{{ $settlement->status == 'approved' ? 'green' : ($settlement->status == 'rejected' ? 'red' : 'blue') }}-100 text-{{ $settlement->status == 'approved' ? 'green' : ($settlement->status == 'rejected' ? 'red' : 'blue') }}-700 px-2 py-0.5 rounded-full text-xs font-bold">
                         @if($settlement->status == 'approved')
@@ -58,34 +58,34 @@
     <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md">
             <p class="text-[10px] text-gray-400 font-almarai mb-1">الرصيد الافتتاحي الكلي</p>
-            <p class="text-xl font-bold text-gray-800 font-mono">
+            <p class="text-xl font-bold text-gray-800 ">
                 {{ number_format($settlement->total_budget, 2) }}
                 <span class="text-[10px] text-gray-500 font-cairo">ر.ي</span>
             </p>
         </div>
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md border-r-4 border-r-red-500">
             <p class="text-[10px] text-gray-400 font-almarai mb-1">إجمالي المنصرف (الشهر)</p>
-            <p class="text-xl font-bold text-red-600 font-mono">
+            <p class="text-xl font-bold text-red-600  ">
                 {{ number_format($settlement->total_spent, 2) }}
                 <span class="text-[10px] text-gray-500 font-cairo">ر.ي</span>
             </p>
         </div>
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md border-r-4 border-r-green-500">
             <p class="text-[10px] text-gray-400 font-almarai mb-1">الرصيد الختامي المتبقي</p>
-            <p class="text-xl font-bold text-green-700 font-mono">
+            <p class="text-xl font-bold text-green-700  ">
                 {{ number_format($settlement->total_remaining, 2) }}
                 <span class="text-[10px] text-gray-500 font-cairo">ر.ي</span>
             </p>
         </div>
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md">
             <p class="text-[10px] text-gray-400 font-almarai mb-1">عدد الصناديق</p>
-            <p class="text-xl font-bold text-gray-800 font-mono">
+            <p class="text-xl font-bold text-gray-800  ">
                 {{ $settlement->details->count() }}
             </p>
         </div>
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md">
             <p class="text-[10px] text-gray-400 font-almarai mb-1">تارِيخ الرفع</p>
-            <p class="text-sm font-bold text-gray-800 font-mono mt-1">
+            <p class="text-sm font-bold text-gray-800   mt-1">
                 {{ $settlement->submitted_at->format('Y-m-d') }}
             </p>
         </div>
@@ -94,7 +94,9 @@
     <!-- Funds Breakdown & Transactions -->
     <div class="space-y-6">
         <h2 class="text-xl font-bold text-gray-800 font-cairo mb-4 flex items-center gap-2">
-            <i class="fas fa-boxes text-orange-500"></i> حركة الصناديق والعمليات التفصيلية
+            <i class="fas fa-boxes text-orange-500"></i>  
+             تفاصيل الصناديق وحركاتها المالية
+
         </h2>
 
         @foreach($settlement->details as $detail)
@@ -121,19 +123,19 @@
                     <div class="flex flex-wrap md:flex-nowrap gap-6 flex-1 lg:justify-end">
                         <div class="text-center md:text-right">
                             <p class="text-[10px] text-gray-400 font-almarai mb-0.5">الرصيد الافتتاحي</p>
-                            <p class="text-sm font-bold text-gray-600 font-mono">{{ number_format($detail->opening_balance, 2) }} <span class="text-[10px]">ر.ي</span></p>
+                            <p class="text-sm font-bold text-gray-600  ">{{ number_format($detail->opening_balance, 2) }} <span class="text-[10px]">ر.ي</span></p>
                         </div>
                         <div class="text-center md:text-right">
                             <p class="text-[10px] text-green-500 font-almarai mb-0.5">إجمالي المقبوضات</p>
-                            <p class="text-sm font-bold text-green-600 font-mono">+{{ number_format($detail->total_income, 2) }} <span class="text-[10px]">ر.ي</span></p>
+                            <p class="text-sm font-bold text-green-600  ">+{{ number_format($detail->total_income, 2) }} <span class="text-[10px]">ر.ي</span></p>
                         </div>
                         <div class="text-center md:text-right">
                             <p class="text-[10px] text-red-500 font-almarai mb-0.5">إجمالي المصروفات</p>
-                            <p class="text-sm font-bold text-red-600 font-mono">-{{ number_format($detail->total_expense, 2) }} <span class="text-[10px]">ر.ي</span></p>
+                            <p class="text-sm font-bold text-red-600  ">-{{ number_format($detail->total_expense, 2) }} <span class="text-[10px]">ر.ي</span></p>
                         </div>
                         <div class="text-center md:text-right bg-gray-100 px-3 py-1 rounded-lg">
                             <p class="text-[10px] text-gray-500 font-almarai mb-0.5">الرصيد الختامي</p>
-                            <p class="text-sm font-bold text-gray-800 font-mono">{{ number_format($detail->closing_balance, 2) }} <span class="text-[10px]">ر.ي</span></p>
+                            <p class="text-sm font-bold text-gray-800  ">{{ number_format($detail->closing_balance, 2) }} <span class="text-[10px]">ر.ي</span></p>
                         </div>
                     </div>
                     
@@ -181,16 +183,16 @@
                                             $typeInfo = $types[$voucher->type] ?? ['label' => $voucher->type, 'color' => 'text-gray-600 bg-gray-50'];
                                         @endphp
                                         <tr class="hover:bg-gray-50 transition-colors">
-                                            <td class="px-6 py-3 font-mono text-xs">
+                                            <td class="px-6 py-3   text-xs">
                                                 <a href="{{ route('vouchers.show', $voucher) }}" target="_blank" class="text-blue-600 hover:underline">{{ $voucher->voucher_number }}</a>
                                             </td>
-                                            <td class="px-6 py-3 text-xs text-gray-500 font-mono">{{ $voucher->date->format('Y-m-d') }}</td>
+                                            <td class="px-6 py-3 text-xs text-gray-500  ">{{ $voucher->date->format('Y-m-d') }}</td>
                                             <td class="px-6 py-3">
                                                 <span class="px-2 py-1 rounded-md text-[10px] font-bold font-almarai {{ $typeInfo['color'] }}">
                                                     {{ $typeInfo['label'] }}
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-3 font-bold font-mono text-sm {{ $isIncoming ? 'text-green-600' : 'text-red-600' }}" dir="ltr">
+                                            <td class="px-6 py-3 font-bold   text-sm {{ $isIncoming ? 'text-green-600' : 'text-red-600' }}" dir="ltr">
                                                 {{ $isIncoming ? '+' : '-' }}{{ number_format($voucher->amount, 2) }}
                                             </td>
                                             <td class="px-6 py-3 text-center">

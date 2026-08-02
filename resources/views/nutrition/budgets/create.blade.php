@@ -35,13 +35,13 @@
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">السنة <span
                                 class="text-red-500">*</span></label>
                         <input type="number" name="year" value="{{ date('Y') }}" required
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-navy font-mono text-sm">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-navy   text-sm">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">عدد أيام الفترة <span
                                 class="text-red-500">*</span></label>
                         <input type="number" name="days_count" id="daysCount" value="30" min="1" required
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-navy font-mono text-sm">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-navy   text-sm">
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">عنوان الميزانية</label>
@@ -51,13 +51,13 @@
                     <div class="md:col-span-2">
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">عدد المشتركين (تقديري)</label>
                         <input type="number" name="subscribers_count" id="subscribersCount" min="0" value="0"
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-navy font-mono text-sm">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-navy   text-sm">
                     </div>
 
                     <div class="md:col-span-2">
                         <label class="block text-sm font-bold text-gold font-cairo mb-1.5">قيمة الاشتراك الشهري (ثابت) <span class="text-red-500">*</span></label>
                         <input type="number" name="cost_per_student" id="costPerStudent" step="0.01" min="0" required
-                            class="w-full border border-gold/30 bg-gold/5 rounded-xl px-4 py-3 focus:ring-2 focus:ring-gold font-mono text-lg font-bold shadow-sm"
+                            class="w-full border border-gold/30 bg-gold/5 rounded-xl px-4 py-3 focus:ring-2 focus:ring-gold   text-lg font-bold shadow-sm"
                             placeholder="0.00">
                         <p class="text-[10px] text-gray-400 mt-1 font-cairo">هذا المبلغ سيحتسب للطلاب المشتركين بالنظام الشهري</p>
                     </div>
@@ -65,7 +65,7 @@
                     <div class="md:col-span-2">
                         <label class="block text-sm font-bold text-navy font-cairo mb-1.5">قيمة اليوم الواحد (للاشتراك اليومي) <span class="text-red-500">*</span></label>
                         <input type="number" name="daily_rate" id="dailyRate" step="0.01" min="0" required
-                            class="w-full border border-navy/20 bg-navy/5 rounded-xl px-4 py-3 focus:ring-2 focus:ring-navy font-mono text-lg font-bold shadow-sm"
+                            class="w-full border border-navy/20 bg-navy/5 rounded-xl px-4 py-3 focus:ring-2 focus:ring-navy   text-lg font-bold shadow-sm"
                             placeholder="0.00">
                         <p class="text-[10px] text-gray-400 mt-1 font-cairo">هذا السعر سيضرب في عدد الأيام للطلاب المشتركين بالنظام اليومي</p>
                     </div>
@@ -73,7 +73,7 @@
                     <div class="md:col-span-4 mt-2">
                         <label class="block text-sm font-bold text-red-600 font-cairo mb-1.5">آخر تاريخ لدفع الاشتراك</label>
                         <input type="date" name="last_payment_date"
-                            class="w-full border border-red-100 bg-red-50 rounded-xl px-4 py-3 focus:ring-2 focus:ring-red-400 font-mono text-lg text-center font-bold">
+                            class="w-full border border-red-100 bg-red-50 rounded-xl px-4 py-3 focus:ring-2 focus:ring-red-400   text-lg text-center font-bold">
                     </div>
                 </div>
             </div>
@@ -119,7 +119,7 @@
                                     <i class="fas fa-sigma ml-1"></i> إجمالي الميزانية (المصروفات المتوقعة):
                                 </td>
                                 <td class="px-4 py-3">
-                                    <span id="grandTotal" class="font-black text-navy font-mono text-lg">0.00</span>
+                                    <span id="grandTotal" class="font-black text-navy   text-lg">0.00</span>
                                     <span class="text-xs text-navy font-cairo">ر.ي</span>
                                 </td>
                                 <td colspan="2"></td>
@@ -181,20 +181,20 @@
                 <td class="px-2 py-2">
                     <input type="number" name="lines[${i}][days]" value="${data?.days || ''}" placeholder="—" min="0" step="1"
                         onchange="calcRow(${i})" oninput="calcRow(${i})"
-                        class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm font-mono text-center focus:ring-2 focus:ring-navy">
+                        class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm   text-center focus:ring-2 focus:ring-navy">
                 </td>
                 <td class="px-2 py-2">
                     <input type="number" name="lines[${i}][quantity]" value="${data?.quantity || ''}" placeholder="—" min="0" step="0.001"
                         onchange="calcRow(${i})" oninput="calcRow(${i})"
-                        class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm font-mono text-center focus:ring-2 focus:ring-navy">
+                        class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm   text-center focus:ring-2 focus:ring-navy">
                 </td>
                 <td class="px-2 py-2">
                     <input type="number" name="lines[${i}][unit_price]" value="${data?.unit_price || ''}" placeholder="0.00" min="0" step="0.01"
                         onchange="calcRow(${i})" oninput="calcRow(${i})"
-                        class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm font-mono text-center focus:ring-2 focus:ring-navy">
+                        class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm   text-center focus:ring-2 focus:ring-navy">
                 </td>
                 <td class="px-2 py-2">
-                    <div id="total-${i}" class="font-bold text-green-700 font-mono text-sm text-center bg-green-50 rounded-lg px-2 py-1.5 min-w-[70px]">
+                    <div id="total-${i}" class="font-bold text-green-700   text-sm text-center bg-green-50 rounded-lg px-2 py-1.5 min-w-[70px]">
                         ${((data?.days || 1) * (data?.quantity || 1) * (data?.unit_price || 0)).toFixed(2)}
                     </div>
                 </td>

@@ -43,21 +43,21 @@
                         <div class="p-5 space-y-3">
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-gray-400 font-cairo">الإيرادات:</span>
-                                <span class="font-bold text-green-700 font-mono">{{ number_format($settlement->total_revenue, 2) }}
+                                <span class="font-bold text-green-700  ">{{ number_format($settlement->total_revenue, 2) }}
                                     ر.ي</span>
                             </div>
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-gray-400 font-cairo">المصاريف:</span>
-                                <span class="font-bold text-red-600 font-mono">{{ number_format($settlement->total_expenses, 2) }} ر.ي</span>
+                                <span class="font-bold text-red-600  ">{{ number_format($settlement->total_expenses, 2) }} ر.ي</span>
                             </div>
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-gray-400 font-cairo">إجمالي مديونية الموردين:</span>
-                                <span class="font-bold text-indigo-700 font-mono">{{ number_format($settlement->total_debt, 2) }} ر.ي</span>
+                                <span class="font-bold text-indigo-700  ">{{ number_format($settlement->total_debt, 2) }} ر.ي</span>
                             </div>
                             <div class="border-t border-gray-100 pt-3 flex justify-between items-center">
                                 <span class="font-bold text-gray-700 font-cairo">الصافي:</span>
                                 <span
-                                    class="font-black text-{{ $color }}-700 font-mono text-lg">{{ number_format($settlement->net_result, 2) }}
+                                    class="font-black text-{{ $color }}-700   text-lg">{{ number_format($settlement->net_result, 2) }}
                                     ر.ي</span>
                             </div>
                                 <div class="flex items-center gap-2 mt-3">

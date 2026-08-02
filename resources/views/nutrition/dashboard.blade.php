@@ -11,7 +11,7 @@
                 <h1 class="text-3xl font-bold text-gray-800 font-cairo">لوحة متابعة التغذية</h1>
                 <p class="text-gray-400 font-almarai text-sm mt-1">نظرة عامة على الأداء المالي لقسم التغذية</p>
             </div>
-            <div class="text-sm text-gray-400 font-mono" id="realtime-clock">
+            <div class="text-sm text-gray-400  " id="realtime-clock">
                 {{ now()->translatedFormat('l, d F Y | h:i:s A') }}
             </div>
             <script>
@@ -57,7 +57,7 @@
                         <p class="text-[10px] font-bold text-gray-400 font-cairo mb-1 uppercase tracking-wider">
                             {{ $card['label'] }}
                         </p>
-                        <p class="text-2xl font-black text-navy font-mono">{{ $card['value'] }} <span
+                        <p class="text-2xl font-black text-navy  ">{{ $card['value'] }} <span
                                 class="text-xs font-cairo text-gray-400">{{ $card['unit'] }}</span></p>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                     class="w-12 h-12 bg-navy/5 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                     <i class="fas fa-user-check text-navy text-xl"></i>
                 </div>
-                <p class="text-3xl font-black text-navy font-mono">{{ $stats['active_subscribers'] }}</p>
+                <p class="text-3xl font-black text-navy  ">{{ $stats['active_subscribers'] }}</p>
                 <p class="text-[10px] font-bold text-gray-400 mt-2 font-cairo uppercase tracking-widest">مشترك فعال</p>
             </div>
 
@@ -82,7 +82,7 @@
                     class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                     <i class="fas fa-hand-holding-dollar text-red-500 text-xl"></i>
                 </div>
-                <p class="text-3xl font-black text-red-600 font-mono">{{ $stats['pending_payments'] }}</p>
+                <p class="text-3xl font-black text-red-600  ">{{ $stats['pending_payments'] }}</p>
                 <p class="text-[10px] font-bold text-gray-400 mt-2 font-cairo uppercase tracking-widest">تأخر دفع</p>
             </div>
 
@@ -92,7 +92,7 @@
                     class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                     <i class="fas fa-user-clock text-orange-600 text-xl"></i>
                 </div>
-                <p class="text-3xl font-black text-orange-700 font-mono">{{ $stats['late_today'] }}</p>
+                <p class="text-3xl font-black text-orange-700  ">{{ $stats['late_today'] }}</p>
                 <p class="text-[10px] font-bold text-gray-400 mt-2 font-cairo uppercase tracking-widest">متأخر اليوم</p>
             </div>
 
@@ -102,7 +102,7 @@
                     class="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                     <i class="fas fa-user-xmark text-rose-600 text-xl"></i>
                 </div>
-                <p class="text-3xl font-black text-rose-700 font-mono">{{ $stats['absent_today'] }}</p>
+                <p class="text-3xl font-black text-rose-700  ">{{ $stats['absent_today'] }}</p>
                 <p class="text-[10px] font-bold text-gray-400 mt-2 font-cairo uppercase tracking-widest">غائب اليوم</p>
             </div>
 
@@ -112,7 +112,7 @@
                     class="w-12 h-12 bg-gold/5 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                     <i class="fas fa-user-slash text-gold text-xl"></i>
                 </div>
-                <p class="text-3xl font-black text-gold font-mono">{{ $stats['suspended_subscribers'] }}</p>
+                <p class="text-3xl font-black text-gold  ">{{ $stats['suspended_subscribers'] }}</p>
                 <p class="text-[10px] font-bold text-gray-400 mt-2 font-cairo uppercase tracking-widest">موقوفين</p>
             </div>
         </div>
@@ -139,7 +139,7 @@
                                         <p class="font-bold text-navy text-sm font-cairo">{{ $budget->month_name }}
                                             {{ $budget->year }}
                                         </p>
-                                        <p class="text-xs text-gray-400 font-mono">{{ number_format($budget->total_amount, 0) }} ر.ي</p>
+                                        <p class="text-xs text-gray-400  ">{{ number_format($budget->total_amount, 0) }} ر.ي</p>
                                     </div>
                                     <span
                                         class="px-3 py-1 rounded-lg text-[10px] font-bold
@@ -174,9 +174,9 @@
                         <div class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-transparent">
                             <div>
                                 <p class="font-bold text-navy text-sm font-cairo">{{ $invoice->supplier->name }}</p>
-                                <p class="text-xs text-gray-400 font-mono">{{ $invoice->invoice_number }}</p>
+                                <p class="text-xs text-gray-400  ">{{ $invoice->invoice_number }}</p>
                             </div>
-                            <p class="font-black text-navy font-mono text-sm">{{ number_format($invoice->total_amount, 0) }}
+                            <p class="font-black text-navy   text-sm">{{ number_format($invoice->total_amount, 0) }}
                                 ر.ي</p>
                         </div>
                         @endforeach
@@ -204,7 +204,7 @@
                         <div
                             class="flex items-center justify-between p-4 bg-red-50/20 rounded-2xl border border-red-100 transition-all hover:bg-red-50/40">
                             <p class="font-bold text-navy text-sm font-cairo">{{ $sub->student?->name_ar ?? 'طالب غير موجود' }}</p>
-                            <p class="font-black text-red-600 font-mono text-xs">
+                            <p class="font-black text-red-600   text-xs">
                                 {{ number_format($sub->total_due - $sub->total_paid, 0) }} ر.ي
                             </p>
                         </div>

@@ -10,7 +10,7 @@
                 <td class="col-right">
                     <div class="detail-row">
                         <div class="detail-label">الفترة</div>
-                        <div class="detail-value font-mono">شهر {{ $budget->month }} / سنة {{ $budget->year }}</div>
+                        <div class="detail-value  ">شهر {{ $budget->month }} / سنة {{ $budget->year }}</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">بواسطة (المنشئ)</div>
@@ -18,18 +18,18 @@
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">عدد المشتركين</div>
-                        <div class="detail-value font-mono">{{ $budget->subscribers_count }} مشترك</div>
+                        <div class="detail-value  ">{{ $budget->subscribers_count }} مشترك</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">عدد الأيام</div>
-                        <div class="detail-value font-mono">{{ $budget->days_count }} يوم</div>
+                        <div class="detail-value  ">{{ $budget->days_count }} يوم</div>
                     </div>
                 </td>
                 <td class="col-spacer"></td>
                 <td class="col-left">
                     <div class="detail-row">
                         <div class="detail-label">إجمالي الميزانية</div>
-                        <div class="detail-value large font-mono text-navy">{{ number_format($budget->total_amount, 2) }} ر.ي</div>
+                        <div class="detail-value large   text-navy">{{ number_format($budget->total_amount, 2) }} ر.ي</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">الحالة</div>
@@ -48,7 +48,7 @@
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">التكلفة اليومية للطالب</div>
-                        <div class="detail-value font-mono text-success">{{ number_format($budget->cost_per_student, 2) }} ر.ي</div>
+                        <div class="detail-value   text-success">{{ number_format($budget->cost_per_student, 2) }} ر.ي</div>
                     </div>
                 </td>
             </tr>
@@ -76,7 +76,7 @@
             @if(!empty($supplierName))
             <tr>
                 <td class="font-bold">{{ $supplierName }}</td>
-                <td class="text-center font-bold font-mono text-navy">{{ number_format($total, 2) }}</td>
+                <td class="text-center font-bold   text-navy">{{ number_format($total, 2) }}</td>
             </tr>
             @endif
         @endforeach
@@ -104,17 +104,17 @@
             <td class="text-center">{{ $index + 1 }}</td>
             <td class="font-bold">{{ $item->item_name }}</td>
             <td class="text-center">{{ $item->supplier_name ?: '-' }}</td>
-            <td class="text-center font-mono">{{ $item->quantity }}</td>
-            <td class="text-center font-mono">{{ $item->days }}</td>
-            <td class="text-center font-mono">{{ number_format($item->unit_price, 2) }}</td>
-            <td class="text-center font-bold font-mono text-navy">{{ number_format($item->total, 2) }}</td>
+            <td class="text-center  ">{{ $item->quantity }}</td>
+            <td class="text-center  ">{{ $item->days }}</td>
+            <td class="text-center  ">{{ number_format($item->unit_price, 2) }}</td>
+            <td class="text-center font-bold   text-navy">{{ number_format($item->total, 2) }}</td>
         </tr>
         @endforeach
     </tbody>
     <tfoot>
         <tr>
             <th colspan="6" class="text-left">المجموع الكلي:</th>
-            <th class="text-center font-black font-mono text-success" style="font-size: 14px;">{{ number_format($budget->total_amount, 2) }} ر.ي</th>
+            <th class="text-center font-black   text-success" style="font-size: 14px;">{{ number_format($budget->total_amount, 2) }} ر.ي</th>
         </tr>
     </tfoot>
 </table>

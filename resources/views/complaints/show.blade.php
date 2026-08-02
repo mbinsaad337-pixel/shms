@@ -62,8 +62,8 @@
                         </div>
                     </div>
                     <div class="text-right">
-                        <div class="text-[11px] text-gray-400 font-mono">{{ $message->created_at->format('Y/m/d H:i') }}</div>
-                        <div class="text-[10px] text-gray-300 font-mono">{{ $message->created_at->diffForHumans() }}</div>
+                        <div class="text-[11px] text-gray-400  ">{{ $message->created_at->format('Y/m/d H:i') }}</div>
+                        <div class="text-[10px] text-gray-300  ">{{ $message->created_at->diffForHumans() }}</div>
                     </div>
                 </div>
 

@@ -37,7 +37,7 @@
         <!-- Filters -->
         <form method="GET" class="flex flex-wrap gap-3 mb-5">
             <input type="date" name="date" value="{{ request('date', date('Y-m-d')) }}"
-                class="border border-gray-200 rounded-xl px-4 py-2.5 font-mono text-sm focus:ring-2 focus:ring-teal-400">
+                class="border border-gray-200 rounded-xl px-4 py-2.5   text-sm focus:ring-2 focus:ring-teal-400">
             <select name="meal_type" class="border border-gray-200 rounded-xl px-4 py-2.5 font-cairo text-sm">
                 <option value="">كل الوجبات</option>
                 <option value="breakfast" {{ request('meal_type') === 'breakfast' ? 'selected' : '' }}>فطور</option>
@@ -93,10 +93,10 @@
                                     {{ $d->getTypeLabel() }}
                                 </span>
                             </td>
-                            <td class="px-5 py-4 text-center font-mono text-gray-600 text-sm">
+                            <td class="px-5 py-4 text-center   text-gray-600 text-sm">
                                 {{ $isGroup ? ($d->group_members_count ?? '—') : '1' }}
                             </td>
-                            <td class="px-5 py-4 text-center font-mono text-gray-500 text-sm">
+                            <td class="px-5 py-4 text-center   text-gray-500 text-sm">
                                 {{ $d->distributed_at->format('Y-m-d H:i') }}
                             </td>
                             <td class="px-5 py-4 text-gray-600 font-cairo text-sm">{{ $d->distributor->name }}</td>

@@ -16,10 +16,10 @@
         @foreach($data as $index => $invoice)
         <tr>
             <td class="text-center">{{ $index + 1 }}</td>
-            <td class="font-bold font-mono">{{ $invoice->invoice_number }}</td>
+            <td class="font-bold  ">{{ $invoice->invoice_number }}</td>
             <td>{{ $invoice->supplier->name ?? '---' }}</td>
-            <td class="font-bold font-mono text-navy">{{ number_format($invoice->total_amount, 2) }}</td>
-            <td class="text-center font-mono text-sm">{{ $invoice->invoice_date instanceof \Carbon\Carbon ? $invoice->invoice_date->format('Y/m/d') : $invoice->invoice_date }}</td>
+            <td class="font-bold   text-navy">{{ number_format($invoice->total_amount, 2) }}</td>
+            <td class="text-center   text-sm">{{ $invoice->invoice_date instanceof \Carbon\Carbon ? $invoice->invoice_date->format('Y/m/d') : $invoice->invoice_date }}</td>
             <td class="text-center">
                 @php
                     $statusMap = [

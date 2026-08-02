@@ -27,7 +27,7 @@
                         class="text-xs px-3 py-1 rounded-full font-bold font-cairo bg-navy/10 text-navy">{{ $news->getCategoryLabel() }}</span>
                     <span
                         class="text-xs px-3 py-1 rounded-full font-bold {{ $news->is_published ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-600' }}">{{ $news->is_published ? 'منشور' : 'مسودة' }}</span>
-                    <span class="text-xs text-gray-400 font-mono mr-auto">{{ $news->created_at->format('Y/m/d') }}</span>
+                    <span class="text-xs text-gray-400   mr-auto">{{ $news->created_at->format('Y/m/d') }}</span>
                 </div>
 
                 <h1 class="text-3xl font-black text-navy font-cairo leading-snug mb-6">{{ $news->title }}</h1>
@@ -48,7 +48,7 @@
                                 </div>
                             @else
                                 <div class="p-6 text-center">
-                                    <a href="{{ $news->video_url }}" target="_blank" class="text-white hover:text-gold transition-colors underline font-mono text-sm">
+                                    <a href="{{ $news->video_url }}" target="_blank" class="text-white hover:text-gold transition-colors underline   text-sm">
                                         <i class="fas fa-external-link-alt ml-2"></i> شاهد الفيديو من المصدر الخارجي
                                     </a>
                                 </div>
@@ -138,7 +138,7 @@
                                         <div class="flex items-center justify-between mb-2">
                                             <div>
                                                 <span class="font-bold text-navy font-cairo">{{ $comment->user->name }}</span>
-                                                <span class="text-[10px] text-gray-400 mr-2 font-mono">{{ $comment->created_at->diffForHumans() }}</span>
+                                                <span class="text-[10px] text-gray-400 mr-2  ">{{ $comment->created_at->diffForHumans() }}</span>
                                             </div>
                                             @if (auth()->id() === $comment->user_id || auth()->user()->can('manage-news'))
                                                 <form action="{{ route('news.comments.delete', $comment) }}" method="POST" onsubmit="return confirm('حذف التعليق؟')">

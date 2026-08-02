@@ -42,7 +42,7 @@
             </div>
             <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4">
                 <p class="text-[10px] font-bold text-gray-400 font-cairo uppercase mb-1">تاريخ الفاتورة</p>
-                <p class="font-bold text-gray-800 font-mono">{{ $invoice->invoice_date->format('Y-m-d') }}</p>
+                <p class="font-bold text-gray-800  ">{{ $invoice->invoice_date->format('Y-m-d') }}</p>
             </div>
             <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4">
                 <p class="text-[10px] font-bold text-blue-400 font-cairo uppercase mb-1">طريقة الدفع</p>
@@ -62,7 +62,7 @@
             </div>
             <div class="bg-orange-50 border border-orange-200 rounded-2xl p-4">
                 <p class="text-[10px] font-bold text-orange-400 font-cairo uppercase mb-1">الإجمالي</p>
-                <p class="font-black text-orange-700 font-mono text-lg">{{ number_format($invoice->total_amount, 2) }} ر.ي
+                <p class="font-black text-orange-700   text-lg">{{ number_format($invoice->total_amount, 2) }} ر.ي
                 </p>
             </div>
         </div>
@@ -86,14 +86,14 @@
                 <tbody class="divide-y divide-gray-50">
                     @foreach($invoice->items as $i => $item)
                         <tr class="hover:bg-gray-50/50">
-                            <td class="px-5 py-3 text-gray-400 font-mono text-sm">{{ $i + 1 }}</td>
+                            <td class="px-5 py-3 text-gray-400   text-sm">{{ $i + 1 }}</td>
                             <td class="px-5 py-3 font-bold text-gray-800 font-cairo">{{ $item->item_name }}</td>
-                            <td class="px-5 py-3 text-center font-mono text-gray-700">{{ number_format($item->quantity, 3) }}
+                            <td class="px-5 py-3 text-center   text-gray-700">{{ number_format($item->quantity, 3) }}
                             </td>
                             <td class="px-5 py-3 text-center font-cairo text-gray-500 text-sm">{{ $item->unit ?? '—' }}</td>
-                            <td class="px-5 py-3 text-center font-mono text-gray-700">{{ number_format($item->unit_price, 2) }}
+                            <td class="px-5 py-3 text-center   text-gray-700">{{ number_format($item->unit_price, 2) }}
                             </td>
-                            <td class="px-5 py-3 text-center font-bold text-orange-700 font-mono">
+                            <td class="px-5 py-3 text-center font-bold text-orange-700  ">
                                 {{ number_format($item->total, 2) }} ر.ي
                             </td>
                         </tr>
@@ -103,7 +103,7 @@
                     <tr>
                         <td colspan="5" class="px-5 py-3 text-right font-black text-orange-800 font-cairo">الإجمالي الكلي:
                         </td>
-                        <td class="px-5 py-3 text-center font-black text-orange-800 font-mono text-xl">
+                        <td class="px-5 py-3 text-center font-black text-orange-800   text-xl">
                             {{ number_format($invoice->total_amount, 2) }} ر.ي
                         </td>
                     </tr>

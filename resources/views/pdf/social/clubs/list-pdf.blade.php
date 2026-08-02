@@ -19,7 +19,7 @@
             <td class="font-bold">{{ $club->name }}</td>
             <td>{{ $club->center->name ?? '---' }}</td>
             <td>{{ $club->category }}</td>
-            <td class="text-center font-mono font-bold">{{ $club->members_count ?? $club->members->count() }}</td>
+            <td class="text-center   font-bold">{{ $club->members_count ?? $club->members->count() }}</td>
             <td class="text-center">
                 @php
                     $statusMap = [
@@ -39,7 +39,7 @@
     <tr>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">أعده / مسؤول الأنشطة</div>
+            <div class="sign-title">  مسؤول الأنشطة</div>
             <div class="sign-name">
                 @php
                       $Activty_manager = \App\Models\User::role('social-manager')->where('center_id',$club->center_id)->get();

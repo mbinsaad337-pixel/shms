@@ -22,7 +22,7 @@
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">رقم الفاتورة <span
                                 class="text-red-500">*</span></label>
                         <input type="text" name="invoice_number" value="{{ $nextNumber }}" required
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-2 focus:ring-orange-400">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-orange-400">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">المورد <span
@@ -39,7 +39,7 @@
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">تاريخ الفاتورة <span
                                 class="text-red-500">*</span></label>
                         <input type="date" name="invoice_date" value="{{ date('Y-m-d') }}" required
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-2 focus:ring-orange-400">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-orange-400">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">طريقة الدفع <span
@@ -96,7 +96,7 @@
                                 <td colspan="4" class="px-4 py-3 text-right font-black text-orange-800 font-cairo">الإجمالي
                                     الكلي للفاتورة:</td>
                                 <td class="px-4 py-3 text-center">
-                                    <span id="grandTotal" class="font-black text-orange-800 font-mono text-xl">0.00</span>
+                                    <span id="grandTotal" class="font-black text-orange-800   text-xl">0.00</span>
                                     <span class="text-xs text-orange-500 font-cairo">ر.ي</span>
                                 </td>
                                 <td></td>
@@ -149,7 +149,7 @@
                 <td class="px-2 py-2">
                     <input type="number" name="items[${i}][quantity]" min="0.001" step="0.001" required
                         oninput="calcItem(${i})"
-                        class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm font-mono text-center focus:ring-2 focus:ring-orange-400">
+                        class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm   text-center focus:ring-2 focus:ring-orange-400">
                 </td>
                 <td class="px-2 py-2">
                     <input type="text" name="items[${i}][unit]" placeholder="كجم"
@@ -158,10 +158,10 @@
                 <td class="px-2 py-2">
                     <input type="number" name="items[${i}][unit_price]" min="0" step="0.01" required
                         oninput="calcItem(${i})"
-                        class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm font-mono text-center focus:ring-2 focus:ring-orange-400">
+                        class="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm   text-center focus:ring-2 focus:ring-orange-400">
                 </td>
                 <td class="px-2 py-2">
-                    <div id="itotal-${i}" class="font-bold text-orange-700 font-mono text-sm text-center bg-orange-50 rounded-lg px-2 py-1.5">0.00</div>
+                    <div id="itotal-${i}" class="font-bold text-orange-700   text-sm text-center bg-orange-50 rounded-lg px-2 py-1.5">0.00</div>
                     <input type="hidden" id="override-${i}" value="0">
                 </td>
                 <td class="px-2 py-2 text-center">
@@ -188,8 +188,8 @@
                     html: `<div class="text-right font-cairo text-sm">
                         <p class="mb-2">المادة: <span class="font-bold">${item.name}</span></p>
                         <hr class="my-2 opacity-10">
-                        <p class="flex justify-between mb-1"><span>إجمالي الميزانية:</span> <span class="font-mono">${item.total_budget.toLocaleString()}</span></p>
-                        <p class="flex justify-between mb-1"><span>المتبقي المتاح:</span> <span class="font-mono text-emerald-600">${item.remaining.toLocaleString()}</span></p>
+                        <p class="flex justify-between mb-1"><span>إجمالي الميزانية:</span> <span class=" ">${item.total_budget.toLocaleString()}</span></p>
+                        <p class="flex justify-between mb-1"><span>المتبقي المتاح:</span> <span class="  text-emerald-600">${item.remaining.toLocaleString()}</span></p>
                         <p class="flex justify-between text-red-600 font-bold border-t pt-2 mt-2"><span>مبلغ الفاتورة الحالية:</span> <span>${currentTotal.toLocaleString()}</span></p>
                         <p class="mt-4 text-xs text-gray-500 italic">* المبلغ يتجاوز المتبقي في الميزانية المعتمدة.</p>
                     </div>`,

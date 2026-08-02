@@ -21,11 +21,11 @@
                 <td class="col-left">
                     <div class="detail-row">
                         <div class="detail-label">رقم الهاتف</div>
-                        <div class="detail-value font-mono" dir="ltr">{{ $supplier->phone }}</div>
+                        <div class="detail-value  " dir="ltr">{{ $supplier->phone }}</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">الرصيد المتبقي (له)</div>
-                        <div class="detail-value font-mono text-danger font-bold text-lg">{{ number_format($supplier->balance, 2) }} ر.ي</div>
+                        <div class="detail-value   text-danger font-bold text-lg">{{ number_format($supplier->balance, 2) }} ر.ي</div>
                     </div>
                 </td>
             </tr>
@@ -59,11 +59,11 @@
         @endphp
         <tr>
             <td class="text-center">{{ $index + 1 }}</td>
-            <td class="font-mono text-navy">{{ $invoice->invoice_number }}</td>
-            <td class="text-center font-mono text-sm">{{ $invoice->invoice_date instanceof \Carbon\Carbon ? $invoice->invoice_date->format('Y-m-d') : $invoice->invoice_date }}</td>
-            <td class="text-center font-mono font-bold">{{ number_format($invoice->total_amount, 2) }}</td>
-            <td class="text-center font-mono text-success">{{ number_format($invoice->paid_amount, 2) }}</td>
-            <td class="text-center font-mono text-danger">{{ number_format($invoice->total_amount - $invoice->paid_amount, 2) }}</td>
+            <td class="  text-navy">{{ $invoice->invoice_number }}</td>
+            <td class="text-center   text-sm">{{ $invoice->invoice_date instanceof \Carbon\Carbon ? $invoice->invoice_date->format('Y-m-d') : $invoice->invoice_date }}</td>
+            <td class="text-center   font-bold">{{ number_format($invoice->total_amount, 2) }}</td>
+            <td class="text-center   text-success">{{ number_format($invoice->paid_amount, 2) }}</td>
+            <td class="text-center   text-danger">{{ number_format($invoice->total_amount - $invoice->paid_amount, 2) }}</td>
             <td class="text-center">
                 @php
                     $statusMap = [
@@ -88,9 +88,9 @@
     <tfoot>
         <tr style="background: #fafbfc; font-weight: bold;">
             <td colspan="3" class="text-left">الإجمالي:</td>
-            <td class="text-center font-mono">{{ number_format($totalInvoices, 2) }}</td>
-            <td class="text-center font-mono text-success">{{ number_format($totalPaid, 2) }}</td>
-            <td class="text-center font-mono text-danger">{{ number_format($totalInvoices - $totalPaid, 2) }}</td>
+            <td class="text-center  ">{{ number_format($totalInvoices, 2) }}</td>
+            <td class="text-center   text-success">{{ number_format($totalPaid, 2) }}</td>
+            <td class="text-center   text-danger">{{ number_format($totalInvoices - $totalPaid, 2) }}</td>
             <td></td>
         </tr>
     </tfoot>

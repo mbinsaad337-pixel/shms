@@ -59,9 +59,9 @@
                     <tbody>
                         <tr>
                             <td class="font-bold text-navy">{{ $settlement->month_name }} {{ $settlement->year }}</td>
-                            <td class="font-mono text-emerald-700 font-black">{{ number_format($settlement->total_revenue, 2) }} ر.ي</td>
-                            <td class="font-mono text-rose-700 font-black">{{ number_format($settlement->total_expenses, 2) }} ر.ي</td>
-                            <td class="font-mono text-indigo-700 font-black bg-indigo-50/30">{{ number_format($settlement->total_debt, 2) }} ر.ي</td>
+                            <td class="  text-emerald-700 font-black">{{ number_format($settlement->total_revenue, 2) }} ر.ي</td>
+                            <td class="  text-rose-700 font-black">{{ number_format($settlement->total_expenses, 2) }} ر.ي</td>
+                            <td class="  text-indigo-700 font-black bg-indigo-50/30">{{ number_format($settlement->total_debt, 2) }} ر.ي</td>
                             <td class="text-center">
                                 <span class="px-4 py-1.5 rounded-lg font-black text-sm {{ $settlement->net_result >= 0 ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200' }}">
                                     {{ number_format(abs($settlement->net_result), 2) }} 
@@ -91,12 +91,12 @@
                         @if (is_countable($receipts) ? count($receipts) > 0 : (method_exists($receipts, 'count') ? $receipts->count() > 0 : !empty($receipts)))
     @foreach ($receipts as $index => $receipt)
                             <tr>
-                                <td class="text-center text-gray-400 font-mono">{{ $index + 1 }}</td>
-                                <td class="font-mono text-xs font-bold">#{{ $receipt->voucher_number }}</td>
+                                <td class="text-center text-gray-400  ">{{ $index + 1 }}</td>
+                                <td class="  text-xs font-bold">#{{ $receipt->voucher_number }}</td>
                                 <td class="font-bold text-gray-800">{{ $receipt->student?->name_ar ?? '---' }}</td>
-                                <td class="text-xs text-gray-500 font-mono">{{ $receipt->voucher_date->format('Y-m-d') }}</td>
+                                <td class="text-xs text-gray-500  ">{{ $receipt->voucher_date->format('Y-m-d') }}</td>
                                 <td class="text-xs text-gray-400 italic">{{ $receipt->description }}</td>
-                                <td class="text-left font-black text-emerald-600 font-mono">{{ number_format($receipt->amount, 2) }}</td>
+                                <td class="text-left font-black text-emerald-600  ">{{ number_format($receipt->amount, 2) }}</td>
                             </tr>
                             @endforeach
 @else
@@ -107,7 +107,7 @@
                         <tfoot>
                             <tr>
                                 <td colspan="5" class="text-left font-black text-navy">إجمالي المقبوضات</td>
-                                <td class="text-left font-black text-emerald-700 font-mono bg-emerald-50/50">{{ number_format($receipts->sum('amount'), 2) }}</td>
+                                <td class="text-left font-black text-emerald-700   bg-emerald-50/50">{{ number_format($receipts->sum('amount'), 2) }}</td>
                             </tr>
                         </tfoot>
                     @endif
@@ -137,16 +137,16 @@
                         @if (is_countable($invoices) ? count($invoices) > 0 : (method_exists($invoices, 'count') ? $invoices->count() > 0 : !empty($invoices)))
     @foreach ($invoices as $index => $invoice)
                             <tr>
-                                <td class="text-center text-gray-400 font-mono">{{ $index + 1 }}</td>
-                                <td class="font-mono text-xs font-bold">{{ $invoice->invoice_number }}</td>
+                                <td class="text-center text-gray-400  ">{{ $index + 1 }}</td>
+                                <td class="  text-xs font-bold">{{ $invoice->invoice_number }}</td>
                                 <td class="font-bold text-gray-800">{{ $invoice->supplier?->name ?? '---' }}</td>
                                 <td class="text-center">
                                     <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold {{ $invoice->payment_type === 'cash' ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-orange-100 text-orange-700 border border-orange-200' }}">
                                         {{ $invoice->payment_type_label }}
                                     </span>
                                 </td>
-                                <td class="text-xs text-gray-500 font-mono">{{ $invoice->invoice_date->format('Y-m-d') }}</td>
-                                <td class="text-left font-black text-rose-600 font-mono">{{ number_format($invoice->total_amount, 2) }}</td>
+                                <td class="text-xs text-gray-500  ">{{ $invoice->invoice_date->format('Y-m-d') }}</td>
+                                <td class="text-left font-black text-rose-600  ">{{ number_format($invoice->total_amount, 2) }}</td>
                             </tr>
                             @endforeach
 @else
@@ -173,11 +173,11 @@
                         @if (is_countable($payments) ? count($payments) > 0 : (method_exists($payments, 'count') ? $payments->count() > 0 : !empty($payments)))
     @foreach ($payments as $index => $payment)
                             <tr>
-                                <td class="text-center text-gray-400 font-mono">{{ $index + 1 }}</td>
-                                <td class="font-mono text-xs font-bold">#{{ $payment->voucher_number }}</td>
+                                <td class="text-center text-gray-400  ">{{ $index + 1 }}</td>
+                                <td class="  text-xs font-bold">#{{ $payment->voucher_number }}</td>
                                 <td class="font-bold text-gray-800">{{ $payment->supplier?->name ?? '---' }}</td>
-                                <td class="text-xs text-gray-500 font-mono">{{ $payment->voucher_date->format('Y-m-d') }}</td>
-                                <td class="text-left font-black text-cyan-600 font-mono">{{ number_format($payment->amount, 2) }}</td>
+                                <td class="text-xs text-gray-500  ">{{ $payment->voucher_date->format('Y-m-d') }}</td>
+                                <td class="text-left font-black text-cyan-600  ">{{ number_format($payment->amount, 2) }}</td>
                             </tr>
                             @endforeach
 @else
@@ -187,7 +187,7 @@
                     <tfoot>
                         <tr class="bg-rose-50/40">
                             <td colspan="4" class="text-left font-black text-navy border-t-2 border-navy">إجمالي المصروفات التشغيلية (سندات الصرف)</td>
-                            <td class="text-left font-black text-rose-700 font-mono border-t-2 border-navy">{{ number_format($payments->sum('amount'), 2) }}</td>
+                            <td class="text-left font-black text-rose-700   border-t-2 border-navy">{{ number_format($payments->sum('amount'), 2) }}</td>
                         </tr>
                     </tfoot>
                 </table>

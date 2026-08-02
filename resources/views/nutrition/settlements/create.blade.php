@@ -17,17 +17,17 @@
         <div class="grid grid-cols-4 gap-4 mb-6">
             <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 text-center">
                 <p class="text-[10px] font-bold text-indigo-500 uppercase font-cairo mb-2">إجمالي مديونية الموردين</p>
-                <p class="text-2xl font-black text-indigo-700 font-mono">{{ number_format($totalDebt, 2) }}</p>
+                <p class="text-2xl font-black text-indigo-700  ">{{ number_format($totalDebt, 2) }}</p>
                 <p class="text-xs text-indigo-400 font-cairo">ر.ي</p>
             </div>
             <div class="bg-green-50 border border-green-100 rounded-2xl p-5 text-center">
                 <p class="text-[10px] font-bold text-green-500 uppercase font-cairo mb-2">إجمالي الإيرادات</p>
-                <p class="text-3xl font-black text-green-700 font-mono">{{ number_format($totalRevenue, 2) }}</p>
+                <p class="text-3xl font-black text-green-700  ">{{ number_format($totalRevenue, 2) }}</p>
                 <p class="text-xs text-green-400 font-cairo">ر.ي</p>
             </div>
             <div class="bg-red-50 border border-red-100 rounded-2xl p-5 text-center">
                 <p class="text-[10px] font-bold text-red-500 uppercase font-cairo mb-2">إجمالي المصاريف</p>
-                <p class="text-3xl font-black text-red-700 font-mono">{{ number_format($totalExpenses, 2) }}</p>
+                <p class="text-3xl font-black text-red-700  ">{{ number_format($totalExpenses, 2) }}</p>
                 <p class="text-xs text-red-400 font-cairo">ر.ي</p>
             </div>
             <div
@@ -36,7 +36,7 @@
                     class="text-[10px] font-bold text-{{ $netResult >= 0 ? 'teal' : 'orange' }}-500 uppercase font-cairo mb-2">
                     صافي النتيجة ({{ $netResult >= 0 ? 'فائض' : 'عجز' }})
                 </p>
-                <p class="text-3xl font-black text-{{ $netResult >= 0 ? 'teal' : 'orange' }}-700 font-mono">
+                <p class="text-3xl font-black text-{{ $netResult >= 0 ? 'teal' : 'orange' }}-700  ">
                     {{ number_format(abs($netResult), 2) }}
                 </p>
                 <p class="text-xs text-{{ $netResult >= 0 ? 'teal' : 'orange' }}-400 font-cairo">ر.ي</p>
@@ -61,7 +61,7 @@
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">السنة</label>
                         <input type="number" name="year" value="{{ $currentYear }}" required
                             onchange="window.location.href='{{ route('nutrition.settlements.create') }}?month={{ $currentMonth }}&year=' + this.value"
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-2 focus:ring-pink-400">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-pink-400">
                     </div>
                 </div>
 

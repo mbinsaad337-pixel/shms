@@ -158,7 +158,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500  ">
                             {{ $student->student_number }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
@@ -175,7 +175,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">
                             {{ $student->program->name ?? '---' }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap font-mono text-sm font-bold text-gray-700">
+                        <td class="px-6 py-4 whitespace-nowrap   text-sm font-bold text-gray-700">
                             {{ $student->graduation_year ?? '---' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">

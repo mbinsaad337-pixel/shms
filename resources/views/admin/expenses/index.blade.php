@@ -107,12 +107,12 @@
                                 {{ str_pad($expense->month, 2, '0', STR_PAD_LEFT) }} / {{ $expense->year }}
                             </td>
                             <td class="p-4">
-                                <span class="font-bold text-navy font-mono">{{ number_format($expense->amount, 2) }}</span> <span class="text-xs text-gray-400">ريال يمني</span>
+                                <span class="font-bold text-navy ">{{ number_format($expense->amount, 2) }}</span> <span class="text-xs text-gray-400">ريال يمني</span>
                             </td>
                             <td class="p-4">
-                                <div class="text-xs text-gray-500 font-mono"><span class="text-gray-400 font-almarai">مستحق:</span> {{ $expense->due_date->format('Y-m-d') }}</div>
+                                <div class="text-xs text-gray-500 "><span class="text-gray-400 font-almarai">مستحق:</span> {{ $expense->due_date->format('Y-m-d') }}</div>
                                 @if($expense->payment_date)
-                                    <div class="text-xs text-emerald-600 font-mono mt-1"><span class="font-almarai text-emerald-600/70">دفع في:</span> {{ $expense->payment_date->format('Y-m-d') }}</div>
+                                    <div class="text-xs text-emerald-600  mt-1"><span class="font-almarai text-emerald-600/70">دفع في:</span> {{ $expense->payment_date->format('Y-m-d') }}</div>
                                 @endif
                             </td>
                             <td class="p-4">
@@ -207,7 +207,7 @@
                                         <div class="text-right w-full overflow-hidden">
                                             <label class="block text-sm font-bold text-navy font-cairo mb-2">تاريخ الدفع <span class="text-red-500">*</span></label>
                                             <input type="date" name="payment_date" required value="{{ date('Y-m-d') }}"
-                                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all font-mono">
+                                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all ">
                                         </div>
                                         <div class="text-right w-full overflow-hidden">
                                             <label class="block text-sm font-bold text-navy font-cairo mb-2">إرفاق إيصال الدفع <span class="text-gray-400 font-normal">(اختياري)</span></label>

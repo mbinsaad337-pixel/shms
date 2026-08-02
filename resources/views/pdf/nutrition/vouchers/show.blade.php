@@ -70,16 +70,16 @@
     <table class="info-table">
         <tr>
             <td class="info-label">رقم السند</td>
-            <td class="info-value font-mono">{{ $voucher->voucher_number }}</td>
+            <td class="info-value  ">{{ $voucher->voucher_number }}</td>
             <td class="info-label">تاريخ السند</td>
-            <td class="info-value font-mono">{{ $voucher->voucher_date instanceof \Carbon\Carbon ? $voucher->voucher_date->format('Y-m-d') : $voucher->voucher_date }}</td>
+            <td class="info-value  ">{{ $voucher->voucher_date instanceof \Carbon\Carbon ? $voucher->voucher_date->format('Y-m-d') : $voucher->voucher_date }}</td>
         </tr>
         @if($voucher->student)
         <tr>
             <td class="info-label">اسم الطالب</td>
             <td class="info-value">{{ $voucher->student->name_ar }}</td>
             <td class="info-label">الرقم الجامعي</td>
-            <td class="info-value font-mono">{{ $voucher->student->university_id }}</td>
+            <td class="info-value  ">{{ $voucher->student->university_id }}</td>
         </tr>
         @endif
         @if($voucher->supplier)

@@ -202,7 +202,7 @@
                                 @if($recent_vouchers->count() > 0)
                                     @foreach($recent_vouchers as $voucher)
                                         <tr class="hover:bg-gray-50/50 transition-colors">
-                                            <td class="px-8 py-4 font-mono text-sm text-primary font-bold">
+                                            <td class="px-8 py-4   text-sm text-primary font-bold">
                                                 {{ $voucher->voucher_number }}
                                             </td>
                                             <td class="px-8 py-4 font-almarai text-sm">{{ $voucher->fund->name ?? '---' }}</td>
@@ -230,7 +230,7 @@
                                             <td class="px-8 py-4 font-bold text-gray-800 font-almarai">
                                                 {{ number_format($voucher->amount, 2) }}
                                             </td>
-                                            <td class="px-8 py-4 font-mono text-xs text-gray-500">
+                                            <td class="px-8 py-4   text-xs text-gray-500">
                                                 {{ $voucher->date->format('Y-m-d') }}
                                             </td>
                                         </tr>

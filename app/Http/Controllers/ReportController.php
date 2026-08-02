@@ -8,6 +8,7 @@ use App\Models\Violation;
 use App\Models\Room;
 use App\Models\Voucher;
 use App\Models\Fund;
+use App\Models\Center;
 use App\Models\MonthlySettlement;
 use App\Models\SettlementDetail;
 
@@ -16,6 +17,47 @@ class ReportController extends Controller
     public function index()
     {
         return view('reports.index');
+    }
+
+    /**
+     * Show the interactive HTML funds report page with filter support.
+     */
+    public function fundsView(Request $request)
+    {
+        $user        = auth()->user();
+        $centerId    = $user->center_id;
+        $isExecutive = $user->hasRole('super-admin') || $user->hasRole('executive-manager');
+
+        $month = (int) ($request->month ?? now()->month);
+        $year  = (int) ($request->year  ?? now()->year);
+
+        $query = Fund::with(['center', 'budgetItems' => function($q) use ($month, $year) {
+            $q->whereHas('monthlyBudget', function($sbq) use ($month, $year) {
+                $sbq->where('month', $month)
+                    ->where('year', $year)
+                    ->where('status', 'approved');
+            });
+        }]);
+
+        if ($request->filled('center_id') && $isExecutive) {
+            $query->where('center_id', (int) $request->center_id);
+        } elseif (!$isExecutive) {
+            $query->where('center_id', $centerId);
+        }
+
+        $data = $query->get();
+
+        $settlementBalances = SettlementDetail::whereHas('settlement', function ($q) use ($month, $year) {
+            $q->where('month', $month)
+              ->where('year', $year)
+              ->whereNotIn('status', ['deleted', 'rejected']);
+        })->get()->keyBy('fund_id');
+
+        $centers = $isExecutive ? Center::orderBy('name')->get() : collect();
+
+        return view('reports.funds', compact(
+            'data', 'month', 'year', 'settlementBalances', 'isExecutive', 'centers'
+        ));
     }
 
     public function show(Request $request, $type, \App\Services\PdfService $pdfService)

@@ -47,7 +47,7 @@
             <div>
                 <label class="block text-sm font-bold text-navy font-cairo mb-2">المبلغ (ريال سعودي) <span class="text-red-500">*</span></label>
                 <input type="number" step="0.01" name="amount" required value="{{ old('amount', $centerExpense->amount) }}"
-                       class="w-full px-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50 font-mono text-sm focus:ring-4 focus:ring-navy/10 focus:border-navy transition-all @error('amount') border-red-500 @enderror">
+                       class="w-full px-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50  text-sm focus:ring-4 focus:ring-navy/10 focus:border-navy transition-all @error('amount') border-red-500 @enderror">
                 @error('amount')<p class="text-red-500 text-xs mt-1 font-almarai">{{ $message }}</p>@enderror
             </div>
 
@@ -55,7 +55,7 @@
             <div>
                 <label class="block text-sm font-bold text-navy font-cairo mb-2">تاريخ الاستحقاق <span class="text-red-500">*</span></label>
                 <input type="date" name="due_date" required value="{{ old('due_date', $centerExpense->due_date->format('Y-m-d')) }}"
-                       class="w-full px-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50 font-mono text-sm focus:ring-4 focus:ring-navy/10 focus:border-navy transition-all @error('due_date') border-red-500 @enderror">
+                       class="w-full px-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50  text-sm focus:ring-4 focus:ring-navy/10 focus:border-navy transition-all @error('due_date') border-red-500 @enderror">
                 @error('due_date')<p class="text-red-500 text-xs mt-1 font-almarai">{{ $message }}</p>@enderror
             </div>
 
@@ -91,7 +91,7 @@
                     <div>
                         <label class="block text-sm font-bold text-emerald-700 font-cairo mb-2">تاريخ الدفع الفعلي <span class="text-red-500">*</span></label>
                         <input type="date" name="payment_date" :required="status === 'paid'" value="{{ old('payment_date', $centerExpense->payment_date ? $centerExpense->payment_date->format('Y-m-d') : date('Y-m-d')) }}"
-                               class="w-full px-4 py-3 rounded-xl border border-emerald-200 bg-white font-mono text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all @error('payment_date') border-red-500 @enderror">
+                               class="w-full px-4 py-3 rounded-xl border border-emerald-200 bg-white  text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all @error('payment_date') border-red-500 @enderror">
                         @error('payment_date')<p class="text-red-500 text-xs mt-1 font-almarai">{{ $message }}</p>@enderror
                     </div>
                     <div>

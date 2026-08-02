@@ -43,14 +43,14 @@
                                     <label class="block text-xs font-bold text-gray-400 mb-2 font-cairo">وقت بدء الوجبة</label>
                                     <input type="time" name="start_time"
                                         value="{{ $s ? \Carbon\Carbon::parse($s->start_time)->format('H:i') : '' }}" required
-                                        class="w-full bg-gray-50 border-gray-100 rounded-xl focus:ring-primary focus:border-primary font-mono">
+                                        class="w-full bg-gray-50 border-gray-100 rounded-xl focus:ring-primary focus:border-primary  ">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-gray-400 mb-2 font-cairo">وقت انتهاء
                                         الوجبة</label>
                                     <input type="time" name="end_time"
                                         value="{{ $s ? \Carbon\Carbon::parse($s->end_time)->format('H:i') : '' }}" required
-                                        class="w-full bg-gray-50 border-gray-100 rounded-xl focus:ring-primary focus:border-primary font-mono">
+                                        class="w-full bg-gray-50 border-gray-100 rounded-xl focus:ring-primary focus:border-primary  ">
                                 </div>
                             </div>
 
@@ -61,7 +61,7 @@
                                     التأخر</label>
                                 <input type="time" name="late_deadline"
                                     value="{{ $s ? \Carbon\Carbon::parse($s->late_deadline)->format('H:i') : '' }}" required
-                                    class="w-full bg-orange-50 border-orange-100 rounded-xl focus:ring-orange-500 focus:border-orange-500 font-mono text-orange-700">
+                                    class="w-full bg-orange-50 border-orange-100 rounded-xl focus:ring-orange-500 focus:border-orange-500   text-orange-700">
                                 <p class="text-[10px] text-gray-400 mt-1 font-almarai italic">* لا يمكن للطالب اختيار "سأتأخر"
                                     بعد هذا الوقت</p>
                             </div>
@@ -71,7 +71,7 @@
                                     الغياب</label>
                                 <input type="time" name="absent_deadline"
                                     value="{{ $s ? \Carbon\Carbon::parse($s->absent_deadline)->format('H:i') : '' }}" required
-                                    class="w-full bg-red-50 border-red-100 rounded-xl focus:ring-red-500 focus:border-red-500 font-mono text-red-700">
+                                    class="w-full bg-red-50 border-red-100 rounded-xl focus:ring-red-500 focus:border-red-500   text-red-700">
                                 <p class="text-[10px] text-gray-400 mt-1 font-almarai italic">* لا يمكن للطالب اختيار "لن أحضر"
                                     بعد هذا الوقت</p>
                             </div>

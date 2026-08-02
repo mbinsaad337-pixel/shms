@@ -10,7 +10,7 @@
                 <td class="col-right">
                     <div class="detail-row">
                         <div class="detail-label">الفترة</div>
-                        <div class="detail-value font-mono">شهر {{ $budget->month }} / سنة {{ $budget->year }}</div>
+                        <div class="detail-value  ">شهر {{ $budget->month }} / سنة {{ $budget->year }}</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">بواسطة (المنشئ)</div>
@@ -21,7 +21,7 @@
                 <td class="col-left">
                     <div class="detail-row">
                         <div class="detail-label">المبلغ الإجمالي للموازنة</div>
-                        <div class="detail-value large font-mono text-navy">{{ number_format($budget->total_amount, 2) }} ر.ي</div>
+                        <div class="detail-value large   text-navy">{{ number_format($budget->total_amount, 2) }} ر.ي</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">الحالة</div>
@@ -64,11 +64,11 @@
         <tr>
             <td class="text-center">{{ $index + 1 }}</td>
             <td class="font-bold">{{ $item->fund->name }}</td>
-            <td class="text-center font-bold font-mono text-navy">{{ number_format($item->requested_amount, 2) }}</td>
+            <td class="text-center font-bold   text-navy">{{ number_format($item->requested_amount, 2) }}</td>
             @if($budget->status == 'approved')
-            <td class="text-center font-bold font-mono text-success">{{ number_format($item->approved_amount, 2) }}</td>
+            <td class="text-center font-bold   text-success">{{ number_format($item->approved_amount, 2) }}</td>
             @endif
-            <td class="text-center font-mono text-muted">{{ number_format($item->fund->balance, 2) }}</td>
+            <td class="text-center   text-muted">{{ number_format($item->fund->balance, 2) }}</td>
         </tr>
         @endforeach
     </tbody>
@@ -87,19 +87,29 @@
     <tr>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">أعده / المحاسب</div>
-            <div class="sign-name">{{ $budget->submitter->name ?? '-' }}</div>
-        </td>
+            <div class="sign-title">  المسؤول المالي</div>
+<div class="sign-name">
+                    @php
+                      $financial_manager = \App\Models\User::role('financial-manager')->where('center_id',$budget->center_id)->get();
+                @endphp
+                {{ $financial_manager->count() ===1 ? $financial_manager->first()->name : '' }}
+            </div>        </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">راجعه / مدير المركز</div>
-            <div class="sign-name">{{ $budget->status == 'approved' || $budget->status == 'confirmed' ? 'تمت المراجعة' : '-' }}</div>
-        </td>
+            <div class="sign-title">  مدير المركز</div>
+          <div class="sign-name">
+                    @php
+                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$budget->center_id)->get();
+                @endphp
+                {{ $center_manager->count() ===1 ? $center_manager->first()->name : '' }}
+            </div>        </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">اعتمده /مدير قسم المراكز الطلابية</div>
-            <div class="sign-name">{{ $budget->approver->name ?? '-' }}</div>
-        </td>
+<div class="sign-title">مدير قسم المراكز الطلابية</div>
+            @php
+                $super_admin = \App\Models\User::role('super-admin')->first();
+            @endphp
+            <div class="sign-name">{{ $super_admin ? $super_admin->name : '' }}</div>        </td>
     </tr>
 </table>
 @endsection

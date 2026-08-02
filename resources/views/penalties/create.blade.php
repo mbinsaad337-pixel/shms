@@ -59,7 +59,7 @@
                                         <div class="bg-navy text-white px-4 py-2 rounded-xl flex items-center gap-3 border border-navy shadow-sm animate-fade-in group">
                                             <div class="flex flex-col">
                                                 <span class="text-xs font-bold font-almarai" x-text="students.find(s => s.id == id)?.name"></span>
-                                                <span class="text-[9px] opacity-70 font-mono" x-text="students.find(s => s.id == id)?.num"></span>
+                                                <span class="text-[9px] opacity-70  " x-text="students.find(s => s.id == id)?.num"></span>
                                             </div>
                                             <button type="button" @click="removeStudent(id)" class="w-5 h-5 bg-navy-light/20 rounded-full flex items-center justify-center hover:bg-red-500 transition-all">
                                                 <i class="fas fa-times text-[8px]"></i>
@@ -92,7 +92,7 @@
                                                     class="w-full text-right px-6 py-4 rounded-2xl hover:bg-navy text-navy hover:text-white flex items-center justify-between group transition-all">
                                                 <div class="flex flex-col">
                                                     <span class="font-bold font-almarai" x-text="student.name"></span>
-                                                    <span class="text-[10px] opacity-70 font-mono" x-text="student.num"></span>
+                                                    <span class="text-[10px] opacity-70  " x-text="student.num"></span>
                                                 </div>
                                                 <i class="fas fa-plus text-xs opacity-0 group-hover:opacity-100 transition-all"></i>
                                             </button>
@@ -146,12 +146,12 @@
                         <div>
                             <label class="block text-sm font-black text-navy mb-4 font-cairo text-right">تاريخ البدء</label>
                             <input type="date" name="start_date" value="{{ date('Y-m-d') }}"
-                                   class="w-full px-6 py-5 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 focus:border-navy outline-none font-mono text-right transition-all">
+                                   class="w-full px-6 py-5 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 focus:border-navy outline-none   text-right transition-all">
                         </div>
                         <div>
                             <label class="block text-sm font-black text-navy mb-4 font-cairo text-right">تاريخ الانتهاء (اختياري)</label>
                             <input type="date" name="end_date"
-                                   class="w-full px-6 py-5 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 focus:border-navy outline-none font-mono text-right transition-all">
+                                   class="w-full px-6 py-5 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 focus:border-navy outline-none   text-right transition-all">
                         </div>
 
                         <!-- Description -->

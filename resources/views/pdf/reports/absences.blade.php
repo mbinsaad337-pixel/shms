@@ -19,7 +19,7 @@
             <td class="text-center">{{ $index + 1 }}</td>
             <td class="font-bold">{{ $absence->student->name_ar ?? '---' }}</td>
             <td>{{ $absence->student->center->name ?? '---' }}</td>
-            <td class="text-center font-mono text-sm">{{ $absence->date->format('Y/m/d') }}</td>
+            <td class="text-center   text-sm">{{ $absence->date->format('Y/m/d') }}</td>
             <td class="text-center">
                 @php $typeLabels = ['housing'=>'سكن','quran'=>'حلقة قرآنية','activity'=>'نشاط','other'=>'آخر']; @endphp
                 {{ $typeLabels[$absence->absence_type] ?? ($absence->absence_type ?? 'عام') }}

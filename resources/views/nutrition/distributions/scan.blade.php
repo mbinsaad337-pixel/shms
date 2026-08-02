@@ -90,7 +90,7 @@
                         <p class="text-xs text-gray-500 font-cairo mb-1 text-right">✅ تم قراءة الباركود — يمكنك التعديل إذا لزم:</p>
                         <div class="flex gap-2">
                             <input type="text" id="photoQrValue" dir="ltr"
-                                class="flex-1 border border-green-300 bg-green-50 rounded-xl px-3 py-2 font-mono text-xs focus:ring-2 focus:ring-green-400 text-left"
+                                class="flex-1 border border-green-300 bg-green-50 rounded-xl px-3 py-2   text-xs focus:ring-2 focus:ring-green-400 text-left"
                                 placeholder="القيمة المقروءة...">
                             <button onclick="submitPhotoQr()"
                                 class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-bold font-cairo text-sm transition-all">
@@ -114,7 +114,7 @@
             <div id="manualPanel" class="hidden">
                 <div class="flex gap-2">
                     <input type="text" id="manualQr" placeholder="أدخل رمز QR يدوياً..."
-                        class="flex-1 border border-gray-200 rounded-xl px-3 py-3 font-mono text-sm focus:ring-2 focus:ring-teal-400">
+                        class="flex-1 border border-gray-200 rounded-xl px-3 py-3   text-sm focus:ring-2 focus:ring-teal-400">
                     <button onclick="processManualScan()"
                         class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-xl font-bold font-cairo text-sm transition-all">
                         مسح
@@ -163,7 +163,7 @@
                         </label>
                         <input type="number" id="dishNumber" placeholder="أدخل رقم الصحن..."
                             min="1" inputmode="numeric"
-                            class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 font-mono text-xl text-center focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all">
+                            class="w-full border-2 border-gray-200 rounded-xl px-4 py-3   text-xl text-center focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all">
                         <p id="dishNumberError" class="hidden text-red-500 text-xs font-cairo mt-1">⚠️ رقم الصحن مطلوب قبل التوزيع</p>
                     </div>
 
@@ -519,7 +519,7 @@
                     document.getElementById('resultError').classList.remove('hidden');
                     document.getElementById('errorMsg').innerHTML =
                         (data.message || 'خطأ غير معروف') +
-                        `<br><span class="text-xs text-gray-400 font-mono mt-2 block break-all">القيمة: ${qrCode.substring(0, 80)}</span>`;
+                        `<br><span class="text-xs text-gray-400   mt-2 block break-all">القيمة: ${qrCode.substring(0, 80)}</span>`;
                     return;
                 }
 

@@ -8,7 +8,7 @@
             <p class="text-gray-500 font-almarai mt-2">حدد حالتك لوجبات اليوم لتحسين كفاءة التوزيع</p>
         <div class="mt-4 inline-flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100 shadow-inner">
             <i class="fas fa-clock text-primary"></i>
-            <span id="student-live-clock" class="font-mono text-sm font-bold text-gray-600">
+            <span id="student-live-clock" class="  text-sm font-bold text-gray-600">
                 {{ now()->translatedFormat('h:i:s A') }}
             </span>
         </div>

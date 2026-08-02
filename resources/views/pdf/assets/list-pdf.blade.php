@@ -16,7 +16,7 @@
         @foreach($data as $index => $asset)
         <tr>
             <td class="text-center">{{ $index + 1 }}</td>
-            <td class="font-mono font-bold text-navy">{{ $asset->code }}</td>
+            <td class="  font-bold text-navy">{{ $asset->code }}</td>
             <td class="font-bold">{{ $asset->name }}</td>
             <td>{{ $asset->center->name ?? '---' }}</td>
             <td>{{ $asset->category }}</td>
@@ -41,16 +41,19 @@
     <tr>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">أعده / مسؤول العهد والأصول</div>
-            <div class="sign-name">{{ $exportUser ?? '' }}</div>
+            <div class="sign-title">مدير المركز</div>
+            @php
+                $center_manager = \App\Models\User::role('center-manager')->where('center_id', $asset->center_id)->first();
+            @endphp
+            <div class="sign-name">{{ $center_manager ? $center_manager->name : '' }}</div>
         </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">راجعه / المسؤول الإداري</div>
-        </td>
-        <td>
-            <div class="sign-line"></div>
-            <div class="sign-title">اعتمده / مدير المركز</div>
+            <div class="sign-title">مدير قسم المراكز الطلابية</div>
+            @php
+                $super_admin = \App\Models\User::role('super-admin')->first();
+            @endphp
+            <div class="sign-name">{{ $super_admin ? $super_admin->name : '' }}</div>
         </td>
     </tr>
 </table>

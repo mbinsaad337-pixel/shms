@@ -78,7 +78,7 @@
                         {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(120)->generate($student->barcode) !!}
                         <div class="flex items-center gap-2 mt-2 w-full justify-center">
                             <code id="studentBarcodeVal"
-                                class="text-sm text-primary font-mono bg-blue-50 px-3 py-1 rounded-lg border border-blue-100">{{ $student->barcode }}</code>
+                                class="text-sm text-primary   bg-blue-50 px-3 py-1 rounded-lg border border-blue-100">{{ $student->barcode }}</code>
                             <button onclick="copyBarcode('studentBarcodeVal')" title="نسخ الباركود"
                                 class="bg-primary hover:bg-primary-dark text-white px-3 py-1 rounded-lg transition-colors text-xs font-cairo shadow-sm flex items-center gap-1">
                                 <i class="fas fa-copy"></i>
@@ -142,7 +142,7 @@
                                 </div>
                                 <div class="bg-primary/10 p-4 rounded-xl border border-primary/20">
                                     <p class="text-xs text-primary font-bold mb-1">رقم الغرفة</p>
-                                    <p class="font-bold text-primary font-mono text-xl">{{ $currentRoom->room->room_number }}
+                                    <p class="font-bold text-primary   text-xl">{{ $currentRoom->room->room_number }}
                                     </p>
                                 </div>
                             </div>
@@ -208,7 +208,7 @@
                                                 <p class="text-sm text-gray-500 font-almarai mt-1">{{ $record['item']->reason }}</p>
                                             </div>
                                         @endif
-                                        <div class="text-xs font-mono text-gray-400">
+                                        <div class="text-xs   text-gray-400">
                                             {{ \Carbon\Carbon::parse($record['date'])->format('Y-m-d') }}
                                         </div>
                                     </div>
@@ -231,7 +231,7 @@
                         <ul class="space-y-4 font-almarai">
                             <li class="flex justify-between items-center">
                                 <span class="text-gray-400 text-sm">الرقم الجامعي</span>
-                                <span class="font-bold text-gray-800 font-mono">{{ $student->student_number }}</span>
+                                <span class="font-bold text-gray-800  ">{{ $student->student_number }}</span>
                             </li>
                             <li class="flex justify-between items-center">
                                 <span class="text-gray-400 text-sm">الكلية</span>
@@ -265,7 +265,7 @@
                             </li>
                             <li class="flex flex-col gap-2 mt-2 pt-2 border-t border-gray-50">
                                 <span class="text-gray-400 text-sm">رقم التواصل</span>
-                                <span class="font-bold text-red-600 font-mono text-left w-full block"
+                                <span class="font-bold text-red-600   text-left w-full block"
                                     dir="ltr">{{ $student->emergency_phone ?? '-' }}</span>
                             </li>
                         </ul>
@@ -316,7 +316,7 @@
                                 </div>
                                 <div class="mt-3 flex items-center justify-center gap-2">
                                     <code id="subQrCodeVal"
-                                        class="text-xs text-green-700 font-mono bg-green-50 px-3 py-1.5 rounded">{{ $subscription->qr_code }}</code>
+                                        class="text-xs text-green-700   bg-green-50 px-3 py-1.5 rounded">{{ $subscription->qr_code }}</code>
                                     <button onclick="copyBarcode('subQrCodeVal')"
                                         class="text-green-600 hover:text-green-800 p-1.5 rounded-lg bg-green-50/50 transition-colors"
                                         title="نسخ الكود">

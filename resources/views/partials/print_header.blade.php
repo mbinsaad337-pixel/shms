@@ -34,7 +34,7 @@
             </div>
             <div class="ctx-item">
                 <span class="ctx-label">الرقم المرجعي:</span>
-                <span class="ctx-val font-mono">{{ $number ?? '---' }}</span>
+                <span class="ctx-val  ">{{ $number ?? '---' }}</span>
             </div>
             <div class="ctx-item">
                 <span class="ctx-label">تاريخ المستند:</span>
@@ -299,7 +299,7 @@
             background-color: #fafbfc !important;
         }
 
-        .font-mono {
+        .  {
             font-family: 'Courier New', Courier, monospace !important;
         }
 

@@ -27,7 +27,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">التاريخ</label>
-                    <input type="date" name="date" value="{{ old('date', $commitment->date->format('Y-m-d')) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm font-mono outline-none focus:ring-2 focus:ring-navy/10">
+                    <input type="date" name="date" value="{{ old('date', $commitment->date->format('Y-m-d')) }}" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm   outline-none focus:ring-2 focus:ring-navy/10">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-1.5 font-cairo">الحالة</label>

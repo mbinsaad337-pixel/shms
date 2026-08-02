@@ -43,7 +43,7 @@
                                     class="w-4 h-4 text-teal-600 rounded">
                                 <div>
                                     <p class="font-bold text-gray-800 font-cairo text-sm">{{ $s->name_ar }}</p>
-                                    <p class="text-xs text-gray-400 font-mono">{{ $s->university_id }}</p>
+                                    <p class="text-xs text-gray-400  ">{{ $s->university_id }}</p>
                                 </div>
                             </label>
                         @endforeach

@@ -12,7 +12,7 @@
                 </a>
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 font-cairo">{{ $voucher->getTypeLabel() }}</h2>
-                    <p class="text-gray-400 font-mono text-sm">{{ $voucher->voucher_number }}</p>
+                    <p class="text-gray-400   text-sm">{{ $voucher->voucher_number }}</p>
                 </div>
             </div>
             <div class="flex gap-2">
@@ -43,7 +43,7 @@
                         <p class="text-white/70 text-sm font-cairo">
                             {{ $voucher->type === 'payment' ? 'سند صرف' : 'سند قبض' }}
                         </p>
-                        <p class="text-white text-4xl font-black font-mono mt-1">{{ number_format($voucher->amount, 2) }}
+                        <p class="text-white text-4xl font-black   mt-1">{{ number_format($voucher->amount, 2) }}
                         </p>
                         <p class="text-white/80 font-cairo mt-0.5">ريال سعودي</p>
                     </div>
@@ -63,7 +63,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="bg-gray-50 rounded-2xl p-4">
                         <p class="text-xs font-bold text-gray-400 font-cairo uppercase mb-1">التاريخ</p>
-                        <p class="font-bold text-gray-800 font-mono">{{ $voucher->voucher_date->format('Y-m-d') }}</p>
+                        <p class="font-bold text-gray-800  ">{{ $voucher->voucher_date->format('Y-m-d') }}</p>
                     </div>
                     <div class="bg-gray-50 rounded-2xl p-4">
                         <p class="text-xs font-bold text-gray-400 font-cairo uppercase mb-1">أُنشئ بواسطة</p>
@@ -81,7 +81,7 @@
                     <div class="bg-purple-50 border border-purple-100 rounded-2xl p-4">
                         <p class="text-xs font-bold text-purple-400 font-cairo mb-1">الطالب</p>
                         <p class="font-bold text-purple-800 font-cairo text-lg">{{ $voucher->student?->name_ar ?? 'طالب غير موجود' }}</p>
-                        <p class="text-purple-400 font-mono text-xs">{{ $voucher->student->university_id }}</p>
+                        <p class="text-purple-400   text-xs">{{ $voucher->student->university_id }}</p>
                     </div>
                 @endif
 

@@ -23,7 +23,7 @@
         @endphp
         <tr>
             <td class="text-center">{{ $index + 1 }}</td>
-            <td class="font-mono font-bold text-navy">{{ $voucher->voucher_number }}</td>
+            <td class="  font-bold text-navy">{{ $voucher->voucher_number }}</td>
             <td>{{ $voucher->center->name }}</td>
             <td class="text-center">
                 @php
@@ -37,10 +37,10 @@
                 @endphp
                 <span class="badge {{ $type[1] }}">{{ $type[0] }}</span>
             </td>
-            <td class="text-center font-bold font-mono">{{ number_format($voucher->amount, 2) }}</td>
+            <td class="text-center font-bold  ">{{ number_format($voucher->amount, 2) }}</td>
             <td>{{ $voucher->fund->name ?? '-' }}</td>
             <td class="text-sm" style="max-width: 150px; overflow: hidden;">{{ \Illuminate\Support\Str::limit($voucher->description, 50) }}</td>
-            <td class="text-center font-mono text-sm">{{ $voucher->date instanceof \Carbon\Carbon ? $voucher->date->format('Y-m-d') : $voucher->date }}</td>
+            <td class="text-center   text-sm">{{ $voucher->date instanceof \Carbon\Carbon ? $voucher->date->format('Y-m-d') : $voucher->date }}</td>
         </tr>
         @endforeach
     </tbody>
@@ -64,21 +64,31 @@
     </tr>
 </table>
 
-<table class="signatures-table">
+<table class="signatures-table avoid-break">
     <tr>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">أعده / المحاسب المالي</div>
-            <div class="sign-name">{{ $exportUser ?? '' }}</div>
-        </td>
+            <div class="sign-title">  المسؤول المالي</div>
+<div class="sign-name">
+                    @php
+                      $financial_manager = \App\Models\User::role('financial-manager')->where('center_id',$budget->center_id)->get();
+                @endphp
+                {{ $financial_manager->count() ===1 ? $financial_manager->first()->name : '' }}
+            </div>        </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">راجعه / المدير المالي</div>
-        </td>
+            <div class="sign-title">  مدير المركز</div>
+          <div class="sign-name">
+                    @php
+                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$budget->center_id)->get();
+                @endphp
+                {{ $center_manager->count() ===1 ? $center_manager->first()->name : '' }}
+            </div>        </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">اعتمده / مدير المركز</div>
+<div class="sign-title">المستفيد </div>
         </td>
+            
     </tr>
 </table>
 @endsection

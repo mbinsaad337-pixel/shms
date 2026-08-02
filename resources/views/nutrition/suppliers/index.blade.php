@@ -39,13 +39,13 @@
                                     <p class="text-xs text-gray-400">{{ $supplier->email }}</p>
                                 @endif
                             </td>
-                            <td class="px-5 py-4 font-mono text-gray-600 text-sm" dir="ltr">{{ $supplier->phone ?? '—' }}</td>
+                            <td class="px-5 py-4   text-gray-600 text-sm" dir="ltr">{{ $supplier->phone ?? '—' }}</td>
                             <td class="px-5 py-4 text-gray-500 font-cairo text-sm">{{ $supplier->address ?? '—' }}</td>
-                            <td class="px-5 py-4 text-center font-bold text-red-600 font-mono">
+                            <td class="px-5 py-4 text-center font-bold text-red-600  ">
                                 {{ number_format($supplier->balance_debit, 2) }}</td>
-                            <td class="px-5 py-4 text-center font-bold text-green-600 font-mono">
+                            <td class="px-5 py-4 text-center font-bold text-green-600  ">
                                 {{ number_format($supplier->balance_credit, 2) }}</td>
-                            <td class="px-5 py-4 text-center font-bold font-mono text-lg
+                            <td class="px-5 py-4 text-center font-bold   text-lg
                                 {{ $net > 0 ? 'text-red-600' : ($net < 0 ? 'text-green-600' : 'text-gray-400') }}">
                                 {{ number_format(abs($net), 2) }}
                                 <span

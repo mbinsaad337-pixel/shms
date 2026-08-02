@@ -14,10 +14,13 @@
     </thead>
     <tbody>
         @foreach($data as $index => $user)
+        @if($user->hasRole('student'))
+        @continue
+    @endif
         <tr>
             <td class="text-center">{{ $index + 1 }}</td>
             <td class="font-bold">{{ $user->name }}</td>
-            <td class="font-mono text-sm" dir="ltr" style="text-align: right;">{{ $user->email }}</td>
+            <td class="  text-sm" dir="ltr" style="text-align: right;">{{ $user->email }}</td>
             <td>{{ $user->center->name ?? 'الإدارة العامة' }}</td>
             <td>
                 @foreach($user->roles as $role)
@@ -27,7 +30,7 @@
                     <span class="text-muted text-sm">لا توجد أدوار</span>
                 @endif
             </td>
-            <td class="text-center font-mono text-sm">{{ $user->created_at->format('Y/m/d') }}</td>
+            <td class="text-center   text-sm">{{ $user->created_at->format('Y/m/d') }}</td>
         </tr>
         @endforeach
     </tbody>
@@ -37,16 +40,25 @@
     <tr>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">أعده / مسؤول النظام</div>
-            <div class="sign-name">{{ $exportUser ?? '' }}</div>
+            <div class="sign-title">مدير المركز</div>
+            <div class="sign-name">
+              @php
+                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$user->center_id)->first();
+                @endphp
+                {{ $center_manager->count() ===1 ? $center_manager->first()->name : '' }}
+            </div>
+            
         </td>
+        
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">راجعه / مدير الموارد البشرية</div>
-        </td>
-        <td>
-            <div class="sign-line"></div>
-            <div class="sign-title">اعتمده / مدير قسم المراكز الطلابية</div>
+            <div class="sign-title"> مدير قسم المراكز الطلابية</div>
+            <div class="sign-name">
+              @php
+                      $super_admin = \App\Models\User::role('super-admin')->first();
+                @endphp
+                {{ $super_admin->name ??'' }}
+            </div>
         </td>
     </tr>
 </table>

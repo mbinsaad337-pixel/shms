@@ -67,7 +67,7 @@
                                     <p class="text-xs text-gray-400 font-almarai">{{ $activity->club->name ?? 'نادي عام' }} • {{ $activity->location }}</p>
                                 </div>
                                 <div class="text-left shrink-0">
-                                    <p class="text-xs font-mono text-navy font-bold">{{ $activity->start_date?->format('d/m') ?? '--' }}</p>
+                                    <p class="text-xs   text-navy font-bold">{{ $activity->start_date?->format('d/m') ?? '--' }}</p>
                                     <p class="text-[10px] text-gray-400">{{ $activity->participants->count() }} مشارك</p>
                                 </div>
                             </div>

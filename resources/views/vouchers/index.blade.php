@@ -47,12 +47,12 @@
             <div
                 class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all group hover:border-navy/20">
                 <p class="text-[10px] font-bold text-gray-400 font-cairo mb-1 uppercase tracking-wider">إجمالي السندات</p>
-                <p class="text-3xl font-black text-navy font-mono">{{ $vouchers->total() }}</p>
+                <p class="text-3xl font-black text-navy  ">{{ $vouchers->total() }}</p>
             </div>
             <div
                 class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all group hover:border-gold/20">
                 <p class="text-[10px] font-bold text-gray-400 font-cairo mb-1 uppercase tracking-wider">المقبوضات</p>
-                <p class="text-3xl font-black text-navy font-mono">
+                <p class="text-3xl font-black text-navy  ">
                     {{ number_format($vouchers->where('type', 'receipt')->sum('amount'), 0) }} <span
                         class="text-xs font-cairo text-gray-400">ر.ي</span>
                 </p>
@@ -61,7 +61,7 @@
             <div
                 class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all group hover:border-red-100">
                 <p class="text-[10px] font-bold text-gray-400 font-cairo mb-1 uppercase tracking-wider">المصروفات</p>
-                <p class="text-3xl font-black text-red-600 font-mono">
+                <p class="text-3xl font-black text-red-600  ">
                     {{ number_format($vouchers->whereIn('type', ['payment', 'salary'])->sum('amount'), 0) }} <span
                         class="text-xs font-cairo text-gray-400">ر.ي</span>
                 </p>
@@ -98,7 +98,7 @@
                         @if ($vouchers->count() > 0)
                             @foreach ($vouchers as $voucher)
                             <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 font-mono text-sm">{{ $voucher->voucher_number }}</td>
+                                <td class="px-6 py-4   text-sm">{{ $voucher->voucher_number }}</td>
                                 <td class="px-6 py-4">
                                     @php
                                         $types = [

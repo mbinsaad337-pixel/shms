@@ -65,7 +65,7 @@
                                         <div class="bg-navy/5 text-navy px-4 py-2 rounded-2xl flex items-center gap-3 border border-navy/10 animate-fade-in">
                                             <div class="flex flex-col">
                                                 <span class="text-xs font-bold font-almarai" x-text="items.find(i => i.id == id)?.name"></span>
-                                                <span class="text-[10px] opacity-50 font-mono" x-text="items.find(i => i.id == id)?.num"></span>
+                                                <span class="text-[10px] opacity-50  " x-text="items.find(i => i.id == id)?.num"></span>
                                             </div>
                                             <button type="button" @click="removeStudent(id)" class="w-6 h-6 rounded-full bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
                                                 <i class="fas fa-times text-[10px]"></i>
@@ -103,7 +103,7 @@
                                                     class="w-full text-right px-6 py-4 rounded-2xl hover:bg-navy/5 flex items-center justify-between group transition-all">
                                                 <div class="flex flex-col">
                                                     <span class="font-bold text-navy font-almarai group-hover:text-navy" x-text="student.name"></span>
-                                                    <span class="text-[10px] text-gray-400 font-mono" x-text="student.num"></span>
+                                                    <span class="text-[10px] text-gray-400  " x-text="student.num"></span>
                                                 </div>
                                                 <div class="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-navy group-hover:text-white transition-all">
                                                     <i class="fas fa-plus text-xs"></i>

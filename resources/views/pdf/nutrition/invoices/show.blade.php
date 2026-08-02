@@ -10,7 +10,7 @@
                 <td class="col-right">
                     <div class="detail-row">
                         <div class="detail-label">رقم الفاتورة</div>
-                        <div class="detail-value font-mono text-navy font-bold">{{ $invoice->invoice_number }}</div>
+                        <div class="detail-value   text-navy font-bold">{{ $invoice->invoice_number }}</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">المورد</div>
@@ -21,7 +21,7 @@
                 <td class="col-left">
                     <div class="detail-row">
                         <div class="detail-label">تاريخ الفاتورة</div>
-                        <div class="detail-value font-mono">{{ $invoice->invoice_date instanceof \Carbon\Carbon ? $invoice->invoice_date->format('Y-m-d') : $invoice->invoice_date }}</div>
+                        <div class="detail-value  ">{{ $invoice->invoice_date instanceof \Carbon\Carbon ? $invoice->invoice_date->format('Y-m-d') : $invoice->invoice_date }}</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">الحالة</div>
@@ -60,9 +60,9 @@
         <tr>
             <td class="text-center">{{ $index + 1 }}</td>
             <td class="font-bold">{{ $item->item_name }}</td>
-            <td class="text-center font-mono">{{ $item->quantity }}</td>
-            <td class="text-center font-mono">{{ number_format($item->unit_price, 2) }}</td>
-            <td class="text-center font-mono font-bold text-navy">{{ number_format($item->total_price, 2) }}</td>
+            <td class="text-center  ">{{ $item->quantity }}</td>
+            <td class="text-center  ">{{ number_format($item->unit_price, 2) }}</td>
+            <td class="text-center   font-bold text-navy">{{ number_format($item->total_price, 2) }}</td>
         </tr>
         @endforeach
     </tbody>

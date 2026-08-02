@@ -19,7 +19,7 @@
             <td class="font-bold">{{ $commitment->student->name_ar ?? '---' }}</td>
             <td>{{ $commitment->student->center->name ?? '---' }}</td>
             <td>{{ $commitment->title ?? 'تعهد' }}</td>
-            <td class="text-center font-mono text-sm">{{ $commitment->date->format('Y/m/d') }}</td>
+            <td class="text-center   text-sm">{{ $commitment->date->format('Y/m/d') }}</td>
             <td class="text-center">
                 <span class="badge {{ $commitment->status == 'active' ? 'badge-success' : 'badge-secondary' }}">
                     {{ $commitment->status == 'active' ? 'نشط' : 'منتهي' }}

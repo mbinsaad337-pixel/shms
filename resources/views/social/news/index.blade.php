@@ -61,7 +61,7 @@
                             {{ $item->is_published ? 'منشور' : 'مسودة' }}
                         </span>
                     </div>
-                    <p class="text-xs text-gray-400 font-mono shrink-0">{{ $item->created_at->format('Y-m-d') }}</p>
+                    <p class="text-xs text-gray-400   shrink-0">{{ $item->created_at->format('Y-m-d') }}</p>
                 </div>
                 <h2 class="text-xl font-black text-navy font-cairo mb-2 leading-snug">{{ $item->title }}</h2>
                 <p class="text-gray-500 font-almarai text-sm line-clamp-2 flex-1">{{ strip_tags($item->body) }}</p>

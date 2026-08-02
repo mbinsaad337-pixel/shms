@@ -32,7 +32,7 @@
                         </div>
                         <div class="detail-row">
                             <div class="detail-label">رقم الهاتف</div>
-                            <div class="detail-value font-mono">{{ $center->phone ?: '-' }}</div>
+                            <div class="detail-value  ">{{ $center->phone ?: '-' }}</div>
                         </div>
                         <div class="detail-row">
                             <div class="detail-label">حالة المبنى</div>

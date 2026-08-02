@@ -70,7 +70,7 @@
                                 <div class="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center text-orange-500 font-bold text-xs">{{ mb_substr($p->student->name_ar ?? '?', 0, 1) }}</div>
                                 <div>
                                     <p class="font-bold text-navy font-almarai text-sm">{{ $p->student->name_ar ?? '---' }}</p>
-                                    <p class="text-[10px] text-gray-400 font-mono">{{ $p->student->student_number ?? '' }}</p>
+                                    <p class="text-[10px] text-gray-400  ">{{ $p->student->student_number ?? '' }}</p>
                                 </div>
                             </div>
                         </td>
@@ -89,7 +89,7 @@
                             @endif
                         </td>
                         <td class="px-5 py-4 text-center">
-                            <span class="text-xs font-mono text-gray-500">{{ $p->start_date ? \Carbon\Carbon::parse($p->start_date)->format('Y-m-d') : '---' }}</span>
+                            <span class="text-xs   text-gray-500">{{ $p->start_date ? \Carbon\Carbon::parse($p->start_date)->format('Y-m-d') : '---' }}</span>
                         </td>
                         <td class="px-5 py-4 text-center">
                             <span class="px-2.5 py-1 rounded-lg text-xs font-black {{ $p->is_active ? 'bg-orange-50 text-orange-600' : 'bg-gray-100 text-gray-500' }}">

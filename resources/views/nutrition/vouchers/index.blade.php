@@ -32,7 +32,7 @@
                     @if ($vouchers->count() > 0)
                         @foreach ($vouchers as $voucher)
                         <tr class="hover:bg-gray-50/50 transition-colors">
-                            <td class="px-5 py-4 font-mono font-bold text-gray-700">{{ $voucher->voucher_number }}</td>
+                            <td class="px-5 py-4   font-bold text-gray-700">{{ $voucher->voucher_number }}</td>
                             <td class="px-5 py-4 text-center">
                                 <span
                                     class="px-3 py-1.5 rounded-lg text-xs font-bold
@@ -47,12 +47,12 @@
                             </td>
                             <td class="px-5 py-4 text-gray-500 font-almarai text-sm truncate max-w-xs">
                                 {{ $voucher->description }}</td>
-                            <td class="px-5 py-4 text-center font-black font-mono text-lg
+                            <td class="px-5 py-4 text-center font-black   text-lg
                                 {{ $voucher->type === 'payment' ? 'text-red-600' : 'text-green-600' }}">
                                 {{ number_format($voucher->amount, 2) }} <span
                                     class="text-xs font-cairo font-normal text-gray-400">ر.ي</span>
                             </td>
-                            <td class="px-5 py-4 text-center font-mono text-gray-600 text-sm">
+                            <td class="px-5 py-4 text-center   text-gray-600 text-sm">
                                 {{ $voucher->voucher_date->format('Y-m-d') }}</td>
                             <td class="px-5 py-4 text-center">
                                 <span

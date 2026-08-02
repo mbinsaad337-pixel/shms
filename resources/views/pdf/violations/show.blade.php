@@ -77,13 +77,13 @@
             <td class="info-label">اسم الطالب</td>
             <td class="info-value">{{ $violation->student->name_ar ?? 'غير معروف' }}</td>
             <td class="info-label">الرقم الجامعي</td>
-            <td class="info-value font-mono">{{ $violation->student->university_id ?? '-' }}</td>
+            <td class="info-value  ">{{ $violation->student->university_id ?? '-' }}</td>
         </tr>
         <tr>
             <td class="info-label">المركز السكني</td>
             <td class="info-value">{{ $violation->center->name ?? '-' }}</td>
             <td class="info-label">تاريخ المخالفة</td>
-            <td class="info-value font-mono">{{ $violation->violation_date ? \Carbon\Carbon::parse($violation->violation_date)->format('Y-m-d') : '-' }}</td>
+            <td class="info-value  ">{{ $violation->violation_date ? \Carbon\Carbon::parse($violation->violation_date)->format('Y-m-d') : '-' }}</td>
         </tr>
         <tr>
             <td class="info-label">العقوبة المطبقة</td>

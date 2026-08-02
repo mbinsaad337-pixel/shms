@@ -19,7 +19,7 @@
             <td class="font-bold">{{ $violation->student->name_ar }}</td>
             <td>{{ $violation->center->name }}</td>
             <td class="text-danger">{{ $violation->type }}</td>
-            <td class="text-center font-mono text-sm">{{ $violation->created_at->format('Y/m/d') }}</td>
+            <td class="text-center   text-sm">{{ $violation->created_at->format('Y/m/d') }}</td>
             <td class="text-center">
                 <span class="badge badge-warning">{{ $violation->penalty->name ?? 'قيد المراجعة' }}</span>
             </td>

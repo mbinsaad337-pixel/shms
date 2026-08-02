@@ -42,13 +42,13 @@
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">التاريخ <span
                                 class="text-red-500">*</span></label>
                         <input type="date" name="voucher_date" value="{{ date('Y-m-d') }}" required
-                            class="w-full border border-gray-200 rounded-xl px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-yellow-400">
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3   text-sm focus:ring-2 focus:ring-yellow-400">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">المبلغ (ر.ي) <span
                                 class="text-red-500">*</span></label>
                         <input type="number" name="amount" step="0.01" min="0.01" required
-                            class="w-full border border-gray-200 rounded-xl px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-yellow-400"
+                            class="w-full border border-gray-200 rounded-xl px-4 py-3   text-sm focus:ring-2 focus:ring-yellow-400"
                             placeholder="0.00">
                     </div>
 

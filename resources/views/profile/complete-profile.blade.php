@@ -105,7 +105,7 @@
             <div class="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                 <div class="flex justify-between items-end mb-2">
                     <span class="text-sm font-black text-gray-700 font-cairo">نسبة الإنجاز</span>
-                    <span class="text-lg font-black text-primary font-mono" id="completionPercentage">0%</span>
+                    <span class="text-lg font-black text-primary  " id="completionPercentage">0%</span>
                 </div>
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
@@ -813,7 +813,7 @@
                                             @foreach ($existingWorkers as $i => $w)
                                                 <tr class="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
                                                     <td
-                                                        class="px-3 py-2 text-center text-gray-400 text-xs font-mono worker-num">
+                                                        class="px-3 py-2 text-center text-gray-400 text-xs   worker-num">
                                                         {{ $i + 1 }}</td>
                                                     <td class="px-2 py-2"><input type="text"
                                                             name="workers[{{ $i }}][name]"
@@ -1063,7 +1063,7 @@
             const row = document.createElement('tr');
             row.className = 'border-b border-gray-100 hover:bg-gray-50/50 transition-colors';
             row.innerHTML = `
-            <td class="px-3 py-2 text-center text-gray-400 text-xs font-mono worker-num"></td>
+            <td class="px-3 py-2 text-center text-gray-400 text-xs   worker-num"></td>
             <td class="px-2 py-2"><input type="text" name="workers[${workerIndex}][name]" placeholder="الاسم" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg font-almarai text-xs focus:ring-1 focus:ring-primary outline-none bg-gray-50/50"></td>
             <td class="px-2 py-2"><input type="text" name="workers[${workerIndex}][job]" placeholder="الوظيفة" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg font-almarai text-xs focus:ring-1 focus:ring-primary outline-none bg-gray-50/50"></td>
             <td class="px-2 py-2"><input type="text" name="workers[${workerIndex}][organization]" placeholder="المؤسسة" class="w-full px-2 py-1.5 border border-gray-200 rounded-lg font-almarai text-xs focus:ring-1 focus:ring-primary outline-none bg-gray-50/50"></td>

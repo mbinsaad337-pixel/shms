@@ -67,6 +67,7 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
 
     // Reports
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('reports/funds/view', [ReportController::class, 'fundsView'])->name('reports.funds.view');
     Route::get('reports/{type}', [ReportController::class, 'show'])->name('reports.show');
 
     // ── Complaints & Internal Notifications ──

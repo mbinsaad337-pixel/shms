@@ -19,11 +19,11 @@
                     <td class="col-right">
                         <div class="detail-row">
                             <div class="detail-label">الفترة</div>
-                            <div class="detail-value font-mono">{{ $settlement->month_name }} {{ $settlement->year }}</div>
+                            <div class="detail-value  ">{{ $settlement->month_name }} {{ $settlement->year }}</div>
                         </div>
                         <div class="detail-row">
                             <div class="detail-label">تاريخ إعداد التصفية</div>
-                            <div class="detail-value font-mono text-sm">{{ $settlement->created_at->format('Y-m-d') }}</div>
+                            <div class="detail-value   text-sm">{{ $settlement->created_at->format('Y-m-d') }}</div>
                         </div>
                         <div class="detail-row">
                             <div class="detail-label">أعدت بواسطة</div>
@@ -38,11 +38,11 @@
                         </div>
                         <div class="detail-row">
                             <div class="detail-label">تاريخ الاعتماد</div>
-                            <div class="detail-value font-mono text-sm">{{ $settlement->approved_at?->format('Y-m-d H:i') ?? 'لم تعتمد بعد' }}</div>
+                            <div class="detail-value   text-sm">{{ $settlement->approved_at?->format('Y-m-d H:i') ?? 'لم تعتمد بعد' }}</div>
                         </div>
                         <div class="detail-row">
                             <div class="detail-label">النتيجة النهائية</div>
-                            <div class="detail-value font-mono {{ $settlement->net_result >= 0 ? 'text-success' : 'text-danger' }}">{{ number_format(abs($settlement->net_result), 2) }} ر.ي ({{ $settlement->getResultTypeLabel() }})</div>
+                            <div class="detail-value   {{ $settlement->net_result >= 0 ? 'text-success' : 'text-danger' }}">{{ number_format(abs($settlement->net_result), 2) }} ر.ي ({{ $settlement->getResultTypeLabel() }})</div>
                         </div>
                     </td>
                 </tr>
@@ -83,11 +83,11 @@
             @forelse($receipts as $index => $receipt)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td class="font-bold font-mono">{{ $receipt->voucher_number }}</td>
+                    <td class="font-bold  ">{{ $receipt->voucher_number }}</td>
                     <td>{{ $receipt->student?->name_ar ?? '-' }}</td>
-                    <td class="text-center font-mono">{{ $receipt->voucher_date->format('Y-m-d') }}</td>
+                    <td class="text-center  ">{{ $receipt->voucher_date->format('Y-m-d') }}</td>
                     <td>{{ $receipt->description ?? '-' }}</td>
-                    <td class="text-center font-mono text-success">{{ number_format($receipt->amount, 2) }}</td>
+                    <td class="text-center   text-success">{{ number_format($receipt->amount, 2) }}</td>
                 </tr>
             @empty
                 <tr><td colspan="6" class="text-center text-muted">لا توجد سجلات مقبوضات لهذه الفترة.</td></tr>
@@ -96,7 +96,7 @@
         <tfoot>
             <tr>
                 <th colspan="5" class="text-left">إجمالي المقبوضات:</th>
-                <th class="text-center font-mono text-success">{{ number_format($receipts->sum('amount'), 2) }}</th>
+                <th class="text-center   text-success">{{ number_format($receipts->sum('amount'), 2) }}</th>
             </tr>
         </tfoot>
     </table>
@@ -117,11 +117,11 @@
             @forelse($invoices as $index => $invoice)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td class="font-bold font-mono">{{ $invoice->invoice_number }}</td>
+                    <td class="font-bold  ">{{ $invoice->invoice_number }}</td>
                     <td>{{ $invoice->supplier?->name ?? '-' }}</td>
                     <td class="text-center">{{ $invoice->payment_type_label }}</td>
-                    <td class="text-center font-mono">{{ $invoice->invoice_date->format('Y-m-d') }}</td>
-                    <td class="text-center font-mono text-danger">{{ number_format($invoice->total_amount, 2) }}</td>
+                    <td class="text-center  ">{{ $invoice->invoice_date->format('Y-m-d') }}</td>
+                    <td class="text-center   text-danger">{{ number_format($invoice->total_amount, 2) }}</td>
                 </tr>
             @empty
                 <tr><td colspan="6" class="text-center text-muted">لا توجد فواتير شراء لهذه الفترة.</td></tr>
@@ -145,11 +145,11 @@
             @forelse($payments as $index => $payment)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td class="font-bold font-mono">{{ $payment->voucher_number }}</td>
+                    <td class="font-bold  ">{{ $payment->voucher_number }}</td>
                     <td>{{ $payment->supplier?->name ?? '-' }}</td>
-                    <td class="text-center font-mono">{{ $payment->voucher_date->format('Y-m-d') }}</td>
+                    <td class="text-center  ">{{ $payment->voucher_date->format('Y-m-d') }}</td>
                     <td>{{ $payment->description ?? '-' }}</td>
-                    <td class="text-center font-mono text-danger">{{ number_format($payment->amount, 2) }}</td>
+                    <td class="text-center   text-danger">{{ number_format($payment->amount, 2) }}</td>
                 </tr>
             @empty
                 <tr><td colspan="6" class="text-center text-muted">لا توجد سندات صرف لهذه الفترة.</td></tr>
@@ -158,7 +158,7 @@
         <tfoot>
             <tr>
                 <th colspan="5" class="text-left">إجمالي المصروفات التشغيلية:</th>
-                <th class="text-center font-mono text-danger">{{ number_format($payments->sum('amount'), 2) }}</th>
+                <th class="text-center   text-danger">{{ number_format($payments->sum('amount'), 2) }}</th>
             </tr>
         </tfoot>
     </table>

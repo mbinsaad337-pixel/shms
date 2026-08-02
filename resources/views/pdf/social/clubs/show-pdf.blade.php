@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\DB;
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">إجمالي الأعضاء</div>
-                        <div class="detail-value font-mono">{{ $club->members->count() }} عضو</div>
+                        <div class="detail-value  ">{{ $club->members->count() }} عضو</div>
                     </div>
                 </td>
             </tr>
@@ -64,7 +64,7 @@ use Illuminate\Support\Facades\DB;
                 @endphp
                 <span class="badge {{ $role[1] }}">{{ $role[0] }}</span>
             </td>
-            <td class="text-center font-mono text-sm">{{ $member->joined_at instanceof \Carbon\Carbon ? $member->joined_at->format('Y/m/d') : $member->joined_at }}</td>
+            <td class="text-center   text-sm">{{ $member->joined_at instanceof \Carbon\Carbon ? $member->joined_at->format('Y/m/d') : $member->joined_at }}</td>
         </tr>
         @endforeach
         

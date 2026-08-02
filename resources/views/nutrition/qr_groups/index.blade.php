@@ -38,7 +38,7 @@
                     </div>
                     <div class="p-5">
                         <p class="text-xs text-gray-400 font-cairo">تاريخ الصلاحية: <span
-                                class="font-mono font-bold text-gray-700">{{ $group->valid_date->format('Y-m-d') }}</span></p>
+                                class="  font-bold text-gray-700">{{ $group->valid_date->format('Y-m-d') }}</span></p>
                         <div class="mt-3 flex flex-wrap gap-2">
                             @foreach($group->members->take(6) as $member)
                                 <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-lg font-cairo">

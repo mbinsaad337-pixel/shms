@@ -41,34 +41,34 @@
                                 class="text-red-500">*</span></label>
                         <input type="date" name="start_date" id="startDate" required value="{{ $subscription->start_date->format('Y-m-d') }}"
                             onchange="calcDays()"
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-2 focus:ring-navy">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-navy">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">إلى تاريخ <span
                                 class="text-red-500">*</span></label>
                         <input type="date" name="end_date" id="endDate" required value="{{ $subscription->end_date->format('Y-m-d') }}"
                             onchange="calcDays()"
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-2 focus:ring-navy">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-navy">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">عدد الأيام <span
                                 class="text-red-500">*</span></label>
                         <input type="number" name="days_count" id="daysCount" required min="1" value="{{ $subscription->days_count }}"
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-2 focus:ring-navy">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-navy">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5" id="rateLabel">قيمة الاشتراك اليومي (ر.ي)</label>
                         <input type="number" name="daily_rate" id="dailyRate" step="0.01" min="0" required
                             value="{{ $subscription->daily_rate }}"
                             onchange="calcTotal()" oninput="calcTotal()"
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-2 focus:ring-navy"
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-navy"
                             placeholder="0.00">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5 font-red-hue">آخر يوم للدفع (من الميزانية)</label>
                         <input type="date" name="last_payment_date" id="lastPaymentDate" readonly
                             value="{{ $subscription->last_payment_date ? $subscription->last_payment_date->format('Y-m-d') : '' }}"
-                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 font-mono text-sm focus:ring-0 bg-gray-50 text-red-600 cursor-not-allowed">
+                            class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-0 bg-gray-50 text-red-600 cursor-not-allowed">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">حالة الاشتراك <span

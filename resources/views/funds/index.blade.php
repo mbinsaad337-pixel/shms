@@ -104,7 +104,7 @@
                     <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">الرصيد الحالي</label>
                     <div class="relative">
                         <input type="number" name="balance" step="0.01" required placeholder="0.00"
-                            class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-center font-bold text-xl text-primary font-mono transition-all">
+                            class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-center font-bold text-xl text-primary   transition-all">
                         <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 font-almarai text-xs">ر.ي</span>
                     </div>
                 </div>
@@ -147,7 +147,7 @@
                         فقط)</label>
                     <div class="relative">
                         <input type="number" name="balance" id="edit_balance" step="0.01" required
-                            class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-center font-bold text-xl text-primary font-mono transition-all">
+                            class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-center font-bold text-xl text-primary   transition-all">
                         <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 font-almarai text-xs">ر.ي</span>
                     </div>
                 </div>
