@@ -14,6 +14,7 @@ class Center extends Model
         'logo',
         'is_active',
         'has_rent',
+        'leave_cutoff_time',
     ];
 
     public function getLogoUrlAttribute()

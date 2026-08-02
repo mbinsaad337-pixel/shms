@@ -9,9 +9,11 @@ class Commitment extends Model
     protected $fillable = [
         'student_id',
         'violation_id',
+        'title',
         'text',
         'date',
         'requires_guardian_signature',
+        'image_path',
         'status',
     ];
 

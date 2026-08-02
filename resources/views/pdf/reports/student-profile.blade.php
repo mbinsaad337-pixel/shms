@@ -798,28 +798,70 @@
             </table>
         @endif
     </div>
+    <div class="card-academic">
+        <table class="section-header-table">
+            <tr>
+                <td class="section-indicator"></td>
+                <td class="section-title-text">سابعاً:الاحصائيات العامة</td>
+            </tr>
+        </table>
 
+        <!-- شريط الحالة الأكاديمية السريع -->
+        <div style="border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 8px; background-color: #f1f5f9; margin-bottom: 10px;">
+            <table style="width: 100%; border-collapse: collapse; text-align: center;">
+                <tr>
+                    <td style="border-left: 1px solid #cbd5e1; width: 20%;">
+                        <div style="font-size: 7.5px; color: #64748b; margin-bottom: 1px;">عدد المخالفات</div>
+                        <div style="font-weight: 800; color: #002c4f; font-size: 10px;">{{ $student->violations()->count() }}</div>
+                    </td>
+                    <td style="border-left: 1px solid #cbd5e1; width: 20%;">
+                        <div style="font-size: 7.5px; color: #64748b; margin-bottom: 1px;">عدد العقوبات</div>
+                        <div style="font-weight: 800; color: #002c4f; font-size: 10px;">{{ $student->penalties()->count() }}</div>
+                    </td>
+                    <td style="border-left: 1px solid #cbd5e1; width: 20%;">
+                        <div style="font-size: 7.5px; color: #64748b; margin-bottom: 1px;">عدد الاستئذانات</div>
+                        <div style="font-weight: 800; color: #002c4f; font-size: 10px;">{{ $student->leaves()->count() }}</div>
+                    </td>
+                    <td style="border-left: 1px solid #cbd5e1; width: 20%;">
+                        <div style="font-size: 7.5px; color: #64748b; margin-bottom: 1px;">عدد الغيابات</div>
+                        <div style="font-weight: 800; color: #002c4f; font-size: 10px;">{{ $student->absences()->count() }}</div>
+                    </td>
+                    <td style="width: 20%;">
+                        <div style="font-size: 7.5px; color: #64748b; margin-bottom: 1px;">عدد التعهدات</div>
+                        <div style="font-weight: 800; color: #002c4f; font-size: 10px;">{{ $student->commitments()->count() }}</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
     {{-- ===================== التوقيعات والاعتماد ===================== --}}
     <div class="signature-section">
         <table class="signature-table">
             <tr>
                 <td>
-                    <div class="signature-title">أعده وصاغه / مسؤول مدخلات البيانات</div>
+                    <div class="signature-title"> مشرف الطلاب</div>
                     <div class="signature-line"></div>
-                    <div class="signature-subtitle">الاسم والتوقيع: {{ $exportUser ?? 'مسؤول النظام المعتمد' }}</div>
+                    <div class="sign-name">
+                @php
+                      $center_manager = \App\Models\User::role('housing-manager')->where('center_id',$student->center_id)->get();
+                @endphp
+                {{ $center_manager->count() ===1 ? $center_manager->first()->name : '' }}
+            </div>
                 </td>
+                
                 <td>
-                    <div class="signature-title">راجعه وصادقه / المسؤول الإداري المباشر</div>
+                    <div class="signature-title">مدير المركز</div>
                     <div class="signature-line"></div>
-                    <div class="signature-subtitle">التوقيع، والتاريخ، وختم القسم المعتمد</div>
-                </td>
-                <td>
-                    <div class="signature-title">اعتمد من قِبل / إدارة المركز الطلابي</div>
-                    <div class="signature-line"></div>
-                    <div class="signature-subtitle">الاعتماد النهائي والمصادقة الأكاديمية</div>
+                    <div class="sign-name">
+                @php
+                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$student->center_id)->get();
+                @endphp
+                {{ $center_manager->count() ===1 ? $center_manager->first()->name : '' }}
+            </div>
                 </td>
             </tr>
         </table>
+        <br>
 
         <!-- الفوتر والتذييل الزمني للطباعة -->
         <table style="width: 100%; margin-top: 15px; border-collapse: collapse;">
@@ -833,4 +875,5 @@
             </tr>
         </table>
     </div>
+    
 @endsection

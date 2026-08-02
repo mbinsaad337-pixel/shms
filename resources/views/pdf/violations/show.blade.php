@@ -114,23 +114,35 @@
         {{ $violation->description ?: 'لا يوجد وصف إضافي مسجل لهذه المخالفة.' }}
     </div>
 
-    <table class="signatures-table" style="margin-top: 60px;">
-        <tr>
-            <td>
-                <div class="sign-line"></div>
-                <div class="sign-title">توقيع الطالب المخالف (للإقرار)</div>
-            </td>
-            <td>
-                <div class="sign-line"></div>
-                <div class="sign-title">سُجلت بواسطة / مسؤول الانضباط</div>
-                <div class="sign-name">{{ $violation->recordedBy->name ?? '-' }}</div>
-            </td>
-            <td>
-                <div class="sign-line"></div>
-                <div class="sign-title">اعتماد / مدير المركز</div>
-            </td>
-        </tr>
-    </table>
+    <table class="signatures-table">
+    <tr>
+        <td>
+            <div class="sign-line"></div>
+            <div class="sign-title">مشرف الطلاب</div>
+            <div class="sign-name">
+                 @php
+                      $housing_manager = \App\Models\User::role('housing-manager')->where('center_id',$violation->student->center_id)->get();
+                @endphp
+                {{ $housing_manager->count() ===1 ? $housing_manager->first()->name : '' }}</div>
+        </td>
+        <td>
+            <div class="sign-line"></div>
+            <div class="sign-title">توقيع الطالب</div>
+               
+                 
+        </td>
+        <td>
+            <div class="sign-line"></div>
+            <div class="sign-title">مدير المركز</div>
+            <div class="sign-name">
+                @php
+                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$violation->student->center_id)->get();
+                @endphp
+                {{ $center_manager->count() ===1 ? $center_manager->first()->name : '' }}
+            </div>
+        </td>
+    </tr>
+</table>
 </div>
 
 @endsection

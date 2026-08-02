@@ -409,9 +409,14 @@ class StudentController extends Controller
 
         $students = $query->with(['center'])->latest()->get();
 
+        $isGraduate = $request->boolean('is_graduate');
+        $reportTitle = $isGraduate ? 'تقرير قائمة الطلاب الخريجين' : 'تقرير قائمة الطلاب';
+        $fileName = ($isGraduate ? 'alumni_list_' : 'students_list_') . now()->format('Y-m-d') . '.pdf';
+
         return $pdfService->stream('pdf.reports.students', [
             'data' => $students,
-        ], 'تقرير قائمة الطلاب', 'students_list_' . now()->format('Y-m-d') . '.pdf', 'landscape', $appliedFilters);
+            'isGraduate' => $isGraduate,
+        ], $reportTitle, $fileName, 'landscape', $appliedFilters);
     }
 
     public function markAsGraduate(Student $student)
@@ -425,7 +430,8 @@ class StudentController extends Controller
             // 1. Mark as graduate
             $student->update([
                 'is_graduate' => true,
-                'status' => 'graduated'
+                'status' => 'graduated',
+                'graduation_year' => now()->year
             ]);
 
             $notices = [];
@@ -462,6 +468,7 @@ class StudentController extends Controller
                 $notices[] = "تنبيه مالي: للطالب مبلغ فائض (دائن) قدره (" . abs($totalRemaining) . ").";
             } else {
                 $notices[] = "المراجعة المالية: ذمة الطالب المالية في وحدة التغذية مسواة.";
+                
             }
 
             $message = "تم نقل الطالب إلى قائمة الخريجين بنجاح. \n" . implode("\n", $notices);
@@ -496,7 +503,7 @@ class StudentController extends Controller
         }
 
         // Generic Filters
-        $filters = ['major', 'university', 'college', 'academic_level', 'nationality'];
+        $filters = ['major', 'university', 'college', 'academic_level', 'nationality', 'graduation_year'];
         foreach ($filters as $filter) {
             if ($request->filled($filter)) {
                 $query->where($filter, $request->input($filter));

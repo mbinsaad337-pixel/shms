@@ -7,21 +7,23 @@
             <th style="width: 5%;">#</th>
             <th>الطالب</th>
             <th>المركز</th>
-            <th>نوع المخالفة</th>
+            <th>العنوان</th>
             <th class="text-center">التاريخ</th>
-            <th class="text-center">إجراء العقوبة</th>
+            <th class="text-center">الحالة</th>
         </tr>
     </thead>
     <tbody>
-        @foreach($data as $index => $violation)
+        @foreach($data as $index => $commitment)
         <tr>
             <td class="text-center">{{ $index + 1 }}</td>
-            <td class="font-bold">{{ $violation->student->name_ar }}</td>
-            <td>{{ $violation->center->name }}</td>
-            <td class="text-danger">{{ $violation->type }}</td>
-            <td class="text-center font-mono text-sm">{{ $violation->created_at->format('Y/m/d') }}</td>
+            <td class="font-bold">{{ $commitment->student->name_ar ?? '---' }}</td>
+            <td>{{ $commitment->student->center->name ?? '---' }}</td>
+            <td>{{ $commitment->title ?? 'تعهد' }}</td>
+            <td class="text-center font-mono text-sm">{{ $commitment->date->format('Y/m/d') }}</td>
             <td class="text-center">
-                <span class="badge badge-warning">{{ $violation->penalty->name ?? 'قيد المراجعة' }}</span>
+                <span class="badge {{ $commitment->status == 'active' ? 'badge-success' : 'badge-secondary' }}">
+                    {{ $commitment->status == 'active' ? 'نشط' : 'منتهي' }}
+                </span>
             </td>
         </tr>
         @endforeach
@@ -35,7 +37,7 @@
             <div class="sign-title">مشرف الطلاب</div>
             <div class="sign-name">
                  @php
-                      $housing_manager = \App\Models\User::role('housing-manager')->where('center_id',$violation->student->center_id)->get();
+                      $housing_manager = \App\Models\User::role('housing-manager')->where('center_id',$commitment->student->center_id)->get();
                 @endphp
                 {{ $housing_manager->count() ===1 ? $housing_manager->first()->name : '' }}</div>
         </td>
@@ -44,7 +46,7 @@
             <div class="sign-title">مدير المركز</div>
             <div class="sign-name">
                 @php
-                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$violation->student->center_id)->get();
+                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$commitment->student->center_id)->get();
                 @endphp
                 {{ $center_manager->count() ===1 ? $center_manager->first()->name : '' }}
             </div>

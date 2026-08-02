@@ -102,6 +102,11 @@ class Student extends Model
         return $this->hasMany(Penalty::class);
     }
 
+    public function commitments()
+    {
+        return $this->hasMany(Commitment::class);
+    }
+
     public function mealSubscription()
     {
         return $this->hasOne(MealSubscription::class);

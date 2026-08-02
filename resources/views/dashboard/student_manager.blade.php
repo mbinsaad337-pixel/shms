@@ -272,28 +272,27 @@
                                 id="adminChevron"></i>
                         </button>
                         <div id="adminMenu" class="absolute right-0 left-0 top-full mt-2 hidden z-50 animate-fade-in-down">
-                            <div
-                                class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden font-cairo ring-1 ring-black ring-opacity-5">
-                                <button onclick="openViolationModal()"
-                                    class="w-full text-right px-6 py-4 hover:bg-red-50 text-gray-700 font-bold border-b border-gray-50 flex items-center gap-3 transition-colors">
-                                    <i class="fas fa-exclamation-triangle text-red-500 w-5"></i> تسجيل مخالفة
-                                </button>
-                                <button onclick="openCommitmentModal()"
-                                    class="w-full text-right px-6 py-4 hover:bg-orange-50 text-gray-700 font-bold border-b border-gray-50 flex items-center gap-3 transition-colors">
-                                    <i class="fas fa-file-contract text-orange-500 w-5"></i> تسجيل تعهد
-                                </button>
-                                <button onclick="openPenaltyModal()"
-                                    class="w-full text-right px-6 py-4 hover:bg-red-50 text-gray-700 font-bold border-b border-gray-50 flex items-center gap-3 transition-colors">
-                                    <i class="fas fa-ban text-red-700 w-5"></i> تطبيق عقوبة
-                                </button>
-                                <button onclick="openAbsenceModal()"
-                                    class="w-full text-right px-6 py-4 hover:bg-blue-50 text-gray-700 font-bold border-b border-gray-50 flex items-center gap-3 transition-colors">
-                                    <i class="fas fa-calendar-times text-blue-600 w-5"></i> تسجيل غياب
-                                </button>
-                                <button onclick="openLeaveModal()"
-                                    class="w-full text-right px-6 py-4 hover:bg-blue-50 text-gray-700 font-bold flex items-center gap-3 transition-colors">
-                                    <i class="fas fa-plane-departure text-indigo-600 w-5"></i> تسجيل استئذان
-                                </button>
+                            <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden font-cairo ring-1 ring-black ring-opacity-5">
+                                <a href="{{ route('administrative.index', ['tab' => 'violations']) }}"
+                                    class="block w-full text-right px-6 py-4 hover:bg-red-50 text-gray-700 font-bold border-b border-gray-50 transition-colors">
+                                    <i class="fas fa-exclamation-triangle text-red-500 w-5 inline-block"></i> تسجيل مخالفة
+                                </a>
+                                <a href="{{ route('administrative.index', ['tab' => 'commitments']) }}"
+                                    class="block w-full text-right px-6 py-4 hover:bg-orange-50 text-gray-700 font-bold border-b border-gray-50 transition-colors">
+                                    <i class="fas fa-file-contract text-orange-500 w-5 inline-block"></i> تسجيل تعهد
+                                </a>
+                                <a href="{{ route('administrative.index', ['tab' => 'penalties']) }}"
+                                    class="block w-full text-right px-6 py-4 hover:bg-red-50 text-gray-700 font-bold border-b border-gray-50 transition-colors">
+                                    <i class="fas fa-ban text-red-700 w-5 inline-block"></i> تطبيق عقوبة
+                                </a>
+                                <a href="{{ route('administrative.index', ['tab' => 'absences']) }}"
+                                    class="block w-full text-right px-6 py-4 hover:bg-blue-50 text-gray-700 font-bold border-b border-gray-50 transition-colors">
+                                    <i class="fas fa-calendar-times text-blue-600 w-5 inline-block"></i> تسجيل غياب
+                                </a>
+                                <a href="{{ route('administrative.index', ['tab' => 'leaves']) }}"
+                                    class="block w-full text-right px-6 py-4 hover:bg-blue-50 text-gray-700 font-bold transition-colors">
+                                    <i class="fas fa-plane-departure text-indigo-600 w-5 inline-block"></i> تسجيل استئذان
+                                </a>
                             </div>
                         </div>
                     </div>

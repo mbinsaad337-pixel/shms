@@ -78,15 +78,19 @@
                         <i class="fas fa-award h-5 w-5 ml-3"></i>
                         إنجازات الطلاب
                     </a>
-                    <a href="{{ route('violations.index') }}"
-                        class="flex items-center px-4 py-3 text-sm font-medium rounded-2xl {{ request()->routeIs('violations.*') ? 'bg-white/10 text-gold font-bold shadow-sm' : 'text-gray-300 hover:bg-white/5' }} transition-all">
-                        <i class="fas fa-gavel h-5 w-5 ml-3 text-red-400/60"></i>
-                        سجل المخالفات
-                    </a>
-                    <a href="{{ route('penalties.index') }}"
-                        class="flex items-center px-4 py-3 text-sm font-medium rounded-2xl {{ request()->routeIs('penalties.*') ? 'bg-white/10 text-gold font-bold shadow-sm' : 'text-gray-300 hover:bg-white/5' }} transition-all">
-                        <i class="fas fa-calendar-minus h-5 w-5 ml-3 text-orange-400/60"></i>
-                        سجل العقوبات
+                    {{-- Unified Administrative Actions Hub --}}
+                    <a href="{{ route('administrative.index') }}"
+                        class="flex items-center px-4 py-3 text-sm font-medium rounded-2xl {{ request()->routeIs('administrative.*') || request()->routeIs('violations.*') || request()->routeIs('penalties.*') || request()->routeIs('commitments.*') || request()->routeIs('absences.*') || request()->routeIs('leaves.*') ? 'bg-white/10 text-gold font-bold shadow-sm' : 'text-gray-300 hover:bg-white/5' }} transition-all">
+                        <i class="fas fa-clipboard-list h-5 w-5 ml-3 text-amber-400/70"></i>
+                        <span class="flex-1">الإجراءات الإدارية</span>
+                        @php
+                            $pendingLeaves = \App\Models\Leave::whereHas('student', fn($q) => $q->when(auth()->user()->center_id, fn($sq) => $sq->where('center_id', auth()->user()->center_id)))->where('status', 'pending')->count();
+                        @endphp
+                        @if($pendingLeaves > 0)
+                        <span class="bg-amber-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                            {{ $pendingLeaves > 9 ? '9+' : $pendingLeaves }}
+                        </span>
+                        @endif
                     </a>
                 @endif
             @endcan
@@ -328,6 +332,19 @@
                         class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('student.quran-circles.index') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5 transition' }}">
                         <i class="fas fa-quran h-5 w-5 ml-3"></i>
                         حلقاتي القرآنية
+                    </a>
+                    <a href="{{ route('student.leave-requests.index') }}"
+                        class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('student.leave-requests.*') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5 transition' }}">
+                        <i class="fas fa-door-open h-5 w-5 ml-3 text-blue-400/70"></i>
+                        <span class="flex-1">طلبات الاستئذان</span>
+                        @php
+                            $myPendingLeaves = auth()->user()->student
+                                ? \App\Models\Leave::where('student_id', auth()->user()->student->id)->where('status', 'pending')->count()
+                                : 0;
+                        @endphp
+                        @if($myPendingLeaves > 0)
+                        <span class="bg-amber-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full">{{ $myPendingLeaves }}</span>
+                        @endif
                     </a>
                     <a href="{{ route('student-grades.index') }}"
                         class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('student-grades.*') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5 transition' }}">
