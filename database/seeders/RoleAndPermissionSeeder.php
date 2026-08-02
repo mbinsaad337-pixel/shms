@@ -68,6 +68,7 @@ class RoleAndPermissionSeeder extends Seeder
             'register-activities',
             'manage-news',
             'publish-news',
+            'approve-news',
             'delete-news',
 
             // Nutrition (Global & Basic)
@@ -230,6 +231,15 @@ class RoleAndPermissionSeeder extends Seeder
             'register-activities',
             'manage-news',
             'publish-news',
+            'delete-news',
+        ]);
+
+        // مسؤول الإعلام: مراجعة واعتماد الأخبار والإعلانات من المراكز
+        $mediaOfficer = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'media-officer', 'guard_name' => 'web']);
+        $mediaOfficer->syncPermissions([
+            'manage-news',
+            'publish-news',
+            'approve-news',
             'delete-news',
         ]);
 

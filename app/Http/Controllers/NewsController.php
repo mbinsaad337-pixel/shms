@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -10,15 +11,47 @@ class NewsController extends Controller
 {
     public function index()
     {
-        $centerId = auth()->user()->center_id;
-        $query = News::where('center_id', $centerId);
+        $user = auth()->user();
+        $query = News::with(['center', 'creator']);
 
-        if (!auth()->user()->can('manage-news')) {
-            $query->where('is_published', true);
+        if (!$user->hasAnyRole(['super-admin', 'media-officer', 'executive-manager'])) {
+            // Center users see their center's news
+            $query->where('center_id', $user->center_id);
+            if (!$user->can('manage-news')) {
+                $query->where('is_published', true);
+            }
         }
 
         $news = $query->latest()->paginate(12);
         return view('social.news.index', compact('news'));
+    }
+
+    public function pendingIndex()
+    {
+        // Media Officer Dashboard / Pending News List across all centers
+        if (!auth()->user()->hasRole(['super-admin', 'media-officer'])) {
+            abort(403, 'غير مصرح لك بالوصول للوحة اعتمادات الإعلام');
+        }
+
+        $query = News::query();
+        if (\Illuminate\Support\Facades\Schema::hasColumn('news', 'status')) {
+            $query->where('status', 'pending')
+                ->orWhere(function ($q) {
+                    $q->where('is_published', false)->where('status', '!=', 'rejected');
+                });
+            $approvedCount = News::where('status', 'approved')->orWhere('is_published', true)->count();
+            $rejectedCount = News::where('status', 'rejected')->count();
+        } else {
+            $query->where('is_published', false);
+            $approvedCount = News::where('is_published', true)->count();
+            $rejectedCount = 0;
+        }
+
+        $pendingNews = $query->with(['center', 'creator'])
+            ->latest()
+            ->paginate(12);
+
+        return view('social.news.pending', compact('pendingNews', 'approvedCount', 'rejectedCount'));
     }
 
     public function create()
@@ -35,7 +68,7 @@ class NewsController extends Controller
             'cover_image' => 'nullable|image|max:4096',
             'gallery.*' => 'nullable|image|max:4096',
             'video_url' => 'nullable|url',
-            'video_file' => 'nullable|mimes:mp4,mov,ogg,qt|max:20480', // 20MB max
+            'video_file' => 'nullable|mimes:mp4,mov,ogg,qt|max:20480',
             'is_published' => 'nullable|boolean',
         ]);
 
@@ -56,11 +89,16 @@ class NewsController extends Controller
             }
         }
 
-        $isPublished = $request->boolean('is_published');
+        $user = auth()->user();
+        $canDirectPublish = $user->hasAnyRole(['super-admin', 'media-officer']);
 
-        News::create([
-            'center_id' => auth()->user()->center_id,
-            'created_by' => auth()->id(),
+        $isPublishedRequest = $request->boolean('is_published');
+        $isPublished = $canDirectPublish ? $isPublishedRequest : false;
+        $status = $canDirectPublish && $isPublishedRequest ? 'approved' : 'pending';
+
+        $news = News::create([
+            'center_id' => $user->center_id,
+            'created_by' => $user->id,
             'title' => $validated['title'],
             'body' => $validated['body'],
             'category' => $validated['category'],
@@ -68,9 +106,15 @@ class NewsController extends Controller
             'video_path' => $videoPath,
             'cover_image' => $coverPath,
             'gallery' => count($galleryPaths) ? $galleryPaths : null,
+            'status' => $status,
             'is_published' => $isPublished,
             'published_at' => $isPublished ? now() : null,
         ]);
+
+        if ($status === 'pending') {
+            $this->notifyMediaOfficer($news);
+            return redirect()->route('news.index')->with('success', 'تم تقديم الإعلان بنجاح وهو الآن في قائمة الانتظار للموافقة عليه من قبل مسؤول الإعلام.');
+        }
 
         return redirect()->route('news.index')->with('success', 'تم نشر الخبر بنجاح.');
     }
@@ -118,15 +162,64 @@ class NewsController extends Controller
             $validated['gallery'] = $galleryPaths;
         }
 
-        $isPublished = $request->boolean('is_published');
-        $validated['is_published'] = $isPublished;
-        if ($isPublished && !$news->published_at) {
-            $validated['published_at'] = now();
+        $user = auth()->user();
+        if (!$user->hasAnyRole(['super-admin', 'media-officer'])) {
+            // Re-submit for pending approval if modified by center manager
+            $validated['status'] = 'pending';
+            $validated['is_published'] = false;
+            $validated['rejection_reason'] = null;
+        } else {
+            $isPublished = $request->boolean('is_published');
+            $validated['is_published'] = $isPublished;
+            if ($isPublished) {
+                $validated['status'] = 'approved';
+                if (!$news->published_at) {
+                    $validated['published_at'] = now();
+                }
+            }
         }
 
         $news->update($validated);
 
+        if ($news->status === 'pending') {
+            $this->notifyMediaOfficer($news);
+            return redirect()->route('news.show', $news)->with('success', 'تم تحديث الإعلان وإرساله لقائمة الانتظار لمراجعة مسؤول الإعلام.');
+        }
+
         return redirect()->route('news.show', $news)->with('success', 'تم تحديث الخبر.');
+    }
+
+    public function approve(News $news)
+    {
+        if (!auth()->user()->hasRole(['super-admin', 'media-officer'])) {
+            abort(403);
+        }
+
+        $news->update([
+            'status' => 'approved',
+            'is_published' => true,
+            'published_at' => now(),
+            'rejection_reason' => null,
+        ]);
+
+        return back()->with('success', 'تم اعتماد ونشر الإعلان/الخبر بنجاح.');
+    }
+
+    public function reject(Request $request, News $news)
+    {
+        if (!auth()->user()->hasRole(['super-admin', 'media-officer'])) {
+            abort(403);
+        }
+
+        $request->validate(['reason' => 'nullable|string|max:500']);
+
+        $news->update([
+            'status' => 'rejected',
+            'is_published' => false,
+            'rejection_reason' => $request->input('reason'),
+        ]);
+
+        return back()->with('success', 'تم رفض نشر الإعلان.');
     }
 
     public function destroy(News $news)
@@ -144,20 +237,20 @@ class NewsController extends Controller
 
     public function togglePublish(News $news)
     {
+        $newPublishState = !$news->is_published;
         $news->update([
-            'is_published' => !$news->is_published,
-            'published_at' => !$news->is_published ? now() : $news->published_at,
+            'is_published' => $newPublishState,
+            'status' => $newPublishState ? 'approved' : 'pending',
+            'published_at' => $newPublishState ? now() : $news->published_at,
         ]);
-        return back()->with('success', $news->is_published ? 'تم نشر الخبر.' : 'تم إلغاء نشر الخبر.');
+        return back()->with('success', $news->is_published ? 'تم نشر الخبر.' : 'تم إلغاء نشر الخبر وتوجيهه للانتظار.');
     }
 
     public function publicShow(News $news)
     {
-        // Only published news accessible publicly
         if (!$news->is_published) {
             abort(404);
         }
-        // Related news from same center (excluding current)
         $related = News::where('center_id', $news->center_id)
             ->where('id', '!=', $news->id)
             ->where('is_published', true)
@@ -168,7 +261,6 @@ class NewsController extends Controller
         return view('social.news.public_show', compact('news', 'related'));
     }
 
-    // Public feed for login page (latest published news from all centers)
     public function publicFeed()
     {
         $news = News::where('is_published', true)
@@ -179,6 +271,7 @@ class NewsController extends Controller
 
         return response()->json($news);
     }
+
     public function toggleLike(News $news)
     {
         $like = \App\Models\NewsLike::where('news_id', $news->id)
@@ -219,5 +312,34 @@ class NewsController extends Controller
 
         $comment->delete();
         return back()->with('success', 'تم حذف التعليق.');
+    }
+
+    private function notifyMediaOfficer(News $news)
+    {
+        $centerName = auth()->user()->center ? auth()->user()->center->name : 'المركز';
+
+        // Auto-ensure role exists so Spatie never throws missing role exception
+        try {
+            \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'media-officer', 'guard_name' => 'web']);
+            $mediaOfficer = User::role('media-officer')->whereNotNull('phone')->first();
+        } catch (\Throwable $e) {
+            $mediaOfficer = null;
+        }
+
+        $phone = $mediaOfficer ? preg_replace('/[^0-9]/', '', $mediaOfficer->phone) : '';
+
+        $message = "📢 *إعلان جديد بانتظار الاعتماد*\n\n"
+            . "يقوم مركز *{$centerName}* بطلب نشر إعلان جديد في النظام:\n"
+            . "📌 *عنوان الخبر:* {$news->title}\n"
+            . "👤 *المُرسل:* " . auth()->user()->name . "\n\n"
+            . "يرجى الدخول للوحة تحكم مسؤول الإعلام في النظام للاطلاع عليه والبت فيه بالموافقة أو الرفض.";
+
+        if ($phone) {
+            $whatsappUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
+        } else {
+            $whatsappUrl = "https://api.whatsapp.com/send?text=" . urlencode($message);
+        }
+
+        session()->flash('whatsapp_url', $whatsappUrl);
     }
 }

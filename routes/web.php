@@ -88,6 +88,10 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         Route::resource('managers', CenterManagerController::class);
         Route::post('managers/{manager}/toggle', [CenterManagerController::class, 'toggleStatus'])->name('managers.toggle');
 
+        // Central Media Officers Management
+        Route::resource('media-officers', \App\Http\Controllers\Admin\MediaOfficerController::class)->except(['show']);
+        Route::post('media-officers/{media_officer}/toggle', [\App\Http\Controllers\Admin\MediaOfficerController::class, 'toggleStatus'])->name('media-officers.toggle');
+
         // GM Approvals
         Route::get('executive/approvals', [ApprovalController::class, 'index'])->name('executive.approvals');
         Route::post('executive/approvals/budget/{budget}/approve', [ApprovalController::class, 'approveBudget'])->name('executive.budgets.approve');
@@ -206,16 +210,22 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         Route::get('activities/export/list', [ActivityController::class, 'exportListPdf'])->name('activities.export-list');
         Route::resource('activities', ActivityController::class);
 
-        // News & Announcements
-        Route::middleware('permission:manage-news')->group(function () {
-            // News Management
-            Route::resource('news', NewsController::class)->except(['destroy']);
-            Route::post('news/{news}/delete', [NewsController::class, 'destroy'])->name('news.destroy');
-            Route::post('news/{news}/toggle-publish', [NewsController::class, 'togglePublish'])->name('news.toggle-publish');
-            Route::post('news/{news}/like', [NewsController::class, 'toggleLike'])->name('news.like');
-            Route::post('news/{news}/comments', [NewsController::class, 'addComment'])->name('news.comments.add');
-            Route::post('news/comments/{comment}/delete', [NewsController::class, 'deleteComment'])->name('news.comments.delete');
-        });
+    });
+
+    // News & Announcements
+    Route::middleware('permission:manage-news')->group(function () {
+        // Media Officer Approvals Dashboard
+        Route::get('news/pending', [NewsController::class, 'pendingIndex'])->name('news.pending');
+        Route::post('news/{news}/approve', [NewsController::class, 'approve'])->name('news.approve');
+        Route::post('news/{news}/reject', [NewsController::class, 'reject'])->name('news.reject');
+
+        // News Management
+        Route::resource('news', NewsController::class)->except(['destroy']);
+        Route::post('news/{news}/delete', [NewsController::class, 'destroy'])->name('news.destroy');
+        Route::post('news/{news}/toggle-publish', [NewsController::class, 'togglePublish'])->name('news.toggle-publish');
+        Route::post('news/{news}/like', [NewsController::class, 'toggleLike'])->name('news.like');
+        Route::post('news/{news}/comments', [NewsController::class, 'addComment'])->name('news.comments.add');
+        Route::post('news/comments/{comment}/delete', [NewsController::class, 'deleteComment'])->name('news.comments.delete');
     });
 
     // Assets — مدير المخزون ومدير المركز فقط
