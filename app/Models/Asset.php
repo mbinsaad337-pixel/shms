@@ -10,10 +10,12 @@ class Asset extends Model
         'center_id',
         'name',
         'type',
+        'category',
         'code',
         'status',
         'value',
         'notes',
+        'photo',
     ];
 
     protected $casts = [

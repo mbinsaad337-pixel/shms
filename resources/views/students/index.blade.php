@@ -8,10 +8,11 @@
     /** @var array $statuss */
 @endphp
 
-@section ('title', 'إدارة الطلاب')
+@section('title', 'إدارة الطلاب')
 
-@section ('content')
-    <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 bg-white p-6 rounded-2xl border-r-8 border-gold shadow-sm" dir="rtl">
+@section('content')
+    <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 bg-white p-6 rounded-2xl border-r-8 border-gold shadow-sm"
+        dir="rtl">
         <div>
             <h1 class="text-2xl md:text-3xl font-black text-navy font-cairo">سجل الطلاب</h1>
             <p class="text-gray-400 font-almarai text-xs md:text-sm mt-1">إدارة واعتمادات بيانات الطلاب المقيمين</p>
@@ -22,14 +23,16 @@
                 <i class="fas fa-file-pdf"></i>
                 <span class="whitespace-nowrap">تصدير PDF</span>
             </a>
-            @if(auth()->user()->can('manage-students') && !auth()->user()->hasRole('super-admin'))
+            @if (auth()->user()->can('manage-students') && !auth()->user()->hasRole('super-admin'))
                 <a href="{{ route('students.create') }}"
                     class="flex-1 sm:flex-none px-4 py-3 bg-navy text-white rounded-xl hover:bg-navy/90 shadow-lg font-cairo font-bold transition-all flex items-center justify-center gap-2 text-sm">
                     <i class="fas fa-plus-circle text-gold"></i>
                     <span class="whitespace-nowrap">تسجيل جديد</span>
                 </a>
             @endif
-            @if(auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('center-manager') || auth()->user()->can('manage-students'))
+            @if (auth()->user()->hasRole('super-admin') ||
+                    auth()->user()->hasRole('center-manager') ||
+                    auth()->user()->can('manage-students'))
                 <button type="button" onclick="openAnnualFeesModal()"
                     class="flex-1 sm:flex-none px-4 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 shadow-lg font-cairo font-bold transition-all flex items-center justify-center gap-2 text-sm">
                     <i class="fas fa-money-bill-wave text-gold"></i>
@@ -55,12 +58,14 @@
                 </div>
 
                 <div>
-                    <label for="program_id" class="block text-xs font-bold text-gray-700 mb-2 font-cairo">نظام التسكين</label>
+                    <label for="program_id" class="block text-xs font-bold text-gray-700 mb-2 font-cairo">نظام
+                        التسكين</label>
                     <select name="program_id" id="program_id"
                         class="w-full rounded-xl border-gray-100 focus:border-gold focus:ring-gold transition-all text-xs md:text-sm bg-gray-50/50">
                         <option value="">جميع الانظمة</option>
                         @foreach ($programs ?? [] as $program)
-                            <option value="{{ $program->id }}" {{ request('program_id') == $program->id ? 'selected' : '' }}>
+                            <option value="{{ $program->id }}"
+                                {{ request('program_id') == $program->id ? 'selected' : '' }}>
                                 {{ $program->name }}
                             </option>
                         @endforeach
@@ -73,7 +78,8 @@
                         class="w-full rounded-xl border-gray-100 focus:border-gold focus:ring-gold transition-all text-xs md:text-sm bg-gray-50/50">
                         <option value="">جميع الجامعات</option>
                         @foreach ($universitys as $v)
-                            <option value="{{ $v }}" {{ request('university') == $v ? 'selected' : '' }}>{{ $v }}
+                            <option value="{{ $v }}" {{ request('university') == $v ? 'selected' : '' }}>
+                                {{ $v }}
                             </option>
                         @endforeach
                     </select>
@@ -85,7 +91,8 @@
                         class="w-full rounded-xl border-gray-100 focus:border-gold focus:ring-gold transition-all text-xs md:text-sm bg-gray-50/50">
                         <option value="">جميع التخصصات</option>
                         @foreach ($majors as $v)
-                            <option value="{{ $v }}" {{ request('major') == $v ? 'selected' : '' }}>{{ $v }}</option>
+                            <option value="{{ $v }}" {{ request('major') == $v ? 'selected' : '' }}>
+                                {{ $v }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -98,7 +105,8 @@
                         class="w-full rounded-xl border-gray-100 focus:border-gold focus:ring-gold transition-all text-xs md:text-sm bg-gray-50/50">
                         <option value="">جميع الكليات</option>
                         @foreach ($colleges as $v)
-                            <option value="{{ $v }}" {{ request('college') == $v ? 'selected' : '' }}>{{ $v }}</option>
+                            <option value="{{ $v }}" {{ request('college') == $v ? 'selected' : '' }}>
+                                {{ $v }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -110,7 +118,8 @@
                         class="w-full rounded-xl border-gray-100 focus:border-gold focus:ring-gold transition-all text-xs md:text-sm bg-gray-50/50">
                         <option value="">جميع المستويات</option>
                         @foreach ($academic_levels as $v)
-                            <option value="{{ $v }}" {{ request('academic_level') == $v ? 'selected' : '' }}>{{ $v }}
+                            <option value="{{ $v }}" {{ request('academic_level') == $v ? 'selected' : '' }}>
+                                {{ $v }}
                             </option>
                         @endforeach
                     </select>
@@ -132,7 +141,7 @@
                         @endphp
                         @foreach ($statuss as $v)
                             <option value="{{ $v }}" {{ request('status') == $v ? 'selected' : '' }}>
-                                {{ $statusLabels[(string)$v] ?? $v }}
+                                {{ $statusLabels[(string) $v] ?? $v }}
                             </option>
                         @endforeach
                     </select>
@@ -183,7 +192,7 @@
                                 <div class="mr-4">
                                     <div class="text-sm font-bold text-gray-900 flex items-center gap-2">
                                         {{ $student->name_ar }}
-                                        @if($student->program)
+                                        @if ($student->program)
                                             <x-program-badge :program="$student->program" />
                                         @endif
                                     </div>
@@ -204,7 +213,7 @@
                             {{ $student->major }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @if(auth()->user()->hasRole('super-admin'))
+                            @if (auth()->user()->hasRole('super-admin'))
                                 <span class="text-sm font-bold text-navy font-cairo">
                                     {{ $student->center->name ?? 'غير محدد' }}
                                 </span>
@@ -215,7 +224,7 @@
                                                                                                 @if ($student->status == 'residing') bg-navy/10 text-navy 
                                                                                                 @elseif ($student->status == 'registered') bg-gold/10 text-gold 
                                                                                                 @else bg-gray-100 text-gray-800 @endif">
-                                        {{ $student->status == 'residing' ? 'مقيم' : ($student->status == 'registered' ? ($student->is_profile_approved ? 'تم الحجز' : 'حجز مبدئي') : 'غادر') }}
+                                        {{ $student->status == 'residing' ? 'مقيم' : ($student->status == 'registered' ? ($student->is_profile_approved ? 'مقيم' : 'حجز مبدئي') : 'غادر') }}
                                     </span>
 
                                     @if ($student->user->profile_completed && !$student->is_profile_approved)
@@ -232,9 +241,10 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            @if(auth()->user()->can('manage-students') && !auth()->user()->hasRole('super-admin'))
+                            @if (auth()->user()->can('manage-students') && !auth()->user()->hasRole('super-admin'))
                                 @if ($student->user->profile_completed && !$student->is_profile_approved)
-                                    <form action="{{ route('students.approve-profile', $student) }}" method="POST" class="inline">
+                                    <form action="{{ route('students.approve-profile', $student) }}" method="POST"
+                                        class="inline">
                                         @csrf
                                         <button type="submit"
                                             class="text-green-600 hover:text-green-800 ml-3 bg-green-50 px-2 py-1 rounded text-xs font-bold font-cairo"
@@ -243,7 +253,8 @@
                                 @endif
                                 <a href="{{ route('students.edit', $student) }}"
                                     class="text-gray-400 hover:text-primary ml-3">تعديل</a>
-                                <form action="{{ route('students.mark-graduate', $student) }}" method="POST" class="inline"
+                                <form action="{{ route('students.mark-graduate', $student) }}" method="POST"
+                                    class="inline"
                                     onsubmit="return confirm('هل تريد نقل هذا الطالب لقائمة الخريجين؟ سيتم إخفاؤه من هذه القائمة وتجميد حسابه.')">
                                     @csrf
                                     <button type="submit" class="text-navy hover:text-gold ml-3" title="نقل للخريجين">
@@ -253,7 +264,8 @@
                                 <form action="{{ route('students.destroy', $student) }}" method="POST" class="inline"
                                     data-confirm="هل أنت متأكد من حذف سجل هذا الطالب؟">
                                     @csrf
-                                    <button type="submit" class="text-gray-400 hover:text-red-700 transition-colors">حذف</button>
+                                    <button type="submit"
+                                        class="text-gray-400 hover:text-red-700 transition-colors">حذف</button>
                                 </form>
                             @endif
                             <a href="{{ route('students.show', $student) }}"
@@ -286,10 +298,11 @@
             </div>
             <form action="{{ route('students.apply-annual-fees') }}" method="POST" class="p-8 space-y-6">
                 @csrf
-                
+
                 <div>
                     <label class="block text-sm font-bold text-gray-700 font-cairo mb-2">الفئة المستهدفة (البرنامج)</label>
-                    <select name="program_id" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 font-almarai focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-right">
+                    <select name="program_id"
+                        class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 font-almarai focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-right">
                         <option value="all">جميع البرامج (جميع الطلاب)</option>
                         @foreach ($programs ?? [] as $program)
                             <option value="{{ $program->id }}">{{ $program->name }}</option>
@@ -302,21 +315,24 @@
                     <div class="relative">
                         <input type="number" name="amount" min="0" step="0.01" required
                             placeholder="أدخل مبلغ الرسوم السنوية لتعميمه على الفئة المحددة"
-                            class="w-full bg-gray-50 border border-gray-200 rounded-xl pr-12 p-4 font-almarai focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-left" dir="ltr">
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl pr-12 p-4 font-almarai focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-left"
+                            dir="ltr">
                         <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
                             <i class="fas fa-coins text-gray-400"></i>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-400 mt-2 font-almarai leading-relaxed"><i class="fas fa-info-circle ml-1"></i> سيتم تطبيق هذا المبلغ على جميع الطلاب المسجلين والمقيمين الحاليين 
+                    <p class="text-xs text-gray-400 mt-2 font-almarai leading-relaxed"><i
+                            class="fas fa-info-circle ml-1"></i> سيتم تطبيق هذا المبلغ على جميع الطلاب المسجلين والمقيمين
+                        الحاليين
 
-                <div class="flex gap-4 pt-4 border-t border-gray-50">
-                    <button type="submit"
-                        class="flex-1 bg-indigo-600 text-white py-4 rounded-xl font-bold font-cairo shadow-lg shadow-indigo-600/30 hover:bg-indigo-700 transform hover:-translate-y-1 transition-all flex justify-center items-center gap-2">
-                        <i class="fas fa-check-circle"></i> تأكيد التحديث
-                    </button>
-                    <button type="button" onclick="closeAnnualFeesModal()"
-                        class="flex-1 bg-gray-100 text-gray-700 py-4 rounded-xl font-bold font-cairo hover:bg-gray-200 transition-all">إلغاء</button>
-                </div>
+                    <div class="flex gap-4 pt-4 border-t border-gray-50">
+                        <button type="submit"
+                            class="flex-1 bg-indigo-600 text-white py-4 rounded-xl font-bold font-cairo shadow-lg shadow-indigo-600/30 hover:bg-indigo-700 transform hover:-translate-y-1 transition-all flex justify-center items-center gap-2">
+                            <i class="fas fa-check-circle"></i> تأكيد التحديث
+                        </button>
+                        <button type="button" onclick="closeAnnualFeesModal()"
+                            class="flex-1 bg-gray-100 text-gray-700 py-4 rounded-xl font-bold font-cairo hover:bg-gray-200 transition-all">إلغاء</button>
+                    </div>
             </form>
         </div>
     </div>
