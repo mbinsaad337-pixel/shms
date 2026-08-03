@@ -57,16 +57,30 @@
     <tr>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">أعده / هعهعه المالي</div>
-            <div class="sign-name">{{ $exportUser ?? '' }}</div>
+            <div class="sign-title">المسؤول المالي</div>
+            <div class="sign-name">
+              @php
+                $financeOfficer = \App\Models\User::role('financial-manager')->where('center_id', $data->first()->center_id)->first();
+              @endphp
+                {{ $financeOfficer ? $financeOfficer->name : 'غير محدد' }}
+            </div>
         </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">راجعه / المدير المالي</div>
+            <div class="sign-title">  مدير المركز</div>
+            <div class="sign-name">
+              @php
+                $centerManager = \App\Models\User::role('center-manager')->where('center_id', $data->first()->center_id)->first();
+              @endphp
+                {{ $centerManager ? $centerManager->name : 'غير محدد' }}
         </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">اعتمده /  مدير قسم المراكز الطلابية</div>
+            <div class="sign-title">  مدير قسم المراكز الطلابية</div>
+            @php
+                $superAdmin = \App\Models\User::role('super-admin')->first();
+            @endphp
+            <div class="sign-name">{{ $superAdmin ? $superAdmin->name : 'غير محدد' }}</div>
         </td>
     </tr>
 </table>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Penalty;
 use App\Models\Violation;
 use App\Models\Student;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 
 class PenaltyController extends Controller
@@ -34,6 +35,9 @@ class PenaltyController extends Controller
 
         $studentIds = is_array($request->student_id) ? $request->student_id : [$request->student_id];
 
+        /** @var WhatsAppService $whatsapp */
+        $whatsapp = app(WhatsAppService::class);
+
         foreach ($studentIds as $id) {
             Penalty::create([
                 'student_id' => $id,
@@ -45,6 +49,20 @@ class PenaltyController extends Controller
                 'applied_by' => auth()->id(),
                 'is_active' => true,
             ]);
+
+            // إرسال إشعار واتساب للطالب
+            $student = Student::find($id);
+            if ($student && $student->phone) {
+                /** @var WhatsAppService $whatsapp */
+                $whatsapp = app(WhatsAppService::class);
+                $message = $whatsapp->penaltyMessage(
+                    $student->name_ar,
+                    $validated['type'],
+                    $validated['start_date'] ?? null,
+                    $validated['end_date'] ?? null
+                );
+                $whatsapp->flash($student->phone, $message, $student->name_ar);
+            }
         }
 
         return redirect()->route('administrative.index', ['tab' => 'penalties'])->with('success', 'تم تطبيق العقوبات بنجاح.');

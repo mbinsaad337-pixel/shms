@@ -150,13 +150,9 @@ class StudentController extends Controller
                 . "⚠️ يرجى تغيير كلمة المرور عند أول تسجيل دخول وإكمال بياناتك الشخصية.\n\n"
                 . "نتمنى لك إقامة طيبة 🏠";
 
-            // Format phone for WhatsApp (remove leading 0, add country code if needed)
-            $phone = preg_replace('/[^0-9]/', '', $validated['phone']);
-            if (str_starts_with($phone, '0')) {
-                $phone = '967' . substr($phone, 1); // Yemen country code
-            } elseif (!str_starts_with($phone, '967')) {
-                $phone = '967' . $phone;
-            }
+            // Format phone for WhatsApp
+            $whatsappService = app(\App\Services\WhatsAppService::class);
+            $phone = $whatsappService->normalizePhone($validated['phone']);
 
             $whatsappUrl = 'https://wa.me/' . $phone . '?text=' . urlencode($whatsappMessage);
 

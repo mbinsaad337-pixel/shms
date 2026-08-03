@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Leave;
 use App\Models\Student;
 use App\Models\Violation;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 
 class LeaveController extends Controller
@@ -62,6 +63,9 @@ class LeaveController extends Controller
 
         $studentIds = is_array($request->student_id) ? $request->student_id : [$request->student_id];
 
+        /** @var WhatsAppService $whatsapp */
+        $whatsapp = app(WhatsAppService::class);
+
         foreach ($studentIds as $id) {
             Leave::create([
                 'student_id'           => $id,
@@ -75,6 +79,18 @@ class LeaveController extends Controller
                 'approved_by'          => auth()->id(),
                 'submitted_by_student' => false,
             ]);
+
+            // إرسال إشعار واتساب للطالب
+            $student = Student::find($id);
+            if ($student && $student->phone) {
+                $message = $whatsapp->leaveApprovalMessage(
+                    $student->name_ar,
+                    $validated['type'],
+                    $validated['departure_date'],
+                    $validated['expected_return_date'] ?? null
+                );
+                $whatsapp->flash($student->phone, $message, $student->name_ar);
+            }
         }
 
         return back()->with('success', 'تم تسجيل الاستئذان بنجاح.');
@@ -125,6 +141,20 @@ class LeaveController extends Controller
             'status'      => 'approved',
             'approved_by' => auth()->id(),
         ]);
+
+        // إرسال إشعار واتساب للطالب
+        $student = $leave->student;
+        if ($student && $student->phone) {
+            /** @var WhatsAppService $whatsapp */
+            $whatsapp = app(WhatsAppService::class);
+            $message = $whatsapp->leaveApprovalMessage(
+                $student->name_ar,
+                $leave->type,
+                $leave->departure_date?->format('Y-m-d'),
+                $leave->expected_return_date?->format('Y-m-d')
+            );
+            $whatsapp->flash($student->phone, $message);
+        }
 
         return back()->with('success', 'تم قبول طلب الاستئذان بنجاح.');
     }

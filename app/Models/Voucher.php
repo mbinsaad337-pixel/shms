@@ -3,9 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\ValidationException;
 
 class Voucher extends Model
 {
+    protected static function booted(): void
+    {
+        $ensureSettlementIsNotApproved = function (Voucher $voucher): void {
+            if ($voucher->isLockedByApprovedSettlement()) {
+                throw ValidationException::withMessages([
+                    'voucher' => 'لا يمكن إنشاء أو تعديل أو حذف سند ضمن شهر تم اعتماد تصفيته المالية.',
+                ]);
+            }
+        };
+
+        static::creating($ensureSettlementIsNotApproved);
+        static::updating($ensureSettlementIsNotApproved);
+        static::deleting($ensureSettlementIsNotApproved);
+    }
+
     protected $fillable = [
         'center_id',
         'voucher_number',
@@ -62,5 +78,18 @@ class Voucher extends Model
     public function student()
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function isLockedByApprovedSettlement(): bool
+    {
+        if (!$this->center_id || !$this->date) {
+            return false;
+        }
+
+        return MonthlySettlement::where('center_id', $this->center_id)
+            ->where('year', $this->date->year)
+            ->where('month', $this->date->month)
+            ->where('status', 'approved')
+            ->exists();
     }
 }

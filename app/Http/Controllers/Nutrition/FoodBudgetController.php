@@ -47,7 +47,9 @@ class FoodBudgetController extends Controller
             'lines.*.supplier_name' => 'nullable|string',
         ]);
 
-        DB::transaction(function () use ($request) {
+        $isNutritionManager = auth()->user()->hasRole('nutrition-manager');
+
+        DB::transaction(function () use ($request, $isNutritionManager) {
             $centerId = auth()->user()->center_id;
             $totalAmount = 0;
 
@@ -75,7 +77,8 @@ class FoodBudgetController extends Controller
                 'last_payment_date' => $request->last_payment_date,
                 'subscribers_count' => $subscribersCount,
                 'cost_per_student' => $request->cost_per_student,
-                'status' => 'draft',
+                // تُرسل ميزانية مسؤول التغذية مباشرةً إلى مدير المركز للاعتماد.
+                'status' => $isNutritionManager ? 'submitted' : 'draft',
                 'created_by' => auth()->id(),
             ]);
 
@@ -121,6 +124,13 @@ class FoodBudgetController extends Controller
 
     public function approve(FoodBudget $budget)
     {
+        $user = auth()->user();
+
+        if (!$user->hasRole(['center-manager', 'super-admin']) ||
+            (!$user->hasRole('super-admin') && $user->center_id !== $budget->center_id)) {
+            abort(403);
+        }
+
         if ($budget->status !== 'submitted') {
             return back()->with('error', 'الميزانية غير في حالة الانتظار.');
         }
@@ -134,6 +144,13 @@ class FoodBudgetController extends Controller
 
     public function reject(Request $request, FoodBudget $budget)
     {
+        $user = auth()->user();
+
+        if (!$user->hasRole(['center-manager', 'super-admin']) ||
+            (!$user->hasRole('super-admin') && $user->center_id !== $budget->center_id)) {
+            abort(403);
+        }
+
         $request->validate(['rejection_reason' => 'required|string']);
         $budget->update([
             'status' => 'rejected',
@@ -144,6 +161,11 @@ class FoodBudgetController extends Controller
 
     public function edit(FoodBudget $budget)
     {
+        if (!in_array($budget->status, ['draft', 'rejected'])) {
+            return redirect()->route('nutrition.budgets.show', $budget)
+                ->with('error', 'لا يمكن تعديل ميزانية تم إرسالها للاعتماد.');
+        }
+
         $centerId = auth()->user()->center_id;
         $suppliers = \App\Models\FoodSupplier::where('center_id', $centerId)->where('is_active', true)->orderBy('name')->get();
         $budget->load('lines');
@@ -152,6 +174,11 @@ class FoodBudgetController extends Controller
 
     public function update(Request $request, FoodBudget $budget)
     {
+        if (!in_array($budget->status, ['draft', 'rejected'])) {
+            return redirect()->route('nutrition.budgets.show', $budget)
+                ->with('error', 'لا يمكن تعديل ميزانية تم إرسالها للاعتماد.');
+        }
+
         $request->validate([
             'month' => 'required|integer|min:1|max:12',
             'year' => 'required|integer|min:2020|max:2099',
@@ -189,6 +216,8 @@ class FoodBudgetController extends Controller
                 'daily_rate' => $request->daily_rate,
                 'last_payment_date' => $request->last_payment_date,
                 'cost_per_student' => $request->cost_per_student,
+                'status' => auth()->user()->hasRole('nutrition-manager') ? 'submitted' : $budget->status,
+                'rejection_reason' => null,
             ]);
 
             // Sync lines: Delete old and create new
@@ -220,6 +249,10 @@ class FoodBudgetController extends Controller
 
     public function destroy(FoodBudget $budget)
     {
+        if (!in_array($budget->status, ['draft', 'rejected'])) {
+            return back()->with('error', 'لا يمكن حذف ميزانية تم إرسالها للاعتماد أو تم اعتمادها بالفعل.');
+        }
+
         if ($budget->status === 'approved') {
             return back()->with('error', 'لا يمكن حذف ميزانية معتمدة بالفعل.');
         }

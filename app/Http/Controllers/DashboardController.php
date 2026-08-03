@@ -31,13 +31,18 @@ use App\Models\News;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         /** @var User $user */
         $user = Auth::user();
 
         if ($user->hasRole('student')) {
             return $this->studentDashboard();
+        }
+
+        // صفحة الاعتمادات هي لوحة التحكم الرئيسية لمسؤول الإعلام.
+        if ($user->hasRole('media-officer') && !$user->hasAnyRole(['super-admin', 'executive-manager'])) {
+            return redirect()->route('news.pending');
         }
 
         $isExecutive = $user->hasRole('super-admin') || $user->hasRole('executive-manager');
@@ -56,7 +61,13 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('financial-manager')) {
-            return $this->financialManagerDashboard($user->center_id);
+            $selectedPeriod = $request->input('period', now()->format('Y-m'));
+
+            if (!preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $selectedPeriod)) {
+                $selectedPeriod = now()->format('Y-m');
+            }
+
+            return $this->financialManagerDashboard($user->center_id, $selectedPeriod);
         }
 
         if ($user->hasRole('social-manager')) {
@@ -234,13 +245,19 @@ class DashboardController extends Controller
         return \view('dashboard.student_manager', compact('stats', 'recent_violations', 'recent_absences', 'circle_absences', 'students'));
     }
 
-    private function financialManagerDashboard($centerId)
+    private function financialManagerDashboard($centerId, string $selectedPeriod)
     {
+        [$year, $month] = array_map('intval', explode('-', $selectedPeriod));
+
+        $monthlyVouchers = Voucher::where('center_id', $centerId)
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year);
+
         $stats = [
             'total_liquidity' => Fund::where('center_id', $centerId)->sum('balance'),
-            'total_revenues' => Voucher::where('center_id', $centerId)->where('type', 'receipt')->where('status', 'approved')->sum('amount'), // General only
+            'total_revenues' => (clone $monthlyVouchers)->where('type', 'receipt')->where('status', 'approved')->sum('amount'), // General only
             'nutrition_total_revenues' => FoodVoucher::where('center_id', $centerId)->where('type', 'receipt')->where('status', 'active')->sum('amount'), // Nutrition only
-            'total_expenses' => Voucher::where('center_id', $centerId)->whereIn('type', ['payment', 'salary'])->where('status', 'approved')->sum('amount'), // General only
+            'total_expenses' => (clone $monthlyVouchers)->whereIn('type', ['payment', 'salary'])->where('status', 'approved')->sum('amount'), // General only
             'nutrition_total_expenses' => FoodVoucher::where('center_id', $centerId)->where('type', 'payment')->where('status', 'active')->sum('amount'), // Nutrition only
 
             'pending_vouchers' => Voucher::where('center_id', $centerId)->where('status', 'pending')->count(),
@@ -253,6 +270,8 @@ class DashboardController extends Controller
 
         $recent_vouchers = Voucher::with('fund')
             ->where('center_id', $centerId)
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
             ->latest()
             ->take(5)
             ->get();
@@ -265,7 +284,7 @@ class DashboardController extends Controller
             'food_settlements' => $stats['nutrition_settlements'],
         ];
 
-        return \view('dashboard.financial_manager', compact('stats', 'recent_vouchers', 'pending_approvals'));
+        return \view('dashboard.financial_manager', compact('stats', 'recent_vouchers', 'pending_approvals', 'selectedPeriod'));
     }
 
     private function socialManagerDashboard($centerId)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Commitment;
 use App\Models\Student;
 use App\Models\Violation;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 
 class CommitmentController extends Controller
@@ -59,6 +60,9 @@ class CommitmentController extends Controller
 
         $studentIds = is_array($request->student_id) ? $request->student_id : [$request->student_id];
 
+        /** @var WhatsAppService $whatsapp */
+        $whatsapp = app(WhatsAppService::class);
+
         foreach ($studentIds as $id) {
             Commitment::create([
                 'student_id'                  => $id,
@@ -70,6 +74,19 @@ class CommitmentController extends Controller
                 'image_path'                  => $imagePath,
                 'status'                      => 'active',
             ]);
+
+            // إرسال إشعار واتساب للطالب
+            $student = Student::find($id);
+            if ($student && $student->phone) {
+                /** @var WhatsAppService $whatsapp */
+                $whatsapp = app(WhatsAppService::class);
+                $message = $whatsapp->commitmentMessage(
+                    $student->name_ar,
+                    $validated['title'] ?? 'تعهد سلوكي',
+                    $validated['date']
+                );
+                $whatsapp->flash($student->phone, $message, $student->name_ar);
+            }
         }
 
         return back()->with('success', 'تم تسجيل التعهد بنجاح.');

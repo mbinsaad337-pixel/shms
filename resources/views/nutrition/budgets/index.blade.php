@@ -89,13 +89,13 @@
                                                 class="text-blue-600 hover:text-blue-800 font-cairo text-sm font-bold flex items-center gap-1">
                                                 <i class="fas fa-eye"></i> تفاصيل
                                             </a>
-                                            @hasrole('nutrition-manager')
+                                            @if(auth()->user()->hasRole('nutrition-manager') && in_array($budget->status, ['draft', 'rejected']))
                                                 <a href="{{ route('nutrition.budgets.edit', $budget) }}"
                                                     class="text-amber-600 hover:text-amber-800 font-cairo text-sm font-bold flex items-center gap-1">
                                                     <i class="fas fa-edit"></i> تعديل
                                                 </a>
-                                            @endhasrole
-                                            @if($budget->status !== 'approved' && auth()->user()->hasRole('nutrition-manager'))
+                                            @endif
+                                            @if(in_array($budget->status, ['draft', 'rejected']) && auth()->user()->hasRole('nutrition-manager'))
                                                 <form action="{{ route('nutrition.budgets.destroy', $budget) }}" method="POST"
                                                     onsubmit="return confirm('هل أنت متأكد من حذف هذه الميزانية (العهدة)؟')">
                                                     @csrf

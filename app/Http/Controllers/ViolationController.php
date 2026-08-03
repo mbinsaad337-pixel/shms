@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Violation;
 use App\Models\Student;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 
 class ViolationController extends Controller
@@ -71,6 +72,9 @@ class ViolationController extends Controller
 
         $studentIds = is_array($request->student_id) ? $request->student_id : [$request->student_id];
 
+        /** @var WhatsAppService $whatsapp */
+        $whatsapp = app(WhatsAppService::class);
+
         foreach ($studentIds as $id) {
             Violation::create([
                 'student_id' => $id,
@@ -82,6 +86,18 @@ class ViolationController extends Controller
                 'center_id' => auth()->user()->center_id,
                 'recorded_by' => auth()->id(),
             ]);
+
+            // إرسال إشعار واتساب للطالب
+            $student = Student::find($id);
+            if ($student && $student->phone) {
+                $message = $whatsapp->violationMessage(
+                    $student->name_ar,
+                    $validated['type'],
+                    $validated['severity'],
+                    $validated['violation_date']
+                );
+                $whatsapp->flash($student->phone, $message, $student->name_ar);
+            }
         }
 
         if (!empty($validated['circle_attendance_id'])) {

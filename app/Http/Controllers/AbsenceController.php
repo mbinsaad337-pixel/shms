@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Absence;
 use App\Models\Student;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 
 class AbsenceController extends Controller
@@ -54,6 +55,9 @@ class AbsenceController extends Controller
 
         $studentIds = is_array($request->student_id) ? $request->student_id : [$request->student_id];
 
+        /** @var \App\Services\WhatsAppService $whatsapp */
+        $whatsapp = app(\App\Services\WhatsAppService::class);
+
         foreach ($studentIds as $id) {
             Absence::create([
                 'student_id'   => $id,
@@ -64,6 +68,17 @@ class AbsenceController extends Controller
                 'notes'        => $validated['notes'] ?? null,
                 'recorded_by'  => auth()->id(),
             ]);
+
+            // إرسال إشعار واتساب للطالب
+            $student = Student::find($id);
+            if ($student && $student->phone) {
+                $message = $whatsapp->absenceMessage(
+                    $student->name_ar,
+                    $validated['date'],
+                    (bool) $validated['has_excuse']
+                );
+                $whatsapp->flash($student->phone, $message, $student->name_ar);
+            }
         }
 
         return back()->with('success', 'تم تسجيل الغياب بنجاح.');

@@ -208,27 +208,59 @@
         });
     </script>
 
-    @if(session('whatsapp_url'))
+    @if(session('whatsapp_url') || session('whatsapp_links'))
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            Swal.fire({
-                title: 'إرسال بيانات الدخول',
-                html: '<p class="font-almarai text-gray-600">هل تريد إرسال بيانات الدخول للطالب عبر واتساب؟</p>',
-                icon: 'success',
-                showCancelButton: true,
-                confirmButtonColor: '#25D366',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: '<i class="fab fa-whatsapp ml-2"></i> إرسال عبر واتساب',
-                cancelButtonText: 'تخطي',
-                customClass: {
-                    popup: 'font-cairo',
-                    title: 'font-cairo font-bold',
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.open(@json(session('whatsapp_url')), '_blank');
-                }
-            });
+            let singleUrl = @json(session('whatsapp_url'));
+            let links = @json(session('whatsapp_links') ?? []);
+            
+            if (singleUrl && links.length === 0) {
+                links = [{ name: 'الطالب', url: singleUrl }];
+            }
+
+            if (links.length === 1) {
+                Swal.fire({
+                    title: 'إرسال إشعار للطالب',
+                    html: '<p class="font-almarai text-gray-600">هل تريد إرسال إشعار واتساب للطالب ' + (links[0].name !== 'الطالب' ? links[0].name : '') + '؟</p>',
+                    icon: 'success',
+                    showCancelButton: true,
+                    confirmButtonColor: '#25D366',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: '<i class="fab fa-whatsapp ml-2"></i> إرسال عبر واتساب',
+                    cancelButtonText: 'تخطي',
+                    customClass: {
+                        popup: 'font-cairo',
+                        title: 'font-cairo font-bold',
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.open(links[0].url, '_blank');
+                    }
+                });
+            } else if (links.length > 1) {
+                let htmlContent = '<p class="font-almarai text-gray-600 mb-4 text-sm">تم تنفيذ الإجراء بنجاح لعدة طلاب. يرجى الضغط على الزر بجانب كل طالب لإرسال الإشعار له:</p>';
+                htmlContent += '<div class="flex flex-col gap-2 max-h-60 overflow-y-auto p-1">';
+                links.forEach(link => {
+                    htmlContent += `<a href="${link.url}" target="_blank" class="bg-[#25D366] text-black py-2 px-4 rounded-xl text-sm font-bold flex items-center justify-between hover:bg-green-600 transition-colors cursor-pointer" onclick="this.classList.add('opacity-50')">
+                        <span>${link.name}</span>
+                        <i class="fab fa-whatsapp text-lg"></i>
+                    </a>`;
+                });
+                htmlContent += '</div>';
+
+                Swal.fire({
+                    title: 'إرسال إشعارات جماعية',
+                    html: htmlContent,
+                    icon: 'info',
+                    showConfirmButton: true,
+                    confirmButtonText: 'إغلاق',
+                    confirmButtonColor: '#6b7280',
+                    customClass: {
+                        popup: 'font-cairo',
+                        title: 'font-cairo font-bold',
+                    }
+                });
+            }
         });
     </script>
     @endif

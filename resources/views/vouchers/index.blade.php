@@ -15,6 +15,9 @@
             <div class="flex items-center gap-4">
                 @if(auth()->user()->hasRole('super-admin'))
                     <form action="{{ route('vouchers.index') }}" method="GET" class="flex items-center gap-2">
+                        @if($selectedPeriod)
+                            <input type="hidden" name="period" value="{{ $selectedPeriod }}">
+                        @endif
                         <select name="center_id" onchange="this.form.submit()" 
                             class="px-4 py-2 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-gold outline-none text-sm font-cairo">
                             <option value="">كل المراكز</option>
@@ -42,18 +45,38 @@
             </div>
         </div>
 
+        <form action="{{ route('vouchers.index') }}" method="GET"
+            class="mb-6 flex flex-wrap items-end gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+            @if(request()->filled('center_id'))
+                <input type="hidden" name="center_id" value="{{ request('center_id') }}">
+            @endif
+            <div>
+                <label for="period" class="mb-1 block text-xs font-bold text-gray-500 font-cairo">شهر السندات</label>
+                <input id="period" name="period" type="month" value="{{ $selectedPeriod }}"
+                    class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm font-cairo outline-none focus:border-gold focus:bg-white">
+            </div>
+            <button type="submit"
+                class="rounded-xl bg-navy px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-navy/90 font-cairo">
+                <i class="fas fa-filter ml-1"></i> تطبيق الفلترة
+            </button>
+            @if(request()->filled('period'))
+                <a href="{{ route('vouchers.index', request()->only('center_id')) }}"
+                    class="px-3 py-2.5 text-sm font-bold text-gray-500 hover:text-navy font-cairo">إلغاء فلترة الشهر</a>
+            @endif
+        </form>
+
         <!-- Stats Summary -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-8">
             <div
                 class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all group hover:border-navy/20">
                 <p class="text-[10px] font-bold text-gray-400 font-cairo mb-1 uppercase tracking-wider">إجمالي السندات</p>
-                <p class="text-3xl font-black text-navy  ">{{ $vouchers->total() }}</p>
+                <p class="text-3xl font-black text-navy  ">{{ $voucherStats['total'] }}</p>
             </div>
             <div
                 class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all group hover:border-gold/20">
                 <p class="text-[10px] font-bold text-gray-400 font-cairo mb-1 uppercase tracking-wider">المقبوضات</p>
                 <p class="text-3xl font-black text-navy  ">
-                    {{ number_format($vouchers->where('type', 'receipt')->sum('amount'), 0) }} <span
+                    {{ number_format($voucherStats['receipts'], 0) }} <span
                         class="text-xs font-cairo text-gray-400">ر.ي</span>
                 </p>
                 <div class="h-1 w-12 bg-gold mt-2 rounded-full"></div>
@@ -62,7 +85,7 @@
                 class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all group hover:border-red-100">
                 <p class="text-[10px] font-bold text-gray-400 font-cairo mb-1 uppercase tracking-wider">المصروفات</p>
                 <p class="text-3xl font-black text-red-600  ">
-                    {{ number_format($vouchers->whereIn('type', ['payment', 'salary'])->sum('amount'), 0) }} <span
+                    {{ number_format($voucherStats['expenses'], 0) }} <span
                         class="text-xs font-cairo text-gray-400">ر.ي</span>
                 </p>
                 <div class="h-1 w-12 bg-red-500 mt-2 rounded-full"></div>
@@ -72,7 +95,7 @@
                 <div class="w-12 h-12 bg-navy/5 rounded-xl flex items-center justify-center mx-auto mb-3">
                     <i class="fas fa-exchange-alt text-navy"></i>
                 </div>
-                <p class="text-xs font-bold text-navy font-cairo">{{ $vouchers->where('type', 'transfer')->count() }}
+                <p class="text-xs font-bold text-navy font-cairo">{{ $voucherStats['transfers'] }}
                     تحويلات
                 </p>
             </div>
@@ -147,6 +170,11 @@
                                             <i class="fas fa-file-pdf text-sm"></i>
                                         </a>
 
+                                        @php
+                                            $periodKey = $voucher->center_id . '-' . $voucher->date->format('Y-n');
+                                            $isLockedBySettlement = isset($lockedPeriods[$periodKey]);
+                                        @endphp
+                                        @if (!$isLockedBySettlement)
                                         <form action="{{ route('vouchers.destroy', $voucher) }}" method="POST"
                                             onsubmit="return confirm('هل أنت متأكد من حذف هذا السند؟ سيتم عكس التأثير المالي على الرصيد.');"
                                             class="inline">
@@ -158,6 +186,12 @@
                                                 <i class="fas fa-trash-alt text-sm"></i>
                                             </button>
                                         </form>
+                                        @else
+                                            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 text-gray-400"
+                                                title="مقفل بعد اعتماد تصفية الشهر">
+                                                <i class="fas fa-lock text-sm"></i>
+                                            </span>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

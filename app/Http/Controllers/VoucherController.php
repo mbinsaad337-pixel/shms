@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Voucher;
 use App\Models\Fund;
+use App\Models\MonthlySettlement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,7 +30,13 @@ class VoucherController extends Controller
             });
         }
 
-        if ($request->filled('month')) {
+        $selectedPeriod = null;
+
+        if ($request->filled('period') && preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $request->period)) {
+            [$year, $month] = array_map('intval', explode('-', $request->period));
+            $query->whereMonth('date', $month)->whereYear('date', $year);
+            $selectedPeriod = $request->period;
+        } elseif ($request->filled('month')) {
             $query->whereMonth('date', $request->month);
         }
 
@@ -37,13 +44,27 @@ class VoucherController extends Controller
             $query->whereYear('date', $request->year);
         }
 
+        $voucherStats = [
+            'total' => (clone $query)->count(),
+            'receipts' => (clone $query)->where('type', 'receipt')->sum('amount'),
+            'expenses' => (clone $query)->whereIn('type', ['payment', 'salary'])->sum('amount'),
+            'transfers' => (clone $query)->where('type', 'transfer')->count(),
+        ];
+
         $vouchers = $query->with(['fund', 'targetFund', 'student'])
             ->latest()
-            ->paginate(20);
+            ->paginate(20)
+            ->withQueryString();
 
         $centers = \App\Models\Center::all();
+        $lockedPeriods = MonthlySettlement::where('status', 'approved')
+            ->get(['center_id', 'year', 'month'])
+            ->mapWithKeys(fn (MonthlySettlement $settlement) => [
+                "{$settlement->center_id}-{$settlement->year}-{$settlement->month}" => true,
+            ])
+            ->all();
 
-        return view('vouchers.index', compact('vouchers', 'centers'));
+        return view('vouchers.index', compact('vouchers', 'centers', 'selectedPeriod', 'voucherStats', 'lockedPeriods'));
     }
 
     public function create()
@@ -80,6 +101,11 @@ class VoucherController extends Controller
         ]);
 
         $fund = Fund::findOrFail($validated['fund_id']);
+        $centerId = auth()->user()->center_id ?? (\App\Models\Center::first()->id ?? null);
+
+        if ($this->isSettlementApproved($centerId, $validated['date'])) {
+            return back()->withInput()->with('error', 'لا يمكن إصدار سند لشهر تم اعتماد تصفيته المالية.');
+        }
       
 
         $prefix = [
@@ -89,16 +115,14 @@ class VoucherController extends Controller
             'salary' => 'SV',
         ][$validated['type']];
 
-        DB::transaction(function () use ($validated, $request, $prefix) {
+        DB::transaction(function () use ($validated, $request, $prefix, $centerId) {
             $path = null;
             if ($request->hasFile('attachment')) {
                 $path = $request->file('attachment')->store('vouchers/' . date('Y/m'), 'public');
             }
 
-            $center_id = auth()->user()->center_id ?? (\App\Models\Center::first()->id ?? null);
-
             $voucher = Voucher::create(array_merge($validated, [
-                'center_id' => $center_id,
+                'center_id' => $centerId,
                 'created_by' => auth()->id(),
                 'status' => 'approved',
                 'voucher_number' => $prefix . '-' . date('Ymd') . '-' . mt_rand(100, 999),
@@ -156,6 +180,10 @@ class VoucherController extends Controller
     }
     public function destroy(Voucher $voucher)
     {
+        if ($voucher->isLockedByApprovedSettlement()) {
+            return back()->with('error', 'لا يمكن حذف سند ضمن شهر تم اعتماد تصفيته المالية.');
+        }
+
         DB::transaction(function () use ($voucher) {
             $this->reverseBalances($voucher);
             $voucher->delete();
@@ -179,5 +207,20 @@ class VoucherController extends Controller
                 $voucher->targetFund->decrement('balance', $amount);
             }
         }
+    }
+
+    private function isSettlementApproved(?int $centerId, string $date): bool
+    {
+        if (!$centerId) {
+            return false;
+        }
+
+        $period = \Carbon\Carbon::parse($date);
+
+        return MonthlySettlement::where('center_id', $centerId)
+            ->where('year', $period->year)
+            ->where('month', $period->month)
+            ->where('status', 'approved')
+            ->exists();
     }
 }

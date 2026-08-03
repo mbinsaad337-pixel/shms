@@ -10,7 +10,15 @@
             </h1>
             <p class="text-gray-500 font-almarai mt-1">متابعة العمليات المالية والاعتمادات لموارد المركز.</p>
         </div>
-        <div class="flex gap-4">
+        <div class="flex flex-wrap items-center justify-end gap-4">
+            <form action="{{ route('dashboard') }}" method="GET" class="flex items-end gap-2">
+                <div>
+                    <label for="period" class="mb-1 block text-xs font-bold text-gray-500 font-cairo">شهر الإحصاءات</label>
+                    <input id="period" name="period" type="month" value="{{ $selectedPeriod }}"
+                        class="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:border-gold">
+                </div>
+                <button type="submit" class="rounded-xl bg-navy px-4 py-2 text-sm font-bold text-white font-cairo">تطبيق</button>
+            </form>
             <span
                 class="bg-gold/10 text-gold border border-gold/20 px-4 py-2 rounded-xl text-sm font-bold font-almarai shadow-sm">
                 {{ auth()->user()->getRoleNames()->first() }}
@@ -91,100 +99,17 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
+    <div class="grid  xl:grid-cols-4 gap-8 mb-8">
         <div class="xl:col-span-2 space-y-8">
             <!-- Pending Approvals & Checks -->
-            <div class="card-premium overflow-hidden">
-                <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-gold/5">
-                    <h2 class="text-lg font-bold text-navy font-cairo flex items-center gap-2">
-                        <i class="fas fa-clipboard-check text-gold"></i> بانتظار المراجعة والاعتماد
-                    </h2>
-                </div>
-
-                <div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    @if(isset($pending_approvals['vouchers']) && auth()->user()->can('manage-vouchers'))
-                        <a href="{{ route('vouchers.index') }}"
-                            class="bg-purple-50/50 hover:bg-purple-50 p-4 rounded-2xl flex items-center justify-between border border-purple-100 transition-colors group">
-                            <div>
-                                <p class="text-[11px] text-purple-600 font-bold mb-1 font-cairo">سندات مالية (عامة)</p>
-                                <h3 class="text-2xl font-bold text-gray-800 group-hover:text-purple-700">
-                                    {{ $pending_approvals['vouchers'] }}
-                                </h3>
-                            </div>
-                            <div class="bg-white p-3 rounded-xl text-purple-500 shadow-sm">
-                                <i class="fas fa-file-invoice-dollar text-lg"></i>
-                            </div>
-                        </a>
-                    @endif
-
-                    @if(isset($pending_approvals['budgets']) && auth()->user()->can('view-budgets'))
-                        <a href="{{ route('budgets.index') }}"
-                            class="bg-orange-50/50 hover:bg-orange-50 p-4 rounded-2xl flex items-center justify-between border border-orange-100 transition-colors group">
-                            <div>
-                                <p class="text-[11px] text-orange-600 font-bold mb-1 font-cairo">موازنات (عامة)</p>
-                                <h3 class="text-2xl font-bold text-gray-800 group-hover:text-orange-700">
-                                    {{ $pending_approvals['budgets'] }}
-                                </h3>
-                            </div>
-                            <div class="bg-white p-3 rounded-xl text-orange-500 shadow-sm">
-                                <i class="fas fa-chart-pie text-lg"></i>
-                            </div>
-                        </a>
-                    @endif
-
-                    @if(isset($pending_approvals['settlements']) && auth()->user()->can('view-settlements'))
-                        <a href="{{ route('settlements.index') }}"
-                            class="bg-blue-50/50 hover:bg-blue-50 p-4 rounded-2xl flex items-center justify-between border border-blue-100 transition-colors group">
-                            <div>
-                                <p class="text-[11px] text-blue-600 font-bold mb-1 font-cairo">تصفيات (عامة)</p>
-                                <h3 class="text-2xl font-bold text-gray-800 group-hover:text-blue-700">
-                                    {{ $pending_approvals['settlements'] }}
-                                </h3>
-                            </div>
-                            <div class="bg-white p-3 rounded-xl text-blue-500 shadow-sm">
-                                <i class="fas fa-tasks text-lg"></i>
-                            </div>
-                        </a>
-                    @endif
-
-                    @if(isset($pending_approvals['food_budgets']) && auth()->user()->can('view-nutrition-budgets'))
-                        <a href="{{ route('nutrition.budgets.index') }}"
-                            class="bg-emerald-50/50 hover:bg-emerald-50 p-4 rounded-2xl flex items-center justify-between border border-emerald-100 transition-colors group">
-                            <div>
-                                <p class="text-[11px] text-emerald-600 font-bold mb-1 font-cairo">موازنات התמذية</p>
-                                <h3 class="text-2xl font-bold text-gray-800 group-hover:text-emerald-700">
-                                    {{ $pending_approvals['food_budgets'] }}
-                                </h3>
-                            </div>
-                            <div class="bg-white p-3 rounded-xl text-emerald-500 shadow-sm">
-                                <i class="fas fa-utensils text-lg"></i>
-                            </div>
-                        </a>
-                    @endif
-
-                    @if(isset($pending_approvals['food_settlements']) && auth()->user()->can('view-nutrition-settlements'))
-                        <a href="{{ route('nutrition.settlements.index') }}"
-                            class="bg-amber-50/50 hover:bg-amber-50 p-4 rounded-2xl flex items-center justify-between border border-amber-100 transition-colors group">
-                            <div>
-                                <p class="text-[11px] text-amber-600 font-bold mb-1 font-cairo">تصفيات التغذية</p>
-                                <h3 class="text-2xl font-bold text-gray-800 group-hover:text-amber-700">
-                                    {{ $pending_approvals['food_settlements'] }}
-                                </h3>
-                            </div>
-                            <div class="bg-white p-3 rounded-xl text-amber-500 shadow-sm">
-                                <i class="fas fa-receipt text-lg"></i>
-                            </div>
-                        </a>
-                    @endif
-                </div>
-            </div>
+            
 
             <!-- Recent General Vouchers -->
             @can('view-vouchers')
                 <div class="card-premium overflow-hidden">
                     <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-navy/5">
                         <h2 class="text-lg font-bold text-navy font-cairo">أحدث السندات المالية (العامة)</h2>
-                        <a href="{{ route('vouchers.index') }}"
+                        <a href="{{ route('vouchers.index', ['period' => $selectedPeriod]) }}"
                             class="text-gold text-sm font-bold font-cairo hover:underline">عرض جميع السندات</a>
                     </div>
                     <div class="overflow-x-auto">
@@ -249,79 +174,59 @@
         </div>
 
         <!-- Quick Interaction Panel -->
-        <div class="space-y-6">
-            <div class="card-premium p-8">
-                <h2 class="text-lg font-bold text-navy mb-6 font-cairo">إجراءات وروابط سريعة</h2>
-                <div class="space-y-4">
-                    @can('view-funds')
-                        <a href="{{ route('funds.index') }}"
-                            class="flex items-center p-4 bg-navy/5 rounded-2xl hover:bg-navy hover:text-white transition-all group">
-                            <div
-                                class="w-10 h-10 bg-white shadow-sm rounded-xl flex items-center justify-center text-navy ml-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-wallet text-xl"></i>
-                            </div>
-                            <span class="font-bold font-cairo">إدارة الصناديق المستديمة</span>
-                        </a>
-                    @endcan
+        <div class="space-y-4">
+            <div class="mt-10 border-t border-gray-200 pt-6">
+    <h2 class="text-lg font-bold text-navy mb-6 font-cairo ">
+        الإجراءات السريعة
+    </h2>
 
-                    @can('manage-vouchers')
-                        <a href="{{ route('vouchers.create') }}"
-                            class="flex items-center p-4 bg-gold/5 rounded-2xl hover:bg-gold hover:text-navy transition-all group">
-                            <div
-                                class="w-10 h-10 bg-white shadow-sm rounded-xl flex items-center justify-center text-gold ml-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-file-invoice-dollar text-xl"></i>
-                            </div>
-                            <span class="font-bold font-cairo">إصدار سند مالي جديد</span>
-                        </a>
-                    @endcan
+    <div class="flex flex-wrap justify-center gap-4">
 
-                    @can('view-budgets')
-                        <a href="{{ route('budgets.index') }}"
-                            class="flex items-center p-4 bg-navy/5 rounded-2xl hover:bg-navy hover:text-white transition-all group">
-                            <div
-                                class="w-10 h-10 bg-white shadow-sm rounded-xl flex items-center justify-center text-navy ml-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-chart-pie text-xl"></i>
-                            </div>
-                            <span class="font-bold font-cairo">الموازنات التقديرية (العامة)</span>
-                        </a>
-                    @endcan
+        @can('view-funds')
+            <a href="{{ route('funds.index') }}"
+                class="flex items-center justify-center gap-3 px-6 py-4 bg-navy text-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-w-[220px]">
+                <i class="fas fa-wallet text-lg"></i>
+                <span class="font-bold font-cairo">الصناديق</span>
+            </a>
+        @endcan
 
-                    @can('view-settlements')
-                        <a href="{{ route('settlements.index') }}"
-                            class="flex items-center p-4 bg-navy/5 rounded-2xl hover:bg-navy hover:text-white transition-all group">
-                            <div
-                                class="w-10 h-10 bg-white shadow-sm rounded-xl flex items-center justify-center text-navy ml-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-tasks text-xl"></i>
-                            </div>
-                            <span class="font-bold font-cairo">التصفيات الشهرية (العامة)</span>
-                        </a>
-                    @endcan
+      
 
-                    <hr class="border-gray-100 my-4">
+        @can('view-budgets')
+            <a href="{{ route('budgets.index') }}"
+                class="flex items-center justify-center gap-3 px-6 py-4 bg-indigo-600 text-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-w-[220px]">
+                <i class="fas fa-chart-pie text-lg"></i>
+                <span class="font-bold font-cairo">الموازنات</span>
+            </a>
+        @endcan
 
-                    @can('view-nutrition-budgets')
-                        <a href="{{ route('nutrition.budgets.index') }}"
-                            class="flex items-center p-4 bg-emerald-50 rounded-2xl hover:bg-emerald-600 hover:text-white transition-all group">
-                            <div
-                                class="w-10 h-10 bg-white shadow-sm rounded-xl flex items-center justify-center text-emerald-600 ml-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-utensils text-xl"></i>
-                            </div>
-                            <span class="font-bold font-cairo">موازنات التغذية</span>
-                        </a>
-                    @endcan
+        @can('view-settlements')
+            <a href="{{ route('settlements.index') }}"
+                class="flex items-center justify-center gap-3 px-6 py-4 bg-cyan-600 text-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-w-[220px]">
+                <i class="fas fa-tasks text-lg"></i>
+                <span class="font-bold font-cairo">التصفيات</span>
+            </a>
+        @endcan
 
-                    @can('view-nutrition-settlements')
-                        <a href="{{ route('nutrition.settlements.index') }}"
-                            class="flex items-center p-4 bg-amber-50 rounded-2xl hover:bg-amber-600 hover:text-white transition-all group">
-                            <div
-                                class="w-10 h-10 bg-white shadow-sm rounded-xl flex items-center justify-center text-amber-600 ml-4 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-receipt text-xl"></i>
-                            </div>
-                            <span class="font-bold font-cairo">تصفيات التغذية</span>
-                        </a>
-                    @endcan
-                </div>
-            </div>
+        @can('view-nutrition-budgets')
+            <a href="{{ route('nutrition.budgets.index') }}"
+                class="flex items-center justify-center gap-3 px-6 py-4 bg-emerald-600 text-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-w-[220px]">
+                <i class="fas fa-utensils text-lg"></i>
+                <span class="font-bold font-cairo">موازنات التغذية</span>
+            </a>
+        @endcan
+
+        @can('view-nutrition-settlements')
+            <a href="{{ route('nutrition.settlements.index') }}"
+                class="flex items-center justify-center gap-3 px-6 py-4 bg-amber-500 text-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-w-[220px]">
+                <i class="fas fa-receipt text-lg"></i>
+                <span class="font-bold font-cairo">تصفيات التغذية</span>
+            </a>
+        @endcan
+
+    </div>
+</div>
         </div>
+    </div>
     </div>
 @endsection
