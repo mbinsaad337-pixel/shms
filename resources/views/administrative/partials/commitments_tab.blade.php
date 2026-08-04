@@ -148,7 +148,7 @@
                                         <i class="fas fa-edit text-xs"></i>
                                     </a>
                                     <form action="{{ route('commitments.destroy', $c->id) }}" method="POST"
-                                          onsubmit="return confirm('هل أنت متأكد من حذف هذا التعهد؟')">
+                                          data-confirm="هل أنت متأكد من حذف هذا التعهد؟">
                                         @csrf
                                         <button type="submit" class="w-8 h-8 bg-red-50 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-500 hover:text-white transition-all" title="حذف">
                                             <i class="fas fa-trash-alt text-xs"></i>

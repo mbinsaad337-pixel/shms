@@ -169,7 +169,7 @@
                                             </a>
                                             @can('manage-violations')
                                                 <form action="{{ route('violations.destroy', $violation->id) }}" method="POST"
-                                                    onsubmit="return confirm('هل أنت متأكد من حذف هذه المخالفة؟')">
+                                                    data-confirm="هل أنت متأكد من حذف هذه المخالفة؟">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"

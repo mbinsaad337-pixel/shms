@@ -255,7 +255,7 @@
                                     class="text-gray-400 hover:text-primary ml-3">تعديل</a>
                                 <form action="{{ route('students.mark-graduate', $student) }}" method="POST"
                                     class="inline"
-                                    onsubmit="return confirm('هل تريد نقل هذا الطالب لقائمة الخريجين؟ سيتم إخفاؤه من هذه القائمة وتجميد حسابه.')">
+                                    data-confirm="هل تريد نقل هذا الطالب لقائمة الخريجين؟ سيتم إخفاؤه من هذه القائمة وتجميد حسابه.">
                                     @csrf
                                     <button type="submit" class="text-navy hover:text-gold ml-3" title="نقل للخريجين">
                                         <i class="fas fa-user-graduate"></i>

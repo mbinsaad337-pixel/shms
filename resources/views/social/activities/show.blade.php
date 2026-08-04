@@ -126,7 +126,7 @@
 
                     @if(!auth()->user()->hasRole('super-admin'))
                     <div class="mt-10 pt-8 border-t border-gray-50 flex flex-col gap-3">
-                        <form action="{{ route('activities.destroy', $activity->id) }}" method="POST" onsubmit="return confirm('حذف الفعالية سيؤدي لإزالة سجل الحضور أيضاً. هل أنت متأكد؟')">
+                        <form action="{{ route('activities.destroy', $activity->id) }}" method="POST" data-confirm="حذف الفعالية سيؤدي لإزالة سجل الحضور أيضاً. هل أنت متأكد؟">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="w-full py-4 bg-red-50 text-red-500 rounded-2xl font-bold font-cairo hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2">

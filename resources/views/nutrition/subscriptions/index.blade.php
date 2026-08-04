@@ -175,7 +175,7 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         
-                                        <form action="{{ route('nutrition.subscriptions.destroy', $sub) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا الاشتراك؟ هذا الإجراء لا يمكن التراجع عنه.');">
+                                        <form action="{{ route('nutrition.subscriptions.destroy', $sub) }}" method="POST" data-confirm="هل أنت متأكد من حذف هذا الاشتراك؟ هذا الإجراء لا يمكن التراجع عنه.">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 

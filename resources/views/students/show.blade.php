@@ -45,56 +45,6 @@
 
                     <div class="flex flex-wrap gap-3 items-center justify-between whitespace-nowrap">
                         <div class="flex flex-wrap gap-2">
-                            <!-- Behavioral Actions -->
-                            @if ($student->allows('violations'))
-                                <div class="relative group">
-                                    <button
-                                        class="bg-navy text-white px-6 py-3 rounded-xl hover:bg-navy/90 font-bold font-cairo shadow-lg flex items-center gap-3 transition-all">
-                                        <i class="fas fa-gavel text-gold"></i>
-                                        <span>إجراء إداري</span>
-                                        <i class="fas fa-chevron-down text-[10px] opacity-50"></i>
-                                    </button>
-                                    <div
-                                        class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 hidden group-hover:block z-50">
-                                        <button onclick="openViolationModal()"
-                                            class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-50">
-                                            <i class="fas fa-exclamation-triangle text-red-500 w-5"></i> تسجيل مخالفة
-                                        </button>
-                                        <button onclick="openCommitmentModal()"
-                                            class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-50">
-                                            <i class="fas fa-file-contract text-orange-500 w-5"></i> تسجيل تعهد
-                                        </button>
-                                        <button onclick="openPenaltyModal()"
-                                            class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                                            <i class="fas fa-ban text-red-700 w-5"></i> تطبيق عقوبة
-                                        </button>
-                                    </div>
-                                </div>
-                            @endif
-
-                            <!-- Presence Actions -->
-                            @if ($student->allows('attendance'))
-                                <div class="relative group">
-                                    <button
-                                        class="bg-navy text-white px-6 py-3 rounded-xl hover:bg-navy/90 font-bold font-cairo shadow-lg flex items-center gap-3 transition-all">
-                                        <i class="fas fa-user-clock text-gold"></i>
-                                        <span>الحضور والغياب</span>
-                                        <i class="fas fa-chevron-down text-[10px] opacity-50"></i>
-                                    </button>
-                                    <div
-                                        class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 hidden group-hover:block z-50">
-                                        <button onclick="openAbsenceModal()"
-                                            class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-50">
-                                            <i class="fas fa-calendar-times text-orange-600 w-5"></i> تسجيل غياب
-                                        </button>
-                                        <button onclick="openLeaveModal()"
-                                            class="w-full text-right px-4 py-3 text-sm font-bold font-cairo text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                                            <i class="fas fa-plane-departure text-blue-600 w-5"></i> تسجيل استئذان
-                                        </button>
-                                    </div>
-                                </div>
-                            @endif
-
                             @if ($currentRoom)
                                 <button onclick="openTransferModal()"
                                     class="bg-gold text-navy px-6 py-3 rounded-xl hover:bg-gold/90 font-bold font-cairo shadow-lg flex items-center gap-2 transition-all">

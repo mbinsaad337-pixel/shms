@@ -123,7 +123,7 @@
                         @endif
                         @can('delete-news')
                             <form action="{{ route('news.destroy', $item) }}" method="POST" class="mr-auto"
-                                onsubmit="return confirm('هل أنت متأكد؟')">
+                                data-confirm="هل أنت متأكد من حذف هذا الخبر؟">
                                 @csrf @method('DELETE')
                                 <button type="submit"
                                     class="px-5 py-2 bg-gray-50 text-gray-400 rounded-xl font-bold font-cairo text-sm hover:bg-rose-500 hover:text-white transition-all">

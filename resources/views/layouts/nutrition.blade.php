@@ -142,6 +142,7 @@
     </div>
 
     @include('partials.pdf_preview')
+    @include('partials.confirm_modal')
 
     @stack ('scripts')
     <script>

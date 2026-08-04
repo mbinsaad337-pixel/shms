@@ -185,7 +185,7 @@
                             </a>
                             @if (auth()->user()->hasRole('center-manager'))
                             <form action="{{ route('students.restore-graduate', $student) }}" method="POST" class="inline"
-                                onsubmit="return confirm('هل تريد إعادة هذا الطالب إلى القائمة النشطة؟')">
+                                data-confirm="هل تريد إعادة هذا الطالب إلى القائمة النشطة؟">
                                 @csrf
                                 <button type="submit" class="text-green-600 hover:text-green-800 ml-3 flex items-center gap-1 transition-colors font-bold">
                                     <i class="fas fa-user-check text-xs"></i> إعادة للطالب

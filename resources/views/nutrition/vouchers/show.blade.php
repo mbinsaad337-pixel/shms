@@ -22,7 +22,7 @@
                 </a>
                 @if($voucher->status === 'active')
                     <form action="{{ route('nutrition.vouchers.cancel', $voucher) }}" method="POST"
-                        onsubmit="return confirm('هل تريد إلغاء هذا السند؟')">
+                        data-confirm="هل تريد إلغاء هذا السند؟">
                         @csrf
                         <button type="submit"
                             class="w-9 h-9 bg-red-100 text-red-600 rounded-xl flex items-center justify-center">

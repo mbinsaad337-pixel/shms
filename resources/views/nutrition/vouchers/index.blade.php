@@ -68,7 +68,7 @@
                                     </a>
                                     @if ($voucher->status === 'active')
                                         <form action="{{ route('nutrition.vouchers.cancel', $voucher) }}" method="POST"
-                                            onsubmit="return confirm('هل تريد إلغاء هذا السند؟')">
+                                            data-confirm="هل تريد إلغاء هذا السند؟">
                                             @csrf
                                             <button type="submit" title="إلغاء"
                                                 class="w-8 h-8 bg-amber-50 hover:bg-amber-100 text-amber-500 rounded-lg flex items-center justify-center text-xs">
@@ -77,7 +77,7 @@
                                         </form>
                                     @endif
                                     <form action="{{ route('nutrition.vouchers.destroy', $voucher) }}" method="POST"
-                                        onsubmit="return confirm('هل أنت متأكد من حذف هذا السند نهائياً؟')">
+                                        data-confirm="هل أنت متأكد من حذف هذا السند نهائياً؟">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" title="حذف"

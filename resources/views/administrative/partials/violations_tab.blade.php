@@ -106,7 +106,7 @@
                                 </a>
                                 @can('manage-violations')
                                 <form action="{{ route('violations.destroy', $v->id) }}" method="POST"
-                                      onsubmit="return confirm('حذف هذه المخالفة؟')">
+                                      data-confirm="حذف هذه المخالفة؟">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="w-8 h-8 bg-red-50 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
                                         <i class="fas fa-trash-alt text-xs"></i>

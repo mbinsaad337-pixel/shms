@@ -24,7 +24,7 @@
                     <i class="fas fa-file-pdf"></i> تصدير PDF
                 </a>
                 <form action="{{ route('nutrition.settlements.destroy', $settlement) }}" method="POST"
-                    onsubmit="return confirm('هل أنت متأكد من حذف هذه التصفية نهائياً؟ لا يمكن التراجع.')">
+                    data-confirm="هل أنت متأكد من حذف هذه التصفية نهائياً؟ لا يمكن التراجع.">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="bg-rose-50 text-rose-600 border border-rose-200 px-6 py-2.5 rounded-xl font-bold font-cairo shadow-sm flex items-center gap-2 hover:bg-rose-100 transition-all">

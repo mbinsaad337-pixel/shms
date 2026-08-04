@@ -97,7 +97,7 @@
                                             @endif
                                             @if(in_array($budget->status, ['draft', 'rejected']) && auth()->user()->hasRole('nutrition-manager'))
                                                 <form action="{{ route('nutrition.budgets.destroy', $budget) }}" method="POST"
-                                                    onsubmit="return confirm('هل أنت متأكد من حذف هذه الميزانية (العهدة)؟')">
+                                                    data-confirm="هل أنت متأكد من حذف هذه الميزانية (العهدة)؟">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="text-red-500 hover:text-red-700">

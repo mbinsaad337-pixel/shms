@@ -112,7 +112,7 @@
                             </td>
                             <td class="px-5 py-4 text-center">
                                 <form action="{{ route('nutrition.distributions.destroy', $d->id) }}" method="POST"
-                                    onsubmit="return confirm('هل أنت متأكد من حذف هذا السجل؟ سيؤدي هذا للسماح بإعادة التوزيع للطلاب المرتبطين.')">
+                                    data-confirm="هل أنت متأكد من حذف هذا السجل؟ سيؤدي هذا للسماح بإعادة التوزيع للطلاب المرتبطين.">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-500 hover:text-red-700 transition-colors">

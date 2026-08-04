@@ -170,43 +170,7 @@
 
     @livewireScripts
 
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Find all forms with data-confirm attribute
-            const confirmForms = document.querySelectorAll('form[data-confirm]');
-
-            confirmForms.forEach(form => {
-                form.addEventListener('submit', function (e) {
-                    e.preventDefault();
-
-                    const message = this.getAttribute('data-confirm');
-
-                    Swal.fire({
-                        title: 'تأكيد الإجراء',
-                        text: message,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#2b304c', // primary color
-                        cancelButtonColor: '#f97316',  // secondary color
-                        confirmButtonText: 'نعم، متأكد',
-                        cancelButtonText: 'إلغاء',
-                        customClass: {
-                            popup: 'font-cairo',
-                            title: 'font-cairo font-bold',
-                            content: 'font-almarai'
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Let the form submit normally bypassing alpine/JS
-                            HTMLFormElement.prototype.submit.call(this);
-                        }
-                    });
-                });
-            });
-        });
-    </script>
+    @include('partials.confirm_modal')
 
     @if(session('whatsapp_url') || session('whatsapp_links'))
     <script>

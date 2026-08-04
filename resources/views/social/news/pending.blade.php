@@ -130,7 +130,7 @@
                             <div class="grid grid-cols-2 gap-2">
                                 <form action="{{ route('news.approve', $item) }}" method="POST" class="w-full">
                                     @csrf
-                                    <button type="submit" onclick="return confirm('هل ترغب في اعتماد ونشر هذا الإعلان للجميع؟')"
+                                    <button type="submit" data-confirm="هل ترغب في اعتماد ونشر هذا الإعلان للجميع؟"
                                             class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold font-cairo text-sm shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center gap-1.5">
                                         <i class="fas fa-check"></i> اعتماد ونشر
                                     </button>

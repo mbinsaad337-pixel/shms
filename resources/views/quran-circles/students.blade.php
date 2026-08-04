@@ -96,7 +96,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-left">
                                     <form action="{{ route('quran-circles.students.remove', [$quranCircle, $student]) }}"
-                                        method="POST" onsubmit="return confirm('هل أنت متأكد من إزالة هذا الطالب من الحلقة؟')">
+                                        method="POST" data-confirm="هل أنت متأكد من إزالة هذا الطالب من الحلقة؟">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"

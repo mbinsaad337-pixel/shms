@@ -73,7 +73,7 @@
                                         </button>
                                     </form>
                                     <form action="{{ route('nutrition.settlements.destroy', $settlement) }}" method="POST"
-                                        onsubmit="return confirm('هل أنت متأكد من حذف هذه التصفية نهائياً؟ لا يمكن التراجع.')">
+                                        data-confirm="هل أنت متأكد من حذف هذه التصفية نهائياً؟ لا يمكن التراجع.">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" title="حذف التصفية"
