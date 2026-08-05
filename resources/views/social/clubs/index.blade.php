@@ -122,7 +122,7 @@
                                             <i class="fas fa-edit text-xs"></i>
                                         </a>
                                         <form action="{{ route('clubs.destroy', $club->id) }}" method="POST"
-                                            onsubmit="return confirm('هل أنت متأكد من حذف هذا النادي؟')" class="inline">
+                                            data-confirm="هل أنت متأكد من حذف هذا النادي؟" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"

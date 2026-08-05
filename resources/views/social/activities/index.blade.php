@@ -239,7 +239,7 @@
                                                 </a>
                                                 <form action="{{ route('activities.destroy', $activity->id) }}"
                                                     method="POST" class="inline-block"
-                                                    onsubmit="return confirm('هل أنت متأكد من حذف هذه الفعالية؟ سيتم حذف جميع سجلات الحضور الخاصة بها.')">
+                                                    data-confirm="هل أنت متأكد من حذف هذه الفعالية؟ سيتم حذف جميع سجلات الحضور الخاصة بها.">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"

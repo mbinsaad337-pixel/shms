@@ -53,7 +53,7 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <form action="{{ route('quran-circles.destroy', $circle) }}" method="POST"
-                                            onsubmit="return confirm('هل أنت متأكد من حذف هذه الحلقة؟ سيتم حذف جميع الجلسات والبيانات المرتبطة بها.');">
+                                            data-confirm="هل أنت متأكد من حذف هذه الحلقة؟ سيتم حذف جميع الجلسات والبيانات المرتبطة بها.">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-400 hover:text-red-600 transition-colors p-1"

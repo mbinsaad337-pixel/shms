@@ -250,7 +250,7 @@
                                         <a href="{{ route('leaves.edit', $l->id) }}" class="w-7 h-7 bg-gray-50 text-gray-400 rounded-lg flex items-center justify-center hover:bg-blue-50 hover:text-blue-500 transition-all">
                                             <i class="fas fa-edit text-xs"></i>
                                         </a>
-                                        <form action="{{ route('leaves.destroy', $l->id) }}" method="POST" onsubmit="return confirm('حذف هذا الاستئذان؟')">
+                                        <form action="{{ route('leaves.destroy', $l->id) }}" method="POST" data-confirm="حذف هذا الاستئذان؟">
                                             @csrf
                                             <button type="submit" class="w-7 h-7 bg-red-50 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
                                                 <i class="fas fa-trash-alt text-xs"></i>

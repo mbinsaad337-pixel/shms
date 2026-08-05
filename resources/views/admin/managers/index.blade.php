@@ -8,9 +8,10 @@
             <div>
                 <h2 class="text-3xl font-bold text-primary font-cairo">إدارة مدراء المراكز الطلابية</h2>
                 <p class="text-gray-500 font-almarai mt-1">
-                    @if($selectedCenter)
+                    @if ($selectedCenter)
                         مدراء مركز: <span class="font-bold text-primary">{{ $selectedCenter->name }}</span>
-                        <a href="{{ route('managers.index') }}" class="mr-2 text-sm font-bold text-gold hover:underline">عرض جميع المدراء</a>
+                        <a href="{{ route('managers.index') }}" class="mr-2 text-sm font-bold text-gold hover:underline">عرض
+                            جميع المدراء</a>
                     @else
                         إضافة، تعديل، ومتابعة مدراء المواقع.
                     @endif
@@ -34,7 +35,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    @foreach($managers as $manager)
+                    @foreach ($managers as $manager)
                         <tr class="hover:bg-blue-50/20 transition-colors">
                             <td class="px-8 py-5">
                                 <div class="flex items-center">
@@ -60,12 +61,14 @@
                                 </span>
                             </td>
                             <td class="px-8 py-5">
-                                <a href="{{ route('managers.edit', $manager) }}" class="text-primary hover:text-blue-900 font-bold text-sm font-cairo">تعديل</a>
+                                <a href="{{ route('managers.edit', $manager) }}"
+                                    class="text-primary hover:text-blue-900 font-bold text-sm font-cairo">تعديل</a>
                                 <span class="mx-2 text-gray-300">|</span>
-                                <form action="{{ route('managers.toggle', $manager) }}" method="POST" class="inline" 
-                                    onsubmit="return confirm('{{ $manager->is_active ? 'هل أنت متأكد من تعطيل هذا الحساب؟' : 'هل تريد تفعيل هذا الحساب؟' }}')">
+                                <form action="{{ route('managers.toggle', $manager) }}" method="POST" class="inline"
+                                    data-confirm='{{ $manager->is_active ? 'هل أنت متأكد من تعطيل هذا الحساب؟' : 'هل تريد تفعيل هذا الحساب؟' }}'>
                                     @csrf
-                                    <button type="submit" class="{{ $manager->is_active ? 'text-red-500 hover:text-red-700' : 'text-green-600 hover:text-green-800' }} font-bold text-sm font-cairo">
+                                    <button type="submit"
+                                        class="{{ $manager->is_active ? 'text-red-500 hover:text-red-700' : 'text-green-600 hover:text-green-800' }} font-bold text-sm font-cairo">
                                         {{ $manager->is_active ? 'تعطيل' : 'تفعيل' }}
                                     </button>
                                 </form>

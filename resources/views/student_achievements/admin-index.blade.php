@@ -81,7 +81,7 @@
                                             class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white transition-all flex items-center justify-center shadow-sm">
                                             <i class="fas fa-pencil-alt text-xs"></i>
                                         </a>
-                                        <form action="{{ route('student-achievements.destroy', $achievement) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا الإنجاز؟ لا يمكن التراجع!')">
+                                        <form action="{{ route('student-achievements.destroy', $achievement) }}" method="POST" data-confirm="هل أنت متأكد من حذف هذا الإنجاز؟ لا يمكن التراجع!">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 

@@ -176,7 +176,7 @@
                                         @endphp
                                         @if (!$isLockedBySettlement)
                                         <form action="{{ route('vouchers.destroy', $voucher) }}" method="POST"
-                                            onsubmit="return confirm('هل أنت متأكد من حذف هذا السند؟ سيتم عكس التأثير المالي على الرصيد.');"
+                                            data-confirm="هل أنت متأكد من حذف هذا السند؟ سيتم عكس التأثير المالي على الرصيد."
                                             class="inline">
                                             @csrf
                                             @method('DELETE')

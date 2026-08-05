@@ -69,7 +69,7 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form action="{{ route('nutrition.suppliers.destroy', $supplier) }}" method="POST"
-                                        onsubmit="return confirm('هل تريد حذف هذا المورد؟')">
+                                        data-confirm="هل تريد حذف هذا المورد؟">
                                         @csrf @method('DELETE')
                                         <button type="submit"
                                             class="w-8 h-8 bg-red-50 hover:bg-red-100 text-red-500 rounded-lg flex items-center justify-center text-xs">

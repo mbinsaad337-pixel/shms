@@ -102,7 +102,7 @@
                                     </td>
                                     <td class="px-8 py-6 text-center">
                                         <div class="flex items-center justify-center gap-2">
-                                            <form action="{{ route('penalties.destroy', $penalty->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من إلغاء هذه العقوبة؟')">
+                                            <form action="{{ route('penalties.destroy', $penalty->id) }}" method="POST" data-confirm="هل أنت متأكد من إلغاء هذه العقوبة؟">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="w-9 h-9 bg-red-50 text-red-500 rounded-xl flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-sm">

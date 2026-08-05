@@ -141,7 +141,7 @@
                                                 <span class="text-[10px] text-gray-400 mr-2  ">{{ $comment->created_at->diffForHumans() }}</span>
                                             </div>
                                             @if (auth()->id() === $comment->user_id || auth()->user()->can('manage-news'))
-                                                <form action="{{ route('news.comments.delete', $comment) }}" method="POST" onsubmit="return confirm('حذف التعليق؟')">
+                                                <form action="{{ route('news.comments.delete', $comment) }}" method="POST" data-confirm="حذف التعليق؟">
                                                     @csrf
                                                     <button type="submit" class="text-gray-300 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-all">
                                                         <i class="fas fa-trash-alt text-xs"></i>
@@ -182,7 +182,7 @@
                     @endcan
                     @can('delete-news')
                         <form action="{{ route('news.destroy', $news) }}" method="POST" class="mr-auto"
-                            onsubmit="return confirm('هل أنت متأكد من حذف هذا الخبر؟')">
+                            data-confirm="هل أنت متأكد من حذف هذا الخبر؟">
                             @csrf
                             <button type="submit"
                                 class="inline-flex items-center gap-2 bg-gray-50 text-gray-400 px-6 py-3 rounded-xl font-bold font-cairo hover:bg-rose-500 hover:text-white transition-all">

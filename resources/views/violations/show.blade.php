@@ -281,7 +281,7 @@
                     </div>
 
                     <div class="pt-6 border-t border-gray-50">
-                        <form action="{{ route('violations.destroy', $violation->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذه المخالفة نهائياً؟')">
+                        <form action="{{ route('violations.destroy', $violation->id) }}" method="POST" data-confirm="هل أنت متأكد من حذف هذه المخالفة نهائياً؟">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="w-full py-4 bg-red-50 text-red-500 rounded-2xl font-bold font-cairo hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2">

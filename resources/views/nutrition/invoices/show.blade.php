@@ -23,7 +23,7 @@
                 </a>>
                 @if($invoice->status === 'approved')
                     <form action="{{ route('nutrition.invoices.cancel', $invoice) }}" method="POST"
-                        onsubmit="return confirm('هل تريد إلغاء هذه الفاتورة؟')">
+                        data-confirm="هل تريد إلغاء هذه الفاتورة؟">
                         @csrf
                         <button type="submit"
                             class="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">

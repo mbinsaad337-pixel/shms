@@ -128,7 +128,7 @@
 
                                     @if(auth()->user()->can('manage-budgets') || auth()->user()->hasRole('super-admin'))
                                         <form action="{{ route('budgets.destroy', $budget) }}" method="POST" class="inline"
-                                            onsubmit="return confirm('هل أنت متأكد من رغبتك في حذف هذه الموازنة نهائياً؟ تنبيه: إذا كانت الموازنة معتمدة فسيتم خصم المبالغ من أرصدة الصناديق.')">
+                                            data-confirm="هل أنت متأكد من رغبتك في حذف هذه الموازنة نهائياً؟ تنبيه: إذا كانت الموازنة معتمدة فسيتم خصم المبالغ من أرصدة الصناديق.">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"

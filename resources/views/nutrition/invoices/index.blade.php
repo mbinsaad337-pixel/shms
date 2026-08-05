@@ -57,7 +57,7 @@
                                         </a>
                                         @if ($invoice->status === 'approved')
                                             <form action="{{ route('nutrition.invoices.cancel', $invoice) }}" method="POST"
-                                                onsubmit="return confirm('هل تريد إلغاء هذه الفاتورة؟')">
+                                                data-confirm="هل تريد إلغاء هذه الفاتورة؟">
                                                 @csrf
                                                 <button type="submit" title="إلغاء"
                                                     class="w-8 h-8 bg-amber-50 hover:bg-amber-100 text-amber-500 rounded-lg flex items-center justify-center text-xs">
@@ -66,7 +66,7 @@
                                             </form>
                                         @endif
                                         <form action="{{ route('nutrition.invoices.destroy', $invoice) }}" method="POST"
-                                            onsubmit="return confirm('هل أنت متأكد من حذف هذه الفاتورة نهائياً؟')">
+                                            data-confirm="هل أنت متأكد من حذف هذه الفاتورة نهائياً؟">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" title="حذف"

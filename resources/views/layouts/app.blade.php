@@ -245,8 +245,9 @@
 
     @livewireScripts
 
+<<<<<<< HEAD
     <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function showGlobalLoader() {
             document.getElementById('global-loader').classList.add('active');
@@ -318,6 +319,10 @@
             });
         });
     </script>
+======= --}}
+
+    @include('partials.confirm_modal')
+>>>>>>> 8d689ee457879532bd72d8699a0b6ae15b806e3e
 
     @if(session('whatsapp_url') || session('whatsapp_links'))
     <script>
