@@ -20,6 +20,67 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
+        /* Global Loader */
+        #global-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        #global-loader.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .logo-loader {
+            height: 80px;
+            width: auto;
+            margin-bottom: 1rem;
+            animation: pulse-logo 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .logo-blue {
+            filter: brightness(0) saturate(100%) invert(16%) sepia(87%) saturate(2523%) hue-rotate(190deg) brightness(91%) contrast(104%);
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .loading-dots .dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--navy);
+            border-radius: 50%;
+            animation: bounce-dot 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dots .dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots .dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes bounce-dot {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        @keyframes pulse-logo {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
         :root {
             --navy: #004274;
             --gold: #D4A044;
@@ -239,6 +300,18 @@
 </head>
 
 <body class="font-cairo antialiased">
+    <!-- Global Loader -->
+    <div id="global-loader">
+        <div class="flex flex-col items-center">
+            <img src="{{ asset('images/logos/scs_logo.png') }}" alt="SCS Logo" class="logo-loader logo-blue">
+            <div class="loading-dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <p class="font-cairo text-navy font-bold text-lg animate-pulse">جاري المعالجة...</p>
+        </div>
+    </div>
 
     {{-- ═══════════════════════════════════════════ --}}
     {{-- SECTION 1: Login Hero --}}
@@ -428,10 +501,23 @@
                                 </div>
                                 <h3 style="font-size:1.05rem;font-weight:900;color:#004274;line-height:1.4;margin-bottom:8px;font-family:Cairo">${item.title}</h3>
                                 <p style="color:#6b7280;font-size:0.82rem;font-family:Almarai;line-height:1.7;flex:1">${excerpt}${rawText.length > 130 ? '...' : ''}</p>
-                                <a href="${baseUrl}/news/public/${item.id}" class="read-more-btn">
-                                    <i class="fas fa-book-open" style="font-size:0.75rem"></i>
-                                    قراءة المزيد
-                                </a>
+                                
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px">
+                                    <div style="display:flex;align-items:center;gap:14px">
+                                        <span style="display:flex;align-items:center;gap:5px;font-size:0.78rem;color:#ef4444;font-weight:700;background:#fef2f2;padding:4px 10px;border-radius:999px">
+                                            <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                                            ${item.likes_count ?? 0}
+                                        </span>
+                                        <span style="display:flex;align-items:center;gap:5px;font-size:0.78rem;color:#6b7280;font-weight:700;background:#f3f4f6;padding:4px 10px;border-radius:999px">
+                                            <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                                            ${item.comments_count ?? 0}
+                                        </span>
+                                    </div>
+                                    <a href="${baseUrl}/news/public/${item.id}" class="read-more-btn" style="margin-top:0">
+                                        <i class="fas fa-book-open" style="font-size:0.75rem"></i>
+                                        قراءة المزيد
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -441,7 +527,42 @@
             })
             .catch(err => console.error("News Feed Error:", err));
     </script>
+    <script>
+        function showGlobalLoader() {
+            document.getElementById('global-loader').classList.add('active');
+        }
 
+        function hideGlobalLoader() {
+            document.getElementById('global-loader').classList.remove('active');
+        }
+
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) {
+                hideGlobalLoader();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const normalForms = document.querySelectorAll('form:not([data-no-loader]):not([target="_blank"])');
+            normalForms.forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    if (this.checkValidity()) {
+                        showGlobalLoader();
+                    }
+                });
+            });
+
+            // Show loader on page navigation
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (link && link.href && !link.target && !link.hasAttribute('download') && !link.href.includes('javascript:') && !link.href.includes('#')) {
+                    if (link.origin === window.location.origin) {
+                        showGlobalLoader();
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

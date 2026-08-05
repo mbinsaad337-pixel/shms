@@ -268,13 +268,18 @@ class NewsController extends Controller
             ->take(3)
             ->get();
 
-        return view('social.news.public_show', compact('news', 'related'));
+        $news->load(['comments.user', 'likes']);
+        $likesCount = $news->likes->count();
+        $isLiked = auth()->check() ? $news->isLikedBy(auth()->user()) : false;
+
+        return view('social.news.public_show', compact('news', 'related', 'likesCount', 'isLiked'));
     }
 
     public function publicFeed()
     {
         $news = News::where('is_published', true)
             ->with('center:id,name')
+            ->withCount(['likes', 'comments'])
             ->latest('published_at')
             ->take(6)
             ->get(['id', 'center_id', 'title', 'body', 'cover_image', 'category', 'published_at']);

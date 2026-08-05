@@ -6,6 +6,13 @@
         <p class="text-gray-400 font-almarai text-sm mt-2">نظام إدارة الإسكان الطلابي - النسخة المطورة</p>
     </div>
 
+    @if ($errors->has('session'))
+        <div class="mb-5 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-700 text-sm font-cairo flex items-center gap-2">
+            <i class="fas fa-clock text-amber-500"></i>
+            {{ $errors->first('session') }}
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('login') }}" class="space-y-6">
         @csrf
 

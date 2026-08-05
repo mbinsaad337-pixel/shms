@@ -25,5 +25,18 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        // Handle CSRF token mismatch (419 Page Expired) - redirect to login
+        $exceptions->renderable(function (\Illuminate\Session\TokenMismatchException $e, $request) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى.'], 419);
+            }
+            return redirect()->route('login')->withErrors(['session' => 'انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى.']);
+        });
+
+        $exceptions->respond(function (\Symfony\Component\HttpFoundation\Response $response) {
+            if ($response->getStatusCode() === 419) {
+                return redirect()->route('login')->withErrors(['session' => 'انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى.']);
+            }
+            return $response;
+        });
     })->create();

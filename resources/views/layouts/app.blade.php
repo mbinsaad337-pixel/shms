@@ -24,6 +24,68 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
+        /* Global Loader */
+        #global-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        #global-loader.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .logo-loader {
+            height: 80px;
+            width: auto;
+            margin-bottom: 1rem;
+            animation: pulse-logo 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .logo-blue {
+            filter: brightness(0) saturate(100%) invert(16%) sepia(87%) saturate(2523%) hue-rotate(190deg) brightness(91%) contrast(104%);
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .loading-dots .dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-navy);
+            border-radius: 50%;
+            animation: bounce-dot 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dots .dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots .dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes bounce-dot {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        @keyframes pulse-logo {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
         :root {
             --primary-navy: #004274;
             --primary-gold: #D4A044;
@@ -126,6 +188,19 @@
 </head>
 
 <body class="bg-gray-50 font-sans text-gray-900 antialiased">
+    <!-- Global Loader -->
+    <div id="global-loader">
+        <div class="flex flex-col items-center">
+            <img src="{{ asset('images/logos/scs_logo.png') }}" alt="SCS Logo" class="logo-loader logo-blue">
+            <div class="loading-dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <p class="font-cairo text-navy font-bold text-lg animate-pulse">جاري المعالجة...</p>
+        </div>
+    </div>
+
     <div class="h-screen flex overflow-hidden" x-data="{ sidebarOpen: false }">
         <!-- Sidebar -->
         @include ('partials.sidebar')
@@ -173,7 +248,42 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        function showGlobalLoader() {
+            document.getElementById('global-loader').classList.add('active');
+        }
+
+        function hideGlobalLoader() {
+            document.getElementById('global-loader').classList.remove('active');
+        }
+
+        // Show loader on page hide (back/forward navigation handling)
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) {
+                hideGlobalLoader();
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
+            // Normal forms (without data-confirm)
+            const normalForms = document.querySelectorAll('form:not([data-confirm]):not([data-no-loader]):not([target="_blank"])');
+            normalForms.forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    if (this.checkValidity()) {
+                        showGlobalLoader();
+                    }
+                });
+            });
+
+            // Show loader on page navigation
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (link && link.href && !link.target && !link.hasAttribute('download') && !link.href.includes('javascript:') && !link.href.includes('#')) {
+                    if (link.origin === window.location.origin) {
+                        showGlobalLoader();
+                    }
+                }
+            });
+
             // Find all forms with data-confirm attribute
             const confirmForms = document.querySelectorAll('form[data-confirm]');
 
@@ -199,6 +309,7 @@
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
+                            showGlobalLoader();
                             // Let the form submit normally bypassing alpine/JS
                             HTMLFormElement.prototype.submit.call(this);
                         }

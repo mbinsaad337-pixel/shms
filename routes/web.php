@@ -241,7 +241,12 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
 
     });
 
-    // News & Announcements
+    // News Interactions — available to ALL authenticated users
+    Route::post('news/{news}/like', [NewsController::class, 'toggleLike'])->name('news.like');
+    Route::post('news/{news}/comments', [NewsController::class, 'addComment'])->name('news.comments.add');
+    Route::post('news/comments/{comment}/delete', [NewsController::class, 'deleteComment'])->name('news.comments.delete');
+
+    // News & Announcements — management only
     Route::middleware('permission:manage-news')->group(function () {
         // Media Officer Approvals Dashboard
         Route::get('news/pending', [NewsController::class, 'pendingIndex'])->name('news.pending');
@@ -252,9 +257,6 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         Route::resource('news', NewsController::class)->except(['destroy']);
         Route::post('news/{news}/delete', [NewsController::class, 'destroy'])->name('news.destroy');
         Route::post('news/{news}/toggle-publish', [NewsController::class, 'togglePublish'])->name('news.toggle-publish');
-        Route::post('news/{news}/like', [NewsController::class, 'toggleLike'])->name('news.like');
-        Route::post('news/{news}/comments', [NewsController::class, 'addComment'])->name('news.comments.add');
-        Route::post('news/comments/{comment}/delete', [NewsController::class, 'deleteComment'])->name('news.comments.delete');
     });
 
     // Assets — مدير المخزون ومدير المركز فقط
