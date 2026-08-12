@@ -30,12 +30,13 @@
                     </form>
                 @endif
 
-                @if(!auth()->user()->hasRole('super-admin'))
                 <a href="{{ route('funds.index') }}"
                     class="px-6 py-3 bg-white text-gold border border-gold rounded-xl hover:bg-gold hover:text-navy shadow-sm font-cairo font-bold transition-all transform hover:-translate-y-1 flex items-center gap-2">
                     <i class="fas fa-vault"></i>
                     <span>إدارة الصناديق</span>
                 </a>
+
+                @if(!auth()->user()->hasRole('super-admin'))
                 <a href="{{ route('vouchers.create') }}"
                     class="px-6 py-3 bg-navy text-white rounded-xl hover:bg-navy/90 shadow-lg font-cairo font-bold transition-all transform hover:-translate-y-1 flex items-center gap-2">
                     <i class="fas fa-plus-circle text-gold"></i>

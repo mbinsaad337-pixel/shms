@@ -20,6 +20,8 @@ class Activity extends Model
         'target_audience',
         'max_participants',
         'budget',
+        'total_cost',
+        'attachment_pdf',
         'fund_id',
         'status',
         'created_by',
@@ -29,6 +31,7 @@ class Activity extends Model
         'start_date' => 'date',
         'end_date' => 'date',
         'budget' => 'decimal:2',
+        'total_cost' => 'decimal:2',
     ];
 
     public function targetedStudents()

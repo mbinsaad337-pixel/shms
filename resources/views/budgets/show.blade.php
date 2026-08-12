@@ -189,6 +189,7 @@
                                         <th class="px-6">الصندوق</th>
                                         <th class="px-6">المبلغ المطلوب</th>
                                         <th class="px-6">الرصيد الحالي</th>
+                                        <th class="px-6 text-center">المرفق (PDF)</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-50">
@@ -205,6 +206,17 @@
                                             </td>
                                             <td class="px-6 text-sm text-gray-400">
                                                 {{ number_format($item->fund->balance, 2) }} ر.ي
+                                            </td>
+                                            <td class="px-6 text-center">
+                                                @if($item->attachment_pdf)
+                                                    <a href="{{ asset('storage/' . $item->attachment_pdf) }}" target="_blank"
+                                                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg text-xs font-bold transition-all">
+                                                        <i class="fas fa-file-pdf"></i>
+                                                        <span>عرض</span>
+                                                    </a>
+                                                @else
+                                                    <span class="text-xs text-gray-400 font-bold">لا يوجد</span>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

@@ -16,7 +16,7 @@
         rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Tom Select -->
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
 
@@ -73,17 +73,39 @@
             animation: bounce-dot 1.4s infinite ease-in-out both;
         }
 
-        .loading-dots .dot:nth-child(1) { animation-delay: -0.32s; }
-        .loading-dots .dot:nth-child(2) { animation-delay: -0.16s; }
-        
+        .loading-dots .dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .loading-dots .dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
         @keyframes bounce-dot {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1);
+            }
         }
 
         @keyframes pulse-logo {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
         }
 
         :root {
@@ -169,17 +191,26 @@
                 overflow-y: hidden !important;
                 -webkit-overflow-scrolling: touch;
             }
+
             main.p-6 {
-                padding: 1rem !important; /* Overrides p-6 to be like p-4 on mobile */
+                padding: 1rem !important;
+                /* Overrides p-6 to be like p-4 on mobile */
             }
-            .card-premium, .bg-white.rounded-2xl {
-                padding: 1rem !important; /* Smaller padding inside cards on mobile */
+
+            .card-premium,
+            .bg-white.rounded-2xl {
+                padding: 1rem !important;
+                /* Smaller padding inside cards on mobile */
             }
+
             .gap-10 {
-                gap: 1rem !important; /* Fix large logo gap in topbar */
+                gap: 1rem !important;
+                /* Fix large logo gap in topbar */
             }
+
             img.h-14 {
-                height: 2.5rem !important; /* Fix oversized logos on mobile */
+                height: 2.5rem !important;
+                /* Fix oversized logos on mobile */
             }
         }
     </style>
@@ -245,9 +276,8 @@
 
     @livewireScripts
 
-<<<<<<< HEAD
     <!-- SweetAlert2 -->
-    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function showGlobalLoader() {
             document.getElementById('global-loader').classList.add('active');
@@ -258,17 +288,18 @@
         }
 
         // Show loader on page hide (back/forward navigation handling)
-        window.addEventListener('pageshow', function (event) {
+        window.addEventListener('pageshow', function(event) {
             if (event.persisted) {
                 hideGlobalLoader();
             }
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // Normal forms (without data-confirm)
-            const normalForms = document.querySelectorAll('form:not([data-confirm]):not([data-no-loader]):not([target="_blank"])');
+            const normalForms = document.querySelectorAll(
+                'form:not([data-confirm]):not([data-no-loader]):not([target="_blank"])');
             normalForms.forEach(form => {
-                form.addEventListener('submit', function (e) {
+                form.addEventListener('submit', function(e) {
                     if (this.checkValidity()) {
                         showGlobalLoader();
                     }
@@ -278,7 +309,8 @@
             // Show loader on page navigation
             document.addEventListener('click', function(e) {
                 const link = e.target.closest('a');
-                if (link && link.href && !link.target && !link.hasAttribute('download') && !link.href.includes('javascript:') && !link.href.includes('#')) {
+                if (link && link.href && !link.target && !link.hasAttribute('download') && !link.href
+                    .includes('javascript:') && !link.href.includes('#')) {
                     if (link.origin === window.location.origin) {
                         showGlobalLoader();
                     }
@@ -289,7 +321,7 @@
             const confirmForms = document.querySelectorAll('form[data-confirm]');
 
             confirmForms.forEach(form => {
-                form.addEventListener('submit', function (e) {
+                form.addEventListener('submit', function(e) {
                     e.preventDefault();
 
                     const message = this.getAttribute('data-confirm');
@@ -300,7 +332,7 @@
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#2b304c', // primary color
-                        cancelButtonColor: '#f97316',  // secondary color
+                        cancelButtonColor: '#f97316', // secondary color
                         confirmButtonText: 'نعم، متأكد',
                         cancelButtonText: 'إلغاء',
                         customClass: {
@@ -319,66 +351,69 @@
             });
         });
     </script>
-======= --}}
 
     @include('partials.confirm_modal')
->>>>>>> 8d689ee457879532bd72d8699a0b6ae15b806e3e
 
-    @if(session('whatsapp_url') || session('whatsapp_links'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let singleUrl = @json(session('whatsapp_url'));
-            let links = @json(session('whatsapp_links') ?? []);
-            
-            if (singleUrl && links.length === 0) {
-                links = [{ name: 'الطالب', url: singleUrl }];
-            }
+    @if (session('whatsapp_url') || session('whatsapp_links'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                let singleUrl = @json(session('whatsapp_url'));
+                let links = @json(session('whatsapp_links') ?? []);
 
-            if (links.length === 1) {
-                Swal.fire({
-                    title: 'إرسال إشعار للطالب',
-                    html: '<p class="font-almarai text-gray-600">هل تريد إرسال إشعار واتساب للطالب ' + (links[0].name !== 'الطالب' ? links[0].name : '') + '؟</p>',
-                    icon: 'success',
-                    showCancelButton: true,
-                    confirmButtonColor: '#25D366',
-                    cancelButtonColor: '#6b7280',
-                    confirmButtonText: '<i class="fab fa-whatsapp ml-2"></i> إرسال عبر واتساب',
-                    cancelButtonText: 'تخطي',
-                    customClass: {
-                        popup: 'font-cairo',
-                        title: 'font-cairo font-bold',
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.open(links[0].url, '_blank');
-                    }
-                });
-            } else if (links.length > 1) {
-                let htmlContent = '<p class="font-almarai text-gray-600 mb-4 text-sm">تم تنفيذ الإجراء بنجاح لعدة طلاب. يرجى الضغط على الزر بجانب كل طالب لإرسال الإشعار له:</p>';
-                htmlContent += '<div class="flex flex-col gap-2 max-h-60 overflow-y-auto p-1">';
-                links.forEach(link => {
-                    htmlContent += `<a href="${link.url}" target="_blank" class="bg-[#25D366] text-black py-2 px-4 rounded-xl text-sm font-bold flex items-center justify-between hover:bg-green-600 transition-colors cursor-pointer" onclick="this.classList.add('opacity-50')">
+                if (singleUrl && links.length === 0) {
+                    links = [{
+                        name: 'الطالب',
+                        url: singleUrl
+                    }];
+                }
+
+                if (links.length === 1) {
+                    Swal.fire({
+                        title: 'إرسال إشعار للطالب',
+                        html: '<p class="font-almarai text-gray-600">هل تريد إرسال إشعار واتساب للطالب ' + (
+                            links[0].name !== 'الطالب' ? links[0].name : '') + '؟</p>',
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonColor: '#25D366',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: '<i class="fab fa-whatsapp ml-2"></i> إرسال عبر واتساب',
+                        cancelButtonText: 'تخطي',
+                        customClass: {
+                            popup: 'font-cairo',
+                            title: 'font-cairo font-bold',
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.open(links[0].url, '_blank');
+                        }
+                    });
+                } else if (links.length > 1) {
+                    let htmlContent =
+                        '<p class="font-almarai text-gray-600 mb-4 text-sm">تم تنفيذ الإجراء بنجاح لعدة طلاب. يرجى الضغط على الزر بجانب كل طالب لإرسال الإشعار له:</p>';
+                    htmlContent += '<div class="flex flex-col gap-2 max-h-60 overflow-y-auto p-1">';
+                    links.forEach(link => {
+                        htmlContent += `<a href="${link.url}" target="_blank" class="bg-[#25D366] text-black py-2 px-4 rounded-xl text-sm font-bold flex items-center justify-between hover:bg-green-600 transition-colors cursor-pointer" onclick="this.classList.add('opacity-50')">
                         <span>${link.name}</span>
                         <i class="fab fa-whatsapp text-lg"></i>
                     </a>`;
-                });
-                htmlContent += '</div>';
+                    });
+                    htmlContent += '</div>';
 
-                Swal.fire({
-                    title: 'إرسال إشعارات جماعية',
-                    html: htmlContent,
-                    icon: 'info',
-                    showConfirmButton: true,
-                    confirmButtonText: 'إغلاق',
-                    confirmButtonColor: '#6b7280',
-                    customClass: {
-                        popup: 'font-cairo',
-                        title: 'font-cairo font-bold',
-                    }
-                });
-            }
-        });
-    </script>
+                    Swal.fire({
+                        title: 'إرسال إشعارات جماعية',
+                        html: htmlContent,
+                        icon: 'info',
+                        showConfirmButton: true,
+                        confirmButtonText: 'إغلاق',
+                        confirmButtonColor: '#6b7280',
+                        customClass: {
+                            popup: 'font-cairo',
+                            title: 'font-cairo font-bold',
+                        }
+                    });
+                }
+            });
+        </script>
     @endif
 
     {{-- Notification Bell Alpine Component --}}
@@ -395,14 +430,16 @@
                 },
                 fetchBell() {
                     fetch('{{ route('complaints.bell') }}', {
-                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                    })
-                    .then(r => r.json())
-                    .then(data => {
-                        this.count   = data.count;
-                        this.notices = data.notices;
-                    })
-                    .catch(() => {});
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            this.count = data.count;
+                            this.notices = data.notices;
+                        })
+                        .catch(() => {});
                 }
             }
         }
