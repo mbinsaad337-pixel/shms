@@ -109,6 +109,9 @@
                                 المستهدفون</th>
                             <th
                                 class="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest font-cairo whitespace-nowrap text-center">
+                                إجمالي التكلفة</th>
+                            <th
+                                class="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest font-cairo whitespace-nowrap text-center">
                                 الحالة</th>
                             <th
                                 class="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest font-cairo whitespace-nowrap text-center">
@@ -176,6 +179,16 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 text-center">
+                                        @if ($activity->total_cost)
+                                            <span class="text-sm font-black text-emerald-700 font-cairo">
+                                                {{ number_format($activity->total_cost, 2) }}
+                                                <span class="text-xs font-normal text-gray-400">ر.ي</span>
+                                            </span>
+                                        @else
+                                            <span class="text-xs text-gray-300">—</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
                                         @if (!auth()->user()->hasRole('super-admin') && !auth()->user()->hasRole('activity-assistant'))
                                             <form action="{{ route('activities.update-status', $activity->id) }}"
                                                 method="POST" class="inline-block relative">
@@ -223,6 +236,15 @@
                                                     title="تسجيل حضور">
                                                     <i class="fas fa-user-plus text-xs"></i>
                                                 </button>
+                                            @endif
+
+                                            @if ($activity->attachment_pdf)
+                                                <a href="{{ asset('storage/' . $activity->attachment_pdf) }}"
+                                                    target="_blank"
+                                                    class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center"
+                                                    title="عرض ملف التصور">
+                                                    <i class="fas fa-file-pdf text-xs"></i>
+                                                </a>
                                             @endif
 
                                             <a href="{{ route('activities.show', $activity->id) }}"
@@ -300,7 +322,8 @@
                     </button>
                 </div>
 
-                <form action="{{ route('activities.store') }}" method="POST" class="space-y-6">
+                <form action="{{ route('activities.store') }}" method="POST" enctype="multipart/form-data"
+                    class="space-y-6">
                     @csrf
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <!-- Basic Info -->
@@ -370,6 +393,34 @@
                             <input type="text" id="plan_category" name="category" placeholder="مثال: أنشطة شهر يناير"
                                 class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right transition-all font-almarai">
                             <p class="text-xs text-gray-400 mt-1 font-almarai">يُملأ تلقائياً عند اختيار التاريخ</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">إجمالي تكلفة
+                                الفعالية
+                                <span class="text-gray-400 font-normal text-xs">(اختياري)</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number" name="total_cost" step="0.01" min="0"
+                                    placeholder="0.00"
+                                    class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right transition-all font-almarai">
+                                <span
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-cairo">ر.ي</span>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-2">
+                            <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">ملف التصور (PDF)
+                                <span class="text-gray-400 font-normal text-xs">(اختياري)</span>
+                            </label>
+                            <label
+                                class="flex items-center gap-3 w-full px-5 py-4 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50/50 hover:border-gold/40 hover:bg-gold/5 cursor-pointer transition-all">
+                                <i class="fas fa-file-pdf text-red-400 text-lg"></i>
+                                <span class="text-sm text-gray-400 font-almarai" id="plan_pdf_label">اختر ملف PDF
+                                    للإرفاق...</span>
+                                <input type="file" name="attachment_pdf" accept=".pdf" class="hidden"
+                                    onchange="document.getElementById('plan_pdf_label').textContent = this.files[0]?.name ?? 'اختر ملف PDF للإرفاق...'">
+                            </label>
                         </div>
 
                     </div>
@@ -555,7 +606,8 @@
 
             if (!window.isSecureContext && window.location.hostname !== 'localhost') {
                 alert(
-                "الكاميرا تحتاج إلى اتصال آمن (HTTPS) أو تشغيلها عبر 'localhost' لتعمل بشكل صحيح في هذا المتصفح.");
+                    "الكاميرا تحتاج إلى اتصال آمن (HTTPS) أو تشغيلها عبر 'localhost' لتعمل بشكل صحيح في هذا المتصفح."
+                );
                 return;
             }
 
@@ -592,7 +644,8 @@
                     document.getElementById('registerForm').submit();
                 },
                 (errorMessage) => {
-                    /* scanning... */ }
+                    /* scanning... */
+                }
             ).catch(err => {
                 console.error(err);
                 alert("تعذر تشغيل الكاميرا. يرجى التأكد من منح الإذن لاستخدام الكاميرا.");

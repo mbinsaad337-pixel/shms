@@ -57,6 +57,7 @@
             <th class="text-center">المبلغ المعتمد (ر.ي)</th>
             @endif
             <th class="text-center">الرصيد الحالي للصندوق</th>
+            <th class="text-center">المرفق (PDF)</th>
         </tr>
     </thead>
     <tbody>
@@ -69,6 +70,13 @@
             <td class="text-center font-bold   text-success">{{ number_format($item->approved_amount, 2) }}</td>
             @endif
             <td class="text-center   text-muted">{{ number_format($item->fund->balance, 2) }}</td>
+            <td class="text-center">
+                @if($item->attachment_pdf)
+                    <a href="{{ asset('storage/' . $item->attachment_pdf) }}" target="_blank" style="color: #dc2626; text-decoration: none; font-weight: bold;">عرض المرفق</a>
+                @else
+                    <span style="color: #9ca3af;">لا يوجد</span>
+                @endif
+            </td>
         </tr>
         @endforeach
     </tbody>

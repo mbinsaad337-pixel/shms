@@ -13,6 +13,7 @@ class BudgetItem extends Model
         'approved_amount',
         'justification',
         'notes',
+        'attachment_pdf',
     ];
 
     protected $casts = [

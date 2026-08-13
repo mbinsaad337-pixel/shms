@@ -94,8 +94,9 @@ class ActivityController extends Controller
             $query->where('category', $request->category);
         }
 
-        $activities = $query->latest()->get();
-        $centerName = $user->center_id ? $user->center->name : ($request->filled('center_id') ? \App\Models\Center::find($request->center_id)->name : 'جميع المراكز');
+        $activities  = $query->latest()->get();
+        $totalCost   = $activities->whereNotNull('total_cost')->sum('total_cost');
+        $centerName  = $user->center_id ? $user->center->name : ($request->filled('center_id') ? \App\Models\Center::find($request->center_id)->name : 'جميع المراكز');
 
         $extraInfo = ['المركز' => $centerName];
         if ($request->filled('month')) {
@@ -106,35 +107,47 @@ class ActivityController extends Controller
         }
 
         return $pdfService->stream('pdf.social.activities.list-pdf', [
-            'data' => $activities,
+            'data'       => $activities,
+            'totalCost'  => $totalCost,
+            'centerName' => $centerName,
         ], 'تقرير الفعاليات والأنشطة', 'activities_list.pdf', 'landscape', $extraInfo);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'club_id' => 'required|exists:clubs,id',
-            'name' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'start_time' => 'nullable|string',
-            'end_time' => 'nullable|string',
-            'location' => 'required|string',
-            'target_all_students' => 'nullable|boolean',
-            'target_student_ids' => 'nullable|array',
+            'club_id'              => 'required|exists:clubs,id',
+            'name'                 => 'required|string',
+            'start_date'           => 'required|date',
+            'end_date'             => 'nullable|date|after_or_equal:start_date',
+            'start_time'           => 'nullable|string',
+            'end_time'             => 'nullable|string',
+            'location'             => 'required|string',
+            'target_all_students'  => 'nullable|boolean',
+            'target_student_ids'   => 'nullable|array',
             'target_student_ids.*' => 'exists:students,id',
-            'target_club_members' => 'nullable|boolean',
-            'target_audience' => 'nullable|string',
-            'category' => 'nullable|string|max:255',
+            'target_club_members'  => 'nullable|boolean',
+            'target_audience'      => 'nullable|string',
+            'category'             => 'nullable|string|max:255',
+            'total_cost'           => 'nullable|numeric|min:0',
+            'attachment_pdf'       => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
-        $activity = Activity::create(array_merge($request->only([
-            'club_id', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'location', 'target_audience', 'category'
+        $activityData = array_merge($request->only([
+            'club_id', 'name', 'start_date', 'end_date', 'start_time', 'end_time',
+            'location', 'target_audience', 'category', 'total_cost',
         ]), [
-            'center_id' => auth()->user()->center_id,
+            'center_id'  => auth()->user()->center_id,
             'created_by' => auth()->id(),
-            'status' => 'planned'
-        ]));
+            'status'     => 'planned',
+        ]);
+
+        if ($request->hasFile('attachment_pdf')) {
+            $activityData['attachment_pdf'] = $request->file('attachment_pdf')
+                ->store('activities/attachments', 'public');
+        }
+
+        $activity = Activity::create($activityData);
 
         if ($request->target_all_students) {
             $allStudents = Student::where('center_id', auth()->user()->center_id)
@@ -148,7 +161,6 @@ class ActivityController extends Controller
             $activity->targetedStudents()->sync($request->target_student_ids);
         }
 
-        // If max_participants was null but we have targets, update it for better tracking
         if ($activity->targetedStudents->count() > 0) {
             $activity->update(['max_participants' => $activity->targetedStudents->count()]);
         }
@@ -193,24 +205,43 @@ class ActivityController extends Controller
     public function update(Request $request, Activity $activity)
     {
         $validated = $request->validate([
-            'club_id' => 'required|exists:clubs,id',
-            'name' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'start_time' => 'nullable|string',
-            'end_time' => 'nullable|string',
-            'location' => 'required|string',
-            'target_student_ids' => 'nullable|array',
+            'club_id'              => 'required|exists:clubs,id',
+            'name'                 => 'required|string',
+            'start_date'           => 'required|date',
+            'end_date'             => 'nullable|date|after_or_equal:start_date',
+            'start_time'           => 'nullable|string',
+            'end_time'             => 'nullable|string',
+            'location'             => 'required|string',
+            'target_student_ids'   => 'nullable|array',
             'target_student_ids.*' => 'exists:students,id',
-            'target_club_members' => 'nullable|boolean',
-            'status' => 'required|in:planned,published,completed,cancelled',
-            'target_audience' => 'nullable|string',
-            'category' => 'nullable|string|max:255',
+            'target_club_members'  => 'nullable|boolean',
+            'status'               => 'required|in:planned,published,completed,cancelled',
+            'target_audience'      => 'nullable|string',
+            'category'             => 'nullable|string|max:255',
+            'total_cost'           => 'nullable|numeric|min:0',
+            'attachment_pdf'       => 'nullable|file|mimes:pdf|max:10240',
+            'remove_attachment'    => 'nullable|boolean',
         ]);
 
-        $activity->update(array_merge($request->only([
-            'club_id', 'name', 'start_date', 'end_date', 'start_time', 'end_time', 'location', 'status', 'target_audience', 'category'
-        ])));
+        $activityData = $request->only([
+            'club_id', 'name', 'start_date', 'end_date', 'start_time', 'end_time',
+            'location', 'status', 'target_audience', 'category', 'total_cost',
+        ]);
+
+        // Handle PDF attachment upload
+        if ($request->hasFile('attachment_pdf')) {
+            // Delete old file if exists
+            if ($activity->attachment_pdf) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($activity->attachment_pdf);
+            }
+            $activityData['attachment_pdf'] = $request->file('attachment_pdf')
+                ->store('activities/attachments', 'public');
+        } elseif ($request->boolean('remove_attachment') && $activity->attachment_pdf) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($activity->attachment_pdf);
+            $activityData['attachment_pdf'] = null;
+        }
+
+        $activity->update($activityData);
 
         if ($request->target_all_students) {
             $allStudents = Student::where('center_id', auth()->user()->center_id)

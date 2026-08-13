@@ -25,10 +25,11 @@
         </div>
 
         <div class="bg-white rounded-[2.5rem] p-10 shadow-2xl border-t-8 border-navy">
-            <form action="{{ route('activities.update', $activity->id) }}" method="POST" class="space-y-8">
+            <form action="{{ route('activities.update', $activity->id) }}" method="POST" enctype="multipart/form-data"
+                class="space-y-8">
                 @csrf
                 @method('PUT')
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     <!-- Title & Club -->
                     <div class="lg:col-span-2">
@@ -41,8 +42,9 @@
                         <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">النادي المنظم</label>
                         <select id="edit_club_id" name="club_id" required onchange="updateTargetOptions()"
                             class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right transition-all font-almarai">
-                            @foreach($clubs as $club)
-                                <option value="{{ $club->id }}" {{ $activity->club_id == $club->id ? 'selected' : '' }}>{{ $club->name }}</option>
+                            @foreach ($clubs as $club)
+                                <option value="{{ $club->id }}" {{ $activity->club_id == $club->id ? 'selected' : '' }}>
+                                    {{ $club->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -51,17 +53,22 @@
                         <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">حالة الفعالية</label>
                         <select name="status" required
                             class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right transition-all font-almarai">
-                            <option value="planned" {{ $activity->status == 'planned' ? 'selected' : '' }}>مجدولة (مخطط لها)</option>
-                            <option value="published" {{ $activity->status == 'published' ? 'selected' : '' }}>منشورة (نشطة)</option>
-                            <option value="completed" {{ $activity->status == 'completed' ? 'selected' : '' }}>مكتملة</option>
-                            <option value="cancelled" {{ $activity->status == 'cancelled' ? 'selected' : '' }}>ملغاة</option>
+                            <option value="planned" {{ $activity->status == 'planned' ? 'selected' : '' }}>مجدولة (مخطط لها)
+                            </option>
+                            <option value="published" {{ $activity->status == 'published' ? 'selected' : '' }}>منشورة (نشطة)
+                            </option>
+                            <option value="completed" {{ $activity->status == 'completed' ? 'selected' : '' }}>مكتملة
+                            </option>
+                            <option value="cancelled" {{ $activity->status == 'cancelled' ? 'selected' : '' }}>ملغاة
+                            </option>
                         </select>
                     </div>
 
                     <!-- Date Range -->
                     <div class="lg:col-span-1">
                         <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">من تاريخ</label>
-                        <input type="date" name="start_date" value="{{ $activity->start_date?->format('Y-m-d') }}" required
+                        <input type="date" name="start_date" value="{{ $activity->start_date?->format('Y-m-d') }}"
+                            required
                             class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right   transition-all">
                     </div>
 
@@ -91,43 +98,101 @@
                     </div>
                 </div>
 
+                <!-- Cost & Attachment -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-2">
+                    <div>
+                        <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">إجمالي تكلفة الفعالية
+                            <span class="text-gray-400 font-normal text-xs">(اختياري)</span>
+                        </label>
+                        <div class="relative">
+                            <input type="number" name="total_cost" step="0.01" min="0"
+                                value="{{ $activity->total_cost }}" placeholder="0.00"
+                                class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right transition-all font-almarai">
+                            <span
+                                class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-cairo">ر.ي</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-black text-navy mb-3 font-cairo text-right">ملف التصور (PDF)
+                            <span class="text-gray-400 font-normal text-xs">(اختياري)</span>
+                        </label>
+                        @if ($activity->attachment_pdf)
+                            <div class="flex items-center gap-3 mb-3 p-3 rounded-xl bg-red-50 border border-red-100">
+                                <i class="fas fa-file-pdf text-red-400"></i>
+                                <a href="{{ asset('storage/' . $activity->attachment_pdf) }}" target="_blank"
+                                    class="text-sm text-red-600 hover:underline font-almarai flex-1 truncate">عرض الملف
+                                    الحالي</a>
+                                <label class="flex items-center gap-2 text-xs text-gray-500 cursor-pointer">
+                                    <input type="checkbox" name="remove_attachment" value="1"
+                                        class="w-4 h-4 rounded text-red-500">
+                                    <span>حذف الملف</span>
+                                </label>
+                            </div>
+                        @endif
+                        <label
+                            class="flex items-center gap-3 w-full px-5 py-4 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50/50 hover:border-gold/40 hover:bg-gold/5 cursor-pointer transition-all">
+                            <i class="fas fa-file-pdf text-red-400 text-lg"></i>
+                            <span class="text-sm text-gray-400 font-almarai"
+                                id="edit_pdf_label">{{ $activity->attachment_pdf ? 'تغيير الملف...' : 'اختر ملف PDF للإرفاق...' }}</span>
+                            <input type="file" name="attachment_pdf" accept=".pdf" class="hidden"
+                                onchange="document.getElementById('edit_pdf_label').textContent = this.files[0]?.name ?? 'اختر ملف PDF للإرفاق...'">
+                        </label>
+                    </div>
+                </div>
+
                 <!-- Target Selection Box -->
                 <div class="w-full mt-10">
                     <div class="bg-gray-50 rounded-[2.5rem] p-8 border border-gray-100 shadow-inner">
                         <div class="flex items-center justify-between mb-8">
                             <h3 class="font-black text-navy font-cairo text-xl">تعديل الطلاب المستهدفين</h3>
                             <div class="flex gap-3">
-                                <div id="edit_club_member_option" class="flex items-center gap-3 bg-white px-5 py-3 rounded-2xl border border-gold/20 shadow-sm">
-                                    <input type="checkbox" name="target_club_members" value="1" id="edit_target_club" class="w-6 h-6 rounded border-gray-300 text-gold focus:ring-gold">
-                                    <label for="edit_target_club" class="text-sm font-bold text-navy font-cairo">أعضاء النادي</label>
+                                <div id="edit_club_member_option"
+                                    class="flex items-center gap-3 bg-white px-5 py-3 rounded-2xl border border-gold/20 shadow-sm">
+                                    <input type="checkbox" name="target_club_members" value="1"
+                                        id="edit_target_club"
+                                        class="w-6 h-6 rounded border-gray-300 text-gold focus:ring-gold">
+                                    <label for="edit_target_club" class="text-sm font-bold text-navy font-cairo">أعضاء
+                                        النادي</label>
                                 </div>
-                                <div class="flex items-center gap-3 bg-navy/5 px-5 py-3 rounded-2xl border border-navy/10 shadow-sm">
-                                    <input type="checkbox" name="target_all_students" value="1" id="edit_target_all" class="w-6 h-6 rounded border-gray-300 text-navy focus:ring-navy">
-                                    <label for="edit_target_all" class="text-sm font-bold text-navy font-cairo">جميع طلاب المركز</label>
+                                <div
+                                    class="flex items-center gap-3 bg-navy/5 px-5 py-3 rounded-2xl border border-navy/10 shadow-sm">
+                                    <input type="checkbox" name="target_all_students" value="1"
+                                        id="edit_target_all"
+                                        class="w-6 h-6 rounded border-gray-300 text-navy focus:ring-navy">
+                                    <label for="edit_target_all" class="text-sm font-bold text-navy font-cairo">جميع طلاب
+                                        المركز</label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="space-y-6">
                             <div class="relative">
-                                <input type="text" id="edit_student_search" placeholder="ابحث عن الطالب لإضافته أو إزالته..." onkeyup="filterEditStudents()"
+                                <input type="text" id="edit_student_search"
+                                    placeholder="ابحث عن الطالب لإضافته أو إزالته..." onkeyup="filterEditStudents()"
                                     class="w-full px-14 py-5 rounded-3xl border-2 border-transparent focus:border-gold/30 bg-white shadow-sm outline-none text-right font-almarai text-lg transition-all">
-                                <i class="fas fa-search absolute right-6 top-1/2 -translate-y-1/2 text-gold/50 text-xl"></i>
+                                <i
+                                    class="fas fa-search absolute right-6 top-1/2 -translate-y-1/2 text-gold/50 text-xl"></i>
                             </div>
 
-                            <div class="space-y-3 max-h-96 overflow-y-auto px-4 custom-scrollbar-v2" id="edit_student_list">
+                            <div class="space-y-3 max-h-96 overflow-y-auto px-4 custom-scrollbar-v2"
+                                id="edit_student_list">
                                 @php
                                     $targetedIds = $activity->targetedStudents->pluck('id')->toArray();
                                 @endphp
-                                @foreach($students as $student)
-                                    <label class="edit-student-item group relative flex items-center justify-between p-5 rounded-2xl border border-white bg-white/50 hover:bg-white hover:border-gold/30 hover:shadow-md cursor-pointer transition-all">
+                                @foreach ($students as $student)
+                                    <label
+                                        class="edit-student-item group relative flex items-center justify-between p-5 rounded-2xl border border-white bg-white/50 hover:bg-white hover:border-gold/30 hover:shadow-md cursor-pointer transition-all">
                                         <div class="flex items-center gap-5">
-                                            <input type="checkbox" name="target_student_ids[]" value="{{ $student->id }}" 
+                                            <input type="checkbox" name="target_student_ids[]"
+                                                value="{{ $student->id }}"
                                                 {{ in_array($student->id, $targetedIds) ? 'checked' : '' }}
                                                 class="w-7 h-7 rounded-lg border-gray-300 text-gold focus:ring-gold transition-transform group-hover:scale-110">
                                             <div class="flex flex-col text-right">
-                                                <span class="text-base font-black text-navy group-hover:text-gold transition-colors">{{ $student->name_ar }}</span>
-                                                <span class="text-xs text-gray-400   tracking-widest">{{ $student->student_number }}</span>
+                                                <span
+                                                    class="text-base font-black text-navy group-hover:text-gold transition-colors">{{ $student->name_ar }}</span>
+                                                <span
+                                                    class="text-xs text-gray-400   tracking-widest">{{ $student->student_number }}</span>
                                             </div>
                                         </div>
                                     </label>
@@ -151,17 +216,30 @@
     </div>
 
     <style>
-        .custom-scrollbar-v2::-webkit-scrollbar { width: 8px; }
-        .custom-scrollbar-v2::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar-v2::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 10px; border: 3px solid transparent; }
-        .custom-scrollbar-v2::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
+        .custom-scrollbar-v2::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .custom-scrollbar-v2::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar-v2::-webkit-scrollbar-thumb {
+            background: #E5E7EB;
+            border-radius: 10px;
+            border: 3px solid transparent;
+        }
+
+        .custom-scrollbar-v2::-webkit-scrollbar-thumb:hover {
+            background: #D1D5DB;
+        }
     </style>
 
     <script>
         function filterEditStudents() {
             const search = document.getElementById('edit_student_search').value.toLowerCase();
             const items = document.querySelectorAll('.edit-student-item');
-            
+
             items.forEach(item => {
                 const name = item.innerText.toLowerCase();
                 item.style.display = name.includes(search) ? 'flex' : 'none';

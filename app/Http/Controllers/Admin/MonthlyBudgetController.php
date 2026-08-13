@@ -52,9 +52,10 @@ class MonthlyBudgetController extends Controller
             'items' => 'required|array',
             'items.*.fund_id' => 'required|exists:funds,id',
             'items.*.amount' => 'required|numeric|min:0',
+            'items.*.attachment_pdf' => 'nullable|file|mimes:pdf|max:5120', // Max 5MB
         ]);
 
-        DB::transaction(function () use ($validated) {
+        DB::transaction(function () use ($validated, $request) {
             $budget = MonthlyBudget::create([
                 'center_id' => auth()->user()->center_id,
                 'month' => $validated['month'],
@@ -64,11 +65,17 @@ class MonthlyBudgetController extends Controller
                 'submitted_by' => auth()->id(),
             ]);
 
-            foreach ($validated['items'] as $item) {
+            foreach ($validated['items'] as $index => $item) {
+                $attachmentPath = null;
+                if ($request->hasFile("items.{$index}.attachment_pdf")) {
+                    $attachmentPath = $request->file("items.{$index}.attachment_pdf")->store('budgets/attachments', 'public');
+                }
+
                 BudgetItem::create([
                     'monthly_budget_id' => $budget->id,
                     'fund_id' => $item['fund_id'],
                     'requested_amount' => $item['amount'],
+                    'attachment_pdf' => $attachmentPath,
                 ]);
             }
         });

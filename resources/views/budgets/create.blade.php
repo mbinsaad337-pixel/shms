@@ -16,7 +16,7 @@
                 </div>
             </div>
 
-            <form action="{{ route('budgets.store') }}" method="POST" class="space-y-6">
+            <form action="{{ route('budgets.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
 
                 <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
@@ -46,7 +46,7 @@
 
                         <div id="budget-items-container" class="space-y-4">
                             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 budget-item">
-                                <div class="md:col-span-7">
+                                <div class="md:col-span-4">
                                     <label class="block text-xs font-bold text-gray-400 mb-2 font-cairo">الصندوق</label>
                                     <select name="items[0][fund_id]" required
                                         class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none">
@@ -55,13 +55,18 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="md:col-span-4">
+                                <div class="md:col-span-3">
                                     <label class="block text-xs font-bold text-gray-400 mb-2 font-cairo">المبلغ
                                         المطلوب</label>
                                     <input type="number" name="items[0][amount]" step="0.01" required
                                         class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none text-center font-bold">
                                 </div>
-                                <div class="md:col-span-1 flex items-end">
+                                <div class="md:col-span-4">
+                                    <label class="block text-xs font-bold text-gray-400 mb-2 font-cairo">مرفق التصور (PDF) اختياري</label>
+                                    <input type="file" name="items[0][attachment_pdf]" accept=".pdf"
+                                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none text-sm bg-gray-50/50">
+                                </div>
+                                <div class="md:col-span-1 flex items-end justify-center">
                                     <button type="button"
                                         class="w-full h-[48px] text-gray-300 hover:text-red-500 transition-colors">
                                         <i class="fas fa-trash"></i>
@@ -96,15 +101,18 @@
             const newItem = document.createElement('div');
             newItem.className = 'grid grid-cols-1 md:grid-cols-12 gap-4 budget-item pt-4 border-t border-gray-50';
             newItem.innerHTML = `
-                <div class="md:col-span-7">
+                <div class="md:col-span-4">
                     <select name="items[${itemIndex}][fund_id]" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none">
                         @foreach($funds as $fund)
                             <option value="{{ $fund->id }}">{{ $fund->name }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="md:col-span-4">
+                <div class="md:col-span-3">
                     <input type="number" name="items[${itemIndex}][amount]" step="0.01" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none text-center font-bold">
+                </div>
+                <div class="md:col-span-4">
+                    <input type="file" name="items[${itemIndex}][attachment_pdf]" accept=".pdf" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none text-sm bg-gray-50/50">
                 </div>
                 <div class="md:col-span-1 flex items-center justify-center">
                     <button type="button" onclick="this.closest('.budget-item').remove()" class="text-red-400 hover:text-red-600 transition-colors">
