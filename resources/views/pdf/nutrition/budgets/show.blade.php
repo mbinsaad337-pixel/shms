@@ -128,14 +128,15 @@
         </td>
         <td>
             <div class="sign-line"></div>
-            <div class="sign-title">راجعه / مدير المركز</div>
-            <div class="sign-name">{{ $budget->status == 'approved' ? 'تمت المراجعة' : '-' }}</div>
+            <div class="sign-title">مدير المركز</div>
+            <div class="sign-name">
+                @php
+                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$budget->center_id)->get();
+                @endphp
+                {{ $center_manager->count() ===1 ? $center_manager->first()->name : '' }}
+            </div>
         </td>
-        <td>
-            <div class="sign-line"></div>
-            <div class="sign-title">اعتمده /  مدير قسم المراكز الطلابية</div>
-            <div class="sign-name">{{ $budget->approver->name ?? '-' }}</div>
-        </td>
+        
     </tr>
 </table>
 @endsection

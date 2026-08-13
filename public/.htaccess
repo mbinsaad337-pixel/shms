@@ -4,6 +4,8 @@
     </IfModule>
 
     RewriteEngine On
+
+    # Set base path for the Alias directive (prevents infinite redirect loop)
     RewriteBase /shms/
 
     # Handle Authorization Header

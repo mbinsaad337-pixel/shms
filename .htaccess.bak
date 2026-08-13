@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+    RewriteBase /shms/
+
+    # Allow direct access to public folder files (assets)
+    RewriteCond %{REQUEST_URI} !^/shms/public/
+    RewriteCond %{DOCUMENT_ROOT}/shms/public/$1 -f
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Otherwise route to index.php in the root
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [L]
+</IfModule>
