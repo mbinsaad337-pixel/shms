@@ -367,6 +367,17 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         // Leave / Istizhan Requests (Student submits -> Supervisor approves)
         Route::get('my-leave-requests', [\App\Http\Controllers\Student\LeaveRequestController::class, 'index'])->name('student.leave-requests.index');
         Route::post('my-leave-requests', [\App\Http\Controllers\Student\LeaveRequestController::class, 'store'])->name('student.leave-requests.store');
+
+        // Graduation Data Completion (طالب يستكمل بيانات التخرج)
+        Route::get('students/{student}/graduation-form', [\App\Http\Controllers\GraduationController::class, 'showForm'])->name('graduation.form');
+        Route::post('students/{student}/graduation-submit', [\App\Http\Controllers\GraduationController::class, 'submitRequest'])->name('graduation.submit');
+    });
+
+    // Graduation Pending Review - for managers
+    Route::middleware('role:center-manager|super-admin')->group(function () {
+        Route::get('graduation/pending', [\App\Http\Controllers\GraduationController::class, 'pendingList'])->name('graduation.pending');
+        Route::post('graduation/{student}/approve', [\App\Http\Controllers\GraduationController::class, 'approve'])->name('graduation.approve');
+        Route::post('graduation/{student}/reject', [\App\Http\Controllers\GraduationController::class, 'reject'])->name('graduation.reject');
     });
 
     // Student Grades & Achievements

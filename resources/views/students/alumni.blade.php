@@ -11,7 +11,23 @@
             <h1 class="text-3xl font-black text-navy font-cairo">سجل الخريجين</h1>
             <p class="text-gray-400 font-almarai text-sm mt-1">تصفح وفلترة بيانات الطلاب الخريجين</p>
         </div>
-        <div class="flex gap-3">
+        <div class="flex gap-3 flex-wrap">
+            @if(auth()->user()->hasRole('center-manager') || auth()->user()->hasRole('super-admin'))
+                <a href="{{ route('graduation.pending') }}"
+                   class="px-5 py-3 bg-amber-500 text-white rounded-xl hover:bg-amber-600 shadow-lg font-cairo font-bold transition-all flex items-center gap-2">
+                    <i class="fas fa-hourglass-half"></i>
+                    <span>طلبات التخرج المعلقة</span>
+                    @php
+                        $pendingCount = \App\Models\Student::where('graduation_request_status', 'pending')
+                            ->where('is_graduate', false)
+                            ->when(auth()->user()->center_id, fn($q) => $q->where('center_id', auth()->user()->center_id))
+                            ->count();
+                    @endphp
+                    @if($pendingCount > 0)
+                        <span class="bg-white text-amber-600 text-xs font-black px-2 py-0.5 rounded-full">{{ $pendingCount }}</span>
+                    @endif
+                </a>
+            @endif
             <a href="{{ route('students.export-list-pdf', array_merge(request()->all(), ['is_graduate' => 1])) }}"
                 class="px-6 py-3 bg-white text-red-600 border-2 border-red-50 rounded-xl hover:bg-red-50 shadow-sm font-cairo font-bold transition-all flex items-center gap-2">
                 <i class="fas fa-file-pdf"></i>
@@ -75,7 +91,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
                 <div>
                     <label for="college" class="block text-sm font-bold text-gray-700 mb-2 font-cairo">الكلية</label>
                     <select name="college" id="college"
@@ -111,13 +127,24 @@
                     </select>
                 </div>
 
+                <div>
+                    <label for="job_title" class="block text-sm font-bold text-gray-700 mb-2 font-cairo">الوظيفة</label>
+                    <select name="job_title" id="job_title"
+                        class="w-full rounded-xl border-gray-200 focus:border-primary focus:ring-primary shadow-sm bg-gray-50/50">
+                        <option value="">جميع الوظائف</option>
+                        @foreach ($job_titles ?? [] as $v)
+                            <option value="{{ $v }}" {{ request('job_title') == $v ? 'selected' : '' }}>{{ $v }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <div class="flex gap-2">
                     <button type="submit"
                         class="flex-1 bg-navy text-white py-2.5 rounded-xl font-bold font-cairo shadow-md hover:bg-navy/90 transition-all flex items-center justify-center gap-2">
                         <i class="fas fa-filter text-xs text-gold"></i>
                         <span>تطبيق الفلترة</span>
                     </button>
-                    @if (request()->anyFilled(['search', 'major', 'university', 'college', 'academic_level', 'nationality', 'graduation_year']))
+                    @if (request()->anyFilled(['search', 'major', 'university', 'college', 'academic_level', 'nationality', 'graduation_year', 'job_title']))
                         <a href="{{ route('students.alumni') }}"
                             class="bg-gray-100 text-gray-700 px-4 py-2.5 rounded-xl font-bold font-cairo hover:bg-gray-200 transition-all text-sm flex items-center">
                             إعادة تعيين
@@ -139,6 +166,7 @@
                     <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">السكن</th>
                     <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">البرنامج</th>
                     <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">عام التخرج</th>
+                    <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">الوظيفة</th>
                     <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">الإجراءات</th>
                 </tr>
             </thead>
@@ -177,6 +205,17 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap   text-sm font-bold text-gray-700">
                             {{ $student->graduation_year ?? '---' }}
+                        </td>
+                        {{-- Job Title --}}
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @if($student->job_title)
+                                <span class="inline-flex items-center gap-1 px-2 py-1 bg-navy/10 text-navy rounded-full text-xs font-bold font-cairo">
+                                    <i class="fas fa-briefcase text-[9px]"></i>
+                                    {{ $student->job_title }}
+                                </span>
+                            @else
+                                <span class="text-gray-300 text-xs">—</span>
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <a href="{{ route('students.show', $student) }}"
