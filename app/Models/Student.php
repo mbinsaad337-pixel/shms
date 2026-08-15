@@ -52,7 +52,9 @@ class Student extends Model
         // System
         'barcode', 'status', 'annual_fees', 'registration_date',
         'is_profile_approved', 'can_edit_profile', 'is_graduate',
-        'profile_step', 'profile_completion'
+        'profile_step', 'profile_completion',
+        // Graduation Workflow
+        'graduation_request_status', 'job_title', 'graduation_rejection_reason', 'graduation_requested_at'
     ];
 
     protected $casts = [
@@ -63,13 +65,19 @@ class Student extends Model
         'registration_date'   => 'date',
         'is_profile_approved' => 'boolean',
         'can_edit_profile'    => 'boolean',
-        'is_graduate'         => 'boolean',
-        'family_workers'      => 'array',
+        'is_graduate'              => 'boolean',
+        'family_workers'           => 'array',
+        'graduation_requested_at'  => 'datetime',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function graduationAttachments()
+    {
+        return $this->hasMany(GraduationAttachment::class);
     }
 
     public function center()

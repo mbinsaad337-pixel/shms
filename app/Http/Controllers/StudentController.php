@@ -510,19 +510,20 @@ class StudentController extends Controller
                 $sub->where('name_ar', 'like', '%' . $request->search . '%')
                     ->orWhere('name_en', 'like', '%' . $request->search . '%')
                     ->orWhere('student_number', 'like', '%' . $request->search . '%')
-                    ->orWhere('national_id', 'like', '%' . $request->search . '%');
+                    ->orWhere('national_id', 'like', '%' . $request->search . '%')
+                    ->orWhere('job_title', 'like', '%' . $request->search . '%');
             });
         }
 
         // Generic Filters
-        $filters = ['major', 'university', 'college', 'academic_level', 'nationality', 'graduation_year'];
+        $filters = ['major', 'university', 'college', 'academic_level', 'nationality', 'graduation_year', 'job_title'];
         foreach ($filters as $filter) {
             if ($request->filled($filter)) {
                 $query->where($filter, $request->input($filter));
             }
         }
 
-        $students = $query->with(['center', 'user'])
+        $students = $query->with(['center', 'user', 'graduationAttachments'])
             ->latest()
             ->paginate(20)
             ->withQueryString();

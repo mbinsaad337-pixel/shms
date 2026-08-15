@@ -65,6 +65,22 @@
                     <i class="fas fa-user-tag h-5 w-5 ml-3"></i>
                     قائمة الخريجين
                 </a>
+                <a href="{{ route('graduation.pending') }}"
+                    class="flex items-center px-4 py-3 text-sm font-medium rounded-2xl {{ request()->routeIs('graduation.*') ? 'bg-white/10 text-gold font-bold shadow-sm' : 'text-gray-300 hover:bg-white/5' }} transition-all">
+                    <i class="fas fa-hourglass-half h-5 w-5 ml-3 text-amber-400/80"></i>
+                    <span class="flex-1">طلبات التخرج</span>
+                    @php
+                        $sidebarPendingGradCount = \App\Models\Student::where('graduation_request_status', 'pending')
+                            ->where('is_graduate', false)
+                            ->when(auth()->user()->center_id, fn($q) => $q->where('center_id', auth()->user()->center_id))
+                            ->count();
+                    @endphp
+                    @if($sidebarPendingGradCount > 0)
+                        <span class="bg-amber-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                            {{ $sidebarPendingGradCount > 9 ? '9+' : $sidebarPendingGradCount }}
+                        </span>
+                    @endif
+                </a>
                 @endif
 
                 @if(!auth()->user()->hasRole('super-admin'))

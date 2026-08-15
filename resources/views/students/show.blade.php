@@ -120,6 +120,29 @@
                             <i class="fas fa-utensils"></i> إدارة وجباتي
                         </a>
                     @endif
+
+                    {{-- ────── زر استكمال بيانات التخرج ────── --}}
+                    @if(!$student->is_graduate)
+                        @if($student->graduation_request_status === 'pending')
+                            {{-- طلب قيد المراجعة --}}
+                            <div class="flex items-center gap-3 bg-amber-50 border border-amber-200 text-amber-800 px-6 py-3 rounded-2xl font-cairo font-bold shadow-sm">
+                                <i class="fas fa-hourglass-half text-amber-500 animate-pulse"></i>
+                                طلب التخرج قيد المراجعة
+                            </div>
+                        @elseif($student->graduation_request_status === 'rejected')
+                            {{-- مرفوض - يمكن إعادة التقديم --}}
+                            <a href="{{ route('graduation.form', $student) }}"
+                               class="bg-red-600 text-white px-8 py-3 rounded-2xl font-bold font-cairo shadow-lg flex items-center gap-3 hover:bg-red-700 transition-all">
+                                <i class="fas fa-redo"></i> إعادة تقديم بيانات التخرج
+                            </a>
+                        @else
+                            {{-- لم يتقدم بعد --}}
+                            <a href="{{ route('graduation.form', $student) }}"
+                               class="bg-gradient-to-l from-navy to-navy/80 text-gold px-8 py-3 rounded-2xl font-bold font-cairo shadow-lg flex items-center gap-3 hover:shadow-xl transition-all border border-gold/30">
+                                <i class="fas fa-graduation-cap text-gold"></i> استكمال بيانات التخرج
+                            </a>
+                        @endif
+                    @endif
                 </div>
             @endif
 
