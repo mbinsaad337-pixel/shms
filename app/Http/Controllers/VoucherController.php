@@ -115,7 +115,18 @@ class VoucherController extends Controller
             'salary' => 'SV',
         ][$validated['type']];
 
-        DB::transaction(function () use ($validated, $request, $prefix, $centerId) {
+        $isPendingApproval = false;
+        $requiresApproval = \App\Models\SystemSetting::get('overspend_approval_required', '1') == '1';
+
+        if (in_array($validated['type'], ['payment', 'salary', 'transfer']) && $validated['amount'] > $fund->balance) {
+            if ($requiresApproval) {
+                $isPendingApproval = true;
+            }
+        }
+
+        $voucher = null;
+
+        DB::transaction(function () use ($validated, $request, $prefix, $centerId, $isPendingApproval, &$voucher) {
             $path = null;
             if ($request->hasFile('attachment')) {
                 $path = $request->file('attachment')->store('vouchers/' . date('Y/m'), 'public');
@@ -124,14 +135,36 @@ class VoucherController extends Controller
             $voucher = Voucher::create(array_merge($validated, [
                 'center_id' => $centerId,
                 'created_by' => auth()->id(),
-                'status' => 'approved',
+                'status' => $isPendingApproval ? 'pending_approval' : 'approved',
                 'voucher_number' => $prefix . '-' . date('Ymd') . '-' . mt_rand(100, 999),
                 'attachment' => $path,
             ]));
 
-            $this->updateBalances($voucher);
-            $voucher->update(['approved_by' => auth()->id(), 'approved_at' => now()]);
+            if (!$isPendingApproval) {
+                $this->updateBalances($voucher);
+                $voucher->update(['approved_by' => auth()->id(), 'approved_at' => now()]);
+            }
         });
+
+        if ($isPendingApproval) {
+            $managerPhone = \App\Models\SystemSetting::get('dept_manager_phone');
+            $managerName = \App\Models\SystemSetting::get('dept_manager_name', 'مدير القسم');
+            
+            if ($managerPhone) {
+                $whatsappService = app(\App\Services\WhatsAppService::class);
+                $message = "السلام عليكم ورحمة الله وبركاته،\n\n"
+                         . "يوجد طلب موافقة على سند صرف يتجاوز رصيد الصندوق.\n"
+                         . "• رقم السند: {$voucher->voucher_number}\n"
+                         . "• الصندوق: {$fund->name}\n"
+                         . "• المبلغ: {$voucher->amount}\n"
+                         . "• الرصيد الحالي: {$fund->balance}\n\n"
+                         . "يرجى مراجعة النظام للموافقة أو الرفض.";
+                         
+                $whatsappService->flash($managerPhone, $message, $managerName);
+            }
+
+            return redirect()->route('vouchers.index')->with('warning', 'تم تسجيل السند وهو بانتظار موافقة مدير القسم لتجاوزه رصيد الصندوق.');
+        }
 
         return redirect()->route('vouchers.index')->with('success', 'تم تسجيل السند وتحديث الرصيد بنجاح.');
     }
@@ -222,5 +255,50 @@ class VoucherController extends Controller
             ->where('month', $period->month)
             ->where('status', 'approved')
             ->exists();
+    }
+
+    public function approve(Voucher $voucher)
+    {
+        if ($voucher->status !== 'pending_approval') {
+            return back()->with('error', 'السند ليس بحالة انتظار الموافقة.');
+        }
+
+        if (!auth()->user()->hasRole('super-admin') && !auth()->user()->hasRole('executive-manager')) {
+            return back()->with('error', 'ليس لديك صلاحية للموافقة على هذا السند.');
+        }
+
+        DB::transaction(function () use ($voucher) {
+            $voucher->update([
+                'status' => 'approved',
+                'approved_by' => auth()->id(),
+                'approved_at' => now(),
+            ]);
+
+            $this->updateBalances($voucher);
+        });
+
+        return back()->with('success', 'تمت الموافقة على السند وتحديث رصيد الصندوق بنجاح.');
+    }
+
+    public function reject(Request $request, Voucher $voucher)
+    {
+        if ($voucher->status !== 'pending_approval') {
+            return back()->with('error', 'السند ليس بحالة انتظار الموافقة.');
+        }
+
+        if (!auth()->user()->hasRole('super-admin') && !auth()->user()->hasRole('executive-manager')) {
+            return back()->with('error', 'ليس لديك صلاحية لرفض هذا السند.');
+        }
+
+        $request->validate([
+            'rejection_reason' => 'required|string|max:255',
+        ]);
+
+        $voucher->update([
+            'status' => 'rejected',
+            'rejection_reason' => $request->rejection_reason,
+        ]);
+
+        return back()->with('success', 'تم رفض السند بنجاح.');
     }
 }

@@ -105,6 +105,10 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
 
         // ── Programs Management (إدارة البرامج) ──
         Route::resource('programs', \App\Http\Controllers\ProgramController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+
+        // ── System Settings ──
+        Route::get('admin/settings', [\App\Http\Controllers\Admin\SystemSettingController::class, 'index'])->name('admin.settings.index');
+        Route::put('admin/settings', [\App\Http\Controllers\Admin\SystemSettingController::class, 'update'])->name('admin.settings.update');
     });
 
     // Staff Management for Center Managers & Super Admin
@@ -195,6 +199,8 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
 
     Route::middleware('permission:view-vouchers')->group(function () {
         Route::get('vouchers/{voucher}/export-pdf', [VoucherController::class, 'exportPdf'])->name('vouchers.export-pdf');
+        Route::post('vouchers/{voucher}/approve', [VoucherController::class, 'approve'])->name('vouchers.approve');
+        Route::post('vouchers/{voucher}/reject', [VoucherController::class, 'reject'])->name('vouchers.reject');
         Route::resource('vouchers', VoucherController::class);
     });
 

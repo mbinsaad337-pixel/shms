@@ -115,7 +115,7 @@
 
                         <div class="mt-8 flex gap-3">
                             @if ($room->type == 'residential' && $room->students_count < $room->capacity && $room->status == 'available')
-                                <button onclick="openAssignModal({{ $room->id }}, '{{ $room->room_number }}')"
+                                <button onclick="openAssignModal({{ $room->id }}, '{{ $room->room_number }}', '{{ $room->building }}')"
                                     class="flex-1 bg-navy text-white px-4 py-2.5 rounded-xl text-sm font-cairo font-bold hover:bg-navy/90 transition-all shadow-md group">
                                     <i class="fas fa-user-plus text-gold ml-1 group-hover:scale-110 transition-transform"></i> توزيع
                                 </button>
@@ -156,15 +156,40 @@
                 <input type="hidden" name="room_id" id="modalRoomId">
 
                 @php
-                    $availableStudents = \App\Models\Student::where('center_id', auth()->user()->center_id)
-                        ->where('status', 'registered')
+                    $assignedStudentIds = \App\Models\RoomAssignment::whereNull('released_at')
+                        ->pluck('student_id');
+
+                    $baseQuery = \App\Models\Student::withoutGlobalScopes()
+                        ->where('center_id', auth()->user()->center_id)
+                        ->whereIn('status', ['residing', 'registered'])
+                        ->whereNotIn('id', $assignedStudentIds)
+                        ->orderBy('name_ar');
+
+                    $academicStudents = (clone $baseQuery)
+                        ->whereHas('program', fn($q) => $q->where('code', 'academic'))
+                        ->get(['id', 'name_ar', 'national_id'])
+                        ->toArray();
+
+                    $cooperativeStudents = (clone $baseQuery)
+                        ->whereHas('program', fn($q) => $q->where('code', 'cooperative'))
                         ->get(['id', 'name_ar', 'national_id'])
                         ->toArray();
                 @endphp
 
                 <div x-data="{ 
                     search: '', 
-                    students: {{ json_encode($availableStudents) }},
+                    building: '',
+                    isStudentSupervisor: {{ auth()->user()->hasRole('student-supervisor') ? 'true' : 'false' }},
+                    academicStudents: {{ json_encode($academicStudents) }},
+                    cooperativeStudents: {{ json_encode($cooperativeStudents) }},
+                    get students() {
+                        // مشرف الطلاب يرى الجميع
+                        if (this.isStudentSupervisor) {
+                            return [...this.academicStudents, ...this.cooperativeStudents];
+                        }
+                        // المشرف الأكاديمي/التعاوني يرى فقط طلاب برنامجه
+                        return this.building === 'cooperative' ? this.cooperativeStudents : this.academicStudents;
+                    },
                     get filteredStudents() {
                         const term = this.search.trim().toLowerCase();
                         if (term === '') return this.students;
@@ -173,7 +198,7 @@
                             (s.national_id && s.national_id.toLowerCase().includes(term))
                         );
                     }
-                }">
+                }" x-on:set-building.window="building = $event.detail">
                     <label class="block text-sm font-bold text-gray-700 font-cairo mb-2">اختر الطالب</label>
                     <div class="mb-3 relative">
                         <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400">
@@ -192,7 +217,7 @@
                     </select>
                     
                     <div class="mt-2 flex justify-between items-center px-1">
-                        <p class="text-[10px] text-gray-400 font-almarai">عرض <span x-text="filteredStudents.length"></span> من أصل {{ count($availableStudents) }} طالب</p>
+                        <p class="text-[10px] text-gray-400 font-almarai">عرض <span x-text="filteredStudents.length"></span> من أصل <span x-text="students.length"></span> طالب</p>
                         <template x-if="filteredStudents.length === 0">
                             <p class="text-[10px] text-red-500 font-bold">عذراً، لا توجد نتائج مطابقة</p>
                         </template>
@@ -211,9 +236,11 @@
     </div>
 
     <script>
-        function openAssignModal(roomId, roomNumber) {
+        function openAssignModal(roomId, roomNumber, building) {
             document.getElementById('modalRoomId').value = roomId;
             document.getElementById('modalRoomNumber').innerText = roomNumber;
+            // dispatch building type to Alpine component
+            window.dispatchEvent(new CustomEvent('set-building', { detail: building || 'academic' }));
             document.getElementById('assignModal').classList.remove('hidden');
             document.getElementById('assignModal').classList.add('flex');
         }

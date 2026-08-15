@@ -248,6 +248,14 @@
                             </a>
                         @endif
                     @endcan
+
+                    @if(auth()->user()->hasRole('super-admin'))
+                        <a href="{{ route('admin.settings.index') }}"
+                            class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('admin.settings.*') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5 transition' }}">
+                            <i class="fas fa-cogs h-5 w-5 ml-3"></i>
+                            إعدادات النظام
+                        </a>
+                    @endif
                 </div>
             @endif
 

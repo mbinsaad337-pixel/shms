@@ -77,12 +77,15 @@
                 </div>
                 <div>
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest font-cairo">اعتمادات معلقة</p>
-                    <h3 class="text-3xl font-black text-navy">{{ $stats['pending_budgets'] + $stats['pending_settlements'] }}</h3>
+                    <h3 class="text-3xl font-black text-navy">{{ $stats['pending_budgets'] + $stats['pending_settlements'] + $stats['pending_vouchers'] }}</h3>
                 </div>
             </div>
-            <div class="mt-4 flex gap-2">
+            <div class="mt-4 flex flex-wrap gap-2">
                 <span class="text-[9px] font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded">{{ $stats['pending_budgets'] }} طلبات عهد</span>
                 <span class="text-[9px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">{{ $stats['pending_settlements'] }} تصفيات</span>
+                @if($stats['pending_vouchers'] > 0)
+                    <span class="text-[9px] font-bold bg-red-100 text-red-700 px-2 py-0.5 rounded">{{ $stats['pending_vouchers'] }} تجاوز رصيد</span>
+                @endif
             </div>
         </div>
 
@@ -116,18 +119,39 @@
                 </div>
                 <div class="p-6 overflow-y-auto max-h-[600px] flex flex-col gap-4">
                     @php
-                        $pendingItems = array_merge($recent_budgets->toArray(), $recent_settlements->toArray());
+                        $pendingItems = array_merge($recent_budgets->toArray(), $recent_settlements->toArray(), $recent_pending_vouchers->toArray());
+                        // Sort by created_at desc
+                        usort($pendingItems, function($a, $b) {
+                            return strtotime($b['created_at']) - strtotime($a['created_at']);
+                        });
                     @endphp
                     @if(count($pendingItems) > 0)
                         @foreach($pendingItems as $item)
                             @php 
                                 $isBudget = isset($item['total_amount']);
-                                $typeLabel = $isBudget ? 'طلب عهدة' : 'تقرير تصفية';
-                                $color = $isBudget ? 'orange' : 'blue';
+                                $isSettlement = isset($item['total_spent']);
+                                $isVoucher = isset($item['voucher_number']);
+                                
+                                if ($isBudget) {
+                                    $typeLabel = 'طلب عهدة';
+                                    $color = 'orange';
+                                    $route = route('budgets.show', $item['id']);
+                                    $amount = $item['total_amount'] ?? 0;
+                                } elseif ($isSettlement) {
+                                    $typeLabel = 'تقرير تصفية';
+                                    $color = 'blue';
+                                    $route = route('settlements.show', $item['id']);
+                                    $amount = $item['total_spent'] ?? 0;
+                                } else {
+                                    $typeLabel = 'سند صرف (تجاوز)';
+                                    $color = 'red';
+                                    $route = route('vouchers.show', $item['id']);
+                                    $amount = $item['amount'] ?? 0;
+                                }
+                                
                                 $centerName = $item['center']['name'] ?? 'مركز غير معروف';
-                                $amount = $isBudget ? ($item['total_amount'] ?? 0) : ($item['total_spent'] ?? 0);
                             @endphp
-                          <a href="{{ $isBudget ? route('budgets.show', $item['id']) : route('settlements.show', $item['id']) }}" 
+                          <a href="{{ $route }}" 
                                            class="text-[10px] font-bold text-{{ $color }}-600 hover:underline">   
                                     
                             <div class="p-4 bg-gray-50 border border-gray-100 rounded-2xl transition-all hover:bg-white hover:shadow-md hover:border-{{ $color }}-200 relative group">

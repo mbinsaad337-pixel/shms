@@ -27,7 +27,7 @@
                     <h3 class="text-3xl font-bold text-gray-800">{{ number_format($stats['total_students']) }}</h3>
                     <div class="mt-2 text-xs">
                         <span class="text-red-500 font-bold">{{ $stats['suspended_students'] }}</span>
-                        <span class="text-gray-400">موقوفين</span>
+                        <span class="text-gray-400">خريجين</span>
                     </div>
                 </div>
                 <div class="bg-blue-50 p-4 rounded-2xl text-blue-600">
@@ -68,9 +68,9 @@
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
             <div class="flex items-center justify-between font-cairo">
                 <div>
-                    <p class="text-xs text-gray-400 font-bold mb-1">طلاب خارج السكن</p>
+                    <p class="text-xs text-gray-400 font-bold mb-1">طلاب خارج المركز</p>
                     <h3 class="text-3xl font-bold text-indigo-600">{{ $stats['on_leave_count'] }}</h3>
-                    <p class="text-xs text-gray-400 mt-1">طلاب في إجازة حالياً</p>
+                    <p class="text-xs text-gray-400 mt-1">طلاب خارج المركز  حالياً</p>
                 </div>
                 <div class="bg-indigo-50 p-4 rounded-2xl text-indigo-600">
                     <i class="fas fa-walking text-2xl"></i>
@@ -211,8 +211,8 @@
                                 @foreach($circle_absences as $absence)
                                     <tr class="hover:bg-gray-50/50 transition-colors">
                                         <td class="px-8 py-5">
-                                            <div class="font-bold text-gray-800 font-almarai">{{ $absence->student->name_ar }}</div>
-                                            <div class="text-[10px] text-gray-400  ">{{ $absence->student->barcode }}</div>
+                                            <div class="font-bold text-gray-800 font-almarai">{{ optional($absence->student)->name_ar ?? '—' }}</div>
+                                            <div class="text-[10px] text-gray-400">{{ optional($absence->student)->barcode ?? '' }}</div>
                                         </td>
                                         <td class="px-8 py-5">
                                             <div class="text-sm font-bold text-navy font-cairo">
@@ -224,7 +224,7 @@
                                         </td>
                                         <td class="px-8 py-5 flex gap-2">
                                             <button type="button"
-                                                onclick="openViolationForStudent({{ $absence->student->id }}, {{ $absence->id }})"
+                                                onclick="openViolationForStudent({{ optional($absence->student)->id ?? 0 }}, {{ $absence->id }})"
                                                 class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition-all">
                                                 <i class="fas fa-exclamation-triangle text-xs"></i>
                                             </button>

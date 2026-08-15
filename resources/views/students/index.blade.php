@@ -252,20 +252,20 @@
                                     </form>
                                 @endif
                                 <a href="{{ route('students.edit', $student) }}"
-                                    class="text-gray-400 hover:text-primary ml-3">تعديل</a>
-                                <form action="{{ route('students.mark-graduate', $student) }}" method="POST"
+                                    class="text-gray-400 hover:text-primary ml-3"><i class="fas fa-edit"></i></a>
+                                {{-- <form action="{{ route('students.mark-graduate', $student) }}" method="POST"
                                     class="inline"
                                     data-confirm="هل تريد نقل هذا الطالب لقائمة الخريجين؟ سيتم إخفاؤه من هذه القائمة وتجميد حسابه.">
                                     @csrf
                                     <button type="submit" class="text-navy hover:text-gold ml-3" title="نقل للخريجين">
                                         <i class="fas fa-user-graduate"></i>
                                     </button>
-                                </form>
+                                </form> --}}
                                 <form action="{{ route('students.destroy', $student) }}" method="POST" class="inline"
                                     data-confirm="هل أنت متأكد من حذف سجل هذا الطالب؟">
                                     @csrf
                                     <button type="submit"
-                                        class="text-gray-400 hover:text-red-700 transition-colors">حذف</button>
+                                        class="text-gray-400 hover:text-red-700 transition-colors"><i class="fas fa-trash"></i></button>
                                 </form>
                             @endif
                             <a href="{{ route('students.show', $student) }}"

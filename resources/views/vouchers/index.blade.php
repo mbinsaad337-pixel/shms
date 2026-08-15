@@ -110,6 +110,7 @@
                         <tr class="bg-gray-50 text-gray-600">
                             <th class="px-6 py-4 font-cairo text-sm">رقم السند</th>
                             <th class="px-6 py-4 font-cairo text-sm">نوع السند</th>
+                            <th class="px-6 py-4 font-cairo text-sm">الحالة</th>
                             <th class="px-6 py-4 font-cairo text-sm">المبلغ</th>
                             <th class="px-6 py-4 font-cairo text-sm">مناولة</th>
                             <th class="px-6 py-4 font-cairo text-sm">الصندوق</th>
@@ -140,6 +141,15 @@
                                             - {{ $voucher->sub_type == 'housing' ? 'تسكين' : 'إيداع' }}
                                         @endif
                                     </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if($voucher->status == 'pending_approval')
+                                        <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-[10px] font-bold font-cairo"><i class="fas fa-clock ml-1"></i> بانتظار الموافقة</span>
+                                    @elseif($voucher->status == 'rejected')
+                                        <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-[10px] font-bold font-cairo"><i class="fas fa-times ml-1"></i> مرفوض</span>
+                                    @else
+                                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold font-cairo"><i class="fas fa-check ml-1"></i> معتمد</span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 font-bold text-gray-800">{{ number_format($voucher->amount, 2) }}</td>
                                 <td class="px-6 py-4 text-sm font-almarai">{{ $voucher->payee_or_payer }}</td>
@@ -175,6 +185,19 @@
                                             $periodKey = $voucher->center_id . '-' . $voucher->date->format('Y-n');
                                             $isLockedBySettlement = isset($lockedPeriods[$periodKey]);
                                         @endphp
+                                        
+                                        @if($voucher->status == 'pending_approval' && (auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('executive-manager')))
+                                            <form action="{{ route('vouchers.approve', $voucher) }}" method="POST" data-confirm="هل أنت متأكد من الموافقة على السند واعتماد صرفه؟" class="inline">
+                                                @csrf
+                                                <button type="submit" class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center text-green-600 hover:bg-green-600 hover:text-white transition-all shadow-sm" title="موافقة واعتماد">
+                                                    <i class="fas fa-check text-sm"></i>
+                                                </button>
+                                            </form>
+                                            <button type="button" onclick="rejectVoucher({{ $voucher->id }})" class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-red-600 hover:bg-red-600 hover:text-white transition-all shadow-sm" title="رفض">
+                                                <i class="fas fa-times text-sm"></i>
+                                            </button>
+                                        @endif
+
                                         @if (!$isLockedBySettlement)
                                         <form action="{{ route('vouchers.destroy', $voucher) }}" method="POST"
                                             data-confirm="هل أنت متأكد من حذف هذا السند؟ سيتم عكس التأثير المالي على الرصيد."
@@ -211,4 +234,44 @@
             </div>
         </div>
     </div>
+
+    <!-- Rejection Modal -->
+    <div id="rejectModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity">
+        <div class="w-full max-w-md transform rounded-3xl bg-white p-6 shadow-2xl transition-all relative">
+            <button onclick="closeRejectModal()" class="absolute top-4 left-4 text-gray-400 hover:text-red-500 transition-colors">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div class="mb-6 text-center">
+                <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-red-500">
+                    <i class="fas fa-ban text-2xl"></i>
+                </div>
+                <h3 class="font-cairo text-2xl font-bold text-gray-900">رفض السند</h3>
+                <p class="mt-2 font-almarai text-sm text-gray-500">يرجى كتابة سبب الرفض لتوضيحه لمنشئ السند.</p>
+            </div>
+            <form id="rejectForm" method="POST">
+                @csrf
+                <div class="mb-6">
+                    <label class="mb-2 block font-cairo text-sm font-bold text-gray-700">سبب الرفض <span class="text-red-500">*</span></label>
+                    <textarea name="rejection_reason" required rows="3" class="w-full rounded-xl border border-gray-200 bg-gray-50 p-4 font-almarai text-sm outline-none transition-colors focus:border-red-500 focus:bg-white" placeholder="اكتب سبب الرفض هنا..."></textarea>
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 rounded-xl bg-red-600 py-3 font-cairo font-bold text-white shadow-lg transition-all hover:bg-red-700 hover:shadow-red-500/30">تأكيد الرفض</button>
+                    <button type="button" onclick="closeRejectModal()" class="flex-1 rounded-xl bg-gray-100 py-3 font-cairo font-bold text-gray-700 transition-all hover:bg-gray-200">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function rejectVoucher(id) {
+            document.getElementById('rejectForm').action = `/vouchers/${id}/reject`;
+            document.getElementById('rejectModal').classList.remove('hidden');
+            document.getElementById('rejectModal').classList.add('flex');
+        }
+
+        function closeRejectModal() {
+            document.getElementById('rejectModal').classList.add('hidden');
+            document.getElementById('rejectModal').classList.remove('flex');
+        }
+    </script>
 @endsection

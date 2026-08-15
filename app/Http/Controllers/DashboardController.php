@@ -56,7 +56,10 @@ class DashboardController extends Controller
             return \redirect()->route('nutrition.dashboard');
         }
 
-        if ($user->hasRole('housing-manager') || $user->hasRole('supervisor')) {
+        if ($user->hasRole('housing-manager') || $user->hasRole('supervisor')
+            || $user->hasRole('student-supervisor')
+            || $user->hasRole('academic-supervisor')
+            || $user->hasRole('cooperative-supervisor')) {
             return $this->studentManagerDashboard($user->center_id);
         }
 
@@ -115,6 +118,7 @@ class DashboardController extends Controller
             'total_liquidity' => Fund::sum('balance'),
             'pending_budgets' => MonthlyBudget::where('status', 'confirmed')->count(),
             'pending_settlements' => MonthlySettlement::where('status', 'submitted')->count(),
+            'pending_vouchers' => Voucher::where('status', 'pending_approval')->count(),
             'total_capacity' => Room::where('status', 'available')->sum('capacity'),
             'occupied_seats' => RoomAssignment::whereNull('released_at')->count(),
         ];
@@ -132,19 +136,25 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        $recent_pending_vouchers = Voucher::with('center', 'fund')
+            ->where('status', 'pending_approval')
+            ->latest()
+            ->take(5)
+            ->get();
+
         $centers_performance = Center::withCount('students')
             ->withSum('funds', 'balance')
             ->withCount(['rooms as total_capacity' => fn($q) => $q->where('status', 'available')])
             ->get();
 
-        return \view('dashboard.executive', compact('stats', 'recent_budgets', 'recent_settlements', 'centers_performance'));
+        return \view('dashboard.executive', compact('stats', 'recent_budgets', 'recent_settlements', 'recent_pending_vouchers', 'centers_performance'));
     }
 
     private function centerDashboard($centerId)
     {
         $stats = [
-            'students_count' => Student::where('center_id', $centerId)->count(),
-            'students_suspended' => Student::where('center_id', $centerId)->where('status', 'suspended')->count(),
+            'students_count' => Student::where('center_id', $centerId)->where('status', 'residing')->count(),
+            'students_suspended' => Student::where('center_id', $centerId)->where('status', 'graduated')->count(),
             'staff_count' => User::where('center_id', $centerId)->count(),
             'rooms_count' => Room::where('center_id', $centerId)->count(),
             'total_capacity' => Room::where('center_id', $centerId)->where('status', 'available')->sum('capacity'),
@@ -158,10 +168,10 @@ class DashboardController extends Controller
             'pending_approval' => Student::where('center_id', $centerId)->where('is_profile_approved', false)->count(),
             'on_leave_count' => Leave::whereHas('student', fn($q) => $q->where('center_id', $centerId))
                 ->whereNull('actual_return_date')->count(),
-            'academic_students_count' => Student::where('center_id', $centerId)
+            'academic_students_count' => Student::where('center_id', $centerId)->where('status', 'residing')
                 ->whereHas('program', fn($q) => $q->where('code', 'academic'))
                 ->count(),
-            'cooperative_students_count' => Student::where('center_id', $centerId)
+            'cooperative_students_count' => Student::where('center_id', $centerId)->where('status', 'residing')
                 ->whereHas('program', fn($q) => $q->where('code', 'cooperative'))
                 ->count(),
         ];
@@ -208,9 +218,9 @@ class DashboardController extends Controller
     private function studentManagerDashboard($centerId)
     {
         $stats = [
-            'total_students' => Student::where('center_id', $centerId)->count(),
+            'total_students' => Student::where('center_id', $centerId)->where('status', 'residing')->count(),
             'pending_approval' => Student::where('center_id', $centerId)->where('is_profile_approved', false)->count(),
-            'suspended_students' => Student::where('center_id', $centerId)->where('status', 'suspended')->count(),
+            'suspended_students' => Student::where('center_id', $centerId)->where('status', 'graduated')->count(),
             'on_leave_count' => Leave::whereHas('student', fn($q) => $q->where('center_id', $centerId))
                 ->whereNull('actual_return_date')->count(),
             'total_capacity' => Room::where('center_id', $centerId)->where('status', 'available')->sum('capacity'),
@@ -232,7 +242,10 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        $circle_absences = CircleAttendance::with(['student', 'session.circle'])
+        $circle_absences = CircleAttendance::with([
+                'student' => fn($q) => $q->withoutGlobalScopes(),
+                'session.circle',
+            ])
             ->whereHas('session.circle', fn($q) => $q->where('center_id', $centerId))
             ->where('status', 'absent')
             ->where('is_handled', false)

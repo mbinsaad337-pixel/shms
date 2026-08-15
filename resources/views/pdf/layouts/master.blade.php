@@ -5,7 +5,7 @@
     <title>{{ $reportTitle ?? 'تقرير' }} - {{ $systemName ?? 'نظام إدارة المراكز الطلابية' }}</title>
     <style>
         body {
-            font-family: 'sans-serif';
+            font-family: 'cairo', sans-serif;
             direction: rtl;
             text-align: right;
             color: #1e293b;
@@ -13,6 +13,9 @@
             line-height: 1.6;
             background: #ffffff;
         }
+        
+        .font-cairo { font-family: 'cairo', sans-serif !important; }
+        .font-almarai { font-family: 'almarai', sans-serif !important; }
 
         /* ── PAGE HEADER ── */
         .page-header {

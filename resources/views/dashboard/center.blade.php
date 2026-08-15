@@ -33,7 +33,7 @@
                         </div>
                         <div class="mt-2 text-xs">
                             <span class="text-red-500 font-bold">{{ $stats['students_suspended'] }}</span>
-                            <span class="text-gray-400">موقوفين</span>
+                            <span class="text-gray-400">خريجين</span>
                         </div>
                     </div>
                     <div class="bg-navy/10 p-4 rounded-2xl text-navy">

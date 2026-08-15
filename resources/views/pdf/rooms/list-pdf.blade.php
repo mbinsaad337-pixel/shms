@@ -24,7 +24,7 @@
                 <th>الشقة</th>
                 <th class="text-center">الطابق</th>
                 <th class="text-center">السعة</th>
-                <th class="text-center">السكان الحاليون</th>
+                <th class="text-center">المقيمين</th>
                 <th class="text-center">الشواغر</th>
                 <th class="text-center">الحالة</th>
             </tr>

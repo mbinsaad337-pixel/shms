@@ -217,6 +217,8 @@ class StudentController extends Controller
         }
 
         $student->update(['is_profile_approved' => true]);
+        $student->status = 'residing';
+        $student->save();
 
         return back()->with('success', 'تم اعتماد بيانات الطالب بنجاح.');
     }
