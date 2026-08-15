@@ -3,12 +3,79 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
+use App\Models\Center;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
+    // ─────────────────────────────────────────────────────────────────
+    // PUBLIC LANDING PAGE
+    // ─────────────────────────────────────────────────────────────────
+
+    public function welcome()
+    {
+        $centers = Center::where('is_active', true)
+            ->withCount(['students' => fn ($query) => $query->where('status', 'residing')])
+            ->orderBy('name')
+            ->get();
+
+        $allCenters = Center::orderBy('name')->get(['id', 'name']);
+
+        // Recent published news
+        $recentNews = News::where('is_published', true)
+            ->with('center:id,name')
+            ->withCount(['likes', 'comments'])
+            ->latest('published_at')
+            ->take(6)
+            ->get();
+
+        // Stats
+        $stats = [
+            'centers'  => Center::where('is_active', true)->count(),
+            'students' => Student::count(),
+            'news'     => News::where('is_published', true)->count(),
+        ];
+
+        return view('welcome', compact('centers', 'allCenters', 'recentNews', 'stats'));
+    }
+
+    public function publicCenters()
+    {
+        $centers = Center::where('is_active', true)
+            ->withCount(['students', 'rooms'])
+            ->orderBy('name')
+            ->get(['id', 'name', 'address', 'phone', 'email', 'logo']);
+
+        return response()->json($centers);
+    }
+
+    public function publicNewsFilter(Request $request)
+    {
+        $query = News::where('is_published', true)
+            ->with('center:id,name')
+            ->withCount(['likes', 'comments']);
+
+        if ($request->filled('center_id')) {
+            $query->where('center_id', $request->center_id);
+        }
+
+        if ($request->filled('category') && $request->category !== 'all') {
+            $query->where('category', $request->category);
+        }
+
+        $news = $query->latest('published_at')
+            ->paginate(9, ['id', 'center_id', 'title', 'body', 'cover_image', 'category', 'published_at']);
+
+        return response()->json($news);
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // AUTHENTICATED NEWS MANAGEMENT
+    // ─────────────────────────────────────────────────────────────────
+
     public function index()
     {
         $user = auth()->user();

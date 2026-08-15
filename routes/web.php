@@ -9,12 +9,15 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\NewsController;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Public Landing / Welcome Page
+Route::get('/', [NewsController::class, 'welcome'])->name('welcome');
 
-// Public News Feed (for login page marquee)
+// Public News Feed (for login page marquee & welcome page)
 Route::get('api/public-news', [NewsController::class, 'publicFeed'])->name('news.public-feed');
+// Public Centers API
+Route::get('api/public-centers', [NewsController::class, 'publicCenters'])->name('centers.public-feed');
+// Filtered public news (with center & category filters)
+Route::get('api/public-news-filter', [NewsController::class, 'publicNewsFilter'])->name('news.public-filter');
 
 // Public News Detail (no login required, read only)
 Route::get('news/public/{news}', [NewsController::class, 'publicShow'])->name('news.public-show');
