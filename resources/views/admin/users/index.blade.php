@@ -45,6 +45,9 @@
                         <th class="px-6 py-4">البريد الإلكتروني</th>
                         <th class="px-6 py-4">الدور الوظيفي</th>
                         <th class="px-6 py-4">المركز</th>
+                        <th class="px-6 py-4">رقم الجوال</th>
+                        <th class="px-6 py-4">الرتب</th>
+                        <th class="px-6 py-4">رقم الحساب البنكي</th>
                         
                     
                         <th class="px-6 py-4 text-center">الحالة</th>
@@ -79,6 +82,25 @@
                                     class="px-3 py-1.5 rounded-xl text-[10px] font-black bg-blue-50 text-gray-500 font-cairo">
                                     {{ $user->center ? $user->center->name : 'غير محدد' }}
                                 </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="px-3 py-1.5 rounded-xl text-[10px] font-black bg-blue-50 text-gray-500 font-cairo">
+                                    {{ $user->phone }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="px-3 py-1.5 rounded-xl text-[10px] font-black bg-blue-50 text-gray-500 font-cairo">
+                                    {{ $user->salary }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="px-3 py-1.5 rounded-xl text-[10px] font-black bg-blue-50 text-gray-500 font-cairo">
+                                    {{ $user->bank_account_number }}
+                                </span>
+                            </td>
                             <td class="px-6 py-4 text-center">
                                 <span
                                     class="px-3 py-1.5 rounded-xl text-[10px] font-black {{ $user->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} font-cairo">

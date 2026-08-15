@@ -131,30 +131,35 @@
 <table class="signatures-table avoid-break">
     <tr>
         <td>
-            <div class="sign-line"></div>
             <div class="sign-title">  المسؤول المالي</div>
-<div class="sign-name">
+            <div class="sign-name">
                     @php
-                      $financial_manager = \App\Models\User::role('financial-manager')->where('center_id',$voucher->center_id)->get();
+                      $financial_manager = \App\Models\User::role('financial-manager')->where('center_id', $settlement->center_id)->get();
                 @endphp
                 {{ $financial_manager->count() ===1 ? $financial_manager->first()->name : '' }}
-            </div>        </td>
-        <td>
-            <div class="sign-line"></div>
+            </div>
+              </td>
+              <td>
             <div class="sign-title">  مدير المركز</div>
           <div class="sign-name">
                     @php
-                      $center_manager = \App\Models\User::role('center-manager')->where('center_id',$voucher->center_id)->get();
+                      $center_manager = \App\Models\User::role('center-manager')->where('center_id', $settlement->center_id)->get();
                 @endphp
                 {{ $center_manager->count() ===1 ? $center_manager->first()->name : '' }}
             </div>        </td>
         <td>
-            <div class="sign-line"></div>
 <div class="sign-title">مدير قسم المراكز الطلابية</div>
             @php
                 $super_admin = \App\Models\User::role('super-admin')->first();
             @endphp
-            <div class="sign-name">{{ $super_admin ? $super_admin->name : '' }}</div>        </td>
+            <div class="sign-name">{{ $super_admin ? $super_admin->name : '' }}</div>  
+               </td>
+                 <td>
+            <div class="sign-title">مدير المالية بالجمعية</div>
+               </td>
+                  <td>
+            <div class="sign-title">مدير التنفيذي للجمعية</div>
+               </td>
     </tr>
 </table>
 @endsection

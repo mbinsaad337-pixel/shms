@@ -75,7 +75,7 @@
         }
 
         .header-logo {
-            height: 50px;
+            height: 75px;
             vertical-align: middle;
         }
 
@@ -310,9 +310,9 @@
         }
 
         .sign-title {
-            font-size: 10px;
+            font-size: 18px;
             font-weight: bold;
-            color: #334155;
+            color: #000000;
         }
 
         .sign-line {
@@ -322,8 +322,9 @@
         }
 
         .sign-name {
-            font-size: 9px;
-            color: #64748b;
+            margin-top: 20px;
+            font-size: 15px;
+            color: #45413f;
             margin-top: 3px;
         }
 
@@ -388,8 +389,13 @@
     <div class="page-header">
         <table class="header-table">
             <tr>
-                {{-- RIGHT: Logos --}}
+                 {{-- CENTER: System Name + Report Title --}}
                 <td class="header-right">
+                    <div class="system-name">{{ $systemName ?? 'نظام إدارة المراكز الطلابية' }}</div>
+                    <div class="report-title-small">{{ $reportTitle ?? 'تقرير' }}</div>
+                </td>
+                {{-- RIGHT: Logos --}}
+                <td class="header-center">
                     @php
                         $scsLogoPath    = public_path('images/logos/scs_logo.png');
                         $scsLogoData    = file_exists($scsLogoPath) ? base64_encode(file_get_contents($scsLogoPath)) : '';
@@ -401,20 +407,23 @@
                         $centerLogoData = file_exists($centerLogoPath) ? base64_encode(file_get_contents($centerLogoPath)) : '';
                         $centerLogoExt  = pathinfo($centerLogoPath, PATHINFO_EXTENSION);
                     @endphp
-                    @if($scsLogoData)
-                        <img src="data:image/png;base64,{{ $scsLogoData }}" class="header-logo">
-                    @endif
-                    @if($centerLogoData)
-                        &nbsp;&nbsp;
-                        <img src="data:image/{{ $centerLogoExt }};base64,{{ $centerLogoData }}" class="header-logo">
-                    @endif
+                    <table style="width: 100%; border: none; padding: 0; margin: 0; border-collapse: collapse;">
+                        <tr>
+                            <td style="text-align: left; vertical-align: middle; border: none; padding: 0; width: 50%;">
+                                @if($scsLogoData)
+                                    <img src="data:image/png;base64,{{ $scsLogoData }}" class="header-logo" style="margin-left: 10px;">
+                                @endif
+                            </td>
+                            <td style="text-align: right; vertical-align: middle; border: none; padding: 0; width: 50%;">
+                                @if($centerLogoData)
+                                    <img src="data:image/{{ $centerLogoExt }};base64,{{ $centerLogoData }}" class="header-logo" style="height: 90px; margin-right: 10px;">
+                                @endif
+                            </td>
+                        </tr>
+                    </table>
                 </td>
 
-                {{-- CENTER: System Name + Report Title --}}
-                <td class="header-center">
-                    <div class="system-name">{{ $systemName ?? 'نظام إدارة المراكز الطلابية' }}</div>
-                    <div class="report-title-small">{{ $reportTitle ?? 'تقرير' }}</div>
-                </td>
+               
 
                 {{-- LEFT: Meta --}}
                 <td class="header-left" style="direction: rtl;">

@@ -43,9 +43,12 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                        <label class="block text-gray-700 font-cairo font-bold mb-2">المبنى</label>
-                        <input type="text" name="building" value="{{ $room->building }}" placeholder="أ"
-                            class="w-full px-5 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none font-almarai transition-all">
+                        <label class="block text-gray-700 font-cairo font-bold mb-2">نوع الغرفة</label>
+                        <select name="building" required
+                            class="w-full px-5 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none font-almarai bg-white transition-all">
+                            <option value="academic" {{ $room->building == 'academic' ? 'selected' : '' }}>أكاديمي</option>
+                            <option value="cooperative" {{ $room->building == 'cooperative' ? 'selected' : '' }}>تعاوني</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-gray-700 font-cairo font-bold mb-2">الطابق</label>

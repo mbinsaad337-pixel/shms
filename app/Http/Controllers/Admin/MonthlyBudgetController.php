@@ -115,7 +115,7 @@ class MonthlyBudgetController extends Controller
         return redirect()->route('budgets.index')->with('success', 'تم تأكيد الموازنة وإرسالها للمدير العام للاعتماد النهائي.');
     }
 
-    public function reject(MonthlyBudget $budget)
+    public function reject(Request $request, MonthlyBudget $budget)
     {
         if (!auth()->user()->can('confirm-budgets') && !auth()->user()->can('approve-budgets')) {
             abort(403);
@@ -125,7 +125,14 @@ class MonthlyBudgetController extends Controller
             return back()->with('error', 'لا يمكن رفض موازنة تم اعتمادها أو رفضها مسبقاً.');
         }
 
-        $budget->update(['status' => 'rejected']);
+        $validated = $request->validate([
+            'rejection_reason' => ['required', 'string', 'max:1000'],
+        ]);
+
+        $budget->update([
+            'status' => 'rejected',
+            'rejection_reason' => $validated['rejection_reason'],
+        ]);
 
         return redirect()->route('budgets.index')->with('success', 'تم رفض طلب الموازنة.');
     }

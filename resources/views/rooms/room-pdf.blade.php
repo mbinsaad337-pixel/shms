@@ -82,8 +82,8 @@
                     <span style="font-weight: bold; color: #004274;">{{ $room->room_number }}</span>
                 </td>
                 <td style="border:none; text-align: right; padding: 5px;">
-                    <span class="label">المبنى:</span>
-                    <span>{{ $room->building }}</span>
+                    <span class="label">نوع الغرفة:</span>
+                    <span>{{ $room->building == 'academic' ? 'أكاديمي' : ($room->building == 'cooperative' ? 'تعاوني' : ($room->building ?? '—')) }}</span>
                 </td>
                 <td style="border:none; text-align: right; padding: 5px;">
                     <span class="label">السعة:</span>

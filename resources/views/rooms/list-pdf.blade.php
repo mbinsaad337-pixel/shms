@@ -56,7 +56,7 @@
     <table>
         <thead>
             <tr>
-                <th>المبنى</th>
+                <th>نوع الغرفة</th>
                 <th>الطابق</th>
                 <th>الشقة</th>
                 <th>رقم الغرفة</th>
@@ -69,7 +69,7 @@
         <tbody>
             @foreach($rooms as $room)
                 <tr>
-                    <td>{{ $room->building }}</td>
+                    <td>{{ $room->building == 'academic' ? 'أكاديمي' : ($room->building == 'cooperative' ? 'تعاوني' : ($room->building ?? '—')) }}</td>
                     <td>{{ $room->floor }}</td>
                     <td>{{ $room->apartment ?? '-' }}</td>
                     <td style="font-weight: bold; color: #004274;">{{ $room->room_number }}</td>

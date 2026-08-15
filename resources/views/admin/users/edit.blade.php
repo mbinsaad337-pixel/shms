@@ -52,6 +52,20 @@
                     class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-almarai text-left">
             </div>
 
+            <!-- Bank Account Number -->
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2 font-cairo">رقم الحساب البنكي</label>
+                <input type="text" name="bank_account_number" value="{{ old('bank_account_number', $user->bank_account_number) }}"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-almarai text-left" dir="ltr">
+            </div>
+
+            <!-- Salary -->
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2 font-cairo">الراتب</label>
+                <input type="number" step="0.01" name="salary" value="{{ old('salary', $user->salary) }}"
+                    class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-almarai text-left" dir="ltr">
+            </div>
+
             <!-- Role -->
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2 font-cairo">الدور الوظيفي</label>

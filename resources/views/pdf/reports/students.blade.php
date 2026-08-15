@@ -15,7 +15,7 @@
                 <th class="text-center">عام التخرج</th>
             @else
                 <th>الغرفة</th>
-                <th>نظام التسكن</th>
+                <th>نظام التسكين</th>
                 <th>المستوى الدراسي</th>
                 <th class="text-center">الحالة</th>
             @endif
@@ -61,14 +61,14 @@
 <table class="signatures-table">
     <tr>
         <td>
-            <div class="sign-line"></div>
+            {{-- <div class="sign-line"></div>
             <div class="sign-title">مشرف الطلاب</div>
             <div class="sign-name">
                 @php
                       $housing_manager = \App\Models\User::role('housing-manager')->where('center_id',$student->center_id)->get();
                 @endphp
                 {{ $housing_manager->count() ===1 ? $housing_manager->first()->name : '' }}
-            </div>
+            </div> --}}
         </td>
         
         <td>

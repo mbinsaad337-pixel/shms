@@ -316,7 +316,7 @@
                         @if ($currentRoom)
                             <table class="w-full font-almarai text-sm border-collapse">
                                 <tr class="bg-gray-50">
-                                    <th class="border border-gray-100 p-3 text-center">المبنى</th>
+                                    <th class="border border-gray-100 p-3 text-center">نوع الغرفة</th>
                                     <th class="border border-gray-100 p-3 text-center">الطابق</th>
                                     <th class="border border-gray-100 p-3 text-center">الشقة</th>
                                     <th class="border border-gray-100 p-3 text-center bg-primary/5 text-primary">رقم الغرفة
@@ -324,7 +324,7 @@
                                 </tr>
                                 <tr>
                                     <td class="border border-gray-100 p-4 text-center font-bold">
-                                        {{ $currentRoom->room->building }}</td>
+                                        {{ $currentRoom->room->building == 'academic' ? 'أكاديمي' : ($currentRoom->room->building == 'cooperative' ? 'تعاوني' : ($currentRoom->room->building ?? '—')) }}</td>
                                     <td class="border border-gray-100 p-4 text-center font-bold">
                                         {{ $currentRoom->room->floor }}</td>
                                     <td class="border border-gray-100 p-4 text-center font-bold">

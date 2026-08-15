@@ -15,8 +15,11 @@ class NewsController extends Controller
         $query = News::with(['center', 'creator']);
 
         if (!$user->hasAnyRole(['super-admin', 'media-officer', 'executive-manager'])) {
-            // Center users see their center's news
-            $query->where('center_id', $user->center_id);
+            // Center users see their center's news and general news
+            $query->where(function($q) use ($user) {
+                $q->where('center_id', $user->center_id)
+                  ->orWhereNull('center_id');
+            });
             if (!$user->can('manage-news')) {
                 $query->where('is_published', true);
             }
@@ -77,7 +80,7 @@ class NewsController extends Controller
             'video_url'   => 'nullable|url',
             'video_file'  => 'nullable|mimes:mp4,mov,ogg,qt|max:20480',
             'is_published'=> 'nullable|boolean',
-            'center_id'   => $isPrivileged ? 'required|exists:centers,id' : 'nullable',
+            'center_id'   => 'nullable|exists:centers,id',
         ]);
 
         $coverPath = null;
@@ -103,8 +106,8 @@ class NewsController extends Controller
         $isPublished = $canDirectPublish ? $isPublishedRequest : false;
         $status = $canDirectPublish && $isPublishedRequest ? 'approved' : 'pending';
 
-        // Resolve center_id: privileged users pick from form; others use their own center
-        $centerId = $isPrivileged ? $validated['center_id'] : $user->center_id;
+        // Resolve center_id: privileged users pick from form (optional); others use their own center
+        $centerId = $isPrivileged ? ($validated['center_id'] ?? null) : $user->center_id;
 
         $news = News::create([
             'center_id' => $centerId,

@@ -264,7 +264,7 @@
                 <td class="value" colspan="3">
                     @php $assignment = $student->roomAssignments->where('released_at', null)->first(); @endphp
                     @if ($assignment)
-                        مبنى: {{ $assignment->room->building }} | رقم الغرفة: {{ $assignment->room->room_number }}
+                        نوع الغرفة: {{ $assignment->room->building == 'academic' ? 'أكاديمي' : ($assignment->room->building == 'cooperative' ? 'تعاوني' : ($assignment->room->building ?? '—')) }} | رقم الغرفة: {{ $assignment->room->room_number }}
                         @if ($assignment->room->apartment)
                             | شقة: {{ $assignment->room->apartment }}
                         @endif

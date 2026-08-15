@@ -195,7 +195,7 @@ class MonthlySettlementController extends Controller
         return redirect()->route('settlements.index')->with('success', 'تم تأكيد التصفية وإرسالها للمدير العام للاعتماد النهائي.');
     }
 
-    public function reject(MonthlySettlement $settlement)
+    public function reject(Request $request, MonthlySettlement $settlement)
     {
         if (!auth()->user()->can('confirm-settlements') && !auth()->user()->can('approve-settlements')) {
             abort(403);
@@ -205,8 +205,15 @@ class MonthlySettlementController extends Controller
             return back()->with('error', 'لا يمكن رفض تصفية تم اعتمادها أو رفضها مسبقاً.');
         }
 
-        // Returned status allows re-submission
-        $settlement->update(['status' => 'returned']);
+        $validated = $request->validate([
+            'rejection_reason' => ['required', 'string', 'max:1000'],
+        ]);
+
+        // Returned status allows re-submission.
+        $settlement->update([
+            'status' => 'returned',
+            'rejection_reason' => $validated['rejection_reason'],
+        ]);
 
         return redirect()->route('settlements.index')->with('success', 'تم إعادة التصفية للمراجعة والتعديل.');
     }

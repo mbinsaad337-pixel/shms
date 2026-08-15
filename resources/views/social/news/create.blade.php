@@ -43,11 +43,11 @@
                 @if(auth()->user()->hasAnyRole(['super-admin', 'media-officer']) && count($centers))
                 <div>
                     <label class="block text-sm font-black text-navy mb-2 font-cairo">
-                        المركز <span class="text-rose-500">*</span>
+                        المركز <span class="text-gray-400 font-normal">(اختياري للعام)</span>
                     </label>
-                    <select name="center_id" required
+                    <select name="center_id"
                         class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 focus:border-navy outline-none font-cairo transition-all">
-                        <option value="">— اختر المركز —</option>
+                        <option value="">— كل المراكز (عام) —</option>
                         @foreach($centers as $center)
                             <option value="{{ $center->id }}" {{ old('center_id') == $center->id ? 'selected' : '' }}>
                                 {{ $center->name }}

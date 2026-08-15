@@ -255,7 +255,7 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
 
         // News Management
         Route::resource('news', NewsController::class)->except(['destroy']);
-        Route::post('news/{news}/delete', [NewsController::class, 'destroy'])->name('news.destroy');
+        Route::delete('news/{news}/delete', [NewsController::class, 'destroy'])->name('news.destroy');
         Route::post('news/{news}/toggle-publish', [NewsController::class, 'togglePublish'])->name('news.toggle-publish');
     });
 

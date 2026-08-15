@@ -298,9 +298,51 @@ class RoleAndPermissionSeeder extends Seeder
             'view-circle-reports',
         ]);
 
-        // المشرف (supervisor)
-        $supervisor = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'supervisor', 'guard_name' => 'web']);
-        $supervisor->syncPermissions([
+        // مشرف الطلاب الاكاديمي (academic-supervisor)
+        $academicSupervisor = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'academic-supervisor', 'guard_name' => 'web']);
+        $academicSupervisor->syncPermissions([
+            'view-students',
+            'manage-students',
+            'view-rooms',
+            'manage-rooms',
+            'manage-assignments',
+            'view-assignments',
+            'manage-violations',
+            'view-violations',
+            'manage-leaves',
+            'view-leaves',
+            'manage-absences',
+            'view-absences',
+            'manage-quran-circles',
+            'view-quran-circles',
+            'mark-circle-attendance',
+            'view-circle-reports',
+        ]);
+
+        // مشرف الطلاب التعاوني (cooperative-supervisor)
+        $cooperativeSupervisor = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'cooperative-supervisor', 'guard_name' => 'web']);
+        $cooperativeSupervisor->syncPermissions([
+            'view-students',
+            'manage-students',
+            'view-rooms',
+            'manage-rooms',
+            'manage-assignments',
+            'view-assignments',
+            'manage-violations',
+            'view-violations',
+            'manage-leaves',
+            'view-leaves',
+            'manage-absences',
+            'view-absences',
+            'manage-quran-circles',
+            'view-quran-circles',
+            'mark-circle-attendance',
+            'view-circle-reports',
+        ]);
+
+        // مشرف الطلاب (student-supervisor) - يجمع بين صلاحيات الأكاديمي والتعاوني
+        $studentSupervisor = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'student-supervisor', 'guard_name' => 'web']);
+        $studentSupervisor->syncPermissions([
             'view-students',
             'manage-students',
             'view-rooms',

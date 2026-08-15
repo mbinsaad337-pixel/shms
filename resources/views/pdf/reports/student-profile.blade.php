@@ -567,7 +567,7 @@
             <table class="academic-table">
                 <thead>
                     <tr>
-                        <th>المبنى السكني</th>
+                        <th>نوع الغرفة</th>
                         <th>الطابق</th>
                         <th>الشقة السكنية</th>
                         <th>رقم الغرفة المخصصة</th>
@@ -576,7 +576,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ $student->activeRoomAssignment->room->building }}</td>
+                        <td>{{ $student->activeRoomAssignment->room->building == 'academic' ? 'أكاديمي' : ($student->activeRoomAssignment->room->building == 'cooperative' ? 'تعاوني' : ($student->activeRoomAssignment->room->building ?? '—')) }}</td>
                         <td>{{ $student->activeRoomAssignment->room->floor }}</td>
                         <td>{{ $student->activeRoomAssignment->room->apartment }}</td>
                         <td style="font-weight: 800; color: #002c4f; font-size: 10px;">{{ $student->activeRoomAssignment->room->room_number }}</td>

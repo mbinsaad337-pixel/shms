@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\FilterBySupervisor;
 
 class Violation extends Model
 {
+    use FilterBySupervisor;
     protected $fillable = [
         'student_id',
         'center_id',

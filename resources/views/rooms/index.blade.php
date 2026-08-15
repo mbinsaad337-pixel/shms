@@ -80,7 +80,7 @@
                         </div>
                         <h3 class="text-xl font-bold text-gray-800 font-almarai mb-1">غرفة رقم: {{ $room->room_number }}</h3>
                         <p class="text-sm text-gray-500 font-almarai mb-4">
-                            مبنى {{ $room->building }} - الطابق {{ $room->floor }}
+                            نوع الغرفة: {{ $room->building == 'academic' ? 'أكاديمي' : ($room->building == 'cooperative' ? 'تعاوني' : ($room->building ?? '—')) }} - الطابق {{ $room->floor }}
                             @if ($room->apartment)
                                 - شقة {{ $room->apartment }}
                             @endif

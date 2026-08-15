@@ -9,6 +9,22 @@ class Student extends Model
 {
     use SoftDeletes;
 
+    protected static function booted()
+    {
+        static::addGlobalScope('supervisor', function ($query) {
+            if (auth()->check()) {
+                $user = auth()->user();
+                if (!$user->hasRole('super-admin') && !$user->hasRole('center-manager') && !$user->hasRole('executive-manager') && !$user->hasRole('student-supervisor')) {
+                    if ($user->hasRole('academic-supervisor')) {
+                        $query->whereHas('program', fn ($q) => $q->where('code', 'academic'));
+                    } elseif ($user->hasRole('cooperative-supervisor')) {
+                        $query->whereHas('program', fn ($q) => $q->where('code', 'cooperative'));
+                    }
+                }
+            }
+        });
+    }
+
     protected $fillable = [
         'user_id', 'center_id', 'program_id', 'student_number', 'national_id',
         'name_ar', 'name_en', 'surname',

@@ -102,7 +102,7 @@
                                         </form>
                                         <form action="{{ route('budgets.reject', $budget) }}" method="POST" class="inline">
                                             @csrf
-                                            <button type="submit"
+                                            <button type="button" onclick="openBudgetRejectModal('{{ route('budgets.reject', $budget) }}')"
                                                 class="bg-red-600 text-white hover:bg-red-700 px-3 py-2 rounded-xl text-xs font-bold font-cairo shadow-sm flex items-center gap-1">
                                                 <i class="fas fa-times"></i> رفض
                                             </button>
@@ -119,7 +119,7 @@
                                         </form>
                                         <form action="{{ route('budgets.reject', $budget) }}" method="POST" class="inline">
                                             @csrf
-                                            <button type="submit"
+                                            <button type="button" onclick="openBudgetRejectModal('{{ route('budgets.reject', $budget) }}')"
                                                 class="bg-red-600 text-white hover:bg-red-700 px-3 py-2 rounded-xl text-xs font-bold font-cairo shadow-sm flex items-center gap-1">
                                                 <i class="fas fa-times"></i> رفض
                                             </button>
@@ -155,4 +155,30 @@
             </div>
         </div>
     </div>
+
+    <div id="budgetRejectModal" class="hidden fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="budgetRejectModalTitle">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h3 id="budgetRejectModalTitle" class="font-bold text-gray-800 font-cairo mb-2">رفض الموازنة</h3>
+            <p class="text-sm text-gray-500 font-almarai mb-4">يرجى كتابة سبب الرفض بوضوح.</p>
+            <form id="budgetRejectForm" method="POST">
+                @csrf
+                <textarea name="rejection_reason" rows="4" required maxlength="1000" placeholder="اكتب سبب الرفض..."
+                    class="w-full border border-gray-200 rounded-xl px-4 py-3 font-almarai text-sm focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none resize-y"></textarea>
+                <div class="flex gap-3 justify-end mt-4">
+                    <button type="button" onclick="document.getElementById('budgetRejectModal').classList.add('hidden')"
+                        class="px-5 py-2.5 border border-gray-200 rounded-xl font-cairo font-bold text-gray-600">إلغاء</button>
+                    <button type="submit" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold font-cairo">تأكيد الرفض</button>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
+
+@push('scripts')
+    <script>
+        function openBudgetRejectModal(action) {
+            document.getElementById('budgetRejectForm').action = action;
+            document.getElementById('budgetRejectModal').classList.remove('hidden');
+        }
+    </script>
+@endpush

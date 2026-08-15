@@ -44,12 +44,15 @@
             @endif
 
             <td style="width: {{ $commitment->requires_guardian_signature ? '33%' : '50%' }};">
-                <div style="margin-bottom: 40px;"><strong> مشرف الطلاب  </strong></div>
-                <div style="border-bottom: 1px solid #000; width: 70%; margin: 0 auto;"></div>
-                 @php
-                      $housing_manager = \App\Models\User::role('housing-manager')->where('center_id',$commitment->student->center_id)->get();
+                @php
+                    $isAcademic = $commitment->student?->program?->code === 'academic';
+                    $supervisorRole = $isAcademic ? 'academic-supervisor' : 'cooperative-supervisor';
+                    $supervisorTitle = $isAcademic ? 'مشرف الطلاب الأكاديمي' : 'مشرف الطلاب التعاوني';
+                    $supervisor = \App\Models\User::role($supervisorRole)->where('center_id', $commitment->student?->center_id)->get();
                 @endphp
-                {{ $housing_manager->count() ===1 ? $housing_manager->first()->name : '' }}                
+                <div style="margin-bottom: 40px;"><strong> {{ $supervisorTitle }}  </strong></div>
+                <div style="border-bottom: 1px solid #000; width: 70%; margin: 0 auto;"></div>
+                {{ $supervisor->count() === 1 ? $supervisor->first()->name : '' }}                
             </td>
         </tr>
     </table>

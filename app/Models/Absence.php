@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\FilterBySupervisor;
 
 class Absence extends Model
 {
+    use FilterBySupervisor;
     protected $fillable = [
         'student_id',
         'date',

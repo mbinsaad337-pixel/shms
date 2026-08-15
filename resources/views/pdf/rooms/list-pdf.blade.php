@@ -20,7 +20,7 @@
             <tr>
                 <th class="text-center">#</th>
                 <th>رقم الغرفة</th>
-                <th>المبنى</th>
+                <th>نوع الغرفة</th>
                 <th>الشقة</th>
                 <th class="text-center">الطابق</th>
                 <th class="text-center">السعة</th>
@@ -34,7 +34,7 @@
                 <tr>
                     <td class="text-center">{{ $i + 1 }}</td>
                     <td class="font-bold">{{ $room->room_number }}</td>
-                    <td>{{ $room->building ?? '—' }}</td>
+                    <td>{{ $room->building == 'academic' ? 'أكاديمي' : ($room->building == 'cooperative' ? 'تعاوني' : ($room->building ?? '—')) }}</td>
                     <td>{{ $room->apartment ?? '—' }}</td>
                     <td class="text-center">{{ $room->floor ?? '—' }}</td>
                     <td class="text-center font-bold">{{ $room->capacity }}</td>

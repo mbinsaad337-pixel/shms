@@ -27,6 +27,8 @@ class User extends Authenticatable
         'temp_password',
         'center_id',
         'phone',
+        'bank_account_number',
+        'salary',
         'avatar',
         'is_active',
         'last_login_at',

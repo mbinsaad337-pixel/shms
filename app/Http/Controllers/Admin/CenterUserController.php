@@ -71,7 +71,9 @@ class CenterUserController extends Controller
             'nutrition-manager',
             'inventory-manager',
             'transport-manager',
-            'supervisor',
+            'academic-supervisor',
+            'cooperative-supervisor',
+            'student-supervisor',
             'circle-teacher',
             'student'
         ])->get();
@@ -89,6 +91,8 @@ class CenterUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|string',
+            'bank_account_number' => 'nullable|string|max:255',
+            'salary' => 'nullable|numeric|min:0',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|exists:roles,name',
             'permissions' => 'nullable|array',
@@ -99,6 +103,8 @@ class CenterUserController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
+            'bank_account_number' => $validated['bank_account_number'] ?? null,
+            'salary' => $validated['salary'] ?? null,
             'password' => Hash::make($validated['password']),
             'center_id' => auth()->user()->center_id,
             'is_active' => true,
@@ -125,7 +131,9 @@ class CenterUserController extends Controller
             'nutrition-manager',
             'inventory-manager',
             'transport-manager',
-            'supervisor',
+            'academic-supervisor',
+            'cooperative-supervisor',
+            'student-supervisor',
             'circle-teacher',
             'student'
         ])->get();
@@ -146,6 +154,8 @@ class CenterUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'phone' => 'required|string',
+            'bank_account_number' => 'nullable|string|max:255',
+            'salary' => 'nullable|numeric|min:0',
             'role' => 'required|exists:roles,name',
             'password' => 'nullable|string|min:8|confirmed',
             'permissions' => 'nullable|array',
@@ -156,6 +166,8 @@ class CenterUserController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
+            'bank_account_number' => $validated['bank_account_number'] ?? null,
+            'salary' => $validated['salary'] ?? null,
         ]);
 
         if ($request->filled('password')) {

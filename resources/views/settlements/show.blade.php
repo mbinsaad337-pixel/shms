@@ -91,6 +91,15 @@
         </div>
     </div>
 
+    @if($settlement->rejection_reason)
+        <div class="mb-8 bg-red-50 border border-red-200 rounded-2xl p-6">
+            <h3 class="font-bold text-red-800 font-cairo mb-2 flex items-center gap-2">
+                <i class="fas fa-exclamation-circle"></i> سبب إعادة التصفية للمراجعة
+            </h3>
+            <p class="text-red-700 font-almarai leading-relaxed">{{ $settlement->rejection_reason }}</p>
+        </div>
+    @endif
+
     <!-- Funds Breakdown & Transactions -->
     <div class="space-y-6">
         <h2 class="text-xl font-bold text-gray-800 font-cairo mb-4 flex items-center gap-2">
@@ -273,7 +282,7 @@
             @if((auth()->user()->can('confirm-settlements') || auth()->user()->can('approve-settlements')) && in_array($settlement->status, ['submitted', 'confirmed']))
                 <form action="{{ route('settlements.reject', $settlement) }}" method="POST" data-confirm="هل أنت متأكد من رفض هذه التصفية وإعادتها للمراجعة؟">
                     @csrf
-                    <button type="submit" class="bg-red-500 text-white hover:bg-red-600 px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-bold font-cairo shadow-sm transition-all">
+                    <button type="button" onclick="document.getElementById('settlementRejectModal').classList.remove('hidden')" class="bg-red-500 text-white hover:bg-red-600 px-6 py-3 rounded-xl flex items-center gap-2 text-sm font-bold font-cairo shadow-sm transition-all">
                         <i class="fas fa-times"></i>
                         <span>رفض التصفية</span>
                     </button>
@@ -312,6 +321,26 @@
         @endif
     </div>
 
+</div>
+
+<div id="settlementRejectModal" class="hidden fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="settlementRejectModalTitle">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+        <h3 id="settlementRejectModalTitle" class="font-bold text-gray-800 font-cairo mb-2">رفض التصفية</h3>
+        <p class="text-sm text-gray-500 font-almarai mb-4">يرجى كتابة سبب إعادة التصفية للمراجعة.</p>
+        <form action="{{ route('settlements.reject', $settlement) }}" method="POST">
+            @csrf
+            <textarea name="rejection_reason" rows="4" required maxlength="1000" placeholder="اكتب سبب الرفض..."
+                class="w-full border border-gray-200 rounded-xl px-4 py-3 font-almarai text-sm focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none resize-y">{{ old('rejection_reason') }}</textarea>
+            @error('rejection_reason')
+                <p class="mt-2 text-sm text-red-600 font-almarai">{{ $message }}</p>
+            @enderror
+            <div class="flex gap-3 justify-end mt-4">
+                <button type="button" onclick="document.getElementById('settlementRejectModal').classList.add('hidden')"
+                    class="px-5 py-2.5 border border-gray-200 rounded-xl font-cairo font-bold text-gray-600">إلغاء</button>
+                <button type="submit" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold font-cairo">تأكيد الرفض</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <!-- Print Styles -->

@@ -129,8 +129,8 @@
                         @if ($currentRoom)
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <div class="bg-gray-50 p-4 rounded-xl">
-                                    <p class="text-xs text-gray-500 font-bold mb-1">المبنى</p>
-                                    <p class="font-bold text-gray-800">{{ $currentRoom->room->building }}</p>
+                                    <p class="text-xs text-gray-500 font-bold mb-1">نوع الغرفة</p>
+                                    <p class="font-bold text-gray-800">{{ $currentRoom->room->building == 'academic' ? 'أكاديمي' : ($currentRoom->room->building == 'cooperative' ? 'تعاوني' : ($currentRoom->room->building ?? '—')) }}</p>
                                 </div>
                                 <div class="bg-gray-50 p-4 rounded-xl">
                                     <p class="text-xs text-gray-500 font-bold mb-1">الطابق</p>

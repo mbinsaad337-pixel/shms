@@ -14,8 +14,8 @@
                             <div class="detail-value large">{{ $room->room_number }}</div>
                         </div>
                         <div class="detail-row">
-                            <div class="detail-label">المبنى</div>
-                            <div class="detail-value">{{ $room->building ?? '—' }}</div>
+                            <div class="detail-label">نوع الغرفة</div>
+                            <div class="detail-value">{{ $room->building == 'academic' ? 'أكاديمي' : ($room->building == 'cooperative' ? 'تعاوني' : ($room->building ?? '—')) }}</div>
                         </div>
                         <div class="detail-row">
                             <div class="detail-label">الشقة</div>

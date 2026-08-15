@@ -138,7 +138,7 @@
                             </form>
                             <form action="{{ route('budgets.reject', $budget) }}" method="POST">
                                 @csrf
-                                <button type="submit"
+                                <button type="button" onclick="document.getElementById('budgetRejectModal').classList.remove('hidden')"
                                     class="w-full py-4 bg-white text-red-600 border-2 border-red-50 rounded-2xl font-bold font-cairo hover:bg-red-50 transition-all flex items-center justify-center gap-2">
                                     <i class="fas fa-times"></i> رفض الموازنة
                                 </button>
@@ -155,7 +155,7 @@
                             </form>
                             <form action="{{ route('budgets.reject', $budget) }}" method="POST">
                                 @csrf
-                                <button type="submit"
+                                <button type="button" onclick="document.getElementById('budgetRejectModal').classList.remove('hidden')"
                                     class="w-full py-4 bg-white text-red-600 border-2 border-red-50 rounded-2xl font-bold font-cairo hover:bg-red-50 transition-all flex items-center justify-center gap-2">
                                     <i class="fas fa-times"></i> رفض الموازنة
                                 </button>
@@ -225,6 +225,15 @@
                         </div>
                     </div>
 
+                    @if($budget->rejection_reason)
+                        <div class="bg-red-50 rounded-3xl border border-red-200 p-6">
+                            <h3 class="font-bold text-red-800 font-cairo mb-3 flex items-center gap-2">
+                                <i class="fas fa-exclamation-circle"></i> سبب الرفض
+                            </h3>
+                            <p class="text-red-700 font-almarai leading-relaxed">{{ $budget->rejection_reason }}</p>
+                        </div>
+                    @endif
+
                     @if($budget->notes)
                         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
                             <h3 class="font-bold text-gray-800 font-cairo mb-4 flex items-center gap-2">
@@ -239,5 +248,25 @@
             </div>
         </div>
         @include('partials.print_footer')
+    </div>
+
+    <div id="budgetRejectModal" class="hidden fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="budgetRejectModalTitle">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h3 id="budgetRejectModalTitle" class="font-bold text-gray-800 font-cairo mb-2">رفض الموازنة</h3>
+            <p class="text-sm text-gray-500 font-almarai mb-4">يرجى كتابة سبب الرفض بوضوح.</p>
+            <form action="{{ route('budgets.reject', $budget) }}" method="POST">
+                @csrf
+                <textarea name="rejection_reason" rows="4" required maxlength="1000" placeholder="اكتب سبب الرفض..."
+                    class="w-full border border-gray-200 rounded-xl px-4 py-3 font-almarai text-sm focus:ring-2 focus:ring-red-400 focus:border-red-400 outline-none resize-y">{{ old('rejection_reason') }}</textarea>
+                @error('rejection_reason')
+                    <p class="mt-2 text-sm text-red-600 font-almarai">{{ $message }}</p>
+                @enderror
+                <div class="flex gap-3 justify-end mt-4">
+                    <button type="button" onclick="document.getElementById('budgetRejectModal').classList.add('hidden')"
+                        class="px-5 py-2.5 border border-gray-200 rounded-xl font-cairo font-bold text-gray-600">إلغاء</button>
+                    <button type="submit" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold font-cairo">تأكيد الرفض</button>
+                </div>
+            </form>
+        </div>
     </div>
 @endsection

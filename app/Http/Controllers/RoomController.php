@@ -12,6 +12,8 @@ class RoomController extends Controller
         $user = auth()->user();
         $query = Room::query()
             ->when($user->center_id, fn($q) => $q->where('center_id', $user->center_id))
+            ->when($user->hasRole('academic-supervisor') && !$user->hasRole('student-supervisor'), fn($q) => $q->where('building', 'academic'))
+            ->when($user->hasRole('cooperative-supervisor') && !$user->hasRole('student-supervisor'), fn($q) => $q->where('building', 'cooperative'))
             ->when($request->status == 'available', fn($q) => $q->where('status', 'available'))
             ->when($request->filled('apartment'), fn($q) => $q->where('apartment', $request->apartment))
             ->when($request->filled('floor'), fn($q) => $q->where('floor', $request->floor))
@@ -45,7 +47,7 @@ class RoomController extends Controller
         $validated = $request->validate([
             'room_number' => 'required|string',
             'apartment' => 'nullable|string',
-            'building' => 'nullable|string',
+            'building' => 'required|in:academic,cooperative',
             'floor' => 'nullable|string',
             'capacity' => 'nullable|integer|min:1',
             'type' => 'required|in:residential,study_hall,activity_hall,other',
@@ -75,7 +77,7 @@ class RoomController extends Controller
         $validated = $request->validate([
             'room_number' => 'required|string',
             'apartment' => 'nullable|string',
-            'building' => 'nullable|string',
+            'building' => 'required|in:academic,cooperative',
             'floor' => 'nullable|string',
             'capacity' => 'nullable|integer|min:1',
             'type' => 'required|in:residential,study_hall,activity_hall,other',
@@ -133,6 +135,8 @@ class RoomController extends Controller
         $user = auth()->user();
         $query = Room::query()
             ->when($user->center_id, fn($q) => $q->where('center_id', $user->center_id))
+            ->when($user->hasRole('academic-supervisor') && !$user->hasRole('student-supervisor'), fn($q) => $q->where('building', 'academic'))
+            ->when($user->hasRole('cooperative-supervisor') && !$user->hasRole('student-supervisor'), fn($q) => $q->where('building', 'cooperative'))
             ->when($request->status == 'available', fn($q) => $q->where('status', 'available'))
             ->when($request->filled('apartment'), fn($q) => $q->where('apartment', $request->apartment))
             ->when($request->filled('floor'), fn($q) => $q->where('floor', $request->floor))

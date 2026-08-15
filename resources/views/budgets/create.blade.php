@@ -25,10 +25,17 @@
                             <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">الشهر</label>
                             <select name="month" required
                                 class="w-full px-5 py-4 rounded-2xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none font-almarai bg-gray-50/50">
-                                @for($i = 1; $i <= 12; $i++)
-                                    <option value="{{ $i }}" {{ date('m') == $i ? 'selected' : '' }}>
-                                        {{ date('F', mktime(0, 0, 0, $i, 10)) }}</option>
-                                @endfor
+                                @php
+                                    $arabicMonths = [
+                                        1 => 'يناير', 2 => 'فبراير', 3 => 'مارس', 4 => 'أبريل',
+                                        5 => 'مايو', 6 => 'يونيو', 7 => 'يوليو', 8 => 'أغسطس',
+                                        9 => 'سبتمبر', 10 => 'أكتوبر', 11 => 'نوفمبر', 12 => 'ديسمبر',
+                                    ];
+                                @endphp
+                                @foreach($arabicMonths as $number => $name)
+                                    <option value="{{ $number }}" {{ old('month', now()->month) == $number ? 'selected' : '' }}>
+                                        {{ $name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div>

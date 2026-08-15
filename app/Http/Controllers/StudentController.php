@@ -84,12 +84,19 @@ class StudentController extends Controller
 
     public function create()
     {
-        $programs = \App\Models\Program::active()->get();
+        $user = auth()->user();
+        $programs = \App\Models\Program::active()
+            ->when($user->hasRole('academic-supervisor'), fn ($q) => $q->where('code', 'academic'))
+            ->when($user->hasRole('cooperative-supervisor'), fn ($q) => $q->where('code', 'cooperative'))
+            // student-supervisor sees all programs (no filter)
+            ->get();
         return view('students.create', compact('programs'));
     }
 
     public function store(Request $request)
     {
+        $user = auth()->user();
+
         $validated = $request->validate([
             'name_ar'        => 'required|string|max:255',
             'email'          => 'nullable|email|unique:users,email',
@@ -100,6 +107,15 @@ class StudentController extends Controller
             'student_number' => 'nullable|string|unique:students,student_number',
             'program_id'     => 'required|exists:programs,id',
         ]);
+
+        // Enforce program restriction for supervisors (student-supervisor bypasses this check)
+        if (($user->hasRole('academic-supervisor') || $user->hasRole('cooperative-supervisor')) && !$user->hasRole('student-supervisor')) {
+            $expectedCode = $user->hasRole('academic-supervisor') ? 'academic' : 'cooperative';
+            $program = \App\Models\Program::find($validated['program_id']);
+            if (!$program || $program->code !== $expectedCode) {
+                abort(403, 'لا يمكنك إضافة طلاب من نوع برنامج مختلف عن نطاق عملك.');
+            }
+        }
 
         return DB::transaction(function () use ($validated, $request) {
             $center_id = auth()->user()->center_id ?? Center::first()->id;
@@ -558,7 +574,7 @@ class StudentController extends Controller
     public function toggleCircleTeacher(Student $student)
     {
         $user = auth()->user();
-        if (!$user->can('manage-users') && !$user->hasRole('center-manager') && !$user->hasRole('housing-manager') && !$user->hasRole('supervisor')) {
+        if (!$user->can('manage-users') && !$user->can('manage-quran-circles') && !$user->hasRole('center-manager') && !$user->hasRole('housing-manager') && !$user->hasRole('student-supervisor') && !$user->hasRole('academic-supervisor') && !$user->hasRole('cooperative-supervisor')) {
             abort(403);
         }
 

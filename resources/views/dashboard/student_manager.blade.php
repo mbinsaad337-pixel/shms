@@ -12,7 +12,7 @@
         <div class="flex gap-4">
             <span
                 class="bg-indigo-50 text-indigo-700 border border-indigo-200 px-4 py-2 rounded-xl text-sm font-bold font-almarai shadow-sm">
-                <i class="fas fa-user-shield ml-1"></i> مشرف الطلاب والسكن
+                <i class="fas fa-user-shield ml-1"></i> مشرف الطلاب 
             </span>
         </div>
     </div>
