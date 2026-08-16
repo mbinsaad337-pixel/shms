@@ -1,130 +1,151 @@
 @extends('pdf.layouts.master')
 
 @section('styles')
-<style>
-    .record-identity {
-        border: 1px solid #004274;
-        padding: 14px 16px;
-        margin-bottom: 14px;
-        background: #f8fafc;
-    }
-    .record-title {
-        font-size: 16px;
-        font-weight: bold;
-        color: #004274;
-        margin-bottom: 6px;
-    }
-    .record-sub {
-        font-size: 10px;
-        color: #64748b;
-    }
-    .badge-module {
-        display: inline-block;
-        background: #004274;
-        color: #ffffff;
-        padding: 3px 10px;
-        font-size: 10px;
-        font-weight: bold;
-        border-radius: 3px;
-        margin-left: 8px;
-    }
-    .badge-year {
-        display: inline-block;
-        background: #D4A044;
-        color: #ffffff;
-        padding: 3px 10px;
-        font-size: 10px;
-        font-weight: bold;
-        border-radius: 3px;
-    }
-    .archive-ref {
-        float: left;
-        text-align: left;
-        font-size: 10px;
-        color: #004274;
-    }
-    .archive-ref .num {
-        font-size: 15px;
-        font-weight: bold;
-    }
-    .section-header {
-        background: #004274;
-        color: #ffffff;
-        padding: 6px 10px;
-        font-size: 12px;
-        font-weight: bold;
-        margin: 16px 0 10px;
-        border-right: 4px solid #D4A044;
-    }
-    .detail-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 6px;
-    }
-    .detail-table td {
-        border: 1px solid #e2e8f0;
-        padding: 7px 10px;
-        vertical-align: top;
-        font-size: 10.5px;
-    }
-    .detail-table .key {
-        width: 22%;
-        background: #f8fafc;
-        color: #64748b;
-        font-weight: bold;
-    }
-    .detail-table .value {
-        color: #0f172a;
-        font-weight: bold;
-    }
-    .detail-table .value.full {
-        width: 78%;
-    }
-    .value-amount {
-        color: #15803d;
-        font-weight: bold;
-    }
-    .value-long {
-        line-height: 1.8;
-        white-space: pre-wrap;
-    }
-    .value-empty {
-        color: #94a3b8;
-        font-weight: normal;
-    }
-    .subtable {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 14px;
-        font-size: 9.5px;
-    }
-    .subtable thead th {
-        background: #eef2f7;
-        color: #004274;
-        padding: 6px 8px;
-        border: 1px solid #d8dee8;
-        font-weight: bold;
-    }
-    .subtable tbody td {
-        padding: 6px 8px;
-        border: 1px solid #e2e8f0;
-        color: #334155;
-    }
-    .subtable tbody tr.even {
-        background: #fafbfc;
-    }
-    .notice {
-        background: #fef3c7;
-        border: 1px solid #fde68a;
-        padding: 10px 12px;
-        font-size: 10px;
-        color: #854d0e;
-        margin-bottom: 12px;
-    }
-    .signatures-table {
-        margin-top: 40px;
-    }
-</style>
+    <style>
+        .record-identity {
+            border: 1px solid #004274;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+            background: #f8fafc;
+        }
+
+        .record-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #004274;
+            margin-bottom: 6px;
+        }
+
+        .record-sub {
+            font-size: 10px;
+            color: #64748b;
+        }
+
+        .badge-module {
+            display: inline-block;
+            background: #004274;
+            color: #ffffff;
+            padding: 3px 10px;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 3px;
+            margin-left: 8px;
+        }
+
+        .badge-year {
+            display: inline-block;
+            background: #D4A044;
+            color: #ffffff;
+            padding: 3px 10px;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 3px;
+        }
+
+        .archive-ref {
+            float: left;
+            text-align: left;
+            font-size: 10px;
+            color: #004274;
+        }
+
+        .archive-ref .num {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .section-header {
+            background: #004274;
+            color: #ffffff;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            margin: 16px 0 10px;
+            border-right: 4px solid #D4A044;
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 6px;
+        }
+
+        .detail-table td {
+            border: 1px solid #e2e8f0;
+            padding: 7px 10px;
+            vertical-align: top;
+            font-size: 10.5px;
+        }
+
+        .detail-table .key {
+            width: 22%;
+            background: #f8fafc;
+            color: #64748b;
+            font-weight: bold;
+        }
+
+        .detail-table .value {
+            color: #0f172a;
+            font-weight: bold;
+        }
+
+        .detail-table .value.full {
+            width: 78%;
+        }
+
+        .value-amount {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .value-long {
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .value-empty {
+            color: #94a3b8;
+            font-weight: normal;
+        }
+
+        .subtable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 14px;
+            font-size: 9.5px;
+        }
+
+        .subtable thead th {
+            background: #eef2f7;
+            color: #004274;
+            padding: 6px 8px;
+            border: 1px solid #d8dee8;
+            font-weight: bold;
+        }
+
+        .subtable tbody td {
+            padding: 6px 8px;
+            border: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        .subtable tbody tr.even {
+            background: #fafbfc;
+        }
+
+        .notice {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            padding: 10px 12px;
+            font-size: 10px;
+            color: #854d0e;
+            margin-bottom: 12px;
+        }
+
+        .signatures-table {
+            margin-top: 40px;
+        }
+    </style>
 @endsection
 
 @php
@@ -148,6 +169,7 @@
         'total_income' => 'إجمالي الإيرادات (ريال)',
         'total_expenses' => 'إجمالي المصروفات (ريال)',
         'balance' => 'الرصيد المتبقي (ريال)',
+        'currency' => 'العملة',
         'month' => 'الشهر',
         'year' => 'السنة',
         'status' => 'الحالة',
@@ -222,7 +244,7 @@
         <div class="record-title">{{ $archive->title }}</div>
         <div class="record-sub">
             المركز: {{ optional($archive->center)->name ?? 'المركز العام' }}
-            @if($archive->student_name || optional($archive->student)->name_ar)
+            @if ($archive->student_name || optional($archive->student)->name_ar)
                 &nbsp;|&nbsp; الطالب: {{ $archive->student_name ?: optional($archive->student)->name_ar }}
             @endif
         </div>
@@ -239,17 +261,18 @@
         </tr>
         <tr>
             <td class="key">الطالب المعني</td>
-            <td class="value">{{ $archive->student_name ?: (optional($archive->student)->name_ar ?: 'غير محدد / سجل عام') }}</td>
+            <td class="value">
+                {{ $archive->student_name ?: (optional($archive->student)->name_ar ?: 'غير محدد / سجل عام') }}</td>
             <td class="key">المنفذ للترحيل</td>
             <td class="value">{{ optional(optional($archive->rollover)->user)->name ?? 'النظام' }}</td>
         </tr>
-        @if($archive->amount > 0)
-        <tr>
-            <td class="key">المبلغ المالي</td>
-            <td class="value value-amount">{{ number_format($archive->amount, 2) }} ريال</td>
-            <td class="key"></td>
-            <td class="value"></td>
-        </tr>
+        @if ($archive->amount > 0)
+            <tr>
+                <td class="key">المبلغ المالي</td>
+                <td class="value value-amount">{{ number_format($archive->amount, 2) }} ريال</td>
+                <td class="key"></td>
+                <td class="value"></td>
+            </tr>
         @endif
     </table>
 
@@ -261,30 +284,32 @@
     @endphp
 
     {{-- ════ SCALAR FIELDS ════ --}}
-    @if(count($scalarData) > 0)
+    @if (count($scalarData) > 0)
         <div class="section-header">بيانات وتفاصيل السجل المؤرشف بالكامل</div>
         <table class="detail-table">
-            @foreach($scalarData as $key => $val)
-                @if($key === 'id' || $key === 'created_at' || $key === 'updated_at' || $key === 'center_id' || $key === 'student_id')
+            @foreach ($scalarData as $key => $val)
+                @if ($key === 'id' || $key === 'created_at' || $key === 'updated_at' || $key === 'center_id' || $key === 'student_id')
                     @continue
                 @endif
                 @php
                     $label = $keysMap[$key] ?? $key;
                     $longValue = $isLongKey($key) || (is_string($val) && mb_strlen($val) > 80);
                 @endphp
-                @if($longValue)
-                    @if($i % 2 !== 0)
-                        <td class="key"></td><td class="value full"></td></tr>
+                @if ($longValue)
+                    @if ($i % 2 !== 0)
+                        <td class="key"></td>
+                        <td class="value full"></td>
+                        </tr>
                     @endif
                     <tr>
                         <td class="key">{{ $label }}</td>
                         <td class="value full value-long">
-                            @if($val === null || $val === '')
+                            @if ($val === null || $val === '')
                                 <span class="value-empty">--</span>
                             @elseif(is_bool($val))
                                 {{ $val ? 'نعم' : 'لا' }}
                             @elseif($isAmountKey($key) && is_numeric($val))
-                                <span class="value-amount">{{ number_format((float)$val, 2) }} ريال</span>
+                                <span class="value-amount">{{ number_format((float) $val, 2) }} ريال</span>
                             @else
                                 {{ $val }}
                             @endif
@@ -292,29 +317,29 @@
                     </tr>
                     @php $i = 0; @endphp
                 @else
-                    @if($i % 2 === 0)
+                    @if ($i % 2 === 0)
                         <tr>
                             <td class="key">{{ $label }}</td>
                             <td class="value">
-                                @if($val === null || $val === '')
+                                @if ($val === null || $val === '')
                                     <span class="value-empty">--</span>
                                 @elseif(is_bool($val))
                                     {{ $val ? 'نعم' : 'لا' }}
                                 @elseif($isAmountKey($key) && is_numeric($val))
-                                    <span class="value-amount">{{ number_format((float)$val, 2) }} ريال</span>
+                                    <span class="value-amount">{{ number_format((float) $val, 2) }} ريال</span>
                                 @else
                                     {{ $val }}
                                 @endif
                             </td>
-                    @else
+                        @else
                             <td class="key">{{ $label }}</td>
                             <td class="value">
-                                @if($val === null || $val === '')
+                                @if ($val === null || $val === '')
                                     <span class="value-empty">--</span>
                                 @elseif(is_bool($val))
                                     {{ $val ? 'نعم' : 'لا' }}
                                 @elseif($isAmountKey($key) && is_numeric($val))
-                                    <span class="value-amount">{{ number_format((float)$val, 2) }} ريال</span>
+                                    <span class="value-amount">{{ number_format((float) $val, 2) }} ريال</span>
                                 @else
                                     {{ $val }}
                                 @endif
@@ -324,48 +349,51 @@
                     @php $i++; @endphp
                 @endif
             @endforeach
-            @if($i % 2 !== 0)
-                <td class="key"></td><td class="value full"></td></tr>
+            @if ($i % 2 !== 0)
+                <td class="key"></td>
+                <td class="value full"></td>
+                </tr>
             @endif
         </table>
     @endif
 
     {{-- ════ COMPLEX SUB-TABLES ════ --}}
-    @if(count($complexData) > 0)
-        @foreach($complexData as $key => $subItems)
-            @if(is_array($subItems) && count($subItems) > 0)
+    @if (count($complexData) > 0)
+        @foreach ($complexData as $key => $subItems)
+            @if (is_array($subItems) && count($subItems) > 0)
                 @php
                     $label = $keysMap[$key] ?? $key;
                     $isTabular = isset($subItems[0]) && is_array($subItems[0]);
                 @endphp
                 <div class="section-header">{{ $label }} ({{ count($subItems) }} سجل)</div>
 
-                @if($isTabular)
+                @if ($isTabular)
                     @php $headers = array_keys($subItems[0]); @endphp
                     <table class="subtable">
                         <thead>
                             <tr>
                                 <th style="width: 5%;">#</th>
-                                @foreach($headers as $colKey)
-                                    @if($colKey !== 'id' && !is_array($subItems[0][$colKey]))
+                                @foreach ($headers as $colKey)
+                                    @if ($colKey !== 'id' && !is_array($subItems[0][$colKey]))
                                         <th>{{ $keysMap[$colKey] ?? $colKey }}</th>
                                     @endif
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($subItems as $idx => $row)
+                            @foreach ($subItems as $idx => $row)
                                 <tr class="{{ $idx % 2 == 0 ? 'even' : 'odd' }}">
                                     <td>{{ $idx + 1 }}</td>
-                                    @foreach($row as $colKey => $cellVal)
-                                        @if($colKey !== 'id' && !is_array($cellVal))
+                                    @foreach ($row as $colKey => $cellVal)
+                                        @if ($colKey !== 'id' && !is_array($cellVal))
                                             <td>
-                                                @if($cellVal === null || $cellVal === '')
+                                                @if ($cellVal === null || $cellVal === '')
                                                     <span class="value-empty">-</span>
                                                 @elseif(is_bool($cellVal))
                                                     {{ $cellVal ? 'نعم' : 'لا' }}
                                                 @elseif(is_numeric($cellVal) && preg_match('/(amount|price|cost|total|balance)/i', $colKey))
-                                                    <span class="value-amount">{{ number_format((float)$cellVal, 2) }} ريال</span>
+                                                    <span class="value-amount">{{ number_format((float) $cellVal, 2) }}
+                                                        ريال</span>
                                                 @else
                                                     {{ $cellVal }}
                                                 @endif
@@ -378,17 +406,18 @@
                     </table>
                 @else
                     <table class="detail-table">
-                        @foreach($subItems as $subKey => $subVal)
-                            @if(is_array($subVal))
+                        @foreach ($subItems as $subKey => $subVal)
+                            @if (is_array($subVal))
                                 <tr>
                                     <td class="key">{{ $keysMap[$subKey] ?? $subKey }}</td>
-                                    <td class="value full value-long">{{ json_encode($subVal, JSON_UNESCAPED_UNICODE) }}</td>
+                                    <td class="value full value-long">{{ json_encode($subVal, JSON_UNESCAPED_UNICODE) }}
+                                    </td>
                                 </tr>
                             @else
                                 <tr>
                                     <td class="key">{{ $keysMap[$subKey] ?? $subKey }}</td>
                                     <td class="value full">
-                                        @if($subVal === null || $subVal === '')
+                                        @if ($subVal === null || $subVal === '')
                                             <span class="value-empty">--</span>
                                         @elseif(is_bool($subVal))
                                             {{ $subVal ? 'نعم' : 'لا' }}
@@ -406,7 +435,7 @@
     @endif
 
     {{-- ════ ROLLOVER AUDIT ════ --}}
-    @if($archive->rollover)
+    @if ($archive->rollover)
         <div class="section-header">بيانات عملية الترحيل السنوي المرتبطة</div>
         <table class="detail-table">
             <tr>
@@ -422,7 +451,7 @@
                 <td class="value"></td>
             </tr>
         </table>
-        @if($archive->rollover->notes)
+        @if ($archive->rollover->notes)
             <div class="notice">
                 <strong>ملاحظات الترحيل السنوي:</strong><br>
                 {{ $archive->rollover->notes }}
@@ -431,22 +460,25 @@
     @endif
 
     {{-- ════ SIGNATURES ════ --}}
-    <table class="signatures-table avoid-break">
+    <table class="signatures-table">
         <tr>
             <td>
-                <div class="sign-title">المسؤول المالي</div>
                 <div class="sign-line"></div>
-                <div class="sign-name"></div>
-            </td>
-            <td>
                 <div class="sign-title">مدير المركز</div>
-                <div class="sign-line"></div>
-                <div class="sign-name"></div>
+                @php
+                    $center_manager = \App\Models\User::role('center-manager')
+                        ->where('center_id', $archive->center_id)
+                        ->first();
+                @endphp
+                <div class="sign-name">{{ $center_manager ? $center_manager->name : '' }}</div>
             </td>
             <td>
-                <div class="sign-title">مسؤول الأرشيف والترحيل</div>
                 <div class="sign-line"></div>
-                <div class="sign-name">{{ optional(optional($archive->rollover)->user)->name ?? '' }}</div>
+                <div class="sign-title">مدير قسم المراكز الطلابية</div>
+                @php
+                    $super_admin = \App\Models\User::role('super-admin')->first();
+                @endphp
+                <div class="sign-name">{{ $super_admin ? $super_admin->name : '' }}</div>
             </td>
         </tr>
     </table>

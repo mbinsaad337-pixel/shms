@@ -229,8 +229,8 @@
             <tr>
                 <th>#</th>
                 <th>الصندوق / الجهة</th>
-                <th>المبلغ المطلوب (ر.ي)</th>
-                <th>الرصيد الحالي (ر.ي)</th>
+                <th>المبلغ المطلوب</th>
+                <th>الرصيد الحالي</th>
             </tr>
         </thead>
         <tbody>
@@ -238,9 +238,9 @@
                 @php /** @var \App\Models\BudgetItem $item */ @endphp
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $item->fund->name }}</td>
-                    <td style="font-weight:bold; color:#112a6f;">{{ number_format($item->requested_amount, 2) }}</td>
-                    <td>{{ number_format($item->fund->balance, 2) }}</td>
+                    <td>{{ $item->fund->name }} <span style="color:#047857; font-size:11px;">({{ $item->fund->currency_label }})</span></td>
+                    <td style="font-weight:bold; color:#112a6f;">{{ number_format($item->requested_amount, 2) }} {{ $item->fund->currency_symbol }}</td>
+                    <td>{{ number_format($item->fund->balance, 2) }} {{ $item->fund->currency_symbol }}</td>
                 </tr>
             @endforeach
             <tr class="total-row">

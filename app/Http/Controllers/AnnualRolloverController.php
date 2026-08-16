@@ -65,7 +65,7 @@ class AnnualRolloverController extends Controller
                 'news' => News::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
             ],
             'financial' => [
-                'vouchers' => Voucher::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
+                'vouchers' => Voucher::when($centerId, fn($q) => $q->where('center_id', $centerId))->where('status', 'approved')->count(),
                 'budgets' => MonthlyBudget::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
                 'settlements' => MonthlySettlement::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
                 'expenses' => CenterExpense::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
@@ -371,6 +371,7 @@ class AnnualRolloverController extends Controller
 
                 // Vouchers
                 $vouchers = Voucher::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->where('status', 'approved')
                     ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
                 foreach ($vouchers as $item) {
                     AnnualArchive::create([

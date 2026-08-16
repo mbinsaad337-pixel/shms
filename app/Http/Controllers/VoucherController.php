@@ -45,10 +45,10 @@ class VoucherController extends Controller
         }
 
         $voucherStats = [
-            'total' => (clone $query)->count(),
-            'receipts' => (clone $query)->where('type', 'receipt')->sum('amount'),
-            'expenses' => (clone $query)->whereIn('type', ['payment', 'salary'])->sum('amount'),
-            'transfers' => (clone $query)->where('type', 'transfer')->count(),
+            'total' => (clone $query)->where('status', 'approved')->count(),
+            'receipts' => (clone $query)->where('status', 'approved')->where('type', 'receipt')->sum('amount'),
+            'expenses' => (clone $query)->where('status', 'approved')->whereIn('type', ['payment', 'salary'])->sum('amount'),
+            'transfers' => (clone $query)->where('status', 'approved')->where('type', 'transfer')->count(),
         ];
 
         $vouchers = $query->with(['fund', 'targetFund', 'student'])
@@ -218,7 +218,9 @@ class VoucherController extends Controller
         }
 
         DB::transaction(function () use ($voucher) {
-            $this->reverseBalances($voucher);
+            if ($voucher->status === 'approved') {
+                $this->reverseBalances($voucher);
+            }
             $voucher->delete();
         });
 

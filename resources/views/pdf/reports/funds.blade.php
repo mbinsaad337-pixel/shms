@@ -1,7 +1,7 @@
 @extends('pdf.layouts.master')
 
 @section('content')
-@php $totalGlobal = 0; @endphp
+@php $totalGlobal = 0; $totalsByCurrency = ['YER' => 0, 'SAR' => 0, 'USD' => 0]; @endphp
 
 @foreach($data->groupBy('center_id') as $centerId => $funds)
     @php $centerName = $funds->first()->center->name; @endphp
@@ -14,9 +14,9 @@
             <thead>
                 <tr>
                     <th>اسم الصندوق</th>
-                    <th class="text-center">الرصيد المعتمد (ر.ي)</th>
-                    <th class="text-center">الرصيد الحالي (ر.ي)</th>
-                    <th class="text-center">رصيد التصفية (ر.ي)</th>
+                    <th class="text-center">الرصيد المعتمد</th>
+                    <th class="text-center">الرصيد الحالي</th>
+                    <th class="text-center">رصيد التصفية</th>
                     <th class="text-center">الفترة</th>
                 </tr>
             </thead>
@@ -27,11 +27,12 @@
                         $settlementDetail = $settlementBalances[$fund->id] ?? null;
                         $settlementClosing = $settlementDetail ? $settlementDetail->closing_balance : null;
                         $totalGlobal += $fund->balance;
+                        $totalsByCurrency[$fund->currency ?? 'YER'] += $fund->balance;
                     @endphp
                     <tr>
-                        <td class="font-bold">{{ $fund->name }}</td>
-                        <td class="text-center font-bold   text-navy">{{ number_format($approvedBalance, 2) }}</td>
-                        <td class="text-center font-bold   text-success">{{ number_format($fund->balance, 2) }}</td>
+                        <td class="font-bold">{{ $fund->name }} <span style="font-size: 9px; color: #047857;">({{ $fund->currency_label }})</span></td>
+                        <td class="text-center font-bold   text-navy">{{ number_format($approvedBalance, 2) }} {{ $fund->currency_symbol }}</td>
+                        <td class="text-center font-bold   text-success">{{ number_format($fund->balance, 2) }} {{ $fund->currency_symbol }}</td>
                         <td class="text-center  ">
                             @if($settlementClosing !== null)
                                 <span class="font-bold" style="color: #c2410c;">{{ number_format($settlementClosing, 2) }}</span>
@@ -49,8 +50,20 @@
 
 {{-- Grand Total --}}
 <div style="background: #004274; padding: 15px; border-radius: 8px; text-align: center; margin-top: 10px;">
-    <div style="font-size: 12px; font-weight: bold; color: #ffffff; margin-bottom: 5px;">إجمالي السيولة النقدية بالنظام</div>
-    <div style="font-size: 22px; font-weight: bold; color: #D4A044;">{{ number_format($totalGlobal, 2) }} <span style="font-size: 11px; color: #ffffff;">ريال يمني</span></div>
+    <div style="font-size: 12px; font-weight: bold; color: #ffffff; margin-bottom: 8px;">إجمالي السيولة النقدية بالنظام</div>
+    <table style="width: 100%; border: none; border-collapse: collapse;">
+        <tr>
+            <td style="width: 33%; border: none; text-align: center; color: #ffffff; font-size: 9px; padding: 4px;">
+                ريال يمني<br><span style="font-size: 15px; font-weight: bold; color: #D4A044;">{{ number_format($totalsByCurrency['YER'], 2) }}</span>
+            </td>
+            <td style="width: 33%; border: none; text-align: center; color: #ffffff; font-size: 9px; padding: 4px;">
+                ريال سعودي<br><span style="font-size: 15px; font-weight: bold; color: #D4A044;">{{ number_format($totalsByCurrency['SAR'], 2) }}</span>
+            </td>
+            <td style="width: 33%; border: none; text-align: center; color: #ffffff; font-size: 9px; padding: 4px;">
+                دولار أمريكي<br><span style="font-size: 15px; font-weight: bold; color: #D4A044;">{{ number_format($totalsByCurrency['USD'], 2) }}</span>
+            </td>
+        </tr>
+    </table>
 </div>
 
 <table class="signatures-table">

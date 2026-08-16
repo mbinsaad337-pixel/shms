@@ -34,6 +34,7 @@ class FundController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'balance' => 'required|numeric|min:0',
+            'currency' => 'required|in:YER,SAR,USD',
         ]);
 
         Fund::create(array_merge($validated, [
@@ -52,6 +53,7 @@ class FundController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'balance' => 'required|numeric|min:0',
+            'currency' => 'required|in:YER,SAR,USD',
         ]);
 
         $fund->update($validated);

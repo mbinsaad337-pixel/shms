@@ -166,7 +166,7 @@
         <tr>
             <td class="summary-card">
                 <div class="label">المبلغ الإجمالي</div>
-                <div class="amount">{{ number_format($voucher->amount, 2) }} <small style="font-size: 10px">ر.ي</small></div>
+                <div class="amount">{{ number_format($voucher->amount, 2) }} <small style="font-size: 10px">{{ $voucher->fund->currency_symbol ?? 'ر.ي' }}</small></div>
             </td>
             <td style="width: 1%"></td>
             <td class="summary-card">
@@ -176,7 +176,7 @@
             <td style="width: 1%"></td>
             <td class="summary-card">
                 <div class="label">الصندوق</div>
-                <div class="value">{{ $voucher->fund->name ?? '-' }}</div>
+                <div class="value">{{ $voucher->fund->name ?? '-' }} @if($voucher->fund) <span style="color:#047857; font-size:10px;">({{ $voucher->fund->currency_label }})</span> @endif</div>
             </td>
             <td style="width: 1%"></td>
             <td class="summary-card">
