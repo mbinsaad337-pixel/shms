@@ -27,6 +27,14 @@ class CenterController extends Controller
             'email' => 'nullable|email',
             'logo' => 'nullable|image|max:2048',
             'has_rent' => 'boolean',
+            'message' => 'nullable|string',
+            'vision' => 'nullable|string',
+            'values' => 'nullable|string',
+            'goals' => 'nullable|string',
+            'whatsapp_link' => 'nullable|string',
+            'instagram_link' => 'nullable|string',
+            'facebook_link' => 'nullable|string',
+            'location_link' => 'nullable|string',
         ]);
 
         if ($request->hasFile('logo')) {
@@ -81,6 +89,14 @@ class CenterController extends Controller
             'logo' => 'nullable|image|max:2048',
             'is_active' => 'required|boolean',
             'has_rent' => 'boolean',
+            'message' => 'nullable|string',
+            'vision' => 'nullable|string',
+            'values' => 'nullable|string',
+            'goals' => 'nullable|string',
+            'whatsapp_link' => 'nullable|string',
+            'instagram_link' => 'nullable|string',
+            'facebook_link' => 'nullable|string',
+            'location_link' => 'nullable|string',
         ]);
 
         if ($request->hasFile('logo')) {

@@ -15,6 +15,14 @@ class Center extends Model
         'is_active',
         'has_rent',
         'leave_cutoff_time',
+        'message',
+        'vision',
+        'values',
+        'goals',
+        'whatsapp_link',
+        'instagram_link',
+        'facebook_link',
+        'location_link',
     ];
 
     public function getLogoUrlAttribute()

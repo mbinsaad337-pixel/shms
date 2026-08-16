@@ -317,7 +317,12 @@
     {{-- SECTION 1: Login Hero --}}
     {{-- ═══════════════════════════════════════════ --}}
     <section class="login-hero">
+          <a href="{{ route('welcome') }}" class="absolute top-6 right-6 md:top-8 md:right-10 bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-full backdrop-blur-md border border-white/10 transition-all flex items-center gap-2 font-cairo text-sm font-bold z-50">
+            <i class="fas fa-arrow-right"></i>
+            العودة للرئيسية
+        </a>
         <div class="w-full max-w-md relative z-10">
+           
 
             <!-- Logos -->
             <div class="flex flex-col items-center mb-10">
@@ -341,19 +346,19 @@
 
             <!-- Copyright -->
             <p class="mt-8 text-center text-white/40 text-xs font-almarai">
-                نظام إدارة السكن الطلابي &copy; {{ date('Y') }}<br>
+                منصة ادارة  المراكز الطلابية&copy; {{ date('Y') }}<br>
                 <span class="text-[10px] opacity-50">جميع الحقوق محفوظة - جمعية رعاية طالب العلم</span>
             </p>
 
             <!-- Scroll Down Hint (shown only when there's news) -->
-            <div id="scrollHint" class="hidden flex-col items-center mt-8 cursor-pointer"
+            {{-- <div id="scrollHint" class="hidden flex-col items-center mt-8 cursor-pointer"
                 onclick="document.getElementById('newsSection').scrollIntoView({behavior:'smooth'})">
                 <p class="text-white/50 text-xs font-almarai mb-2">آخر الأخبار أدناه</p>
                 <div class="bounce text-gold text-xl"><i class="fas fa-chevron-down"></i></div>
             </div>
         </div>
 
-        {{-- Moving particles --}}
+        {{-- Moving particles 
         <div class="absolute inset-0 pointer-events-none overflow-hidden">
             <div class="absolute w-2 h-2 bg-gold/20 rounded-full top-1/4 left-1/4 animate-ping"
                 style="animation-duration:3s"></div>
@@ -361,13 +366,13 @@
                 style="animation-duration:4s;animation-delay:1s"></div>
             <div class="absolute w-1.5 h-1.5 bg-gold/10 rounded-full top-1/2 left-1/6 animate-ping"
                 style="animation-duration:5s;animation-delay:2s"></div>
-        </div>
+        </div> --}}
     </section>
 
     {{-- ═══════════════════════════════════════════ --}}
     {{-- News Ticker Bar --}}
     {{-- ═══════════════════════════════════════════ --}}
-    <div id="tickerBar" class="hidden bg-navy border-y border-white/10">
+    {{-- <div id="tickerBar" class="hidden bg-navy border-y border-white/10">
         <div class="flex items-center gap-0">
             <div class="shrink-0 flex items-center gap-2 bg-gold text-navy px-5 py-2.5 font-black text-xs">
                 <i class="fas fa-satellite-dish animate-pulse"></i>
@@ -377,12 +382,12 @@
                 <div id="tickerContent" class="ticker-scroll gap-10 h-full whitespace-nowrap"></div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- ═══════════════════════════════════════════ --}}
     {{-- SECTION 2: News Feed --}}
     {{-- ═══════════════════════════════════════════ --}}
-    <section id="newsSection" class="news-section hidden">
+    {{-- <section id="newsSection" class="news-section hidden">
         <div class="max-w-6xl mx-auto">
 
             <!-- Section Header -->
@@ -428,11 +433,11 @@
     </section>
 
     {{-- Footer --}}
-    <footer id="newsFooter" class="hidden bg-navy py-6 text-center">
+   {{--footer id="newsFooter" class="hidden bg-navy py-6 text-center">
         <p class="text-white/30 text-xs font-almarai">
-            نظام إدارة السكن الطلابي &copy; {{ date('Y') }} — جمعية رعاية طالب العلم
+            منصة ادارة  المراكز الطلابية&copy; {{ date('Y') }} — جمعية رعاية طالب العلم
         </p>
-    </footer>
+    </footer> --}}
 
     <script>
         const categoryIcons = {

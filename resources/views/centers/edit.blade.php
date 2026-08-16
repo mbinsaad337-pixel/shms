@@ -144,6 +144,64 @@
                         <p class="mt-2 flex items-center gap-1 text-xs font-bold text-red-600 font-cairo"><i class="fas fa-circle-exclamation" aria-hidden="true"></i>{{ $message }}</p>
                     @enderror
                 </section>
+
+                <section class="border-t border-gray-100 pt-8" aria-labelledby="details-title">
+                    <div class="mb-5 flex items-center gap-3">
+                        <span class="h-8 w-1 rounded-full bg-gold"></span>
+                        <div>
+                            <h3 id="details-title" class="font-bold text-navy font-cairo">تفاصيل المركز</h3>
+                            <p class="mt-0.5 text-xs text-gray-500 font-almarai">هذه التفاصيل اختيارية وتظهر في صفحة الترحيب.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                        <div>
+                            <label for="message" class="mb-2 block text-sm font-bold text-gray-700 font-cairo">رسالة المركز</label>
+                            <textarea id="message" name="message" rows="3" class="block w-full resize-y rounded-xl border px-4 py-3 text-gray-800 outline-none transition focus:border-gold focus:ring-4 focus:ring-gold/15 border-gray-300">{{ old('message', $center->message) }}</textarea>
+                        </div>
+                        <div>
+                            <label for="vision" class="mb-2 block text-sm font-bold text-gray-700 font-cairo">رؤية المركز</label>
+                            <textarea id="vision" name="vision" rows="3" class="block w-full resize-y rounded-xl border px-4 py-3 text-gray-800 outline-none transition focus:border-gold focus:ring-4 focus:ring-gold/15 border-gray-300">{{ old('vision', $center->vision) }}</textarea>
+                        </div>
+                        <div>
+                            <label for="values" class="mb-2 block text-sm font-bold text-gray-700 font-cairo">قيم المركز</label>
+                            <textarea id="values" name="values" rows="3" class="block w-full resize-y rounded-xl border px-4 py-3 text-gray-800 outline-none transition focus:border-gold focus:ring-4 focus:ring-gold/15 border-gray-300">{{ old('values', $center->values) }}</textarea>
+                        </div>
+                        <div>
+                            <label for="goals" class="mb-2 block text-sm font-bold text-gray-700 font-cairo">أهداف المركز</label>
+                            <textarea id="goals" name="goals" rows="3" class="block w-full resize-y rounded-xl border px-4 py-3 text-gray-800 outline-none transition focus:border-gold focus:ring-4 focus:ring-gold/15 border-gray-300">{{ old('goals', $center->goals) }}</textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="border-t border-gray-100 pt-8" aria-labelledby="links-title">
+                    <div class="mb-5 flex items-center gap-3">
+                        <span class="h-8 w-1 rounded-full bg-gold"></span>
+                        <div>
+                            <h3 id="links-title" class="font-bold text-navy font-cairo">روابط التواصل والموقع</h3>
+                            <p class="mt-0.5 text-xs text-gray-500 font-almarai">أضف روابط وسائل التواصل والموقع على الخريطة (اختياري).</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                        <div>
+                            <label for="whatsapp_link" class="mb-2 block text-sm font-bold text-gray-700 font-cairo">رقم الواتساب / الرابط</label>
+                            <input id="whatsapp_link" type="text" name="whatsapp_link" value="{{ old('whatsapp_link', $center->whatsapp_link) }}" dir="ltr" class="block w-full rounded-xl border px-4 py-3 text-right text-gray-800 outline-none transition focus:border-gold focus:ring-4 focus:ring-gold/15 border-gray-300">
+                        </div>
+                        <div>
+                            <label for="instagram_link" class="mb-2 block text-sm font-bold text-gray-700 font-cairo">رابط انستقرام</label>
+                            <input id="instagram_link" type="url" name="instagram_link" value="{{ old('instagram_link', $center->instagram_link) }}" dir="ltr" class="block w-full rounded-xl border px-4 py-3 text-right text-gray-800 outline-none transition focus:border-gold focus:ring-4 focus:ring-gold/15 border-gray-300">
+                        </div>
+                        <div>
+                            <label for="facebook_link" class="mb-2 block text-sm font-bold text-gray-700 font-cairo">رابط فيسبوك</label>
+                            <input id="facebook_link" type="url" name="facebook_link" value="{{ old('facebook_link', $center->facebook_link) }}" dir="ltr" class="block w-full rounded-xl border px-4 py-3 text-right text-gray-800 outline-none transition focus:border-gold focus:ring-4 focus:ring-gold/15 border-gray-300">
+                        </div>
+                        <div>
+                            <label for="location_link" class="mb-2 block text-sm font-bold text-gray-700 font-cairo">رابط الموقع (Google Maps)</label>
+                            <input id="location_link" type="url" name="location_link" value="{{ old('location_link', $center->location_link) }}" dir="ltr" class="block w-full rounded-xl border px-4 py-3 text-right text-gray-800 outline-none transition focus:border-gold focus:ring-4 focus:ring-gold/15 border-gray-300">
+                        </div>
+                    </div>
+                </section>
             </div>
 
             <footer class="flex flex-col-reverse gap-3 border-t border-gray-100 bg-gray-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-end sm:px-8">

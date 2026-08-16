@@ -113,7 +113,7 @@ class DashboardController extends Controller
     private function executiveDashboard()
     {
         $stats = [
-            'students_count' => Student::where('center_id', $centerId)->where('status', 'residing')->count(),
+            'students_count' => Student::where('status', 'residing')->count(),
 
             'centers_count' => Center::count(),
             'total_liquidity' => Fund::sum('balance'),

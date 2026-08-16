@@ -3,7 +3,8 @@
 @section('content')
     <div class="text-center mb-10">
         <h2 class="text-3xl font-black text-navy font-cairo">تسجيل الدخول للمنصة</h2>
-        <p class="text-gray-400 font-almarai text-sm mt-2">نظام إدارة الإسكان الطلابي - النسخة المطورة</p>
+        <p class="text-gray-400 font-almarai text-sm mt-2">منصة ادارة لمراكز الطلابية
+        </p>
     </div>
 
     @if ($errors->has('session'))
@@ -35,7 +36,10 @@
             <div class="relative">
                 <i class="fas fa-lock absolute right-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
                 <input type="password" name="password" id="password" required placeholder="••••••••"
-                    class="block w-full pr-12 pl-4 py-3.5 rounded-xl border border-gray-100 bg-gray-50 focus:ring-2 focus:ring-navy focus:bg-white transition-all">
+                    class="block w-full pr-12 pl-12 py-3.5 rounded-xl border border-gray-100 bg-gray-50 focus:ring-2 focus:ring-navy focus:bg-white transition-all">
+                <button type="button" onclick="togglePassword()" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-navy transition-colors focus:outline-none">
+                    <i id="toggleIcon" class="fas fa-eye"></i>
+                </button>
             </div>
             @error('password')
                 <p class="mt-2 text-xs text-red-600 font-cairo">{{ $message }}</p>
@@ -61,4 +65,20 @@
             </button>
         </div>
     </form>
+
+    <script>
+        function togglePassword() {
+            const pwd = document.getElementById('password');
+            const icon = document.getElementById('toggleIcon');
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                pwd.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 @endsection
