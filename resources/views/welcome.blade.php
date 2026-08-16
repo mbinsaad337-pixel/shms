@@ -301,7 +301,7 @@ $slides = [
     <div class="absolute top-0 right-0 w-96 h-96 bg-navy/3 rounded-full blur-3xl -mr-48 -mt-48 pointer-events-none"></div>
     <div class="absolute bottom-0 left-0 w-72 h-72 bg-gold/5 rounded-full blur-3xl -ml-36 -mb-36 pointer-events-none"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-stretch">
+        <div class="grid grid-cols-1 gap-16 items-stretch">
             <div class="flex flex-col justify-center" style='margin-left:25px'>
                 <span class="inline-block bg-navy/5 text-navy text-sm font-bold px-4 py-2 rounded-full mb-4 self-start">من نحن؟</span>
                 <h2 class="text-4xl font-black text-navy mb-4 leading-snug">جمعية رعاية طالب العلم</h2>
@@ -347,9 +347,11 @@ $slides = [
                     </div>
                 </div>
             </div>
-            <div class="relative h-full min-h-[350px]">
-                <img src="{{ asset('images/awael.jpg') }}" class="rounded-3xl shadow-2xl w-full h-full object-cover relative z-10" alt="من نحن">
-                <div class="absolute -bottom-4 -left-4 w-full h-full border-4 border-gold/40 rounded-3xl z-0"></div>
+            <div class="relative flex min-h-[500px] items-end">
+                <div class="relative w-full">
+                    <img src="https://www.scs-ye.org/Uploads/8b517cd4-09e8-4bf5-b12a-c42f592c5cec.jpg" class="relative z-10 h-auto w-full rounded-3xl object-cover shadow-2xl" alt="من نحن">
+                    <div class="absolute -bottom-4 -left-4 h-full w-full rounded-3xl border-4 border-gold/40 z-0"></div>
+                </div>
             </div>
         </div>
     </div>
