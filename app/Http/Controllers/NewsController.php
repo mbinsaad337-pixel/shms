@@ -35,7 +35,8 @@ class NewsController extends Controller
         // Stats
         $stats = [
             'centers'  => Center::where('is_active', true)->count(),
-            'students' => Student::count(),
+            'students' => Student::where('status', 'residing')->count(),
+            'graduates'=> Student::where('status', 'graduated')->count(),
             'news'     => News::where('is_published', true)->count(),
         ];
 
@@ -141,7 +142,7 @@ class NewsController extends Controller
         $validated = $request->validate([
             'title'       => 'required|string|max:255',
             'body'        => 'required|string',
-            'category'    => 'required|in:general,sports,culture,achievement',
+            'category'    => 'required|in:general,sports,culture,achievement,jobs',
             'cover_image' => 'nullable|image|max:4096',
             'gallery.*'   => 'nullable|image|max:4096',
             'video_url'   => 'nullable|url',
@@ -214,7 +215,7 @@ class NewsController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
-            'category' => 'required|in:general,sports,culture,achievement',
+            'category' => 'required|in:general,sports,culture,achievement,jobs',
             'cover_image' => 'nullable|image|max:4096',
             'gallery.*' => 'nullable|image|max:4096',
             'video_url' => 'nullable|url',

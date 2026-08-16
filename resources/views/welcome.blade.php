@@ -195,7 +195,7 @@ $slides = [
     </div>
 
     <!-- MODAL -->
-    <div x-show="sel" style="display:none" class="fixed inset-0 z-[200] flex items-center justify-center px-4 py-6">
+    <div x-show="sel" style="display:none" class="fixed inset-0 z-[200] flex items-center justify-center px-4 sm:p-6">
         <div x-show="sel" x-transition.opacity class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" @click="close"></div>
         <div x-show="sel"
              x-transition:enter="transition ease-out duration-300"
@@ -204,10 +204,10 @@ $slides = [
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100 scale-100"
              x-transition:leave-end="opacity-0 scale-95"
-             class="relative bg-white rounded-3xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden">
-            <div class="bg-navy p-6 text-white flex justify-between items-center">
+             class="relative bg-white rounded-3xl shadow-2xl max-w-3xl w-full max-h-[85vh] sm:max-h-[85vh] flex flex-col overflow-hidden">
+            <div class="bg-navy p-4 sm:p-6 text-white flex justify-between items-center shrink-0">
                 <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center p-2 shrink-0">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white rounded-xl flex items-center justify-center p-2 shrink-0">
                         <template x-if="sel && sel.logo">
                             <img :src="'{{ asset('storage') }}/' + sel.logo" class="max-h-full max-w-full object-contain">
                         </template>
@@ -216,30 +216,35 @@ $slides = [
                         </template>
                     </div>
                     <div>
-                        <h3 class="text-xl font-black" x-text="sel ? sel.name : ''"></h3>
-                        <p class="text-gold text-sm font-almarai flex items-center gap-1 mt-1">
+                        <h3 class="text-lg sm:text-xl font-black" x-text="sel ? sel.name : ''"></h3>
+                        <p class="text-gold text-xs sm:text-sm font-almarai flex items-center gap-1 mt-1">
                             <i class="fas fa-map-marker-alt"></i><span x-text="sel ? sel.address : ''"></span>
                         </p>
                     </div>
                 </div>
-                <button @click="close" class="w-9 h-9 rounded-full bg-white/10 hover:bg-red-500 flex items-center justify-center transition">
+                <button @click="close" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/10 hover:bg-red-500 flex items-center justify-center transition shrink-0">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="p-6 overflow-y-auto flex-1 font-almarai">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-                    <div class="bg-blue-50 rounded-2xl p-5 border border-blue-100">
-                        <h4 class="font-bold text-navy font-cairo mb-2 flex items-center gap-2"><i class="fas fa-eye text-blue-500"></i> رؤية المركز 👁️</h4>
-                        <p class="text-gray-600 text-sm leading-relaxed">الريادة في توفير بيئة سكنية وتربوية جاذبة تُخرّج كفاءات علمية وقيادية تساهم في نهضة المجتمع.</p>
+            <div class="p-4 sm:p-6 overflow-y-auto flex-1 min-h-0 font-almarai">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 mb-6">
+                    <div class="bg-blue-50 rounded-2xl p-4 sm:p-5 border border-blue-100">
+                        <h4 class="font-bold text-navy font-cairo mb-2 flex items-center gap-2"><i class="fas fa-eye text-blue-500"></i> رؤية المركز </h4>
+                        <p class="text-gray-600 text-sm leading-relaxed" x-text="sel?.vision || 'الريادة في توفير بيئة سكنية وتربوية جاذبة تُخرّج كفاءات علمية وقيادية تساهم في نهضة المجتمع.'"></p>
                     </div>
-                    <div class="bg-emerald-50 rounded-2xl p-5 border border-emerald-100">
-                        <h4 class="font-bold text-navy font-cairo mb-2 flex items-center gap-2"><i class="fas fa-bullseye text-emerald-500"></i> رسالة المركز 📝</h4>
-                        <p class="text-gray-600 text-sm leading-relaxed">رعاية الطلاب الجامعيين وتقديم برامج نوعية لتطوير قدراتهم في ظل سكن مهيأ وخدمات متكاملة.</p>
+                    <div class="bg-emerald-50 rounded-2xl p-4 sm:p-5 border border-emerald-100">
+                        <h4 class="font-bold text-navy font-cairo mb-2 flex items-center gap-2"><i class="fas fa-bullseye text-emerald-500"></i> رسالة المركز </h4>
+                        <p class="text-gray-600 text-sm leading-relaxed" x-text="sel?.message || 'رعاية الطلاب الجامعيين وتقديم برامج نوعية لتطوير قدراتهم في ظل سكن مهيأ وخدمات متكاملة.'"></p>
                     </div>
                 </div>
                 <div class="mb-6">
-                    <h4 class="font-bold text-navy font-cairo mb-3 flex items-center gap-2"><i class="fas fa-list-check text-gold"></i> أهداف المركز 🎯</h4>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <h4 class="font-bold text-navy font-cairo mb-3 flex items-center gap-2"><i class="fas fa-list-check text-gold"></i> أهداف المركز</h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm leading-relaxed space-y-1 pr-2" x-show="sel?.goals">
+                        <template x-for="line in (sel?.goals || '').split('\n').filter(l => l.trim() !== '')">
+                            <li x-text="line.trim().replace(/^[-*•]+/, '').trim()"></li>
+                        </template>
+                    </ul>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" x-show="!sel?.goals">
                         <div class="bg-gray-50 rounded-xl p-3 text-center border border-gray-100 hover:border-gold transition"><i class="fas fa-graduation-cap text-navy text-xl mb-1 block"></i><span class="text-xs font-bold">التفوق العلمي</span></div>
                         <div class="bg-gray-50 rounded-xl p-3 text-center border border-gray-100 hover:border-gold transition"><i class="fas fa-users text-navy text-xl mb-1 block"></i><span class="text-xs font-bold">بناء العلاقات</span></div>
                         <div class="bg-gray-50 rounded-xl p-3 text-center border border-gray-100 hover:border-gold transition"><i class="fas fa-lightbulb text-navy text-xl mb-1 block"></i><span class="text-xs font-bold">تنمية المهارات</span></div>
@@ -247,8 +252,13 @@ $slides = [
                     </div>
                 </div>
                 <div class="mb-4">
-                    <h4 class="font-bold text-navy font-cairo mb-3 flex items-center gap-2"><i class="fas fa-gem text-gold"></i> قيمنا 💎</h4>
-                    <div class="flex flex-wrap gap-2">
+                    <h4 class="font-bold text-navy font-cairo mb-3 flex items-center gap-2"><i class="fas fa-gem text-gold"></i> قيمنا </h4>
+                    <ul class="list-disc list-inside text-gray-600 text-sm leading-relaxed space-y-1 pr-2" x-show="sel?.values">
+                        <template x-for="line in (sel?.values || '').split('\n').filter(l => l.trim() !== '')">
+                            <li x-text="line.trim().replace(/^[-*•]+/, '').trim()"></li>
+                        </template>
+                    </ul>
+                    <div class="flex flex-wrap gap-2" x-show="!sel?.values">
                         <span class="px-4 py-1.5 bg-navy/5 text-navy rounded-full text-sm font-bold">الأمانة</span>
                         <span class="px-4 py-1.5 bg-navy/5 text-navy rounded-full text-sm font-bold">التميز</span>
                         <span class="px-4 py-1.5 bg-navy/5 text-navy rounded-full text-sm font-bold">التعاون</span>
@@ -266,14 +276,20 @@ $slides = [
                     </div>
                 </div>
             </div>
-            <div class="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+            <div class="p-3 sm:p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center flex-wrap gap-2">
                 <div class="flex gap-2">
-                    <a href="#" class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition flex items-center justify-center"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-green-100 text-green-600 hover:bg-green-600 hover:text-white transition flex items-center justify-center"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center"><i class="fab fa-instagram"></i></a>
+                    <template x-if="sel?.facebook_link">
+                        <a :href="sel.facebook_link" target="_blank" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white transition flex items-center justify-center"><i class="fab fa-facebook-f"></i></a>
+                    </template>
+                    <template x-if="sel?.whatsapp_link">
+                        <a :href="sel.whatsapp_link.startsWith('http') ? sel.whatsapp_link : 'https://wa.me/' + sel.whatsapp_link.replace(/\D/g, '')" target="_blank" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-green-100 text-green-600 hover:bg-green-600 hover:text-white transition flex items-center justify-center"><i class="fab fa-whatsapp"></i></a>
+                    </template>
+                    <template x-if="sel?.instagram_link">
+                        <a :href="sel.instagram_link" target="_blank" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center"><i class="fab fa-instagram"></i></a>
+                    </template>
                 </div>
-                <a :href="'https://maps.google.com/?q='+(sel?'https://maps.app.goo.gl/jprxLkVgNPB7EBsx7':sel.address)" target="_blank" class="btn-navy px-5 py-2 text-sm rounded-xl">
-                    <i class="fas fa-map-marked-alt"></i> فتح ع'لى الخريطة
+                <a :href="sel?.location_link ? sel.location_link : ('https://maps.google.com/?q='+(sel?sel.address:''))" target="_blank" class="btn-navy px-4 py-2 sm:px-5 text-xs sm:text-sm rounded-xl">
+                    <i class="fas fa-map-marked-alt"></i> فتح على الخريطة
                 </a>
             </div>
         </div>
@@ -285,40 +301,57 @@ $slides = [
     <div class="absolute top-0 right-0 w-96 h-96 bg-navy/3 rounded-full blur-3xl -mr-48 -mt-48 pointer-events-none"></div>
     <div class="absolute bottom-0 left-0 w-72 h-72 bg-gold/5 rounded-full blur-3xl -ml-36 -mb-36 pointer-events-none"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-                <span class="inline-block bg-navy/5 text-navy text-sm font-bold px-4 py-2 rounded-full mb-4">من نحن؟</span>
+        <div class="grid grid-cols-1 gap-16 items-stretch">
+            <div class="flex flex-col justify-center" style='margin-left:25px'>
+                <span class="inline-block bg-navy/5 text-navy text-sm font-bold px-4 py-2 rounded-full mb-4 self-start">من نحن؟</span>
                 <h2 class="text-4xl font-black text-navy mb-4 leading-snug">جمعية رعاية طالب العلم</h2>
                 <div class="w-16 h-1.5 bg-gold rounded-full mb-6"></div>
                 <p class="text-gray-600 font-almarai text-lg leading-relaxed mb-8">
-                    مؤسسة رائدة في تقديم خدمات متكاملة لرعاية الطلاب الجامعيين. نسعى لتوفير بيئة سكنية وتعليمية وتثقيفية تساهم في إعداد جيل متميز علمياً ومهارياً وقيمياً.
+                    جمعية رائدة في تقديم خدمات متكاملة لرعاية الطلاب الجامعيين. نسعى لتوفير بيئة سكنية وتعليمية وتثقيفية تساهم في إعداد جيل متميز علمياً ومهارياً وقيمياً.
                 </p>
                 <div class="grid grid-cols-2 gap-6 mb-8 font-almarai">
                     <div class="p-4 rounded-2xl border border-navy/10 bg-navy/3 hover:border-gold transition">
                         <div class="w-10 h-10 bg-navy/10 text-navy rounded-lg flex items-center justify-center mb-3"><i class="fas fa-eye"></i></div>
                         <h4 class="font-bold text-gray-800 mb-1">رؤيتنا</h4>
-                        <p class="text-xs text-gray-500">الريادة في رعاية وتأهيل الطالب الجامعي على جميع الأصعدة.</p>
+                        <p class="text-xs text-gray-500">فرص تعليمية مستدامة لمخرجات وطنية فاعلة</p>
                     </div>
                     <div class="p-4 rounded-2xl border border-gold/20 bg-gold/5 hover:border-gold transition">
                         <div class="w-10 h-10 bg-gold/15 text-gold rounded-lg flex items-center justify-center mb-3"><i class="fas fa-bullseye"></i></div>
                         <h4 class="font-bold text-gray-800 mb-1">رسالتنا</h4>
-                        <p class="text-xs text-gray-500">تقديم برامج نوعية لتطوير القدرات العلمية والمهارية والقيمية.</p>
+                        <p class="text-xs text-gray-500">تمكين الأفراد من مواصلة تعليمهم وتطوير قدراتهم؛ لبناء وطنهم، من خلال بيئة تعليمية مستدامة ومبادرات مبتكرة وشراكات فاعلة وفق أفضل الممارسات.</p>
                     </div>
                     <div class="p-4 rounded-2xl border border-gray-100 bg-gray-50 hover:border-gold transition">
                         <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center mb-3"><i class="fas fa-list-check"></i></div>
                         <h4 class="font-bold text-gray-800 mb-1">أهدافنا</h4>
-                        <p class="text-xs text-gray-500">التفوق العلمي، بناء العلاقات، تنمية المهارات، المسؤولية المجتمعية.</p>
+                        <ul class="list-disc list-inside text-[11px] text-gray-500 space-y-1.5 mt-2">
+                            <li>توسيع فرص الوصول إلى التعليم المستدام.</li>
+                            <li>تطوير المراكز الطلابية.</li>
+                            <li>التميز في تحسين المخرجات التعليمية.</li>
+                            <li>تعزيز الصورة الذهنية الإيجابية.</li>
+                            <li>تطوير الأداء المؤسسي.</li>
+                            <li>الإبداع في إعداد وتنفيذ المشاريع التعليمية.</li>
+                            <li>تعزيز الشراكات لدعم التعليم.</li>
+                            <li>الاستدامة في المشاريع التعليمية.</li>
+                        </ul>
                     </div>
                     <div class="p-4 rounded-2xl border border-gray-100 bg-gray-50 hover:border-gold transition">
                         <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center mb-3"><i class="fas fa-gem"></i></div>
-                        <h4 class="font-bold text-gray-800 mb-1">قيمنا 💎</h4>
-                        <p class="text-xs text-gray-500">الأمانة، التميز، التعاون، الاحترام، والنزاهة في العمل.</p>
+                        <h4 class="font-bold text-gray-800 mb-2">قيمنا</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1.5 bg-purple-100/50 text-purple-700 rounded-lg text-xs font-bold border border-purple-100">الاستدامة</span>
+                            <span class="px-3 py-1.5 bg-purple-100/50 text-purple-700 rounded-lg text-xs font-bold border border-purple-100">الشراكة</span>
+                            <span class="px-3 py-1.5 bg-purple-100/50 text-purple-700 rounded-lg text-xs font-bold border border-purple-100">روح الفريق</span>
+                            <span class="px-3 py-1.5 bg-purple-100/50 text-purple-700 rounded-lg text-xs font-bold border border-purple-100">الشفافية</span>
+                            <span class="px-3 py-1.5 bg-purple-100/50 text-purple-700 rounded-lg text-xs font-bold border border-purple-100">التمكين</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="relative">
-                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1471&auto=format&fit=crop" class="rounded-3xl shadow-2xl w-full relative z-10" alt="من نحن">
-                <div class="absolute -bottom-4 -left-4 w-full h-full border-4 border-gold/40 rounded-3xl z-0"></div>
+            <div class="relative flex min-h-[500px] items-end">
+                <div class="relative w-full">
+                    <img src="https://www.scs-ye.org/Uploads/8b517cd4-09e8-4bf5-b12a-c42f592c5cec.jpg" class="relative z-10 h-auto w-full rounded-3xl object-cover shadow-2xl" alt="من نحن">
+                    <div class="absolute -bottom-4 -left-4 h-full w-full rounded-3xl border-4 border-gold/40 z-0"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -331,22 +364,22 @@ $slides = [
             <div>
                 <div class="w-14 h-14 mx-auto bg-white/10 rounded-2xl flex items-center justify-center mb-3 text-gold text-2xl"><i class="fas fa-building"></i></div>
                 <div class="text-4xl font-black text-gold mb-1">{{ $stats['centers'] }}</div>
-                <p class="text-sm font-almarai text-gray-300">مراكز طلابية 🏫</p>
+                <p class="text-sm font-almarai text-gray-300">مراكز طلابية</p>
             </div>
             <div>
                 <div class="w-14 h-14 mx-auto bg-white/10 rounded-2xl flex items-center justify-center mb-3 text-gold text-2xl"><i class="fas fa-user-graduate"></i></div>
-                <div class="text-4xl font-black text-gold mb-1">+{{ $stats['students'] }}</div>
-                <p class="text-sm font-almarai text-gray-300">طالب مستفيد 👨‍🎓</p>
+                <div class="text-4xl font-black text-gold mb-1">+{{ $center->students_count }}</div>
+                <p class="text-sm font-almarai text-gray-300">طالب مستفيد</p>
             </div>
             <div>
-                <div class="w-14 h-14 mx-auto bg-white/10 rounded-2xl flex items-center justify-center mb-3 text-gold text-2xl"><i class="fas fa-newspaper"></i></div>
-                <div class="text-4xl font-black text-gold mb-1">{{ $stats['news'] }}</div>
-                <p class="text-sm font-almarai text-gray-300">خبر وفعالية 📰</p>
+                <div class="w-14 h-14 mx-auto bg-white/10 rounded-2xl flex items-center justify-center mb-3 text-gold text-2xl"><i class="fas fa-user-graduate"></i></div>
+                <div class="text-4xl font-black text-gold mb-1">+{{ $stats['graduates'] }}</div>
+                <p class="text-sm font-almarai text-gray-300">طالب خريج</p>
             </div>
             <div>
                 <div class="w-14 h-14 mx-auto bg-white/10 rounded-2xl flex items-center justify-center mb-3 text-gold text-2xl"><i class="fas fa-award"></i></div>
-                <div class="text-4xl font-black text-gold mb-1">100%</div>
-                <p class="text-sm font-almarai text-gray-300">رعاية متكاملة 🏆</p>
+                <div class="text-4xl font-black text-gold mb-1">+30</div>
+                <p class="text-sm font-almarai text-gray-300">تخصص مختلف </p>
             </div>
         </div>
     </div>
@@ -362,12 +395,12 @@ $slides = [
                 <div class="inline-flex items-center gap-2 bg-navy/5 text-navy px-4 py-2 rounded-full text-sm font-bold mb-3">
                     <i class="fas fa-newspaper text-gold"></i> أخبار المراكز الطلابية
                 </div>
-                <h2 class="text-4xl font-black text-navy">📰 آخر الأخبار والفعاليات</h2>
+                <h2 class="text-4xl font-black text-navy"> آخر الأخبار والفعاليات</h2>
                 <div class="w-20 h-1.5 bg-gold rounded-full mt-3"></div>
             </div>
             <div>
                 <select id="centerFilter" onchange="filterNews()" class="border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-almarai focus:ring-2 focus:ring-[#004274] shadow-sm bg-white">
-                    <option value="">🏫 جميع المراكز</option>
+                    <option value=""> جميع المراكز</option>
                     @foreach($allCenters as $c)
                         <option value="{{ $c->id }}">{{ $c->name }}</option>
                     @endforeach
@@ -379,11 +412,11 @@ $slides = [
         <div class="flex overflow-x-auto hide-scrollbar gap-2 mb-10 pb-2">
             <button onclick="setCategory('all')" id="tab-all" class="tab-btn active px-6 py-2.5 rounded-full font-bold whitespace-nowrap text-sm bg-navy text-white shadow-md">الكل</button>
             <button onclick="setCategory('general')" id="tab-general" class="tab-btn px-6 py-2.5 rounded-full font-bold whitespace-nowrap text-sm bg-white text-gray-600 hover:bg-gray-100 transition-colors">عام</button>
-            <button onclick="setCategory('sports')" id="tab-sports" class="tab-btn px-6 py-2.5 rounded-full font-bold whitespace-nowrap text-sm bg-white text-gray-600 hover:bg-gray-100 transition-colors">رياضي ⚽</button>
-            <button onclick="setCategory('culture')" id="tab-culture" class="tab-btn px-6 py-2.5 rounded-full font-bold whitespace-nowrap text-sm bg-white text-gray-600 hover:bg-gray-100 transition-colors">ثقافي 📚</button>
-            <button onclick="setCategory('achievement')" id="tab-achievement" class="tab-btn px-6 py-2.5 rounded-full font-bold whitespace-nowrap text-sm bg-white text-gray-600 hover:bg-gray-100 transition-colors">إنجاز 🏆</button>
+            <button onclick="setCategory('sports')" id="tab-sports" class="tab-btn px-6 py-2.5 rounded-full font-bold whitespace-nowrap text-sm bg-white text-gray-600 hover:bg-gray-100 transition-colors">رياضي </button>
+            <button onclick="setCategory('culture')" id="tab-culture" class="tab-btn px-6 py-2.5 rounded-full font-bold whitespace-nowrap text-sm bg-white text-gray-600 hover:bg-gray-100 transition-colors">ثقافي </button>
+            <button onclick="setCategory('achievement')" id="tab-achievement" class="tab-btn px-6 py-2.5 rounded-full font-bold whitespace-nowrap text-sm bg-white text-gray-600 hover:bg-gray-100 transition-colors">إنجاز </button>
             <button onclick="setCategory('jobs')" id="tab-jobs" class="tab-btn px-6 py-2.5 rounded-full font-bold whitespace-nowrap text-sm bg-white text-emerald-600 border border-emerald-100 hover:bg-emerald-50 transition-colors flex items-center gap-1">
-                فرص عمل للخريجين 💼 <span class="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full animate-pulse">جديد</span>
+                فرص عمل للخريجين <span class="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full animate-pulse">جديد</span>
             </button>
         </div>
 
@@ -417,16 +450,16 @@ $slides = [
         <div id="newsPagination" class="flex justify-center gap-3 mt-10"></div>
 
         <!-- View All -->
-        <div class="text-center mt-10">
+        {{-- <div class="text-center mt-10">
             <a href="{{ route('news.index') }}" class="btn-navy px-10 py-3 rounded-full text-base shadow-lg">
                 عرض جميع الأخبار من هنا <i class="fas fa-arrow-left mr-2"></i>
             </a>
-        </div>
+        </div> --}}
     </div>
 </section>
 
 <!-- CONTACT SECTION -->
-<section id="contact" class="py-24 bg-white">
+{{-- <section id="contact" class="py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-navy rounded-[3rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row min-h-[400px]">
             <div class="p-10 lg:p-14 lg:w-1/2 text-white flex flex-col justify-center">
@@ -458,24 +491,24 @@ $slides = [
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 
 <!-- FOOTER -->
-<footer class="bg-gray-900 text-white pt-16 pb-8 border-t-4 border-gold">
+<footer class="bg-gray-900 text-white pt-16 pb-8 border-t-4 border-gold" id="contact">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
             <div>
                 <img src="{{ asset('images/logos/scs_logo.png') }}" class="h-16 mb-5 filter brightness-0 invert" alt="">
                 <p class="text-gray-400 font-almarai text-sm leading-relaxed mb-5">منصة الإدارة الذكية للمراكز الطلابية التابعة لجمعية رعاية طالب العلم.</p>
                 <div class="flex gap-3">
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 hover:bg-gold transition flex items-center justify-center text-sm"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 hover:bg-gold transition flex items-center justify-center text-sm"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 hover:bg-gold transition flex items-center justify-center text-sm"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 hover:bg-gold transition flex items-center justify-center text-sm"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.facebook.com/scsyeorg/" class="w-10 h-10 rounded-full bg-white/10 hover:bg-gold transition flex items-center justify-center text-sm"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/scs_ye?lang=ar" class="w-10 h-10 rounded-full bg-white/10 hover:bg-gold transition flex items-center justify-center text-sm"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://www.instagram.com/scs_ye/?hl=ar" class="w-10 h-10 rounded-full bg-white/10 hover:bg-gold transition flex items-center justify-center text-sm"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@scs-ye" class="w-10 h-10 rounded-full bg-white/10 hover:bg-gold transition flex items-center justify-center text-sm"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
             <div>
-                <h4 class="text-lg font-bold text-gold mb-5 font-cairo">روابط هامة</h4>
+                <h4 class="text-lg font-bold text-gold mb-5 font-cairo">المحتوي</h4>
                 <ul class="space-y-3 font-almarai text-sm text-gray-400">
                     <li><a href="#hero" class="hover:text-white transition block"><i class="fas fa-angle-left mr-2 text-xs"></i>الرئيسية</a></li>
                     <li><a href="#centers" class="hover:text-white transition block"><i class="fas fa-angle-left mr-2 text-xs"></i>المراكز الطلابية</a></li>
@@ -489,16 +522,16 @@ $slides = [
                 <ul class="space-y-3 font-almarai text-sm text-gray-400">
                     <li><a href="{{ route('login') }}" class="hover:text-white transition block"><i class="fas fa-lock mr-2 text-xs"></i>تسجيل الدخول</a></li>
                     <li><a href="#" class="hover:text-white transition block"><i class="fas fa-utensils mr-2 text-xs"></i>نظام التغذية</a></li>
-                    <li><a href="#" class="hover:text-white transition block"><i class="fas fa-book-open mr-2 text-xs"></i>الحلقات القرآنية</a></li>
+                    <li><a href="#" class="hover:text-white transition block"><i class="fas fa-book-open mr-2 text-xs"></i>الانشطة و الفعاليات</a></li>
                     <li><a href="#news" onclick="setCategory('jobs')" class="hover:text-white transition block"><i class="fas fa-briefcase mr-2 text-xs"></i>فرص العمل للخريجين</a></li>
                 </ul>
             </div>
             <div>
                 <h4 class="text-lg font-bold text-gold mb-5 font-cairo">التواصل</h4>
                 <ul class="space-y-4 font-almarai text-sm text-gray-400">
-                    <li class="flex items-start gap-3"><i class="fas fa-map-marker-alt mt-1 text-gold"></i><span>اليمن، حضرموت، المكلا</span></li>
-                    <li class="flex items-center gap-3"><i class="fas fa-phone-alt text-gold"></i><span dir="ltr">+967 770 000 000</span></li>
-                    <li class="flex items-center gap-3"><i class="fas fa-envelope text-gold"></i><span>info@alawayil.com</span></li>
+                    <li class="flex items-start gap-3"><i class="fas fa-map-marker-alt mt-1 text-gold"></i><span>اليمن، حضرموت، المكلا ، باجعمان</span></li>
+                    <li class="flex items-center gap-3"><i class="fas fa-phone-alt text-gold"></i><span dir="ltr">+967 770892674</li>
+                    <li class="flex items-center gap-3"><i class="fas fa-envelope text-gold"></i><span>info@scs-ye.org</span>
                 </ul>
             </div>
         </div>
@@ -607,6 +640,7 @@ $slides = [
                 <p style="color:#6b7280;font-size:0.82rem;font-family:Almarai;line-height:1.7;flex:1">${excerpt}</p>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px">
                     <div style="display:flex;align-items:center;gap:12px">
+                        ${!isJob ? `
                         <span style="display:flex;align-items:center;gap:4px;font-size:0.78rem;color:#ef4444;font-weight:700;background:#fef2f2;padding:4px 10px;border-radius:999px">
                             <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                             ${item.likes_count||0}
@@ -615,6 +649,7 @@ $slides = [
                             <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
                             ${item.comments_count||0}
                         </span>
+                        ` : ''}
                     </div>
                     <a href="${BASE}/news/public/${item.id}" class="read-more-btn" style="margin-top:0">
                         <i class="fas fa-book-open" style="font-size:0.75rem"></i> قراءة المزيد

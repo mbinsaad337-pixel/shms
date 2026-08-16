@@ -60,6 +60,50 @@
                     </label>
                 </div>
 
+                <hr class="my-6 border-gray-100">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">تفاصيل المركز (اختياري)</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">رسالة المركز</label>
+                        <textarea name="message" rows="3" class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-secondary focus:border-secondary">{{ old('message') }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">رؤية المركز</label>
+                        <textarea name="vision" rows="3" class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-secondary focus:border-secondary">{{ old('vision') }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">قيم المركز</label>
+                        <textarea name="values" rows="3" class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-secondary focus:border-secondary">{{ old('values') }}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">أهداف المركز</label>
+                        <textarea name="goals" rows="3" class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-secondary focus:border-secondary">{{ old('goals') }}</textarea>
+                    </div>
+                </div>
+
+                <hr class="my-6 border-gray-100">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">روابط التواصل والموقع (اختياري)</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">رقم الواتساب / الرابط</label>
+                        <input type="text" name="whatsapp_link" value="{{ old('whatsapp_link') }}" class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-secondary focus:border-secondary" dir="ltr">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">رابط انستقرام</label>
+                        <input type="url" name="instagram_link" value="{{ old('instagram_link') }}" class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-secondary focus:border-secondary" dir="ltr">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">رابط فيسبوك</label>
+                        <input type="url" name="facebook_link" value="{{ old('facebook_link') }}" class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-secondary focus:border-secondary" dir="ltr">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">رابط الموقع (Google Maps)</label>
+                        <input type="url" name="location_link" value="{{ old('location_link') }}" class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-secondary focus:border-secondary" dir="ltr">
+                    </div>
+                </div>
+
                 <div class="pt-4 border-t border-gray-100 flex justify-end">
                     <button type="submit" class="btn-secondary px-10 py-3 font-bold">
                         حفظ البيانات

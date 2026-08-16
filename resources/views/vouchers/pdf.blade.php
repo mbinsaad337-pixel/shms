@@ -294,7 +294,7 @@
     </table>
 
     <div style="position: absolute; bottom: 0; left: 0; right: 0; text-align: center; font-size: 9px; color: #94a3b8; padding-top: 10px; border-top: 1px solid #f1f5f9;">
-        هذا السند مُنشأ آلياً عبر نظام إدارة السكن الطلابي - {{ date('Y-m-d H:i') }}
+        هذا السند مُنشأ آلياً عبر منصة ادارة  المراكز الطلابية- {{ date('Y-m-d H:i') }}
     </div>
 
 </body>

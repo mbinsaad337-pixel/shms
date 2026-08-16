@@ -64,8 +64,8 @@
                 <div>
                     <label class="block text-sm font-black text-navy mb-3 font-cairo">التصنيف <span
                             class="text-rose-500">*</span></label>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="categoryGroup">
-                        @foreach (['general' => ['label' => 'عام', 'icon' => 'fa-newspaper', 'color' => 'navy'], 'sports' => ['label' => 'رياضي', 'icon' => 'fa-futbol', 'color' => 'blue'], 'culture' => ['label' => 'ثقافي', 'icon' => 'fa-book-open', 'color' => 'purple'], 'achievement' => ['label' => 'إنجاز', 'icon' => 'fa-trophy', 'color' => 'amber']] as $val => $cat)
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3" id="categoryGroup">
+                        @foreach (['general' => ['label' => 'عام', 'icon' => 'fa-newspaper', 'color' => 'navy'], 'sports' => ['label' => 'رياضي', 'icon' => 'fa-futbol', 'color' => 'blue'], 'culture' => ['label' => 'ثقافي', 'icon' => 'fa-book-open', 'color' => 'purple'], 'achievement' => ['label' => 'إنجاز', 'icon' => 'fa-trophy', 'color' => 'amber'], 'jobs' => ['label' => 'فرص عمل', 'icon' => 'fa-briefcase', 'color' => 'emerald']] as $val => $cat)
                             <label
                                 class="category-btn cursor-pointer p-4 rounded-2xl border-2 text-center hover:border-navy transition-all {{ old('category', 'general') === $val ? 'border-navy bg-navy/5' : 'border-gray-100' }}">
                                 <input type="radio" name="category" value="{{ $val }}" class="sr-only"
@@ -202,14 +202,17 @@
 @push('scripts')
     <script>
         // Category radio visual selection
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+        document.querySelectorAll('input[name="category"]').forEach(input => {
+            input.addEventListener('change', (e) => {
                 document.querySelectorAll('.category-btn').forEach(b => {
                     b.classList.remove('border-navy', 'bg-navy/5');
                     b.classList.add('border-gray-100');
                 });
-                btn.classList.remove('border-gray-100');
-                btn.classList.add('border-navy', 'bg-navy/5');
+                const label = e.target.closest('.category-btn');
+                if (label) {
+                    label.classList.remove('border-gray-100');
+                    label.classList.add('border-navy', 'bg-navy/5');
+                }
             });
         });
 
