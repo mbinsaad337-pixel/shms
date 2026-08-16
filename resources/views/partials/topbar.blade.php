@@ -12,7 +12,7 @@
 
         <!-- Centered Logos Group -->
         <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-10 py-1">
-            @if (!auth()->user()->hasRole('super-admin'))
+            @if (!auth()->user()->hasRole('super-admin') && !auth()->user()->hasRole('media-officer'))
                 <img src="{{ auth()->user()->center ? auth()->user()->center->logo_url : asset('images/logos/alawayil_logo.png') }}" 
                     alt="Center Logo" class="h-14 w-auto drop-shadow-md transition-all hover:scale-105">
                 <div class="h-10 w-px bg-gray-100"></div>

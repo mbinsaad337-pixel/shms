@@ -313,17 +313,17 @@ $slides = [
                     <div class="p-4 rounded-2xl border border-navy/10 bg-navy/3 hover:border-gold transition">
                         <div class="w-10 h-10 bg-navy/10 text-navy rounded-lg flex items-center justify-center mb-3"><i class="fas fa-eye"></i></div>
                         <h4 class="font-bold text-gray-800 mb-1">رؤيتنا</h4>
-                        <p class="text-xs text-gray-500">فرص تعليمية مستدامة لمخرجات وطنية فاعلة</p>
+                        <p class="text-xs text-gray-500 " style='font-size: 15px'>فرص تعليمية مستدامة لمخرجات وطنية فاعلة</p>
                     </div>
                     <div class="p-4 rounded-2xl border border-gold/20 bg-gold/5 hover:border-gold transition">
                         <div class="w-10 h-10 bg-gold/15 text-gold rounded-lg flex items-center justify-center mb-3"><i class="fas fa-bullseye"></i></div>
                         <h4 class="font-bold text-gray-800 mb-1">رسالتنا</h4>
-                        <p class="text-xs text-gray-500">تمكين الأفراد من مواصلة تعليمهم وتطوير قدراتهم؛ لبناء وطنهم، من خلال بيئة تعليمية مستدامة ومبادرات مبتكرة وشراكات فاعلة وفق أفضل الممارسات.</p>
+                        <p class="text-xs text-gray-500 " style='font-size: 15px'>تمكين الأفراد من مواصلة تعليمهم وتطوير قدراتهم؛ لبناء وطنهم، من خلال بيئة تعليمية مستدامة ومبادرات مبتكرة وشراكات فاعلة وفق أفضل الممارسات.</p>
                     </div>
                     <div class="p-4 rounded-2xl border border-gray-100 bg-gray-50 hover:border-gold transition">
                         <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center mb-3"><i class="fas fa-list-check"></i></div>
                         <h4 class="font-bold text-gray-800 mb-1">أهدافنا</h4>
-                        <ul class="list-disc list-inside text-[11px] text-gray-500 space-y-1.5 mt-2">
+                        <ul class="list-disc list-inside text-[15px] text-gray-500 space-y-1.5 mt-2">
                             <li>توسيع فرص الوصول إلى التعليم المستدام.</li>
                             <li>تطوير المراكز الطلابية.</li>
                             <li>التميز في تحسين المخرجات التعليمية.</li>
@@ -337,7 +337,7 @@ $slides = [
                     <div class="p-4 rounded-2xl border border-gray-100 bg-gray-50 hover:border-gold transition">
                         <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center mb-3"><i class="fas fa-gem"></i></div>
                         <h4 class="font-bold text-gray-800 mb-2">قيمنا</h4>
-                        <div class="flex flex-wrap gap-2">
+                        <div class="flex flex-wrap gap-2text-[15px]">
                             <span class="px-3 py-1.5 bg-purple-100/50 text-purple-700 rounded-lg text-xs font-bold border border-purple-100">الاستدامة</span>
                             <span class="px-3 py-1.5 bg-purple-100/50 text-purple-700 rounded-lg text-xs font-bold border border-purple-100">الشراكة</span>
                             <span class="px-3 py-1.5 bg-purple-100/50 text-purple-700 rounded-lg text-xs font-bold border border-purple-100">روح الفريق</span>
