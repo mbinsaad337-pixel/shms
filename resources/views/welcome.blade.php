@@ -18,6 +18,21 @@
             --gold: #D4A044;
         }
 
+        .hero-dynamic {
+            height: 100vh;
+            height: 100dvh;
+        }
+
+        .hero-dynamic img {
+            object-position: center 40%;
+        }
+
+        @media (max-width: 767px) {
+            .hero-dynamic img {
+                object-position: center 30%;
+            }
+        }
+
         body {
             font-family: 'Cairo', sans-serif;
             background: #f8fafc;
@@ -309,7 +324,7 @@
             // ['img'=>'https://www.scs-ye.org/Uploads/ee2c3eb5-b9eb-4c50-a381-9fc0054f09da.jpg','title'=>'فرص وتطوير مستمر للطلاب','desc'=>'برامج وأنشطة ثقافية ورياضية لتنمية مهاراتك وبناء شخصيتك.','cta'=>'آخر الأخبار','link'=>'#news'],
         ];
     @endphp
-    <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden bg-gray-900"
+    <section id="hero" class="relative hero-dynamic flex items-center justify-center overflow-hidden bg-gray-900"
         x-data='{
         cur:0,
         slides: @json($slides),
@@ -350,7 +365,7 @@
     </section>
 
     <!-- CENTERS SECTION -->
-    <section id="centers" class="py-24 bg-[#f8fafc]" x-data="{
+    <section id="centers" class="py-14 md:py-24 bg-[#f8fafc]" x-data="{
         sel: null,
         open(c) {
             this.sel = c;
@@ -363,7 +378,7 @@
     }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-black text-navy mb-3"> مراكزنا الطلابية</h2>
+                <h2 class="text-3xl md:text-4xl font-black text-navy mb-3"> مراكزنا الطلابية</h2>
                 <div class="w-20 h-1.5 bg-gold rounded-full mx-auto mb-4"></div>
                 <p class="text-gray-500 font-almarai max-w-xl mx-auto">بيئة سكنية محفزة تدعم الطالب وتوفر له كافة سبل
                     الراحة والتميز الأكاديمي</p>
@@ -388,7 +403,7 @@
                             </span>
                         </div>
                         <div class="p-6 flex flex-col flex-1">
-                            <h3 class="text-xl font-black text-navy mb-2">{{ $center->name }}</h3>
+                            <h3 class="text-lg md:text-xl font-black text-navy mb-2">{{ $center->name }}</h3>
                             <p class="text-gray-400 font-almarai text-sm mb-4 flex items-center gap-1"><i
                                     class="fas fa-map-marker-alt text-gold"></i> {{ $center->address }}</p>
                             <div class="flex items-center gap-3 text-xs font-bold mb-6 text-gray-500">
@@ -560,26 +575,26 @@
     </section>
 
     <!-- ABOUT SECTION -->
-    <section id="about" class="py-24 bg-white relative overflow-hidden">
+    <section id="about" class="py-14 md:py-24 bg-white relative overflow-hidden">
         <div
-            class="absolute top-0 right-0 w-96 h-96 bg-navy/3 rounded-full blur-3xl -mr-48 -mt-48 pointer-events-none">
+            class="absolute top-0 right-0 w-48 md:w-96 h-48 md:h-96 bg-navy/3 rounded-full blur-3xl -mr-24 md:-mr-48 -mt-24 md:-mt-48 pointer-events-none">
         </div>
         <div
-            class="absolute bottom-0 left-0 w-72 h-72 bg-gold/5 rounded-full blur-3xl -ml-36 -mb-36 pointer-events-none">
+            class="absolute bottom-0 left-0 w-36 md:w-72 h-36 md:h-72 bg-gold/5 rounded-full blur-3xl -ml-18 md:-ml-36 -mb-18 md:-mb-36 pointer-events-none">
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 gap-16 items-stretch">
-                <div class="flex flex-col justify-center" style='margin-left:25px'>
+                <div class="flex flex-col justify-center">
                     <span
                         class="inline-block bg-navy/5 text-navy text-sm font-bold px-4 py-2 rounded-full mb-4 self-start">من
                         نحن؟</span>
-                    <h2 class="text-4xl font-black text-navy mb-4 leading-snug">جمعية رعاية طالب العلم</h2>
+                    <h2 class="text-3xl md:text-4xl font-black text-navy mb-4 leading-snug">جمعية رعاية طالب العلم</h2>
                     <div class="w-16 h-1.5 bg-gold rounded-full mb-6"></div>
-                    <p class="text-gray-600 font-almarai text-lg leading-relaxed mb-8">
+                    <p class="text-gray-600 font-almarai text-base md:text-lg leading-relaxed mb-8">
                         جمعية رائدة في تقديم خدمات متكاملة لرعاية الطلاب الجامعيين. نسعى لتوفير بيئة سكنية وتعليمية
                         وتثقيفية تساهم في إعداد جيل متميز علمياً ومهارياً وقيمياً.
                     </p>
-                    <div class="grid grid-cols-2 gap-6 mb-8 font-almarai">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-8 font-almarai">
                         <div class="p-4 rounded-2xl border border-navy/10 bg-navy/3 hover:border-gold transition">
                             <div
                                 class="w-10 h-10 bg-navy/10 text-navy rounded-lg flex items-center justify-center mb-3">
@@ -637,11 +652,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="relative flex min-h-[500px] items-end">
-                    <div class="relative w-full">
+                <div class="relative flex min-h-[300px] md:min-h-[500px] items-end">
+                    <div class="relative w-full overflow-hidden">
                         <img src="https://www.scs-ye.org/Uploads/8b517cd4-09e8-4bf5-b12a-c42f592c5cec.jpg"
                             class="relative z-10 h-auto w-full rounded-3xl object-cover shadow-2xl" alt="من نحن">
-                        <div class="absolute -bottom-4 -left-4 h-full w-full rounded-3xl border-4 border-gold/40 z-0">
+                        <div class="absolute -bottom-4 -left-4 h-full w-full rounded-3xl border-4 border-gold/40 z-0 hidden md:block">
                         </div>
                     </div>
                 </div>
@@ -650,7 +665,7 @@
     </section>
 
     <!-- STATS SECTION -->
-    <section class="bg-navy py-16 text-white">
+    <section class="bg-navy py-10 md:py-16 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div>
@@ -658,7 +673,7 @@
                         class="w-14 h-14 mx-auto bg-white/10 rounded-2xl flex items-center justify-center mb-3 text-gold text-2xl">
                         <i class="fas fa-building"></i>
                     </div>
-                    <div class="text-4xl font-black text-gold mb-1">{{ $stats['centers'] }}</div>
+                    <div class="text-3xl md:text-4xl font-black text-gold mb-1">{{ $stats['centers'] }}</div>
                     <p class="text-sm font-almarai text-gray-300">مراكز طلابية</p>
                 </div>
                 <div>
@@ -666,7 +681,7 @@
                         class="w-14 h-14 mx-auto bg-white/10 rounded-2xl flex items-center justify-center mb-3 text-gold text-2xl">
                         <i class="fas fa-user-graduate"></i>
                     </div>
-                    <div class="text-4xl font-black text-gold mb-1">+{{ $center->students_count }}</div>
+                    <div class="text-3xl md:text-4xl font-black text-gold mb-1">+{{ $center->students_count }}</div>
                     <p class="text-sm font-almarai text-gray-300">طالب مستفيد</p>
                 </div>
                 <div>
@@ -674,7 +689,7 @@
                         class="w-14 h-14 mx-auto bg-white/10 rounded-2xl flex items-center justify-center mb-3 text-gold text-2xl">
                         <i class="fas fa-user-graduate"></i>
                     </div>
-                    <div class="text-4xl font-black text-gold mb-1">+{{ $stats['graduates'] }}</div>
+                    <div class="text-3xl md:text-4xl font-black text-gold mb-1">+{{ $stats['graduates'] }}</div>
                     <p class="text-sm font-almarai text-gray-300">طالب خريج</p>
                 </div>
                 <div>
@@ -682,7 +697,7 @@
                         class="w-14 h-14 mx-auto bg-white/10 rounded-2xl flex items-center justify-center mb-3 text-gold text-2xl">
                         <i class="fas fa-award"></i>
                     </div>
-                    <div class="text-4xl font-black text-gold mb-1">+30</div>
+                    <div class="text-3xl md:text-4xl font-black text-gold mb-1">+30</div>
                     <p class="text-sm font-almarai text-gray-300">تخصص مختلف </p>
                 </div>
             </div>
@@ -690,7 +705,7 @@
     </section>
 
     <!-- NEWS SECTION — Same design as login page + filters -->
-    <section id="news" class="py-24 bg-[#f8fafc]">
+    <section id="news" class="py-14 md:py-24 bg-[#f8fafc]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <!-- Section Header -->
@@ -700,7 +715,7 @@
                         class="inline-flex items-center gap-2 bg-navy/5 text-navy px-4 py-2 rounded-full text-sm font-bold mb-3">
                         <i class="fas fa-newspaper text-gold"></i> أخبار المراكز الطلابية
                     </div>
-                    <h2 class="text-4xl font-black text-navy"> آخر الأخبار والفعاليات</h2>
+                    <h2 class="text-3xl md:text-4xl font-black text-navy"> آخر الأخبار والفعاليات</h2>
                     <div class="w-20 h-1.5 bg-gold rounded-full mt-3"></div>
                 </div>
                 <div>
@@ -812,7 +827,7 @@
 </section> --}}
 
     <!-- FOOTER -->
-    <footer class="bg-gray-900 text-white pt-16 pb-8 border-t-4 border-gold" id="contact">
+    <footer class="bg-gray-900 text-white pt-10 md:pt-16 pb-8 border-t-4 border-gold" id="contact">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
                 <div>
@@ -836,7 +851,7 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="text-lg font-bold text-gold mb-5 font-cairo">المحتوي</h4>
+                    <h4 class="text-base md:text-lg font-bold text-gold mb-5 font-cairo">المحتوي</h4>
                     <ul class="space-y-3 font-almarai text-sm text-gray-400">
                         <li><a href="#hero" class="hover:text-white transition block"><i
                                     class="fas fa-angle-left mr-2 text-xs"></i>الرئيسية</a></li>
@@ -851,7 +866,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-lg font-bold text-gold mb-5 font-cairo">الخدمات</h4>
+                    <h4 class="text-base md:text-lg font-bold text-gold mb-5 font-cairo">الخدمات</h4>
                     <ul class="space-y-3 font-almarai text-sm text-gray-400">
                         <li><a href="{{ route('login') }}" class="hover:text-white transition block"><i
                                     class="fas fa-lock mr-2 text-xs"></i>تسجيل الدخول</a></li>
@@ -865,7 +880,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-lg font-bold text-gold mb-5 font-cairo">التواصل</h4>
+                    <h4 class="text-base md:text-lg font-bold text-gold mb-5 font-cairo">التواصل</h4>
                     <ul class="space-y-4 font-almarai text-sm text-gray-400">
                         <li class="flex items-start gap-3"><i
                                 class="fas fa-map-marker-alt mt-1 text-gold"></i><span>اليمن، حضرموت، المكلا ،
