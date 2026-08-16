@@ -126,6 +126,13 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         ]);
         Route::post('admin/users/{user}/delete', [CenterUserController::class, 'destroy'])->name('admin.users.destroy');
         Route::post('admin/users/{user}/toggle', [CenterUserController::class, 'toggleStatus'])->name('admin.users.toggle');
+
+        // Annual Rollover & Archives (الترحيل السنوي والأرشيف)
+        Route::get('annual-rollover', [\App\Http\Controllers\AnnualRolloverController::class, 'index'])->name('annual-rollover.index');
+        Route::post('annual-rollover', [\App\Http\Controllers\AnnualRolloverController::class, 'store'])->name('annual-rollover.store');
+        Route::get('annual-rollover/archive/{archive}', [\App\Http\Controllers\AnnualRolloverController::class, 'showArchive'])->name('annual-rollover.show-archive');
+        Route::get('annual-rollover/archive/{archive}/export-pdf', [\App\Http\Controllers\AnnualRolloverController::class, 'exportArchivePdf'])->name('annual-rollover.export-archive-pdf');
+        Route::get('annual-rollover/export-pdf', [\App\Http\Controllers\AnnualRolloverController::class, 'exportPdf'])->name('annual-rollover.export-pdf');
     });
 
     // Students Resource - access control is handled inside the controller methods

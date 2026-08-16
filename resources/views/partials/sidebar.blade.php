@@ -231,6 +231,13 @@
                             طاقم العمل
                         </a>
                     @endif
+                    @if(auth()->user()->hasRole('center-manager') || auth()->user()->hasRole('super-admin'))
+                        <a href="{{ route('annual-rollover.index') }}"
+                            class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('annual-rollover.*') ? 'bg-white/10 text-gold font-bold shadow-sm' : 'text-gray-300 hover:bg-white/5 transition' }}">
+                            <i class="fas fa-archive h-5 w-5 ml-3 text-amber-400"></i>
+                            الترحيل السنوي والأرشيف
+                        </a>
+                    @endif
                     @if(auth()->user()->can('view-assets') || auth()->user()->hasRole('super-admin'))
                         <a href="{{ route('assets.index') }}"
                             class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('assets.*') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5 transition' }}">
