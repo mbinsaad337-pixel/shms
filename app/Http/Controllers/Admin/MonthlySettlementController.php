@@ -29,6 +29,7 @@ class MonthlySettlementController extends Controller
             $funds = Fund::where('center_id', $centerId)->get();
             $currentMonthVouchers = Voucher::with(['creator', 'targetFund', 'fund', 'student'])
                 ->where('center_id', $centerId)
+                ->where('status', 'approved')
                 ->whereMonth('date', $month)
                 ->whereYear('date', $year)
                 ->get();
@@ -104,7 +105,8 @@ class MonthlySettlementController extends Controller
             foreach ($funds as $fund) {
                 // Calculate income: receipts/sales_invoices where fund_id is this fund,
                 // OR transfers where target_fund_id is this fund.
-                $income = Voucher::whereMonth('date', $validated['month'])
+                $income = Voucher::where('status', 'approved')
+                    ->whereMonth('date', $validated['month'])
                     ->whereYear('date', $validated['year'])
                     ->where(function($q) use ($fund) {
                         $q->where(function($q2) use ($fund) {
@@ -116,7 +118,8 @@ class MonthlySettlementController extends Controller
                     ->sum('amount');
 
                 // Calculate expense: payments/salaries/purchase_invoices/transfers where fund_id is this fund.
-                $expense = Voucher::whereMonth('date', $validated['month'])
+                $expense = Voucher::where('status', 'approved')
+                    ->whereMonth('date', $validated['month'])
                     ->whereYear('date', $validated['year'])
                     ->where('fund_id', $fund->id)
                     ->whereIn('type', ['payment', 'salary', 'transfer'])
@@ -155,6 +158,7 @@ class MonthlySettlementController extends Controller
 
         $vouchers = Voucher::with(['creator', 'targetFund', 'student'])
             ->where('center_id', $settlement->center_id)
+            ->where('status', 'approved')
             ->whereMonth('date', $settlement->month)
             ->whereYear('date', $settlement->year)
             ->get();
@@ -168,6 +172,7 @@ class MonthlySettlementController extends Controller
 
         $vouchers = Voucher::with(['creator', 'fund', 'targetFund', 'student'])
             ->where('center_id', $settlement->center_id)
+            ->where('status', 'approved')
             ->whereMonth('date', $settlement->month)
             ->whereYear('date', $settlement->year)
             ->get();
@@ -280,7 +285,8 @@ class MonthlySettlementController extends Controller
             foreach ($settlement->details as $detail) {
                 $fund = $detail->fund;
                 
-                $income = Voucher::whereMonth('date', $settlement->month)
+                $income = Voucher::where('status', 'approved')
+                    ->whereMonth('date', $settlement->month)
                     ->whereYear('date', $settlement->year)
                     ->where(function($q) use ($fund) {
                         $q->where(function($q2) use ($fund) {
@@ -291,7 +297,8 @@ class MonthlySettlementController extends Controller
                     })
                     ->sum('amount');
 
-                $expense = Voucher::whereMonth('date', $settlement->month)
+                $expense = Voucher::where('status', 'approved')
+                    ->whereMonth('date', $settlement->month)
                     ->whereYear('date', $settlement->year)
                     ->where('fund_id', $fund->id)
                     ->whereIn('type', ['payment', 'salary', 'transfer'])

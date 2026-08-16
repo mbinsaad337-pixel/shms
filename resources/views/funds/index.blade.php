@@ -77,6 +77,10 @@
                         <h3 class="text-2xl font-bold text-gray-800 font-cairo mb-2">{{ $fund->name }}</h3>
                         <p class="text-gray-500 text-sm font-almarai leading-relaxed">
                             {{ $fund->description ?? 'لا يوجد وصف مضاف لهذا الصندوق' }}</p>
+                        <span
+                            class="inline-block mt-3 px-3 py-1 rounded-full text-xs font-bold font-cairo bg-emerald-50 text-emerald-700 border border-emerald-100">
+                            {{ $fund->currency_label }}
+                        </span>
                     </div>
 
                     <div class="mt-auto pt-6 border-t border-gray-50 flex justify-between items-end">
@@ -84,7 +88,7 @@
                             <p class="text-gray-400 text-xs font-almarai mb-1">الرصيد المتوفر</p>
                             <p class="text-3xl font-black text-primary tracking-tight">
                                 {{ number_format($fund->balance, 2) }}
-                                <span class="text-sm font-normal text-gray-400 mr-1">ر.ي</span>
+                                <span class="text-sm font-normal text-gray-400 mr-1">{{ $fund->currency_symbol }}</span>
                             </p>
                         </div>
                         @if(auth()->user()->hasRole('super-admin'))
@@ -147,11 +151,20 @@
                         rows="3"></textarea>
                 </div>
                 <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">عملة الصندوق</label>
+                    <select name="currency" id="create_currency" required
+                        class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-right transition-all">
+                        <option value="YER" selected>ريال يمني</option>
+                        <option value="SAR">ريال سعودي</option>
+                        <option value="USD">دولار أمريكي</option>
+                    </select>
+                </div>
+                <div>
                     <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">الرصيد الحالي</label>
                     <div class="relative">
                         <input type="number" name="balance" step="0.01" required placeholder="0.00"
                             class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-center font-bold text-xl text-primary   transition-all">
-                        <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 font-almarai text-xs">ر.ي</span>
+                        <span id="create_currency_suffix" class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 font-almarai text-xs">ر.ي</span>
                     </div>
                 </div>
                 <div class="flex gap-4 pt-6">
@@ -199,12 +212,21 @@
                         rows="3"></textarea>
                 </div>
                 <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">عملة الصندوق</label>
+                    <select name="currency" id="edit_currency" required
+                        class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-right transition-all">
+                        <option value="YER">ريال يمني</option>
+                        <option value="SAR">ريال سعودي</option>
+                        <option value="USD">دولار أمريكي</option>
+                    </select>
+                </div>
+                <div>
                     <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">الرصيد (للمراجعة
                         فقط)</label>
                     <div class="relative">
                         <input type="number" name="balance" id="edit_balance" step="0.01" required
                             class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-center font-bold text-xl text-primary   transition-all">
-                        <span class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 font-almarai text-xs">ر.ي</span>
+                        <span id="edit_currency_suffix" class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 font-almarai text-xs">ر.ي</span>
                     </div>
                 </div>
                 <div class="flex gap-4 pt-6">
@@ -220,18 +242,33 @@
     @endif
 
     <script>
+        const currencySymbols = { YER: 'ر.ي', SAR: 'ر.س', USD: '$' };
+
+        function updateCurrencySuffix(selectId, suffixId) {
+            const select = document.getElementById(selectId);
+            const suffix = document.getElementById(suffixId);
+            if (select && suffix) suffix.textContent = currencySymbols[select.value] || 'ر.ي';
+        }
+
         function openCreateModal() {
             showModal('createModal');
+            updateCurrencySuffix('create_currency', 'create_currency_suffix');
         }
         function closeCreateModal() {
             hideModal('createModal');
         }
+
+        document.getElementById('create_currency').addEventListener('change', function () {
+            updateCurrencySuffix('create_currency', 'create_currency_suffix');
+        });
 
         function openEditModal(fund) {
             document.getElementById('edit_center_id').value = fund.center_id;
             document.getElementById('edit_name').value = fund.name;
             document.getElementById('edit_description').value = fund.description || '';
             document.getElementById('edit_balance').value = fund.balance;
+            document.getElementById('edit_currency').value = fund.currency || 'YER';
+            updateCurrencySuffix('edit_currency', 'edit_currency_suffix');
             
             // Generate the URL using Laravel's route helper to ensure correct pathing (especially in subfolders)
             let actionUrl = "{{ route('funds.update', ':id') }}";
@@ -242,6 +279,10 @@
         function closeEditModal() {
             hideModal('editModal');
         }
+
+        document.getElementById('edit_currency').addEventListener('change', function () {
+            updateCurrencySuffix('edit_currency', 'edit_currency_suffix');
+        });
 
         function showModal(id) {
             const m = document.getElementById(id);

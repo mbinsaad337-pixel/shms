@@ -197,15 +197,17 @@
                                         @php /** @var \App\Models\BudgetItem $item */ @endphp
                                         <tr class="font-almarai h-16 hover:bg-gray-50/50 transition-colors">
                                             <td class="px-6">
-                                                <div class="font-bold text-gray-800">{{ $item->fund->name }}</div>
+                                                <div class="font-bold text-gray-800">{{ $item->fund->name }}
+                                                    <span class="text-[10px] font-bold text-emerald-700">{{ $item->fund->currency_label }}</span>
+                                                </div>
                                             </td>
                                             <td class="px-6">
                                                 <div class="font-bold text-primary">
-                                                    {{ number_format($item->requested_amount, 2) }} ر.ي
+                                                    {{ number_format($item->requested_amount, 2) }} {{ $item->fund->currency_symbol }}
                                                 </div>
                                             </td>
                                             <td class="px-6 text-sm text-gray-400">
-                                                {{ number_format($item->fund->balance, 2) }} ر.ي
+                                                {{ number_format($item->fund->balance, 2) }} {{ $item->fund->currency_symbol }}
                                             </td>
                                             <td class="px-6 text-center">
                                                 @if($item->attachment_pdf)

@@ -120,7 +120,7 @@ class ReportController extends Controller
                 break;
 
             case 'vouchers':
-                $query = Voucher::with('center', 'fund')->orderBy('date', 'desc');
+                $query = Voucher::with('center', 'fund')->where('status', 'approved')->orderBy('date', 'desc');
                 if (!$isExecutive)
                     $query->where('center_id', $centerId);
                 $data = $query->get();

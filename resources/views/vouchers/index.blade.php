@@ -151,10 +151,11 @@
                                         <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-bold font-cairo"><i class="fas fa-check ml-1"></i> معتمد</span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 font-bold text-gray-800">{{ number_format($voucher->amount, 2) }}</td>
+                                <td class="px-6 py-4 font-bold text-gray-800">{{ number_format($voucher->amount, 2) }} <span class="text-xs font-normal text-gray-400">{{ $voucher->fund->currency_symbol ?? '' }}</span></td>
                                 <td class="px-6 py-4 text-sm font-almarai">{{ $voucher->payee_or_payer }}</td>
                                 <td class="px-6 py-4">
                                     <span class="text-sm font-bold text-gray-600">{{ $voucher->fund->name }}</span>
+                                    <span class="text-[10px] font-bold text-emerald-700">{{ $voucher->fund->currency_label }}</span>
                                     @if ($voucher->type == 'transfer' && $voucher->targetFund)
                                         <i class="fas fa-arrow-left mx-2 text-gray-300"></i>
                                         <span class="text-sm font-bold text-primary">{{ $voucher->targetFund->name }}</span>

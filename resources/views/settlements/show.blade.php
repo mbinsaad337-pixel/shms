@@ -55,27 +55,66 @@
     </div>
 
     <!-- Overview Stats -->
+    @php
+        $currencyBreakdown = [];
+        foreach (\App\Models\Fund::CURRENCIES as $code => $label) {
+            $currencyBreakdown[$code] = [
+                'label' => $label,
+                'symbol' => \App\Models\Fund::CURRENCY_SYMBOLS[$code],
+                'opening' => 0.0,
+                'spent' => 0.0,
+                'remaining' => 0.0,
+            ];
+        }
+        foreach ($settlement->details as $d) {
+            $code = $d->fund->currency ?? 'YER';
+            if (!isset($currencyBreakdown[$code])) {
+                $currencyBreakdown[$code] = [
+                    'label' => \App\Models\Fund::CURRENCIES[$code] ?? $code,
+                    'symbol' => \App\Models\Fund::CURRENCY_SYMBOLS[$code] ?? $code,
+                    'opening' => 0.0,
+                    'spent' => 0.0,
+                    'remaining' => 0.0,
+                ];
+            }
+            $currencyBreakdown[$code]['opening'] += (float) $d->opening_balance;
+            $currencyBreakdown[$code]['spent'] += (float) $d->total_expense;
+            $currencyBreakdown[$code]['remaining'] += (float) $d->closing_balance;
+        }
+    @endphp
     <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md">
-            <p class="text-[10px] text-gray-400 font-almarai mb-1">الرصيد الافتتاحي الكلي</p>
-            <p class="text-xl font-bold text-gray-800 ">
-                {{ number_format($settlement->total_budget, 2) }}
-                <span class="text-[10px] text-gray-500 font-cairo">ر.ي</span>
-            </p>
+            <p class="text-[10px] text-gray-400 font-almarai mb-3">الرصيد الافتتاحي الكلي</p>
+            <div class="space-y-2">
+                @foreach($currencyBreakdown as $row)
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-cairo text-gray-400">{{ $row['symbol'] }}</span>
+                        <span class="text-base font-bold text-gray-800">{{ number_format($row['opening'], 2) }}</span>
+                    </div>
+                @endforeach
+            </div>
         </div>
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md border-r-4 border-r-red-500">
-            <p class="text-[10px] text-gray-400 font-almarai mb-1">إجمالي المنصرف (الشهر)</p>
-            <p class="text-xl font-bold text-red-600  ">
-                {{ number_format($settlement->total_spent, 2) }}
-                <span class="text-[10px] text-gray-500 font-cairo">ر.ي</span>
-            </p>
+            <p class="text-[10px] text-gray-400 font-almarai mb-3">إجمالي المنصرف (الشهر)</p>
+            <div class="space-y-2">
+                @foreach($currencyBreakdown as $row)
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-cairo text-gray-400">{{ $row['symbol'] }}</span>
+                        <span class="text-base font-bold text-red-600">{{ number_format($row['spent'], 2) }}</span>
+                    </div>
+                @endforeach
+            </div>
         </div>
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md border-r-4 border-r-green-500">
-            <p class="text-[10px] text-gray-400 font-almarai mb-1">الرصيد الختامي المتبقي</p>
-            <p class="text-xl font-bold text-green-700  ">
-                {{ number_format($settlement->total_remaining, 2) }}
-                <span class="text-[10px] text-gray-500 font-cairo">ر.ي</span>
-            </p>
+            <p class="text-[10px] text-gray-400 font-almarai mb-3">الرصيد الختامي المتبقي</p>
+            <div class="space-y-2">
+                @foreach($currencyBreakdown as $row)
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-cairo text-gray-400">{{ $row['symbol'] }}</span>
+                        <span class="text-base font-bold text-green-700">{{ number_format($row['remaining'], 2) }}</span>
+                    </div>
+                @endforeach
+            </div>
         </div>
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md">
             <p class="text-[10px] text-gray-400 font-almarai mb-1">عدد الصناديق</p>
@@ -126,25 +165,26 @@
                         <div>
                             <h3 class="text-lg font-bold text-gray-800 font-cairo">{{ $detail->fund->name }}</h3>
                             <p class="text-xs text-gray-500 font-almarai">{{ $fundVouchers->count() }} حركة مالية مسجلة</p>
+                            <span class="text-[11px] text-emerald-700 font-bold font-cairo">{{ $detail->fund->currency_label }}</span>
                         </div>
                     </div>
 
                     <div class="flex flex-wrap md:flex-nowrap gap-6 flex-1 lg:justify-end">
                         <div class="text-center md:text-right">
                             <p class="text-[10px] text-gray-400 font-almarai mb-0.5">الرصيد الافتتاحي</p>
-                            <p class="text-sm font-bold text-gray-600  ">{{ number_format($detail->opening_balance, 2) }} <span class="text-[10px]">ر.ي</span></p>
+                            <p class="text-sm font-bold text-gray-600  ">{{ number_format($detail->opening_balance, 2) }} <span class="text-[10px]">{{ $detail->fund->currency_symbol }}</span></p>
                         </div>
                         <div class="text-center md:text-right">
                             <p class="text-[10px] text-green-500 font-almarai mb-0.5">إجمالي المقبوضات</p>
-                            <p class="text-sm font-bold text-green-600  ">+{{ number_format($detail->total_income, 2) }} <span class="text-[10px]">ر.ي</span></p>
+                            <p class="text-sm font-bold text-green-600  ">+{{ number_format($detail->total_income, 2) }} <span class="text-[10px]">{{ $detail->fund->currency_symbol }}</span></p>
                         </div>
                         <div class="text-center md:text-right">
                             <p class="text-[10px] text-red-500 font-almarai mb-0.5">إجمالي المصروفات</p>
-                            <p class="text-sm font-bold text-red-600  ">-{{ number_format($detail->total_expense, 2) }} <span class="text-[10px]">ر.ي</span></p>
+                            <p class="text-sm font-bold text-red-600  ">-{{ number_format($detail->total_expense, 2) }} <span class="text-[10px]">{{ $detail->fund->currency_symbol }}</span></p>
                         </div>
                         <div class="text-center md:text-right bg-gray-100 px-3 py-1 rounded-lg">
                             <p class="text-[10px] text-gray-500 font-almarai mb-0.5">الرصيد الختامي</p>
-                            <p class="text-sm font-bold text-gray-800  ">{{ number_format($detail->closing_balance, 2) }} <span class="text-[10px]">ر.ي</span></p>
+                            <p class="text-sm font-bold text-gray-800  ">{{ number_format($detail->closing_balance, 2) }} <span class="text-[10px]">{{ $detail->fund->currency_symbol }}</span></p>
                         </div>
                     </div>
                     
@@ -163,7 +203,7 @@
                                         <th class="px-6 py-3 font-cairo text-xs">رقم السند</th>
                                         <th class="px-6 py-3 font-cairo text-xs">التاريخ</th>
                                         <th class="px-6 py-3 font-cairo text-xs">النوع</th>
-                                        <th class="px-6 py-3 font-cairo text-xs">المبلغ (ر.ي)</th>
+                                        <th class="px-6 py-3 font-cairo text-xs">المبلغ</th>
                                         <th class="px-6 py-3 font-cairo text-xs text-center">المتبقي</th>
                                         <th class="px-6 py-3 font-cairo text-xs">من / إلى</th>
                                         <th class="px-6 py-3 font-cairo text-xs">البيان</th>
@@ -202,7 +242,7 @@
                                                 </span>
                                             </td>
                                             <td class="px-6 py-3 font-bold   text-sm {{ $isIncoming ? 'text-green-600' : 'text-red-600' }}" dir="ltr">
-                                                {{ $isIncoming ? '+' : '-' }}{{ number_format($voucher->amount, 2) }}
+                                                {{ $isIncoming ? '+' : '-' }}{{ number_format($voucher->amount, 2) }} {{ $detail->fund->currency_symbol }}
                                             </td>
                                             <td class="px-6 py-3 text-center">
                                                 @if($voucher->student)

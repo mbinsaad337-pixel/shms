@@ -141,15 +141,25 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
                 <div class="flex items-center justify-between font-cairo">
                     <div>
-                        <p class="text-xs text-gray-500 font-bold mb-1">رصيد الصناديق</p>
-                        <h3 class="text-2xl font-bold text-navy font-almarai">
-                            {{ number_format($stats['center_funds'], 0) }}
-                        </h3>
-                        <p class="text-xs text-gray-400 mt-1">ريال يمني</p>
+                        <h3 class="text-1xl font-bold text-gray-400 font-almarai">رصيد الصناديق<i
+                                class="fas fa-wallet text-2xl text-gold"></i></h3>
+                        <div class=" gap-2 mt-2">
+                            <span
+                                class="text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 px-2 py-0.5 rounded-full">ر.ي
+                                {{ number_format($stats['funds_by_currency']['YER'] ?? 0, 0) }}</span>
+                            <br>
+                            <span
+                                class="text-[9px] font-bold bg-blue-50 text-blue-700 border border-blue-100 px-2 py-0.5 rounded-full">ر.س
+                                {{ number_format($stats['funds_by_currency']['SAR'] ?? 0, 0) }}</span>
+
+                            <span
+                                class="text-[9px] font-bold bg-amber-50 text-amber-700 border border-amber-100 px-2 py-0.5 rounded-full">$
+                                {{ number_format($stats['funds_by_currency']['USD'] ?? 0, 0) }}</span>
+                        </div>
                     </div>
-                    <div class="bg-gold/10 p-4 rounded-2xl text-gold">
+                    {{-- <div class="bg-gold/10 p-4 rounded-2xl text-gold">
                         <i class="fas fa-wallet text-2xl"></i>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         @endcan
@@ -420,10 +430,12 @@
                                 </button>
                                 <div id="adminMenu"
                                     class="absolute right-0 left-0 top-full mt-2 hidden z-50 animate-fade-in-down">
-                                    <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden font-cairo ring-1 ring-black ring-opacity-5">
+                                    <div
+                                        class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden font-cairo ring-1 ring-black ring-opacity-5">
                                         <a href="{{ route('administrative.index', ['tab' => 'violations']) }}"
                                             class="block w-full text-right px-6 py-4 hover:bg-navy/5 text-navy font-bold border-b border-gray-50 transition-colors">
-                                            <i class="fas fa-exclamation-triangle text-red-500 w-5 inline-block"></i> تسجيل مخالفة
+                                            <i class="fas fa-exclamation-triangle text-red-500 w-5 inline-block"></i> تسجيل
+                                            مخالفة
                                         </a>
                                         <a href="{{ route('administrative.index', ['tab' => 'commitments']) }}"
                                             class="block w-full text-right px-6 py-4 hover:bg-gold/5 text-navy font-bold border-b border-gray-50 transition-colors">
@@ -573,7 +585,7 @@
     </div>{{-- end violations/absences grid --}}
 
     <!-- Active Activities -->
-    
+
 @endsection
 
 @push('scripts')

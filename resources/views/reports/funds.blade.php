@@ -69,7 +69,7 @@
             </div>
         @else
         <div class="grid grid-cols-1 gap-8">
-            @php $totalGlobal = 0; @endphp
+            @php $totalGlobal = 0; $totalsByCurrency = ['YER' => 0, 'SAR' => 0, 'USD' => 0]; @endphp
             @foreach($data->groupBy('center_id') as $centerId => $funds)
                 @php $centerName = $funds->first()->center->name ?? '—'; @endphp
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
@@ -95,12 +95,17 @@
                                     $settlementClosing    = $settlementDetail ? $settlementDetail->closing_balance : null;
                                 @endphp
                                 <tr class="border-b hover:bg-orange-50/20 transition-colors">
-                                    <td class="px-8 py-4 font-almarai border-l border-gray-100 font-semibold">{{ $fund->name }}</td>
+                                    <td class="px-8 py-4 font-almarai border-l border-gray-100 font-semibold">
+                                        {{ $fund->name }}
+                                        <span class="block text-[10px] font-bold text-emerald-700 mt-1">{{ $fund->currency_label }}</span>
+                                    </td>
                                     <td class="px-8 py-4 text-center font-bold text-navy font-almarai text-lg border-l border-gray-100">
                                         {{ number_format($approvedBalance, 2) }}
+                                        <span class="block text-[10px] font-normal text-gray-400">{{ $fund->currency_symbol }}</span>
                                     </td>
                                     <td class="px-8 py-4 text-center font-bold text-green-600 font-almarai text-lg border-l border-gray-100">
                                         {{ number_format($fund->balance, 2) }}
+                                        <span class="block text-[10px] font-normal text-gray-400">{{ $fund->currency_symbol }}</span>
                                     </td>
                                     <td class="px-8 py-4 text-center font-almarai text-sm border-l border-gray-100">
                                         @if($settlementClosing !== null)
@@ -125,20 +130,35 @@
                                         </a>
                                     </td>
                                 </tr>
-                                @php $totalGlobal += $fund->balance; @endphp
+                                @php $totalGlobal += $fund->balance; $totalsByCurrency[$fund->currency ?? 'YER'] += $fund->balance; @endphp
                             @endforeach
                         </tbody>
                     </table>
                 </div>
             @endforeach
 
-            <div class="bg-navy p-10 rounded-3xl text-white shadow-2xl border-r-8 border-gold flex justify-between items-center relative overflow-hidden">
+            <div class="bg-navy p-10 rounded-3xl text-white shadow-2xl border-r-8 border-gold relative overflow-hidden">
                 <div class="absolute -left-10 -top-10 text-white/5 text-9xl">
                     <i class="fas fa-vault"></i>
                 </div>
-                <h2 class="text-2xl font-black font-cairo relative z-10">إجمالي السيولة النقدية بالنظام</h2>
-                <div class="text-4xl font-black font-almarai relative z-10 text-gold">{{ number_format($totalGlobal, 2) }} <span
-                        class="text-xl font-bold text-white/80">ريال يمني</span></div>
+                <h2 class="text-2xl font-black font-cairo relative z-10 mb-6">إجمالي السيولة النقدية بالنظام</h2>
+                <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white/10 rounded-2xl p-4 text-center">
+                        <div class="text-[10px] font-bold text-white/70 font-cairo mb-1">ريال يمني</div>
+                        <div class="text-2xl font-black font-almarai text-gold">{{ number_format($totalsByCurrency['YER'], 2) }}</div>
+                        <div class="text-xs font-bold text-white/60">ر.ي</div>
+                    </div>
+                    <div class="bg-white/10 rounded-2xl p-4 text-center">
+                        <div class="text-[10px] font-bold text-white/70 font-cairo mb-1">ريال سعودي</div>
+                        <div class="text-2xl font-black font-almarai text-gold">{{ number_format($totalsByCurrency['SAR'], 2) }}</div>
+                        <div class="text-xs font-bold text-white/60">ر.س</div>
+                    </div>
+                    <div class="bg-white/10 rounded-2xl p-4 text-center">
+                        <div class="text-[10px] font-bold text-white/70 font-cairo mb-1">دولار أمريكي</div>
+                        <div class="text-2xl font-black font-almarai text-gold">{{ number_format($totalsByCurrency['USD'], 2) }}</div>
+                        <div class="text-xs font-bold text-white/60">$</div>
+                    </div>
+                </div>
             </div>
         </div>
         @endif

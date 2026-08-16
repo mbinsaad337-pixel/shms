@@ -14,10 +14,10 @@
                 <span class="text-sm font-bold text-navy font-cairo">تحليل مباشر للنظام</span>
             </div>
             @can('manage-users')
-                <a href="{{ route('admin.users.index') }}" 
-                   class="bg-navy text-white px-6 py-3 rounded-2xl font-bold font-cairo shadow-lg hover:bg-navy/90 transition-all flex items-center gap-2 group">
-                   <i class="fas fa-users-cog text-gold group-hover:rotate-45 transition-transform"></i>
-                   <span>إدارة الطاقم</span>
+                <a href="{{ route('admin.users.index') }}"
+                    class="bg-navy text-white px-6 py-3 rounded-2xl font-bold font-cairo shadow-lg hover:bg-navy/90 transition-all flex items-center gap-2 group">
+                    <i class="fas fa-users-cog text-gold group-hover:rotate-45 transition-transform"></i>
+                    <span>إدارة الطاقم</span>
                 </a>
             @endcan
         </div>
@@ -31,7 +31,8 @@
                 <i class="fas fa-user-graduate text-8xl text-navy"></i>
             </div>
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 bg-navy/5 text-navy rounded-2xl flex items-center justify-center text-2xl shadow-inner">
+                <div
+                    class="w-14 h-14 bg-navy/5 text-navy rounded-2xl flex items-center justify-center text-2xl shadow-inner">
                     <i class="fas fa-users"></i>
                 </div>
                 <div>
@@ -55,12 +56,33 @@
                 <i class="fas fa-wallet text-8xl text-gold"></i>
             </div>
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 bg-gold/10 text-gold rounded-2xl flex items-center justify-center text-2xl shadow-inner">
+                <div
+                    class="w-14 h-14 bg-gold/10 text-gold rounded-2xl flex items-center justify-center text-2xl shadow-inner">
                     <i class="fas fa-coins"></i>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest font-cairo">إجمالي السيولة</p>
-                    <h3 class="text-3xl font-black text-navy">{{ number_format($stats['total_liquidity'], 0) }} <span class="text-xs font-normal text-gray-400 font-cairo">ر.ي</span></h3>
+                    <h3 class="text-1xl font-black text-gray-400">إجمالي السيولة</h3>
+                    {{-- <h3 class="text-3xl font-black text-navy">{{ number_format($stats['total_liquidity'], 0) }} <span class="text-xs font-normal text-gray-400 font-cairo">إجمالي</span></h3> --}}
+                </div>
+            </div>
+            <div class="mt-4 grid grid-cols-3 gap-2">
+                <div class="bg-emerald-50/70 border border-emerald-100 rounded-xl p-2.5 text-center">
+                    <p class="text-[9px] font-bold text-gray-400 font-cairo mb-1">ريال يمني</p>
+                    <p class="text-sm font-black text-navy">
+                        {{ number_format($stats['liquidity_by_currency']['YER'] ?? 0, 0) }}</p>
+                    <p class="text-[9px] font-bold text-emerald-600">ر.ي</p>
+                </div>
+                <div class="bg-blue-50/70 border border-blue-100 rounded-xl p-2.5 text-center">
+                    <p class="text-[9px] font-bold text-gray-400 font-cairo mb-1">ريال سعودي</p>
+                    <p class="text-sm font-black text-navy">
+                        {{ number_format($stats['liquidity_by_currency']['SAR'] ?? 0, 0) }}</p>
+                    <p class="text-[9px] font-bold text-blue-600">ر.س</p>
+                </div>
+                <div class="bg-amber-50/70 border border-amber-100 rounded-xl p-2.5 text-center">
+                    <p class="text-[9px] font-bold text-gray-400 font-cairo mb-1">دولار</p>
+                    <p class="text-sm font-black text-navy">
+                        {{ number_format($stats['liquidity_by_currency']['USD'] ?? 0, 0) }}</p>
+                    <p class="text-[9px] font-bold text-amber-600">$</p>
                 </div>
             </div>
             <p class="text-[10px] text-gray-500 mt-4  ">إجمالي الأرصدة المتوفرة في كافة الصناديق</p>
@@ -72,19 +94,27 @@
                 <i class="fas fa-file-signature text-8xl text-navy"></i>
             </div>
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 bg-navy/5 text-navy rounded-2xl flex items-center justify-center text-2xl shadow-inner">
+                <div
+                    class="w-14 h-14 bg-navy/5 text-navy rounded-2xl flex items-center justify-center text-2xl shadow-inner">
                     <i class="fas fa-tasks"></i>
                 </div>
                 <div>
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest font-cairo">اعتمادات معلقة</p>
-                    <h3 class="text-3xl font-black text-navy">{{ $stats['pending_budgets'] + $stats['pending_settlements'] + $stats['pending_vouchers'] }}</h3>
+                    <h3 class="text-3xl font-black text-navy">
+                        {{ $stats['pending_budgets'] + $stats['pending_settlements'] + $stats['pending_vouchers'] }}</h3>
                 </div>
             </div>
             <div class="mt-4 flex flex-wrap gap-2">
-                <span class="text-[9px] font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded">{{ $stats['pending_budgets'] }} طلبات عهد</span>
-                <span class="text-[9px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">{{ $stats['pending_settlements'] }} تصفيات</span>
-                @if($stats['pending_vouchers'] > 0)
-                    <span class="text-[9px] font-bold bg-red-100 text-red-700 px-2 py-0.5 rounded">{{ $stats['pending_vouchers'] }} تجاوز رصيد</span>
+                <span
+                    class="text-[9px] font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded">{{ $stats['pending_budgets'] }}
+                    طلبات عهد</span>
+                <span
+                    class="text-[9px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">{{ $stats['pending_settlements'] }}
+                    تصفيات</span>
+                @if ($stats['pending_vouchers'] > 0)
+                    <span
+                        class="text-[9px] font-bold bg-red-100 text-red-700 px-2 py-0.5 rounded">{{ $stats['pending_vouchers'] }}
+                        تجاوز رصيد</span>
                 @endif
             </div>
         </div>
@@ -95,7 +125,8 @@
                 <i class="fas fa-university text-8xl"></i>
             </div>
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-2xl shadow-inner">
+                <div
+                    class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-2xl shadow-inner">
                     <i class="fas fa-building"></i>
                 </div>
                 <div>
@@ -103,7 +134,8 @@
                     <h3 class="text-3xl font-extrabold text-purple-700">{{ $stats['centers_count'] }}</h3>
                 </div>
             </div>
-            <p class="text-[10px] text-gray-500 mt-4 font-almarai underline cursor-pointer hover:text-primary">إدارة المراكز والمدراء الفرعيين</p>
+            <p class="text-[10px] text-gray-500 mt-4 font-almarai underline cursor-pointer hover:text-primary">إدارة المراكز
+                والمدراء الفرعيين</p>
         </div>
     </div>
 
@@ -119,19 +151,23 @@
                 </div>
                 <div class="p-6 overflow-y-auto max-h-[600px] flex flex-col gap-4">
                     @php
-                        $pendingItems = array_merge($recent_budgets->toArray(), $recent_settlements->toArray(), $recent_pending_vouchers->toArray());
+                        $pendingItems = array_merge(
+                            $recent_budgets->toArray(),
+                            $recent_settlements->toArray(),
+                            $recent_pending_vouchers->toArray(),
+                        );
                         // Sort by created_at desc
-                        usort($pendingItems, function($a, $b) {
+                        usort($pendingItems, function ($a, $b) {
                             return strtotime($b['created_at']) - strtotime($a['created_at']);
                         });
                     @endphp
-                    @if(count($pendingItems) > 0)
-                        @foreach($pendingItems as $item)
-                            @php 
+                    @if (count($pendingItems) > 0)
+                        @foreach ($pendingItems as $item)
+                            @php
                                 $isBudget = isset($item['total_amount']);
                                 $isSettlement = isset($item['total_spent']);
                                 $isVoucher = isset($item['voucher_number']);
-                                
+
                                 if ($isBudget) {
                                     $typeLabel = 'طلب عهدة';
                                     $color = 'orange';
@@ -148,28 +184,33 @@
                                     $route = route('vouchers.show', $item['id']);
                                     $amount = $item['amount'] ?? 0;
                                 }
-                                
+
                                 $centerName = $item['center']['name'] ?? 'مركز غير معروف';
                             @endphp
-                          <a href="{{ $route }}" 
-                                           class="text-[10px] font-bold text-{{ $color }}-600 hover:underline">   
-                                    
-                            <div class="p-4 bg-gray-50 border border-gray-100 rounded-2xl transition-all hover:bg-white hover:shadow-md hover:border-{{ $color }}-200 relative group">
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-{{ $color }}-100 text-{{ $color }}-700 uppercase tracking-tighter">
-                                        {{ $typeLabel }}
-                                    </span>
-                                </div>
-                                <h4 class="text-sm font-bold text-gray-800 font-cairo mb-1 truncate">{{ $centerName }}</h4>
-                                <div class="flex justify-between items-end">
-                                    <div>
-                                        <p class="text-[10px] text-gray-500 mb-2">المبلغ: {{ number_format($amount, 2) }} ر.ي</p>
-                                        
+                            <a href="{{ $route }}"
+                                class="text-[10px] font-bold text-{{ $color }}-600 hover:underline">
+
+                                <div
+                                    class="p-4 bg-gray-50 border border-gray-100 rounded-2xl transition-all hover:bg-white hover:shadow-md hover:border-{{ $color }}-200 relative group">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span
+                                            class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-{{ $color }}-100 text-{{ $color }}-700 uppercase tracking-tighter">
+                                            {{ $typeLabel }}
+                                        </span>
                                     </div>
-                                    <span class="text-[9px] text-gray-400">{{ \Carbon\Carbon::parse($item['created_at'])->diffForHumans() }}</span>
+                                    <h4 class="text-sm font-bold text-gray-800 font-cairo mb-1 truncate">
+                                        {{ $centerName }}</h4>
+                                    <div class="flex justify-between items-end">
+                                        <div>
+                                            <p class="text-[10px] text-gray-500 mb-2">المبلغ:
+                                                {{ number_format($amount, 2) }} ر.ي</p>
+
+                                        </div>
+                                        <span
+                                            class="text-[9px] text-gray-400">{{ \Carbon\Carbon::parse($item['created_at'])->diffForHumans() }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                             </a>
+                            </a>
                         @endforeach
                     @else
                         <div class="text-center py-12 flex flex-col items-center">
@@ -191,7 +232,9 @@
                         <i class="fas fa-chart-line text-blue-600"></i>
                         <span>أداء المراكز الطلابية</span>
                     </h2>
-                    <a href="{{ route('centers.index') }}" class="text-xs font-bold text-gray-400 hover:text-primary transition-colors">عرض جميع المراكز <i class="fas fa-external-link-alt text-[9px]"></i></a>
+                    <a href="{{ route('centers.index') }}"
+                        class="text-xs font-bold text-gray-400 hover:text-primary transition-colors">عرض جميع المراكز <i
+                            class="fas fa-external-link-alt text-[9px]"></i></a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-right">
@@ -205,25 +248,30 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50 font-almarai">
-                            @foreach($centers_performance as $center)
+                            @foreach ($centers_performance as $center)
                                 <tr class="hover:bg-blue-50/20 transition-colors group">
                                     <td class="px-8 py-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-primary font-bold text-xs border border-gray-100 transition-colors group-hover:bg-white group-hover:shadow-sm">
+                                            <div
+                                                class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-primary font-bold text-xs border border-gray-100 transition-colors group-hover:bg-white group-hover:shadow-sm">
                                                 {{ mb_substr($center->name, 0, 1) }}
                                             </div>
                                             <div>
-                                                <span class="font-bold text-gray-700 block text-sm">{{ $center->name }}</span>
-                                                <span class="text-[10px] text-gray-400">كود: CTR-{{ $center->id }}</span>
+                                                <span
+                                                    class="font-bold text-gray-700 block text-sm">{{ $center->name }}</span>
+                                                <span class="text-[10px] text-gray-400">كود:
+                                                    CTR-{{ $center->id }}</span>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-8 py-4">
                                         <div class="flex flex-col items-center">
-                                            <span class="text-sm font-bold text-gray-800">{{ $center->students_count }}</span>
+                                            <span
+                                                class="text-sm font-bold text-gray-800">{{ $center->students_count }}</span>
                                             <div class="w-16 bg-gray-100 h-1 rounded-full mt-1 overflow-hidden">
                                                 @php $cp = $center->total_capacity > 0 ? ($center->students_count / $center->total_capacity) * 100 : 0; @endphp
-                                                <div class="bg-blue-500 h-full" style="width: {{ $cp }}%"></div>
+                                                <div class="bg-blue-500 h-full" style="width: {{ $cp }}%">
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -233,11 +281,13 @@
                                     <td class="px-8 py-4">
                                         <div class="flex items-center gap-1">
                                             <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                            <span class="text-[10px] font-bold text-gray-500 uppercase">عمليات اعتيادية</span>
+                                            <span class="text-[10px] font-bold text-gray-500 uppercase">عمليات
+                                                اعتيادية</span>
                                         </div>
                                     </td>
                                     <td class="px-8 py-4 text-left">
-                                        <a href="{{ route('centers.show', $center) }}" class="text-gray-300 hover:text-primary transition-colors">
+                                        <a href="{{ route('centers.show', $center) }}"
+                                            class="text-gray-300 hover:text-primary transition-colors">
                                             <i class="fas fa-chevron-left"></i>
                                         </a>
                                     </td>
@@ -245,7 +295,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    @if($centers_performance->isEmpty())
+                    @if ($centers_performance->isEmpty())
                         <div class="text-center py-20">
                             <i class="fas fa-folder-open text-gray-100 text-7xl mb-4"></i>
                             <p class="text-gray-400 font-cairo italic">لا توجد مراكز مسجلة حتى الآن</p>
@@ -265,7 +315,9 @@
                         <p class="text-[10px] text-gray-400">تتبع كافة التحركات الإدارية والمالية عبر النظام</p>
                     </div>
                 </div>
-                <a href="#" class="px-4 py-2 bg-gray-50 text-gray-600 rounded-xl text-xs font-bold font-cairo hover:bg-gray-100 transition-colors">عرض السجل الكامل</a>
+                <a href="#"
+                    class="px-4 py-2 bg-gray-50 text-gray-600 rounded-xl text-xs font-bold font-cairo hover:bg-gray-100 transition-colors">عرض
+                    السجل الكامل</a>
             </div>
         </div>
     </div>

@@ -58,7 +58,7 @@
                                     <select name="items[0][fund_id]" required
                                         class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none">
                                         @foreach($funds as $fund)
-                                            <option value="{{ $fund->id }}">{{ $fund->name }}</option>
+                                            <option value="{{ $fund->id }}">{{ $fund->name }} ({{ $fund->currency_label }})</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -111,7 +111,7 @@
                 <div class="md:col-span-4">
                     <select name="items[${itemIndex}][fund_id]" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none">
                         @foreach($funds as $fund)
-                            <option value="{{ $fund->id }}">{{ $fund->name }}</option>
+                            <option value="{{ $fund->id }}">{{ $fund->name }} ({{ $fund->currency_label }})</option>
                         @endforeach
                     </select>
                 </div>

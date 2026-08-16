@@ -55,7 +55,7 @@
                                     class="w-full px-5 py-4 rounded-2xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none font-almarai bg-gray-50/50">
                                     @foreach($funds as $fund)
                                         <option value="{{ $fund->id }}">{{ $fund->name }}
-                                            ({{ number_format($fund->balance, 2) }} ر.ي)</option>
+                                            ({{ number_format($fund->balance, 2) }} {{ $fund->currency_symbol }})</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -72,8 +72,7 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">المبلغ
-                                (ر.ي)</label>
+                            <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">المبلغ</label>
                             <input type="number" name="amount" step="0.01" placeholder="0.00" required
                                 class="w-full px-5 py-4 rounded-2xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none   text-xl font-bold text-primary bg-gray-50/50 text-center">
                         </div>
@@ -159,11 +158,17 @@
                 "{{ $fund->id }}": {{ (float)$fund->balance }},
             @endforeach
         };
+        const fundCurrencies = {
+            @foreach($funds as $fund)
+                "{{ $fund->id }}": "{{ $fund->currency_symbol }}",
+            @endforeach
+        };
         function checkBalance() {
     const type = typeSelect.value;
     const fundId = fundSelect.value;
     const amount = parseFloat(amountInput.value) || 0;
     const balance = parseFloat(fundBalances[fundId]) || 0;
+    const currencySymbol = fundCurrencies[fundId] || 'ر.ي';
 
     // إزالة التنبيه السابق
     amountInput.classList.remove(
@@ -190,10 +195,10 @@
 
         warning.innerHTML = `
             ⚠️ تنبيه: هذه العملية ستؤدي إلى عجز في الصندوق.<br>
-            الرصيد الحالي: <strong>${balance.toLocaleString()} ر.ي</strong><br>
-            قيمة العجز: <strong style="color:#dc2626;">-${deficit.toLocaleString()} ر.ي</strong><br>
+            الرصيد الحالي: <strong>${balance.toLocaleString()} ${currencySymbol}</strong><br>
+            قيمة العجز: <strong style="color:#dc2626;">-${deficit.toLocaleString()} ${currencySymbol}</strong><br>
             الرصيد بعد الحفظ:
-            <strong style="color:#dc2626;">${newBalance.toLocaleString()} ر.ي</strong>
+            <strong style="color:#dc2626;">${newBalance.toLocaleString()} ${currencySymbol}</strong>
         `;
 
         amountInput.parentNode.appendChild(warning);

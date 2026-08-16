@@ -35,6 +35,11 @@
                     <p class="text-[10px] text-gray-500 font-bold mb-1">السيولة (الصناديق)</p>
                     <h3 class="text-xl font-bold text-navy font-almarai">{{ number_format($stats['total_liquidity'], 2) }}
                     </h3>
+                    <div class="flex gap-1.5 mt-2">
+                        <span class="text-[8px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 px-1.5 py-0.5 rounded-full">ر.ي {{ number_format($stats['funds_by_currency']['YER'] ?? 0, 0) }}</span>
+                        <span class="text-[8px] font-bold bg-blue-50 text-blue-700 border border-blue-100 px-1.5 py-0.5 rounded-full">ر.س {{ number_format($stats['funds_by_currency']['SAR'] ?? 0, 0) }}</span>
+                        <span class="text-[8px] font-bold bg-amber-50 text-amber-700 border border-amber-100 px-1.5 py-0.5 rounded-full">$ {{ number_format($stats['funds_by_currency']['USD'] ?? 0, 0) }}</span>
+                    </div>
                 </div>
                 <div class="bg-navy/10 p-3 rounded-xl text-navy">
                     <i class="fas fa-wallet text-xl"></i>

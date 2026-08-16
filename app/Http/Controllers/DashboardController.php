@@ -117,6 +117,11 @@ class DashboardController extends Controller
 
             'centers_count' => Center::count(),
             'total_liquidity' => Fund::sum('balance'),
+            'liquidity_by_currency' => Fund::selectRaw('currency, SUM(balance) as total')
+                ->groupBy('currency')
+                ->pluck('total', 'currency')
+                ->map(fn($v) => round((float) $v, 2))
+                ->all(),
             'pending_budgets' => MonthlyBudget::where('status', 'confirmed')->count(),
             'pending_settlements' => MonthlySettlement::where('status', 'submitted')->count(),
             'pending_vouchers' => Voucher::where('status', 'pending_approval')->count(),
@@ -166,6 +171,12 @@ class DashboardController extends Controller
                 $q->where('center_id', $centerId);
             })->where('status', 'active')->count(),
             'center_funds' => Fund::where('center_id', $centerId)->sum('balance'),
+            'funds_by_currency' => Fund::where('center_id', $centerId)
+                ->selectRaw('currency, SUM(balance) as total')
+                ->groupBy('currency')
+                ->pluck('total', 'currency')
+                ->map(fn($v) => round((float) $v, 2))
+                ->all(),
             'pending_approval' => Student::where('center_id', $centerId)->where('is_profile_approved', false)->count(),
             'on_leave_count' => Leave::whereHas('student', fn($q) => $q->where('center_id', $centerId))
                 ->whereNull('actual_return_date')->count(),
@@ -180,6 +191,7 @@ class DashboardController extends Controller
         $stats['remaining_seats'] = $stats['total_capacity'] - $stats['occupied_seats'];
 
         $recent_vouchers = Voucher::where('center_id', $centerId)
+            ->where('status', '!=', 'rejected')
             ->latest()
             ->take(3)
             ->get();
@@ -269,6 +281,12 @@ class DashboardController extends Controller
 
         $stats = [
             'total_liquidity' => Fund::where('center_id', $centerId)->sum('balance'),
+            'funds_by_currency' => Fund::where('center_id', $centerId)
+                ->selectRaw('currency, SUM(balance) as total')
+                ->groupBy('currency')
+                ->pluck('total', 'currency')
+                ->map(fn($v) => round((float) $v, 2))
+                ->all(),
             'total_revenues' => (clone $monthlyVouchers)->where('type', 'receipt')->where('status', 'approved')->sum('amount'), // General only
             'nutrition_total_revenues' => FoodVoucher::where('center_id', $centerId)->where('type', 'receipt')->where('status', 'active')->sum('amount'), // Nutrition only
             'total_expenses' => (clone $monthlyVouchers)->whereIn('type', ['payment', 'salary'])->where('status', 'approved')->sum('amount'), // General only
@@ -284,6 +302,7 @@ class DashboardController extends Controller
 
         $recent_vouchers = Voucher::with('fund')
             ->where('center_id', $centerId)
+            ->where('status', '!=', 'rejected')
             ->whereMonth('date', $month)
             ->whereYear('date', $year)
             ->latest()

@@ -109,6 +109,7 @@
                                                     <div>
                                                         <h3 class="text-md font-bold text-gray-800 font-cairo">{{ $fund->name }}</h3>
                                                         <p class="text-[10px] text-gray-500 font-almarai mt-0.5">{{ $fundVouchers->count() }} حركة مالية</p>
+                                                        <span class="text-[10px] text-emerald-700 font-bold font-cairo">{{ $fund->currency_label }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -116,15 +117,15 @@
                                             <div class="flex gap-6 items-center" @click="expanded = !expanded">
                                                 <div class="hidden md:block text-right">
                                                     <p class="text-[10px] text-green-500 font-almarai">مقبوض (+)</p>
-                                                    <p class="text-sm font-bold text-green-600  ">{{ number_format($totalIncome, 2) }}</p>
+                                                    <p class="text-sm font-bold text-green-600  ">{{ number_format($totalIncome, 2) }} {{ $fund->currency_symbol }}</p>
                                                 </div>
                                                 <div class="hidden md:block text-right">
                                                     <p class="text-[10px] text-red-500 font-almarai">مصروف (-)</p>
-                                                    <p class="text-sm font-bold text-red-600  ">{{ number_format($totalExpense, 2) }}</p>
+                                                    <p class="text-sm font-bold text-red-600  ">{{ number_format($totalExpense, 2) }} {{ $fund->currency_symbol }}</p>
                                                 </div>
                                                 <div class="text-right bg-gray-50 px-4 py-2 rounded-xl border border-gray-100 min-w-[120px]">
                                                     <p class="text-[10px] text-gray-500 font-almarai">الرصيد</p>
-                                                    <p class="text-md font-bold text-gray-800  ">{{ number_format($fund->balance, 2) }}</p>
+                                                    <p class="text-md font-bold text-gray-800  ">{{ number_format($fund->balance, 2) }} {{ $fund->currency_symbol }}</p>
                                                 </div>
                                                 <div class="text-gray-300">
                                                     <i class="fas fa-chevron-down transition-transform duration-300" :class="{'rotate-180': expanded}"></i>
@@ -143,7 +144,7 @@
                                                                 <th class="px-6 py-3 font-cairo">التاريخ</th>
                                                                 <th class="px-6 py-3 font-cairo">النوع</th>
                                                                 <th class="px-6 py-3 font-cairo">مناولة</th>
-                                                                <th class="px-6 py-3 font-cairo">المبلغ (ر.ي)</th>
+                                                                <th class="px-6 py-3 font-cairo">المبلغ</th>
                                                                 <th class="px-6 py-3 font-cairo text-center">المتبقي</th>
                                                                 <th class="px-6 py-3 font-cairo">البيان</th>
                                                             </tr>
@@ -180,7 +181,7 @@
                                                                     </td>
                                                                     <td class="px-6 py-3 font-bold   text-sm {{ $isIncoming ? 'text-green-600' : 'text-red-600' }}"
                                                                         dir="ltr">
-                                                                        {{ $isIncoming ? '+' : '-' }}{{ number_format($voucher->amount, 2) }}
+                                                                        {{ $isIncoming ? '+' : '-' }}{{ number_format($voucher->amount, 2) }} {{ $fund->currency_symbol }}
                                                                     </td>
                                                                     <td class="px-6 py-3 text-center">
                                                                         @if($voucher->student)
@@ -297,6 +298,7 @@
                                         <h3 class="text-lg font-bold text-gray-800 font-cairo">{{ $fund->name }}</h3>
                                         <p class="text-xs text-gray-500 font-almarai mt-1">{{ $fundVouchers->count() }} حركة مالية
                                             هذا الشهر</p>
+                                        <span class="text-[11px] text-emerald-700 font-bold font-cairo">{{ $fund->currency_label }}</span>
                                     </div>
                                 </div>
 
@@ -304,16 +306,19 @@
                                     <div class="text-center md:text-right">
                                         <p class="text-xs text-green-500 font-almarai mb-1">تم قبضه (+)</p>
                                         <p class="text-lg font-bold text-green-600  ">{{ number_format($totalIncome, 2) }}
+                                            <span class="text-xs font-normal text-gray-400">{{ $fund->currency_symbol }}</span>
                                         </p>
                                     </div>
                                     <div class="text-center md:text-right">
                                         <p class="text-xs text-red-500 font-almarai mb-1">تم صرفه (-)</p>
                                         <p class="text-lg font-bold text-red-600  ">{{ number_format($totalExpense, 2) }}
+                                            <span class="text-xs font-normal text-gray-400">{{ $fund->currency_symbol }}</span>
                                         </p>
                                     </div>
                                     <div class="text-center md:text-right bg-gray-100 px-4 py-2 rounded-xl">
                                         <p class="text-xs text-gray-500 font-almarai mb-1">الرصيد المتاح</p>
                                         <p class="text-lg font-bold text-gray-800  ">{{ number_format($fund->balance, 2) }}
+                                            <span class="text-xs font-normal text-gray-400">{{ $fund->currency_symbol }}</span>
                                         </p>
                                     </div>
                                     <div class="text-gray-400 self-center border-r border-gray-200 pr-6 mr-2">
@@ -334,7 +339,7 @@
                                                     <th class="px-6 py-3 font-cairo">التاريخ</th>
                                                     <th class="px-6 py-3 font-cairo">النوع</th>
                                                     <th class="px-6 py-3 font-cairo">مناولة</th>
-                                                    <th class="px-6 py-3 font-cairo">المبلغ (ر.ي)</th>
+                                                    <th class="px-6 py-3 font-cairo">المبلغ</th>
                                                     <th class="px-6 py-3 font-cairo text-center">المتبقي</th>
                                                     <th class="px-6 py-3 font-cairo">البيان</th>
                                                 </tr>

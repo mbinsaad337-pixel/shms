@@ -54,7 +54,7 @@
                     <p class="text-sm text-gray-400 font-almarai mb-1">المبلغ الإجمالي</p>
                     <p class="text-2xl font-bold text-gray-800  ">
                         {{ number_format($voucher->amount, 2) }}
-                        <span class="text-sm text-gray-500 font-cairo">ر.ي</span>
+                        <span class="text-sm text-gray-500 font-cairo">{{ $voucher->fund->currency_symbol ?? 'ر.ي' }}</span>
                     </p>
                 </div>
                 <div class="p-6 border-l border-gray-50 last:border-0">
@@ -63,7 +63,8 @@
                 </div>
                 <div class="p-6 border-l border-gray-50 last:border-0">
                     <p class="text-sm text-gray-400 font-almarai mb-1">الصندوق</p>
-                    <p class="text-lg font-bold text-gray-800 font-cairo">{{ $voucher->fund->name ?? '-' }}</p>
+                    <p class="text-lg font-bold text-gray-800 font-cairo">{{ $voucher->fund->name ?? '-' }}
+                        @if($voucher->fund)<span class="text-xs font-bold text-emerald-700">({{ $voucher->fund->currency_label }})</span>@endif</p>
                 </div>
                 <div class="p-6 border-l border-gray-50 last:border-0">
                     <p class="text-sm text-gray-400 font-almarai mb-1">المُنشئ</p>
@@ -127,12 +128,16 @@
                                 <div class="bg-blue-50/50 rounded-2xl p-4 border border-blue-100 flex items-center justify-between">
                                     <div>
                                         <p class="text-sm text-gray-500 mb-1">صندوق المصدر</p>
-                                        <p class="font-bold text-gray-800">{{ $voucher->fund->name }}</p>
+                                        <p class="font-bold text-gray-800">{{ $voucher->fund->name }}
+                                            <span class="text-[10px] font-bold text-emerald-700">{{ $voucher->fund->currency_label }}</span>
+                                        </p>
                                     </div>
                                     <i class="fas fa-arrow-left text-blue-300 mx-2"></i>
                                     <div>
                                         <p class="text-sm text-gray-500 mb-1">صندوق الوجهة</p>
-                                        <p class="font-bold text-blue-700">{{ $voucher->targetFund->name }}</p>
+                                        <p class="font-bold text-blue-700">{{ $voucher->targetFund->name }}
+                                            <span class="text-[10px] font-bold text-emerald-700">{{ $voucher->targetFund->currency_label }}</span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
