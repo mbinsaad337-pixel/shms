@@ -760,12 +760,21 @@
                                         </td>
                                         <td class="p-4 text-center">
                                             <div class="flex items-center justify-center gap-1.5">
-                                                <a href="{{ route('annual-rollover.show-archive', $arc->id) }}"
-                                                    target="_blank"
-                                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-navy/10 hover:bg-navy text-navy hover:text-navy rounded-xl text-xs font-bold font-cairo transition-all shadow-sm">
-                                                    <i class="fas fa-external-link-alt text-[10px]"></i>
-                                                    <span>عرض التفاصيل</span>
-                                                </a>
+                                                @if ($arc->module === 'graduates')
+                                                    <a href="{{ route('annual-rollover.preview-graduate', $arc->id) }}"
+                                                        target="_blank"
+                                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-navy/10 hover:bg-navy text-navy hover:text-navy rounded-xl text-xs font-bold font-cairo transition-all shadow-sm">
+                                                        <i class="fas fa-external-link-alt text-[10px]"></i>
+                                                        <span>عرض الملف الشخصي</span>
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('annual-rollover.show-archive', $arc->id) }}"
+                                                        target="_blank"
+                                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-navy/10 hover:bg-navy text-navy hover:text-navy rounded-xl text-xs font-bold font-cairo transition-all shadow-sm">
+                                                        <i class="fas fa-external-link-alt text-[10px]"></i>
+                                                        <span>عرض التفاصيل</span>
+                                                    </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -803,6 +812,7 @@
                                     <th class="p-3">المركز</th>
                                     <th class="p-3">القطاعات المشمولة</th>
                                     <th class="p-3">ملخص السجلات المؤرشفة</th>
+                                    <th class="p-3 text-center">إجراءات</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 text-xs font-almarai">
@@ -836,6 +846,19 @@
                                             @else
                                                 <span class="text-gray-400">-</span>
                                             @endif
+                                        </td>
+                                        <td class="p-3">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <form action="{{ route('annual-rollover.undo', $r->id) }}" method="POST"
+                                                    onsubmit="return confirm('هل أنت متأكد من إلغاء ترحيل هذه السنة؟ سيتم استعادة جميع السجلات والملفات المؤرشفة إلى حالتها الأصلية.');">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="px-3 py-1.5 bg-red-50 hover:bg-red-600 hover:text-white text-red-600 text-[10px] font-bold rounded-xl font-cairo transition-all flex items-center gap-1 shadow-sm">
+                                                        <i class="fas fa-undo"></i>
+                                                        <span>إلغاء الترحيل</span>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -19,10 +19,12 @@ class AnnualArchive extends Model
         'student_id',
         'student_name',
         'data',
+        'archived_files',
     ];
 
     protected $casts = [
         'data' => 'array',
+        'archived_files' => 'array',
         'record_date' => 'datetime',
         'amount' => 'decimal:2',
     ];

@@ -213,9 +213,9 @@ class VoucherController extends Controller
     }
     public function destroy(Voucher $voucher)
     {
-        if ($voucher->isLockedByApprovedSettlement()) {
-            return back()->with('error', 'لا يمكن حذف سند ضمن شهر تم اعتماد تصفيته المالية.');
-        }
+        // if ($voucher->isLockedByApprovedSettlement()) {
+        //     return back()->with('error', 'لا يمكن حذف سند ضمن شهر تم اعتماد تصفيته المالية.');
+        // }
 
         DB::transaction(function () use ($voucher) {
             if ($voucher->status === 'approved') {

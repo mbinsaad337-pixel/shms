@@ -1,9 +1,11 @@
 @extends ('layouts.app')
 @php
     /** @var \App\Models\Student $student */
+    $preview = $preview ?? false;
+    $previewArchive = $previewArchive ?? null;
 @endphp
 
-@section('title', 'ملف الطالب: ' . $student->name_ar)
+@section('title', ($preview ? 'معاينة أرشيف: ' : 'ملف الطالب: ') . $student->name_ar)
 
 @section('content')
     <div class="container mx-auto px-4 py-8">
@@ -17,7 +19,7 @@
             @endphp
 
             <!-- Admin Actions & Alerts -->
-            @if (!auth()->user()->hasRole('student') && !auth()->user()->hasRole('super-admin'))
+            @if (!$preview && !auth()->user()->hasRole('student') && !auth()->user()->hasRole('super-admin'))
                 <div class="mb-6 flex flex-col gap-6">
                     @if ($student->user->profile_completed && !$student->is_profile_approved)
                         <div
@@ -94,7 +96,7 @@
                         </div>
                     </div>
                 </div>
-            @elseif(auth()->user()->hasRole('super-admin'))
+            @elseif(!$preview && auth()->user()->hasRole('super-admin'))
                 <div class="mb-6 flex justify-end">
                     <a href="{{ route('students.export-pdf', $student) }}"
                         class="bg-white text-navy border-2 border-navy px-6 py-3 rounded-xl hover:bg-navy/5 font-bold font-cairo shadow-md flex items-center gap-2">
@@ -103,6 +105,7 @@
                 </div>
             @else
                 <!-- Student Self-Service Actions -->
+                @if (!$preview)
                 <div class="mb-8 flex flex-wrap gap-4 no-print">
                     @if ($student->can_edit_profile)
                         <a href="{{ route('profile.complete.view') }}"
@@ -144,6 +147,35 @@
                         @endif
                     @endif
                 </div>
+                @endif
+            @endif
+
+            <!-- Preview Banner -->
+            @if ($preview && $previewArchive)
+                <div class="mb-6 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                            <i class="fas fa-archive text-amber-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-black text-amber-800 font-cairo">وضع المعاينة — سجل مؤرشف</h3>
+                            <p class="text-xs text-amber-600 font-almarai">
+                                بيانات هذا الطالب مؤرشفة من السنة {{ $previewArchive->year }}
+                                &bull; الأرشيف #{{ str_pad($previewArchive->id, 6, '0', STR_PAD_LEFT) }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <a href="{{ route('annual-rollover.export-archive-pdf', $previewArchive) }}" target="_blank"
+                            class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl text-xs font-bold font-cairo flex items-center gap-2 transition-all border border-red-200">
+                            <i class="fas fa-file-pdf"></i> تصدير أرشيف PDF
+                        </a>
+                        <a href="{{ route('annual-rollover.index', $previewArchive) }}"
+                            class="px-4 py-2 bg-white hover:bg-gray-50 text-navy rounded-xl text-xs font-bold font-cairo flex items-center gap-2 transition-all border border-gray-200">
+                            <i class="fas fa-arrow-right"></i> العودة للأرشيف
+                        </a>
+                    </div>
+                </div>
             @endif
 
             <!-- Header Profile Card -->
@@ -151,7 +183,7 @@
                 class="bg-white rounded-[2rem] shadow-sm border border-gray-100 p-8 mb-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden group">
                 <div class="relative z-10 flex flex-col items-center gap-3">
                     <div class="w-32 h-32 bg-gray-50 rounded-full border-4 border-gold shadow-lg overflow-hidden shrink-0">
-                        <img src="{{ $student->photo ? asset('storage/' . $student->photo) : ($student->user->avatar ? asset('storage/' . $student->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($student->name_ar) . '&background=004274&color=fff&size=128') }}"
+                        <img src="{{ $student->photo ? asset('storage/' . $student->photo) : (optional($student->user)->avatar ? asset('storage/' . optional($student->user)->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($student->name_ar) . '&background=004274&color=fff&size=128') }}"
                             alt="Profile" class="w-full h-full object-cover">
                     </div>
                 </div>
@@ -551,6 +583,7 @@
     </div>
 
     <!-- Modals -->
+    @if (!$preview)
     <!-- Violation Modal -->
     <div id="violationModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
         <div class="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl">
@@ -660,6 +693,7 @@
             </form>
         </div>
     </div>
+    @endif
 
     @include('partials.print_footer')
 

@@ -131,8 +131,10 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         Route::get('annual-rollover', [\App\Http\Controllers\AnnualRolloverController::class, 'index'])->name('annual-rollover.index');
         Route::post('annual-rollover', [\App\Http\Controllers\AnnualRolloverController::class, 'store'])->name('annual-rollover.store');
         Route::get('annual-rollover/archive/{archive}', [\App\Http\Controllers\AnnualRolloverController::class, 'showArchive'])->name('annual-rollover.show-archive');
+        Route::get('annual-rollover/archive/{archive}/preview-graduate', [\App\Http\Controllers\AnnualRolloverController::class, 'previewGraduate'])->name('annual-rollover.preview-graduate');
         Route::get('annual-rollover/archive/{archive}/export-pdf', [\App\Http\Controllers\AnnualRolloverController::class, 'exportArchivePdf'])->name('annual-rollover.export-archive-pdf');
         Route::get('annual-rollover/export-pdf', [\App\Http\Controllers\AnnualRolloverController::class, 'exportPdf'])->name('annual-rollover.export-pdf');
+        Route::post('annual-rollover/{rollover}/undo', [\App\Http\Controllers\AnnualRolloverController::class, 'undoRollover'])->name('annual-rollover.undo');
     });
 
     // Students Resource - access control is handled inside the controller methods
