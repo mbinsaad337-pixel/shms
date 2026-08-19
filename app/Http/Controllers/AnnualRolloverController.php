@@ -1270,6 +1270,7 @@ class AnnualRolloverController extends Controller
     $varName => $model,
     'preview' => true,
     'previewArchive' => $archive,
+    'students' => collect(),
         ];
 
         if ($subType === 'settlement' && $module === 'financial') {
@@ -1396,6 +1397,9 @@ class AnnualRolloverController extends Controller
                     });
             }
         }
+
+        
+
 
         if (($subType === 'food_invoice' || $subType === 'food_voucher') && $module === 'nutrition') {
             $supplierId = $data['supplier_id'] ?? null;

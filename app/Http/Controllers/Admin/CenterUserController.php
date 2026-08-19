@@ -75,6 +75,7 @@ class CenterUserController extends Controller
             'cooperative-supervisor',
             'student-supervisor',
             'circle-teacher',
+            'center-guard',
             'student'
         ])->get();
 
@@ -135,6 +136,7 @@ class CenterUserController extends Controller
             'cooperative-supervisor',
             'student-supervisor',
             'circle-teacher',
+            'center-guard',
             'student'
         ])->get();
 

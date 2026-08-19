@@ -2,6 +2,7 @@
 @section('title', 'تفاصيل السند ' . $voucher->voucher_number)
 
 @section('content')
+    @php $preview = $preview ?? false; $previewArchive = $previewArchive ?? null; @endphp
     <div class="p-6 max-w-2xl mx-auto">
         @include('partials.print_header', ['title' => $voucher->getTypeLabel() . ' - ' . $voucher->voucher_number, 'number' => $voucher->voucher_number])
 

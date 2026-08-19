@@ -63,10 +63,14 @@
                     </div>
                 </div>
             </div>
+            @php
+
+            $logopath=auth()->user()->center?->logo ? 'storage/' . auth()->user()->center->logo : 'images/logos/alawayil_logo.png';
+            @endphp
 
             <!-- Centered Logos Group -->
             <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-10 py-1">
-                <img src="{{ asset('images/logos/alawayil_logo.png') }}" alt="Alawayil Logo"
+                <img src="{{ asset($logopath) }}" alt="Alawayil Logo"
                     class="h-14 w-auto drop-shadow-md">
                 <div class="h-10 w-px bg-gray-100"></div>
                 <img src="{{ asset('images/logos/scs_logo.png') }}" alt="SCS Logo"

@@ -2,6 +2,7 @@
 @section ('title', 'تقرير التصفية المالية')
 
 @section ('content')
+    @php $preview = $preview ?? false; $previewArchive = $previewArchive ?? null; @endphp
     <div class="p-4 md:p-8 max-w-6xl mx-auto">
         <!-- Web Action Bar -->
         <div class="flex items-center justify-between mb-8 no-print">

@@ -132,6 +132,12 @@
                                 <i class="fas fa-hourglass-half text-amber-500 animate-pulse"></i>
                                 طلب التخرج قيد المراجعة
                             </div>
+                        @elseif($student->graduation_request_status === 'approved')
+                            {{-- تمت الموافقة --}}
+                            <div class="flex items-center gap-3 bg-green-50 border border-green-200 text-green-800 px-6 py-3 rounded-2xl font-cairo font-bold shadow-sm">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                                تمت الموافقة على طلب التخرج
+                            </div>
                         @elseif($student->graduation_request_status === 'rejected')
                             {{-- مرفوض - يمكن إعادة التقديم --}}
                             <a href="{{ route('graduation.form', $student) }}"
@@ -319,7 +325,7 @@
                     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 overflow-hidden">
                         <h3
                             class="text-xl font-bold font-cairo text-gray-800 mb-6 flex items-center gap-3 border-b border-gray-50 pb-4">
-                            <i class="fas fa-id-badge text-primary"></i> البيانات الشخصية والعدلية
+                            <i class="fas fa-id-badge text-primary"></i> البيانات الشخصية 
                         </h3>
                         <table class="w-full font-almarai text-sm border-collapse">
                             <tr>
@@ -351,15 +357,22 @@
                                     الدم:</th>
                                 <td class="text-right font-bold text-amber-600   py-3 border-b border-gray-50">
                                     {{ $student->blood_type ?? '-' }}</td>
+                                    
+
+                                  
                             </tr>
                             <tr>
-                                <th class="text-right text-gray-400 font-normal py-3">العنوان:</th>
-                                <td colspan="3" class="text-right font-bold text-gray-800 py-3">
+                                <th class="text-right text-gray-400 font-normal py-3 border-b border-gray-50">العنوان:</th>
+                                <td class="text-right font-bold text-gray-800 py-3 border-b border-gray-50">
                                     {{ $student->governorate ?? '-' }} - {{ $student->district ?? '-' }}
                                     @if ($student->address)
                                         ({{ $student->address }})
                                     @endif
                                 </td>
+                                <th class="text-right text-gray-400 font-normal py-3 border-b border-gray-50 px-4">الوضيفة:</th>
+                                <td class="text-right font-bold text-gray-800 py-3 border-b border-gray-50">
+                                    {{ $student->job_title ?? '-' }}</td>
+                                
                             </tr>
                         </table>
                     </div>
@@ -565,7 +578,7 @@
                         <h3 class="text-lg font-bold font-cairo text-gray-800 mb-6 border-b border-gray-50 pb-4"><i
                                 class="fas fa-folder-open text-amber-500 ml-2"></i> الوثائق المرفوعة</h3>
                         <div class="grid grid-cols-1 gap-3 font-almarai text-xs">
-                            @foreach (['id_card_file' => 'البطاقة الشخصية', 'certificate_file' => 'شهادة المؤهل', 'university_card_file' => 'البطاقة الجامعية', 'photo' => 'الصورة الشخصية'] as $key => $title)
+                            @foreach (['id_card_file' => 'البطاقة الشخصية', 'certificate_file' => 'شهادة المؤهل', 'university_card_file' => 'البطاقة الجامعية', 'photo' => 'الصورة الشخصية', 'other_file' => 'مستندات أخرى'] as $key => $title)
                                 @if ($student->$key)
                                     <a href="{{ asset('storage/' . $student->$key) }}" target="_blank"
                                         class="flex items-center justify-between p-4 bg-gray-50 hover:bg-gold/10 rounded-2xl transition-all group">
@@ -573,6 +586,13 @@
                                         <i class="fas fa-external-link-alt text-gray-300 group-hover:text-gold"></i>
                                     </a>
                                 @endif
+                            @endforeach
+                            @foreach ($student->graduationAttachments as $attachment)
+                                <a href="{{ asset('storage/' . $attachment->file_path) }}" target="_blank"
+                                    class="flex items-center justify-between p-4 bg-gray-50 hover:bg-gold/10 rounded-2xl transition-all group">
+                                    <span class="font-bold text-gray-700">{{ $attachment->name ?? 'مستند التخرج' }}</span>
+                                    <i class="fas fa-external-link-alt text-gray-300 group-hover:text-gold"></i>
+                                </a>
                             @endforeach
                         </div>
                     </div>

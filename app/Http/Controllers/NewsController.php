@@ -6,6 +6,7 @@ use App\Models\News;
 use App\Models\Center;
 use App\Models\Student;
 use App\Models\User;
+use App\Models\AnnualArchive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -36,7 +37,7 @@ class NewsController extends Controller
         $stats = [
             'centers'  => Center::where('is_active', true)->count(),
             'students' => Student::where('status', 'residing')->count(),
-            'graduates'=> Student::where('status', 'graduated')->count(),
+            'graduates'=> AnnualArchive::where('module', 'graduates')->count(),
             'news'     => News::where('is_published', true)->count(),
         ];
 

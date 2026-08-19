@@ -2,6 +2,7 @@
 @section ('title', 'تفاصيل الاشتراك')
 
 @section ('content')
+    @php $preview = $preview ?? false; $previewArchive = $previewArchive ?? null; @endphp
     <div class="p-6 max-w-4xl mx-auto">
 
         @include ('partials.print_header', (array)['title' => 'اشتراك تغذية: ' . ($subscription->student?->name_ar ?? 'طالب غير موجود'), 'number' => 'SUB-' . $subscription->id])

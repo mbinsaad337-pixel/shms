@@ -139,6 +139,7 @@ class PermissionTranslationHelper
             'cooperative-supervisor' => 'مشرف الطلاب التعاوني',
             'student-supervisor' => 'مشرف الطلاب',
             'student' => 'طالب',
+            'center-guard' => 'حارس المركز',
         ];
 
         return $translations[$roleName] ?? $roleName;

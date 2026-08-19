@@ -369,5 +369,8 @@ class RoleAndPermissionSeeder extends Seeder
 
         $student = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'student', 'guard_name' => 'web']);
         // Students might have limited permissions like 'view-own-profile' or 'request-leave'
+
+        $centerGuard = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'center-guard', 'guard_name' => 'web']);
+        // Center guard has no permissions — just a staff label
     }
 }

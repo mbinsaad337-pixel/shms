@@ -2,6 +2,7 @@
 @section('title', 'كشف حساب: ' . $supplier->name)
 
 @section('content')
+    @php $preview = $preview ?? false; $previewArchive = $previewArchive ?? null; @endphp
     <div class="p-6 max-w-5xl mx-auto">
 
         @include('partials.print_header', (array)['title' => 'كشف حساب مورد: ' . $supplier->name, 'number' => 'SUP-' . $supplier->id])

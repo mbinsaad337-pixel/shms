@@ -3,6 +3,7 @@
 @section('title', 'تفاصيل النادي وإدارة الأعضاء')
 
 @section('content')
+    @php $preview = $preview ?? false; $previewArchive = $previewArchive ?? null; @endphp
     <div class="container mx-auto px-6 py-8">
         <!-- Header Section -->
         <div class="mb-8 flex justify-between items-center bg-white p-8 rounded-3xl border-l-8 border-gold shadow-sm">
@@ -17,12 +18,16 @@
                 </div>
             </div>
             <div class="flex gap-4">
+              @if(!$preview)
                 <a href="{{ route('clubs.index') }}"
                     class="px-6 py-4 bg-gray-50 text-navy rounded-2xl hover:bg-gray-100 font-cairo font-bold transition-all flex items-center gap-2 border border-gray-100">
                     <i class="fas fa-arrow-right text-xs"></i>
                     <span>العودة للأندية</span>
                 </a>
-                @if(!auth()->user()->hasRole('super-admin'))
+                @elseif()
+                @endif
+
+                @if(!auth()->user()->hasRole('super-admin') && !$preview)
                 <button onclick="openMemberModal()"
                     class="px-8 py-4 bg-navy text-white rounded-2xl hover:bg-navy/90 shadow-xl font-cairo font-bold transition-all transform hover:-translate-y-1 flex items-center gap-3 group">
                     <i class="fas fa-user-plus text-gold group-hover:scale-110 transition-transform"></i>
@@ -109,7 +114,7 @@
                                             {{ $member->joined_at->format('Y/m/d') }}
                                         </td>
                                         <td class="px-10 py-6">
-                                            @if(!auth()->user()->hasRole('super-admin'))
+                                            @if(!auth()->user()->hasRole('super-admin') && !$preview)
                                                 <form
                                                     action="{{ route('clubs.members.remove', [$club->id, $member->student->id]) }}"
                                                     method="POST"
