@@ -59,12 +59,12 @@ class Voucher extends Model
 
     public function fund()
     {
-        return $this->belongsTo(Fund::class);
+        return $this->belongsTo(Fund::class)->withTrashed();
     }
 
     public function targetFund()
     {
-        return $this->belongsTo(Fund::class, 'target_fund_id');
+        return $this->belongsTo(Fund::class, 'target_fund_id')->withTrashed();
     }
 
     public function creator()

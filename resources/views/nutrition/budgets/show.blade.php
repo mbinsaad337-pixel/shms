@@ -8,9 +8,11 @@
 
         <div class="flex items-center justify-between mb-6 no-print">
             <div class="flex items-center gap-4">
+              @if(!$preview)
                 <a href="{{ route('nutrition.budgets.index') }}" class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-arrow-right text-xl"></i>
                 </a>
+                @endif
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 font-cairo">
                         ميزانية {{ $budget->month_name }} {{ $budget->year }}
@@ -26,31 +28,42 @@
                 </div>
             </div>
             <div class="flex items-center gap-2 no-print">
-                <a href="{{ route('nutrition.budgets.export-pdf', $budget) }}"
-                    class="inline-flex items-center gap-2 bg-gray-800 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
-                    <i class="fas fa-file-pdf"></i> تصدير PDF
-                </a>
-                @if ($budget->status === 'draft')
-                    <form action="{{ route('nutrition.budgets.submit', $budget) }}" method="POST">
-                        @csrf
-                        <button type="submit"
-                            class="inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2.5 rounded-xl font-bold font-cairo text-sm shadow-lg shadow-yellow-200 transition-all">
-                            <i class="fas fa-paper-plane"></i> إرسال للاعتماد
+                @if(!$preview)
+                    <a href="{{ route('nutrition.budgets.export-pdf', $budget) }}"
+                        class="inline-flex items-center gap-2 bg-gray-800 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
+                        <i class="fas fa-file-pdf"></i> تصدير PDF
+                    </a>
+                    @if ($budget->status === 'draft')
+                        <form action="{{ route('nutrition.budgets.submit', $budget) }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2.5 rounded-xl font-bold font-cairo text-sm shadow-lg shadow-yellow-200 transition-all">
+                                <i class="fas fa-paper-plane"></i> إرسال للاعتماد
+                            </button>
+                        </form>
+                    @endif
+                    @if ($budget->status === 'submitted' && (auth()->user()->hasRole('center-manager') || auth()->user()->hasRole('super-admin')))
+                        <form action="{{ route('nutrition.budgets.approve', $budget) }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-xl font-bold font-cairo text-sm shadow-lg shadow-green-200">
+                                <i class="fas fa-check"></i> اعتماد
+                            </button>
+                        </form>
+                        <button onclick="document.getElementById('rejectModal').classList.remove('hidden')"
+                            class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-xl font-bold font-cairo text-sm">
+                            <i class="fas fa-times"></i> رفض
                         </button>
-                    </form>
-                @endif
-                @if ($budget->status === 'submitted' && (auth()->user()->hasRole('center-manager') || auth()->user()->hasRole('super-admin')))
-                    <form action="{{ route('nutrition.budgets.approve', $budget) }}" method="POST">
-                        @csrf
-                        <button type="submit"
-                            class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-xl font-bold font-cairo text-sm shadow-lg shadow-green-200">
-                            <i class="fas fa-check"></i> اعتماد
-                        </button>
-                    </form>
-                    <button onclick="document.getElementById('rejectModal').classList.remove('hidden')"
-                        class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-xl font-bold font-cairo text-sm">
-                        <i class="fas fa-times"></i> رفض
-                    </button>
+                    @endif
+                @elseif($preview && $previewArchive)
+                    <a href="{{ route('annual-rollover.export-archive-pdf', $previewArchive) }}" target="_blank"
+                        class="inline-flex items-center gap-2 bg-gray-800 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
+                        <i class="fas fa-file-pdf"></i> تصدير PDF
+                    </a>
+                    <a href="{{ route('annual-rollover.index') }}"
+                        class="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
+                        <i class="fas fa-arrow-right"></i> رجوع للقائمة
+                    </a>
                 @endif
             </div>
         </div>
@@ -191,6 +204,7 @@
         @include('partials.print_footer')
     </div>
 
+@if (!$preview)
     <!-- Reject Modal -->
     <div id="rejectModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
@@ -209,4 +223,5 @@
             </form>
         </div>
     </div>
+@endif
 @endsection

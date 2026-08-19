@@ -331,7 +331,7 @@
                                     </div>
                                     <div>
                                         <h4 class="text-xs font-black text-navy font-cairo">نظام التغذية والوجبات</h4>
-                                        <p class="text-[10px] text-gray-400 font-almarai">توزيع الوجبات، الاشتراكات، فواتير
+                                        <p class="text-[10px] text-gray-400 font-almarai">الموردين، الميزانيات، السندات، فواتير
                                             الشراء، التصفيات</p>
                                     </div>
                                 </div>
@@ -358,8 +358,7 @@
                                     </div>
                                     <div>
                                         <h4 class="text-xs font-black text-navy font-cairo">الحلقات القرآنية والحضور</h4>
-                                        <p class="text-[10px] text-gray-400 font-almarai">جلسات التحفيظ وسجلات الحضور
-                                            والغياب اليومية</p>
+                                        <p class="text-[10px] text-gray-400 font-almarai">حذف الحلقات والجلسات وسجلات الحضور بالكامل</p>
                                     </div>
                                 </div>
                                 <input type="checkbox" name="modules[]" value="quran" checked
@@ -369,7 +368,7 @@
                                 <span class="text-gray-500">سجلات جاهزة للترحيل:</span>
                                 <span
                                     class="font-black text-navy font-cairo bg-teal-100 text-teal-900 px-2 py-0.5 rounded-full">
-                                    {{ array_sum($currentCounts['quran']) }} جلسة
+                                    {{ array_sum($currentCounts['quran']) }} حلقة
                                 </span>
                             </div>
                         </label>
@@ -440,8 +439,7 @@
                                     </div>
                                     <div>
                                         <h4 class="text-xs font-black text-navy font-cairo"> مركبات الطلاب</h4>
-                                        <p class="text-[10px] text-gray-400 font-almarai">أرشفة وتصفية المخالفات المرورية
-                                            السابقة</p>
+                                        <p class="text-[10px] text-gray-400 font-almarai">حذف جميع سجلات المركبات والمخالفات بالكامل</p>
                                     </div>
                                 </div>
                                 <input type="checkbox" name="modules[]" value="vehicles" checked
@@ -451,7 +449,7 @@
                                 <span class="text-gray-500">سجلات جاهزة للترحيل:</span>
                                 <span
                                     class="font-black text-navy font-cairo bg-orange-100 text-orange-900 px-2 py-0.5 rounded-full">
-                                    {{ array_sum($currentCounts['vehicles']) }} مخالفة
+                                    {{ array_sum($currentCounts['vehicles']) }} مركبة
                                 </span>
                             </div>
                         </label>
@@ -467,8 +465,7 @@
                                     </div>
                                     <div>
                                         <h4 class="text-xs font-black text-navy font-cairo">الشكاوى والإشعارات</h4>
-                                        <p class="text-[10px] text-gray-400 font-almarai">أرشفة المراسلات والإشعارات
-                                            الداخلية للمركز</p>
+                                        <p class="text-[10px] text-gray-400 font-almarai">حذف جميع سجلات الشكاوى والإشعارات بالكامل</p>
                                     </div>
                                 </div>
                                 <input type="checkbox" name="modules[]" value="complaints" checked
@@ -507,33 +504,6 @@
                                 <span
                                     class="font-black text-navy font-cairo bg-teal-100 text-teal-900 px-2 py-0.5 rounded-full">
                                     {{ array_sum($currentCounts['graduates'] ?? [0]) }} طالب خريج
-                                </span>
-                            </div>
-                        </label>
-
-                        <!-- 11. Funds -->
-                        <label
-                            class="relative block p-4 rounded-2xl border-2 border-gray-100 hover:border-navy/30 bg-gray-50/30 hover:bg-white transition-all cursor-pointer group">
-                            <div class="flex items-start justify-between gap-3">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-10 h-10 rounded-xl bg-lime-500/10 text-lime-600 flex items-center justify-center font-bold">
-                                        <i class="fas fa-piggy-bank text-lg"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-xs font-black text-navy font-cairo">الصناديق المالية</h4>
-                                        <p class="text-[10px] text-gray-400 font-almarai">أرشفة الصناديق المالية وأرصدتها
-                                            (يستثنى الصناديق النظامية)</p>
-                                    </div>
-                                </div>
-                                <input type="checkbox" name="modules[]" value="funds" checked
-                                    class="module-checkbox w-5 h-5 text-navy rounded border-gray-300 focus:ring-navy mt-1">
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px]">
-                                <span class="text-gray-500">سجلات جاهزة للترحيل:</span>
-                                <span
-                                    class="font-black text-navy font-cairo bg-lime-100 text-lime-900 px-2 py-0.5 rounded-full">
-                                    {{ array_sum($currentCounts['funds']) }} صندوق
                                 </span>
                             </div>
                         </label>
@@ -747,7 +717,27 @@
                                             </span>
                                         </td>
                                         <td class="p-4 font-bold text-gray-800 font-cairo">
-                                            {{ $arc->title }}
+                                            @php
+                                                $archiveTitle = $arc->title;
+                                                if (($arc->module === 'financial' && $arc->sub_type === 'settlement') || ($arc->module === 'nutrition' && $arc->sub_type === 'food_settlement')) {
+                                                    $settlementMonth = data_get($arc->data, 'month');
+                                                    $settlementYear = data_get($arc->data, 'year');
+                                                    
+                                                    if ($settlementMonth && $settlementYear) {
+                                                        $archiveTitle = 'تصفية: ' . $settlementMonth . ' / ' . $settlementYear;
+                                                    }
+                                                }
+                                                if (($arc->module === 'financial' && $arc->sub_type === 'budget') || ($arc->module === 'nutrition' && $arc->sub_type === 'food_budget')) {
+                                                    $budgetMonth = data_get($arc->data, 'month');
+                                                    $budgetYear = data_get($arc->data, 'year');
+                                                    
+                                                    if ($budgetMonth && $budgetYear) {
+                                                        $archiveTitle = 'موازنة شهر: ' . $budgetMonth . ' / ' . $budgetYear;
+                                                    }
+                                                }
+                                                
+                                            @endphp
+                                            {{ $archiveTitle }}
                                         </td>
                                         <td class="p-4 text-gray-600">
                                             {{ $arc->student_name ?: ($arc->student ? $arc->student->name_ar : '-') }}

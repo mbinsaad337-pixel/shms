@@ -33,6 +33,6 @@ class SettlementDetail extends Model
 
     public function fund()
     {
-        return $this->belongsTo(Fund::class);
+        return $this->belongsTo(Fund::class)->withTrashed();
     }
 }

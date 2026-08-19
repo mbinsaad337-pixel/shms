@@ -15,25 +15,24 @@ use App\Models\Commitment;
 use App\Models\Club;
 use App\Models\ClubMember;
 use App\Models\Complaint;
-use App\Models\FoodAttendanceReport;
 use App\Models\Fund;
 use App\Models\FoodBudget;
-use App\Models\FoodDistribution;
 use App\Models\FoodMonthlySettlement;
 use App\Models\FoodPurchaseInvoice;
 use App\Models\FoodSubscription;
+use App\Models\FoodSupplier;
 use App\Models\FoodVoucher;
 use App\Models\Leave;
-use App\Models\MealDistribution;
-use App\Models\MealSubscription;
 use App\Models\MonthlyBudget;
 use App\Models\MonthlySettlement;
 use App\Models\News;
 use App\Models\Penalty;
+use App\Models\QuranCircle;
 use App\Models\RoomAssignment;
 use App\Models\Student;
 use App\Models\StudentAchievement;
 use App\Models\StudentGrade;
+use App\Models\Vehicle;
 use App\Models\VehicleViolation;
 use App\Models\Violation;
 use App\Models\Voucher;
@@ -42,6 +41,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Carbon;
 
 class AnnualRolloverController extends Controller
 {
@@ -134,15 +134,14 @@ class AnnualRolloverController extends Controller
                 'expenses' => CenterExpense::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
             ],
             'nutrition' => [
-                'distributions' => FoodDistribution::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
-                'subscriptions' => FoodSubscription::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
-                'invoices' => FoodPurchaseInvoice::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
-                'vouchers' => FoodVoucher::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
+                'suppliers' => FoodSupplier::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
                 'budgets' => FoodBudget::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
+                'vouchers' => FoodVoucher::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
+                'invoices' => FoodPurchaseInvoice::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
                 'settlements' => FoodMonthlySettlement::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
             ],
             'quran' => [
-                'sessions' => CircleSession::whereHas('circle', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))->count(),
+                'circles' => QuranCircle::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
             ],
             'academic' => [
                 'grades' => StudentGrade::whereHas('student', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))->count(),
@@ -153,7 +152,7 @@ class AnnualRolloverController extends Controller
                     ->whereHas('room', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))->count(),
             ],
             'vehicles' => [
-                'violations' => VehicleViolation::whereHas('vehicle', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))->count(),
+                'vehicles' => Vehicle::when($centerId, fn($q) => $q->where('center_id', $centerId))->count(),
             ],
             'complaints' => [
                 'complaints' => Complaint::when($centerId, fn($q) => $q->where(fn($sq) => $sq->where('sender_center_id', $centerId)->orWhere('receiver_center_id', $centerId)->orWhereHas('sender', fn($ssq) => $ssq->where('center_id', $centerId))))->count(),
@@ -457,7 +456,13 @@ class AnnualRolloverController extends Controller
                         $archived = $this->copyFilesToArchive($files, $year, $arc->id);
                         $arc->update(['archived_files' => $archived]);
                     }
-                    $item->delete();
+                    // Annual rollover is an internal archival operation. Mark the
+                    // already-snapshotted voucher as archived without invoking the
+                    // user-edit lock for approved monthly settlements.
+                    DB::table('vouchers')->where('id', $item->id)->update([
+                        'deleted_at' => now(),
+                        'updated_at' => now(),
+                    ]);
                     $count++;
                 }
 
@@ -489,7 +494,7 @@ class AnnualRolloverController extends Controller
                         'year' => $year,
                         'module' => 'financial',
                         'sub_type' => 'settlement',
-                        'title' => 'تصفية مالية: ' . $item->month_year,
+                        'title' => 'تصفية مالية: ' . $item->month . ' / ' . $item->year,
                         'record_id' => $item->id,
                         'record_date' => $item->created_at,
                         'data' => $item->load('details')->toArray(),
@@ -528,66 +533,21 @@ class AnnualRolloverController extends Controller
             if (in_array('nutrition', $selectedModules)) {
                 $count = 0;
 
-                $distributions = FoodDistribution::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                $foodBudgets = FoodBudget::when($centerId, fn($q) => $q->where('center_id', $centerId))
                     ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
-                foreach ($distributions as $item) {
+                foreach ($foodBudgets as $item) {
                     $arc = AnnualArchive::create([
                         'rollover_id' => $rollover->id,
                         'center_id' => $item->center_id,
                         'year' => $year,
                         'module' => 'nutrition',
-                        'sub_type' => 'food_distribution',
-                        'title' => 'توزيع وجبة: ' . ($item->meal_type ?? 'وجبة'),
-                        'record_id' => $item->id,
-                        'record_date' => $item->created_at,
-                        'student_id' => $item->student_id,
-                        'data' => $item->toArray(),
-                    ]);
-                    $item->delete();
-                    $count++;
-                }
-
-                $subscriptions = FoodSubscription::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
-                foreach ($subscriptions as $item) {
-                    $arc = AnnualArchive::create([
-                        'rollover_id' => $rollover->id,
-                        'center_id' => $item->center_id,
-                        'year' => $year,
-                        'module' => 'nutrition',
-                        'sub_type' => 'food_subscription',
-                        'title' => 'اشتراك تغذية للطالب: ' . optional($item->student)->name_ar,
+                        'sub_type' => 'food_budget',
+                        'title' => 'ميزانية تغذية: ' . $item->month_year,
                         'record_id' => $item->id,
                         'record_date' => $item->created_at,
                         'amount' => $item->total_amount ?? 0,
-                        'student_id' => $item->student_id,
-                        'student_name' => optional($item->student)->name_ar,
-                        'data' => $item->toArray(),
+                        'data' => $item->load('lines')->toArray(),
                     ]);
-                    $item->delete();
-                    $count++;
-                }
-
-                $invoices = FoodPurchaseInvoice::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
-                foreach ($invoices as $item) {
-                    $files = $this->collectFilesFromRecord($item, 'food_invoice');
-                    $arc = AnnualArchive::create([
-                        'rollover_id' => $rollover->id,
-                        'center_id' => $item->center_id,
-                        'year' => $year,
-                        'module' => 'nutrition',
-                        'sub_type' => 'food_invoice',
-                        'title' => 'فاتورة مشتريات تغذية: ' . $item->invoice_number,
-                        'record_id' => $item->id,
-                        'record_date' => $item->created_at,
-                        'amount' => $item->grand_total ?? $item->total_amount ?? 0,
-                        'data' => $item->load('items')->toArray(),
-                    ]);
-                    if ($files) {
-                        $archived = $this->copyFilesToArchive($files, $year, $arc->id);
-                        $arc->update(['archived_files' => $archived]);
-                    }
                     $item->delete();
                     $count++;
                 }
@@ -616,21 +576,26 @@ class AnnualRolloverController extends Controller
                     $count++;
                 }
 
-                $foodBudgets = FoodBudget::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                $invoices = FoodPurchaseInvoice::when($centerId, fn($q) => $q->where('center_id', $centerId))
                     ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
-                foreach ($foodBudgets as $item) {
+                foreach ($invoices as $item) {
+                    $files = $this->collectFilesFromRecord($item, 'food_invoice');
                     $arc = AnnualArchive::create([
                         'rollover_id' => $rollover->id,
                         'center_id' => $item->center_id,
                         'year' => $year,
                         'module' => 'nutrition',
-                        'sub_type' => 'food_budget',
-                        'title' => 'ميزانية تغذية: ' . $item->month_year,
+                        'sub_type' => 'food_invoice',
+                        'title' => 'فاتورة مشتريات تغذية: ' . $item->invoice_number,
                         'record_id' => $item->id,
                         'record_date' => $item->created_at,
-                        'amount' => $item->total_amount ?? 0,
-                        'data' => $item->load('lines')->toArray(),
+                        'amount' => $item->grand_total ?? $item->total_amount ?? 0,
+                        'data' => $item->load('items')->toArray(),
                     ]);
+                    if ($files) {
+                        $archived = $this->copyFilesToArchive($files, $year, $arc->id);
+                        $arc->update(['archived_files' => $archived]);
+                    }
                     $item->delete();
                     $count++;
                 }
@@ -653,28 +618,61 @@ class AnnualRolloverController extends Controller
                     $count++;
                 }
 
+                $subscriptions = FoodSubscription::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                foreach ($subscriptions as $item) {
+                    $arc = AnnualArchive::create([
+                        'rollover_id' => $rollover->id,
+                        'center_id' => $item->center_id,
+                        'year' => $year,
+                        'module' => 'nutrition',
+                        'sub_type' => 'food_subscription',
+                        'title' => 'اشتراك تغذية للطالب: ' . optional($item->student)->name_ar,
+                        'record_id' => $item->id,
+                        'record_date' => $item->created_at,
+                        'amount' => $item->total_amount ?? 0,
+                        'student_id' => $item->student_id,
+                        'student_name' => optional($item->student)->name_ar,
+                        'data' => $item->toArray(),
+                    ]);
+                    $item->delete();
+                    $count++;
+                }
+
+                $foodSuppliers = FoodSupplier::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                foreach ($foodSuppliers as $item) {
+                    $arc = AnnualArchive::create([
+                        'rollover_id' => $rollover->id,
+                        'center_id' => $item->center_id,
+                        'year' => $year,
+                        'module' => 'nutrition',
+                        'sub_type' => 'food_supplier',
+                        'title' => 'مورد: ' . $item->name,
+                        'record_id' => $item->id,
+                        'record_date' => $item->created_at,
+                        'amount' => $item->balance_debit ?? 0,
+                        'data' => $item->toArray(),
+                    ]);
+                    $item->delete();
+                    $count++;
+                }
+
                 $summary['nutrition'] = $count;
             }
 
             if (in_array('quran', $selectedModules)) {
                 $count = 0;
-                $sessions = CircleSession::whereHas('circle', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                $circles = QuranCircle::when($centerId, fn($q) => $q->where('center_id', $centerId))->get();
 
-                foreach ($sessions as $item) {
-                    $arc = AnnualArchive::create([
-                        'rollover_id' => $rollover->id,
-                        'center_id' => optional($item->circle)->center_id,
-                        'year' => $year,
-                        'module' => 'quran',
-                        'sub_type' => 'circle_session',
-                        'title' => 'جلسة تحفيظ: ' . optional($item->circle)->name . ' بتاريخ ' . $item->session_date,
-                        'record_id' => $item->id,
-                        'record_date' => $item->created_at,
-                        'data' => $item->load('attendance')->toArray(),
-                    ]);
-                    CircleAttendance::where('session_id', $item->id)->delete();
-                    $item->delete();
+                foreach ($circles as $circle) {
+                    $sessionIds = $circle->sessions()->pluck('id');
+                    if ($sessionIds->isNotEmpty()) {
+                        CircleAttendance::whereIn('session_id', $sessionIds)->delete();
+                    }
+                    CircleSession::where('circle_id', $circle->id)->delete();
+                    DB::table('circle_students')->where('circle_id', $circle->id)->delete();
+                    $circle->delete();
                     $count++;
                 }
                 $summary['quran'] = $count;
@@ -763,22 +761,11 @@ class AnnualRolloverController extends Controller
 
             if (in_array('vehicles', $selectedModules)) {
                 $count = 0;
-                $vViolations = VehicleViolation::whereHas('vehicle', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                $vehicles = Vehicle::when($centerId, fn($q) => $q->where('center_id', $centerId))->get();
 
-                foreach ($vViolations as $item) {
-                    AnnualArchive::create([
-                        'rollover_id' => $rollover->id,
-                        'center_id' => optional($item->vehicle)->center_id,
-                        'year' => $year,
-                        'module' => 'vehicles',
-                        'sub_type' => 'vehicle_violation',
-                        'title' => 'مخالفة مركبة: ' . $item->violation_type,
-                        'record_id' => $item->id,
-                        'record_date' => $item->created_at,
-                        'data' => $item->toArray(),
-                    ]);
-                    $item->delete();
+                foreach ($vehicles as $vehicle) {
+                    VehicleViolation::where('vehicle_id', $vehicle->id)->delete();
+                    $vehicle->delete();
                     $count++;
                 }
                 $summary['vehicles'] = $count;
@@ -790,22 +777,6 @@ class AnnualRolloverController extends Controller
                     ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
 
                 foreach ($complaints as $item) {
-                    $files = $this->collectFilesFromRecord($item, 'complaint');
-                    $arc = AnnualArchive::create([
-                        'rollover_id' => $rollover->id,
-                        'center_id' => $item->sender_center_id ?? $item->receiver_center_id,
-                        'year' => $year,
-                        'module' => 'complaints',
-                        'sub_type' => 'complaint',
-                        'title' => 'إشعار/شكوى: ' . $item->subject,
-                        'record_id' => $item->id,
-                        'record_date' => $item->created_at,
-                        'data' => $item->toArray(),
-                    ]);
-                    if ($files) {
-                        $archived = $this->copyFilesToArchive($files, $year, $arc->id);
-                        $arc->update(['archived_files' => $archived]);
-                    }
                     $item->delete();
                     $count++;
                 }
@@ -1099,7 +1070,7 @@ class AnnualRolloverController extends Controller
     private function restoreNutritionRecord(AnnualArchive $archive, array $data): int
     {
         $modelClass = match ($archive->sub_type) {
-            'food_distribution' => FoodDistribution::class,
+            'food_supplier' => FoodSupplier::class,
             'food_subscription' => FoodSubscription::class,
             'food_invoice' => FoodPurchaseInvoice::class,
             'food_voucher' => FoodVoucher::class,
@@ -1231,10 +1202,10 @@ class AnnualRolloverController extends Controller
         $viewModelMap = [
             'administrative' => [
                 'violation' => [Violation::class, ['student', 'recordedBy', 'penalty', 'center'], 'violations.show', 'violation'],
-                'commitment' => [Commitment::class, ['student', 'violation'], 'administrative.commitments', 'commitments'],
-                'penalty' => [Penalty::class, ['student', 'appliedBy'], 'administrative.penalties', 'penalties'],
-                'leave' => [Leave::class, ['student', 'approvedBy'], 'administrative.leaves', 'leaves'],
-                'absence' => [Absence::class, ['student'], 'administrative.absences', 'absences'],
+                'commitment' => [Commitment::class, ['student', 'violation'], 'administrative.commitments', 'commitment'],
+                'penalty' => [Penalty::class, ['student', 'appliedBy'], 'administrative.penalties', 'penalty'],
+                'leave' => [Leave::class, ['student', 'approvedBy'], 'administrative.leaves', 'leave'],
+                'absence' => [Absence::class, ['student', 'recorder'], 'administrative.absences', 'absence'],
             ],
             'financial' => [
                 'voucher' => [Voucher::class, ['fund', 'targetFund', 'creator', 'approver', 'center'], 'vouchers.show', 'voucher'],
@@ -1260,6 +1231,7 @@ class AnnualRolloverController extends Controller
                 'food_budget' => [FoodBudget::class, ['lines', 'creator', 'approver'], 'nutrition.budgets.show', 'budget'],
                 'food_subscription' => [FoodSubscription::class, ['student', 'distributions.distributor', 'budget'], 'nutrition.subscriptions.show', 'subscription'],
                 'food_supplier' => [FoodSupplier::class, ['invoices.items', 'vouchers'], 'nutrition.suppliers.show', 'supplier'],
+                'food_settlement' => [FoodMonthlySettlement::class, ['details.supplier', 'creator'], 'nutrition.settlements.show', 'settlement'],
             ],
         ];
 
@@ -1271,7 +1243,19 @@ class AnnualRolloverController extends Controller
 
         $model = null;
         if ($originalId) {
-            $model = $modelClass::withoutGlobalScopes()->with($relations)->find($originalId);
+            $modelQuery = $modelClass::withoutGlobalScopes()->with($relations);
+
+            // Settlement records are soft-deleted during the annual rollover.
+            // Include the archived original so its saved details remain available
+            // when previewing it from the archive.
+            if ($subType === 'settlement' && $module === 'financial') {
+                $modelQuery->withTrashed();
+            }
+            if ($subType === 'food_settlement' && $module === 'nutrition') {
+                $modelQuery->withTrashed();
+            }
+
+            $model = $modelQuery->find($originalId);
         }
         if (!$model) {
             $cleanData = $data;
@@ -1286,18 +1270,193 @@ class AnnualRolloverController extends Controller
     $varName => $model,
     'preview' => true,
     'previewArchive' => $archive,
-];
+        ];
 
         if ($subType === 'settlement' && $module === 'financial') {
-            $viewData['vouchers'] = Voucher::with(['creator', 'targetFund', 'student'])
-                ->where('center_id', $model->center_id)
-                ->where('status', 'approved')
-                ->whereMonth('created_at', $model->month)
-                ->whereYear('created_at', $model->year)
-                ->get();
+            $viewData['vouchers'] = $this->archivedSettlementVouchers($archive, $model);
+        }
+
+        if ($subType === 'food_supplier' && $module === 'nutrition') {
+            $supplierId = $archive->record_id;
+            $centerId = $data['center_id'] ?? $archive->center_id;
+
+            $archivedInvoices = AnnualArchive::query()
+                ->where('rollover_id', $archive->rollover_id)
+                ->where('center_id', $centerId)
+                ->where('module', 'nutrition')
+                ->where('sub_type', 'food_invoice')
+                ->get(['data'])
+                ->filter(fn($a) => data_get($a->data, 'supplier_id') == $supplierId
+                    && (data_get($a->data, 'status') ?? 'approved') === 'approved')
+                ->map(fn($a) => (object) $a->data);
+
+            $archivedVouchers = AnnualArchive::query()
+                ->where('rollover_id', $archive->rollover_id)
+                ->where('center_id', $centerId)
+                ->where('module', 'nutrition')
+                ->where('sub_type', 'food_voucher')
+                ->get(['data'])
+                ->filter(fn($a) => data_get($a->data, 'supplier_id') == $supplierId
+                    && (data_get($a->data, 'status') ?? 'active') === 'active')
+                ->map(fn($a) => (object) $a->data);
+
+            $ledgerItems = [];
+            foreach ($archivedInvoices as $invoice) {
+                $ledgerItems[] = [
+                    'date' => data_get($invoice, 'invoice_date'),
+                    'type' => 'invoice',
+                    'reference' => data_get($invoice, 'invoice_number'),
+                    'description' => 'فاتورة مشتريات',
+                    'debit' => data_get($invoice, 'total_amount', 0),
+                    'credit' => 0,
+                    'item' => $invoice,
+                ];
+            }
+            foreach ($archivedVouchers as $voucher) {
+                $type = data_get($voucher, 'type');
+                $ledgerItems[] = [
+                    'date' => data_get($voucher, 'voucher_date'),
+                    'type' => 'voucher',
+                    'reference' => data_get($voucher, 'voucher_number'),
+                    'description' => $type === 'payment' ? 'سند صرف' : 'سند قبض',
+                    'debit' => $type === 'receipt' ? data_get($voucher, 'amount', 0) : 0,
+                    'credit' => $type === 'payment' ? data_get($voucher, 'amount', 0) : 0,
+                    'item' => $voucher,
+                ];
+            }
+            $ledger = collect($ledgerItems)->sortBy('date')->values();
+            $runningBalance = 0;
+            $ledger = $ledger->map(function ($row) use (&$runningBalance) {
+                $runningBalance += $row['debit'] - $row['credit'];
+                $row['running_balance'] = $runningBalance;
+                return $row;
+            });
+            $viewData['ledger'] = $ledger;
+        }
+
+        if ($subType === 'food_settlement' && $module === 'nutrition') {
+            $centerId = $data['center_id'] ?? $archive->center_id;
+            $month = $data['month'] ?? null;
+            $year = $data['year'] ?? null;
+
+            $viewData['receipts'] = collect();
+            $viewData['invoices'] = collect();
+            $viewData['payments'] = collect();
+
+            if ($month && $year && $centerId) {
+                $archivedSuppliers = AnnualArchive::query()
+                    ->where('rollover_id', $archive->rollover_id)
+                    ->where('center_id', $centerId)
+                    ->where('module', 'nutrition')
+                    ->where('sub_type', 'food_supplier')
+                    ->get(['record_id', 'data'])
+                    ->mapWithKeys(fn($a) => [$a->record_id => data_get($a->data, 'name')]);
+
+                $viewData['supplierNames'] = $archivedSuppliers;
+
+                $archivedFoodVouchers = AnnualArchive::query()
+                    ->where('rollover_id', $archive->rollover_id)
+                    ->where('center_id', $centerId)
+                    ->where('module', 'nutrition')
+                    ->where('sub_type', 'food_voucher')
+                    ->get(['data']);
+
+                $viewData['receipts'] = $archivedFoodVouchers
+                    ->filter(fn($a) => data_get($a->data, 'type') === 'receipt'
+                        && Carbon::parse(data_get($a->data, 'voucher_date'))->month == $month
+                        && Carbon::parse(data_get($a->data, 'voucher_date'))->year == $year)
+                    ->map(function ($a) {
+                        $d = (object) $a->data;
+                        $d->voucher_date = Carbon::parse($d->voucher_date);
+                        return $d;
+                    });
+
+                $viewData['payments'] = $archivedFoodVouchers
+                    ->filter(fn($a) => data_get($a->data, 'type') === 'payment'
+                        && Carbon::parse(data_get($a->data, 'voucher_date'))->month == $month
+                        && Carbon::parse(data_get($a->data, 'voucher_date'))->year == $year)
+                    ->map(function ($a) {
+                        $d = (object) $a->data;
+                        $d->voucher_date = Carbon::parse($d->voucher_date);
+                        return $d;
+                    });
+
+                $viewData['invoices'] = AnnualArchive::query()
+                    ->where('rollover_id', $archive->rollover_id)
+                    ->where('center_id', $centerId)
+                    ->where('module', 'nutrition')
+                    ->where('sub_type', 'food_invoice')
+                    ->get(['data'])
+                    ->filter(fn($a) => Carbon::parse(data_get($a->data, 'invoice_date'))->month == $month
+                        && Carbon::parse(data_get($a->data, 'invoice_date'))->year == $year)
+                    ->map(function ($a) {
+                        $d = (object) $a->data;
+                        $d->invoice_date = Carbon::parse($d->invoice_date);
+                        return $d;
+                    });
+            }
+        }
+
+        if (($subType === 'food_invoice' || $subType === 'food_voucher') && $module === 'nutrition') {
+            $supplierId = $data['supplier_id'] ?? null;
+            if ($supplierId) {
+                $archivedSupplier = AnnualArchive::query()
+                    ->where('rollover_id', $archive->rollover_id)
+                    ->where('center_id', $archive->center_id)
+                    ->where('module', 'nutrition')
+                    ->where('sub_type', 'food_supplier')
+                    ->where('record_id', $supplierId)
+                    ->first();
+                $viewData['archivedSupplierName'] = $archivedSupplier ? data_get($archivedSupplier->data, 'name') : null;
+            }
         }
 
         return view($viewName, $viewData);
+    }
+
+    private function archivedSettlementVouchers(AnnualArchive $archive, MonthlySettlement $settlement)
+    {
+        $archivedVouchers = AnnualArchive::query()
+            ->where('rollover_id', $archive->rollover_id)
+            ->where('center_id', $settlement->center_id)
+            ->where('module', 'financial')
+            ->where('sub_type', 'voucher')
+            ->get(['record_id', 'data'])
+            ->filter(function (AnnualArchive $voucherArchive) use ($settlement) {
+                $voucherDate = data_get($voucherArchive->data, 'date');
+
+                return $voucherDate
+                    && \Carbon\Carbon::parse($voucherDate)->month === (int) $settlement->month
+                    && \Carbon\Carbon::parse($voucherDate)->year === (int) $settlement->year;
+            });
+
+        $vouchers = Voucher::hydrate(
+            $archivedVouchers->map(function (AnnualArchive $voucherArchive) {
+                $voucherData = (array) $voucherArchive->data;
+                $voucherData['id'] = $voucherData['id'] ?? $voucherArchive->record_id;
+
+                return $voucherData;
+            })->all()
+        );
+
+        $fundIds = $vouchers->flatMap(fn (Voucher $voucher) => [$voucher->fund_id, $voucher->target_fund_id])->filter()->unique();
+        $funds = Fund::withoutGlobalScopes()->withTrashed()->whereIn('id', $fundIds)->get()->keyBy('id');
+
+        $studentIds = $vouchers->pluck('student_id')->filter()->unique();
+        $students = Student::withoutGlobalScopes()->withTrashed()->whereIn('id', $studentIds)->get()->keyBy('id');
+
+        $userIds = $vouchers->flatMap(fn (Voucher $voucher) => [$voucher->created_by, $voucher->approved_by])->filter()->unique();
+        $users = \App\Models\User::whereIn('id', $userIds)->get()->keyBy('id');
+
+        $vouchers->each(function (Voucher $voucher) use ($funds, $students, $users) {
+            $voucher->setRelation('fund', $funds->get($voucher->fund_id));
+            $voucher->setRelation('targetFund', $funds->get($voucher->target_fund_id));
+            $voucher->setRelation('student', $students->get($voucher->student_id));
+            $voucher->setRelation('creator', $users->get($voucher->created_by));
+            $voucher->setRelation('approver', $users->get($voucher->approved_by));
+        });
+
+        return $vouchers;
     }
 
     public function showArchive(Request $request, AnnualArchive $archive)
@@ -1549,6 +1708,10 @@ class AnnualRolloverController extends Controller
             'administrative' => [
                 'violation' => [Violation::class, ['student', 'recordedBy', 'penalty', 'center'], 'pdf.violations.show', 'violation', 'تقرير تفصيلي للمخالفة'],
                 'commitment' => [Commitment::class, ['student', 'violation'], 'pdf.commitments.show', 'commitment', 'تعهد طلابي'],
+                // Preserve the original export template and page format for archived records.
+                'penalty' => [Penalty::class, ['student.center', 'student.program', 'violation', 'appliedBy'], 'pdf.reports.penalties', 'data', 'تقرير العقوبات', 'landscape'],
+                'leave' => [Leave::class, ['student.center', 'student.program', 'approvedBy'], 'pdf.reports.leaves', 'data', 'تقرير الاستئذانات', 'landscape'],
+                'absence' => [Absence::class, ['student.center', 'student.program', 'recorder'], 'pdf.reports.absences', 'data', 'تقرير الغيابات', 'landscape'],
             ],
             'financial' => [
                 'voucher' => [Voucher::class, ['fund', 'targetFund', 'creator', 'approver', 'center'], 'pdf.vouchers.show', 'voucher', 'سند مالي'],
@@ -1563,6 +1726,7 @@ class AnnualRolloverController extends Controller
                 'food_voucher' => [FoodVoucher::class, ['supplier', 'student', 'creator'], 'pdf.nutrition.vouchers.show', 'voucher', 'سند تغذية'],
                 'food_budget' => [FoodBudget::class, ['lines', 'creator', 'approver'], 'pdf.nutrition.budgets.show', 'budget', 'موازنة تغذية'],
                 'food_supplier' => [FoodSupplier::class, ['invoices.items', 'vouchers'], 'pdf.nutrition.suppliers.show', 'supplier', 'كشف حساب مورد'],
+                'food_settlement' => [FoodMonthlySettlement::class, ['details.supplier', 'creator'], 'pdf.nutrition.settlements.show', 'settlement', 'تصفيه تغذية شهرية'],
             ],
         ];
 
@@ -1571,8 +1735,11 @@ class AnnualRolloverController extends Controller
         }
 
         if (isset($modelMap[$module][$subType])) {
-            [$modelClass, $relations, $blade, $varName, $title] = $modelMap[$module][$subType];
-            return $this->exportArchivedModelPdf($originalId, $modelClass, $relations, $blade, $varName, $archive, $pdfService, $title);
+            $definition = $modelMap[$module][$subType];
+            [$modelClass, $relations, $blade, $varName, $title] = $definition;
+            $orientation = $definition[5] ?? 'portrait';
+
+            return $this->exportArchivedModelPdf($originalId, $modelClass, $relations, $blade, $varName, $archive, $pdfService, $title, $orientation);
         }
 
         return null;
@@ -1586,12 +1753,17 @@ class AnnualRolloverController extends Controller
         string $variableName,
         AnnualArchive $archive,
         PdfService $pdfService,
-        string $reportTitle
+        string $reportTitle,
+        string $orientation = 'portrait'
     ): \Symfony\Component\HttpFoundation\Response {
         $model = null;
 
         if ($originalId) {
-            $model = $modelClass::withoutGlobalScopes()->with($relations)->find($originalId);
+            $modelQuery = $modelClass::withoutGlobalScopes()->with($relations);
+            if ($archive->module === 'financial' && $archive->sub_type === 'settlement') {
+                $modelQuery->withTrashed();
+            }
+            $model = $modelQuery->find($originalId);
         }
 
         if (!$model) {
@@ -1603,10 +1775,140 @@ class AnnualRolloverController extends Controller
             }
         }
 
+        $viewData = $variableName === 'data'
+            ? ['data' => collect([$model])]
+            : [$variableName => $model];
+
+        if ($archive->module === 'financial' && $archive->sub_type === 'settlement') {
+            $viewData['vouchers'] = $this->archivedSettlementVouchers($archive, $model);
+        }
+
+        if ($archive->module === 'nutrition' && $archive->sub_type === 'food_supplier') {
+            $supplierId = $archive->record_id;
+            $centerId = (array) $archive->data;
+            $centerId = $centerId['center_id'] ?? $archive->center_id;
+
+            $archivedInvoices = AnnualArchive::query()
+                ->where('rollover_id', $archive->rollover_id)
+                ->where('center_id', $centerId)
+                ->where('module', 'nutrition')
+                ->where('sub_type', 'food_invoice')
+                ->get(['data'])
+                ->filter(fn($a) => data_get($a->data, 'supplier_id') == $supplierId
+                    && (data_get($a->data, 'status') ?? 'approved') === 'approved')
+                ->map(fn($a) => (object) $a->data);
+
+            $archivedVouchers = AnnualArchive::query()
+                ->where('rollover_id', $archive->rollover_id)
+                ->where('center_id', $centerId)
+                ->where('module', 'nutrition')
+                ->where('sub_type', 'food_voucher')
+                ->get(['data'])
+                ->filter(fn($a) => data_get($a->data, 'supplier_id') == $supplierId
+                    && (data_get($a->data, 'status') ?? 'active') === 'active')
+                ->map(fn($a) => (object) $a->data);
+
+            $ledgerItems = [];
+            foreach ($archivedInvoices as $invoice) {
+                $ledgerItems[] = [
+                    'date' => data_get($invoice, 'invoice_date'),
+                    'type' => 'invoice',
+                    'reference' => data_get($invoice, 'invoice_number'),
+                    'description' => 'فاتورة مشتريات',
+                    'debit' => data_get($invoice, 'total_amount', 0),
+                    'credit' => 0,
+                    'item' => $invoice,
+                ];
+            }
+            foreach ($archivedVouchers as $voucher) {
+                $type = data_get($voucher, 'type');
+                $ledgerItems[] = [
+                    'date' => data_get($voucher, 'voucher_date'),
+                    'type' => 'voucher',
+                    'reference' => data_get($voucher, 'voucher_number'),
+                    'description' => $type === 'payment' ? 'سند صرف' : 'سند قبض',
+                    'debit' => $type === 'receipt' ? data_get($voucher, 'amount', 0) : 0,
+                    'credit' => $type === 'payment' ? data_get($voucher, 'amount', 0) : 0,
+                    'item' => $voucher,
+                ];
+            }
+            $ledger = collect($ledgerItems)->sortBy('date')->values();
+            $runningBalance = 0;
+            $ledger = $ledger->map(function ($row) use (&$runningBalance) {
+                $runningBalance += $row['debit'] - $row['credit'];
+                $row['running_balance'] = $runningBalance;
+                return $row;
+            });
+            $viewData['ledger'] = $ledger;
+        }
+
+        if ($archive->module === 'nutrition' && $archive->sub_type === 'food_settlement') {
+            $data = (array) $archive->data;
+            $centerId = $data['center_id'] ?? $archive->center_id;
+            $month = $data['month'] ?? null;
+            $year = $data['year'] ?? null;
+
+            $viewData['receipts'] = collect();
+            $viewData['invoices'] = collect();
+            $viewData['payments'] = collect();
+            $viewData['supplierNames'] = collect();
+
+            if ($month && $year && $centerId) {
+                $archivedSuppliers = AnnualArchive::query()
+                    ->where('rollover_id', $archive->rollover_id)
+                    ->where('center_id', $centerId)
+                    ->where('module', 'nutrition')
+                    ->where('sub_type', 'food_supplier')
+                    ->get(['record_id', 'data'])
+                    ->mapWithKeys(fn($a) => [$a->record_id => data_get($a->data, 'name')]);
+
+                $viewData['supplierNames'] = $archivedSuppliers;
+
+                $archivedFoodVouchers = AnnualArchive::query()
+                    ->where('rollover_id', $archive->rollover_id)
+                    ->where('center_id', $centerId)
+                    ->where('module', 'nutrition')
+                    ->where('sub_type', 'food_voucher')
+                    ->get(['data']);
+
+                $viewData['receipts'] = $archivedFoodVouchers
+                    ->filter(fn($a) => data_get($a->data, 'type') === 'receipt'
+                        && Carbon::parse(data_get($a->data, 'voucher_date'))->month == $month
+                        && Carbon::parse(data_get($a->data, 'voucher_date'))->year == $year)
+                    ->map(function ($a) {
+                        $d = (object) $a->data;
+                        $d->voucher_date = Carbon::parse($d->voucher_date);
+                        return $d;
+                    });
+
+                $viewData['payments'] = $archivedFoodVouchers
+                    ->filter(fn($a) => data_get($a->data, 'type') === 'payment'
+                        && Carbon::parse(data_get($a->data, 'voucher_date'))->month == $month
+                        && Carbon::parse(data_get($a->data, 'voucher_date'))->year == $year)
+                    ->map(function ($a) {
+                        $d = (object) $a->data;
+                        $d->voucher_date = Carbon::parse($d->voucher_date);
+                        return $d;
+                    });
+
+                $viewData['invoices'] = AnnualArchive::query()
+                    ->where('rollover_id', $archive->rollover_id)
+                    ->where('center_id', $centerId)
+                    ->where('module', 'nutrition')
+                    ->where('sub_type', 'food_invoice')
+                    ->get(['data'])
+                    ->filter(fn($a) => Carbon::parse(data_get($a->data, 'invoice_date'))->month == $month
+                        && Carbon::parse(data_get($a->data, 'invoice_date'))->year == $year)
+                    ->map(function ($a) {
+                        $d = (object) $a->data;
+                        $d->invoice_date = Carbon::parse($d->invoice_date);
+                        return $d;
+                    });
+            }
+        }
+
         $filename = class_basename($modelClass) . '_' . ($originalId ?? $archive->id) . '.pdf';
-        return $pdfService->stream($bladeTemplate, [
-            $variableName => $model,
-        ], $reportTitle, $filename, 'portrait');
+        return $pdfService->stream($bladeTemplate, $viewData, $reportTitle, $filename, $orientation);
     }
 
     private function exportGraduateProfilePdf(AnnualArchive $archive, PdfService $pdfService)

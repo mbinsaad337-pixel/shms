@@ -47,7 +47,7 @@
                         <div>
                             <h3 class="text-sm font-black text-amber-800 font-cairo">وضع المعاينة — سجل مؤرشف</h3>
                             <p class="text-xs text-amber-600 font-almarai">
-                                بيانات هذا السند مؤرشفة من السنة {{ $previewArchive->year }}
+                                بيانات هذه التصفية مؤرشفة من السنة {{ $previewArchive->year }}
                                 &bull; الأرشيف #{{ str_pad($previewArchive->id, 6, '0', STR_PAD_LEFT) }}
                             </p>
                         </div>
@@ -356,7 +356,7 @@
                 </form>
             @endif
 
-            @if(auth()->user()->hasRole('super-admin'))
+            @if(auth()->user()->hasRole('super-admin')&&!$preview)
                 <form action="{{ route('settlements.destroy', $settlement) }}" method="POST" data-confirm="{{ $settlement->status === 'approved' ? 'تحذير أمني: هذه التصفية معتمدة ومؤرشفة. هل أنت متأكد بصفة استثنائية من رغبتك بحذفها كمدير عام؟!' : 'هل أنت متأكد من حذف هذه التصفية؟ لا يمكن التراجع عن هذا الإجراء.' }}" class="mr-auto">
                     @csrf
                     @method('DELETE')

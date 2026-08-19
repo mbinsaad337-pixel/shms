@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'تفاصيل الموازنة الشهرية')
+@php
+    /** @var \App\Models\Student $student */
+    $preview = $preview ?? false;
+    $previewArchive = $previewArchive ?? null;
+@endphp
+
+@section('title',$preview ? 'عرض الميزانية' : 'تفاصيل الموازنة الشهرية')
 
 @push('styles')
     <style>
@@ -46,10 +52,13 @@
         <div class="max-w-5xl mx-auto">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <div class="flex items-center gap-4">
+                  @if(!$preview)
                     <a href="{{ route('budgets.index') }}"
                         class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-gray-400 hover:text-primary transition-all">
                         <i class="fas fa-chevron-right"></i>
                     </a>
+                  @endif
+                  
                     <div>
                         <h1 class="text-3xl font-bold text-gray-800 font-cairo">موازنة شهر {{ $budget->month }} /
                             {{ $budget->year }}
@@ -58,6 +67,32 @@
                     </div>
                 </div>
 
+                @if ($preview && $previewArchive)
+                <div class="mb-6 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                            <i class="fas fa-archive text-amber-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-black text-amber-800 font-cairo">وضع المعاينة — سجل مؤرشف</h3>
+                            <p class="text-xs text-amber-600 font-almarai">
+                                بيانات هذه الميزانية مؤرشفة من السنة {{ $previewArchive->year }}
+                                &bull; الأرشيف #{{ str_pad($previewArchive->id, 6, '0', STR_PAD_LEFT) }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <a href="{{ route('annual-rollover.export-archive-pdf', $previewArchive) }}" target="_blank"
+                            class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl text-xs font-bold font-cairo flex items-center gap-2 transition-all border border-red-200">
+                            <i class="fas fa-file-pdf"></i> تصدير أرشيف PDF
+                        </a>
+                        <a href="{{ route('annual-rollover.index', $previewArchive) }}"
+                            class="px-4 py-2 bg-white hover:bg-gray-50 text-navy rounded-xl text-xs font-bold font-cairo flex items-center gap-2 transition-all border border-gray-200">
+                            <i class="fas fa-arrow-right"></i> العودة للأرشيف
+                        </a>
+                    </div>
+                </div>
+                @elseif (!$preview)
                 <div class="flex items-center gap-3">
                     @php
                         $statuses = [
@@ -80,6 +115,7 @@
                         حفظ PDF
                     </a>
                 </div>
+                @endif
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -162,7 +198,7 @@
                             </form>
                         @endif
 
-                        @if(auth()->user()->can('manage-budgets') || auth()->user()->hasRole('super-admin'))
+                        @if(!$preview && (auth()->user()->can('manage-budgets') || auth()->user()->hasRole('super-admin')))
                             <form action="{{ route('budgets.destroy', $budget) }}" method="POST"
                                 data-confirm="هل أنت متأكد من رغبتك في حذف هذه الموازنة نهائياً؟ تنبيه: إذا كانت الموازنة معتمدة فسيتم خصم المبالغ من أرصدة الصناديق.">
                                 @csrf

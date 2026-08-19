@@ -118,8 +118,8 @@
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
                     <td class="font-bold  ">{{ $invoice->invoice_number }}</td>
-                    <td>{{ $invoice->supplier?->name ?? '-' }}</td>
-                    <td class="text-center">{{ $invoice->payment_type_label }}</td>
+                    <td>{{ ($supplierNames ?? collect())[$invoice->supplier_id] ?? $invoice->supplier?->name ?? '-' }}</td>
+                    <td class="text-center">{{ $invoice->payment_type === 'cash' ? 'نقدي' : 'آجل' }}</td>
                     <td class="text-center  ">{{ $invoice->invoice_date->format('Y-m-d') }}</td>
                     <td class="text-center   text-danger">{{ number_format($invoice->total_amount, 2) }}</td>
                 </tr>
@@ -146,7 +146,7 @@
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
                     <td class="font-bold  ">{{ $payment->voucher_number }}</td>
-                    <td>{{ $payment->supplier?->name ?? '-' }}</td>
+                    <td>{{ ($supplierNames ?? collect())[$payment->supplier_id] ?? $payment->supplier?->name ?? '-' }}</td>
                     <td class="text-center  ">{{ $payment->voucher_date->format('Y-m-d') }}</td>
                     <td>{{ $payment->description ?? '-' }}</td>
                     <td class="text-center   text-danger">{{ number_format($payment->amount, 2) }}</td>

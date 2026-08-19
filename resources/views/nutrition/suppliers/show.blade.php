@@ -8,9 +8,11 @@
 
         <div class="flex items-center justify-between mb-6 no-print">
             <div class="flex items-center gap-4">
+              @if(!$preview)
                 <a href="{{ route('nutrition.suppliers.index') }}" class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-arrow-right text-xl"></i>
                 </a>
+                @endif
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 font-cairo">كشف حساب: {{ $supplier->name }}</h2>
                     @if($supplier->phone)
@@ -19,14 +21,25 @@
                 </div>
             </div>
             <div class="flex gap-2 no-print">
-                <a href="{{ route('nutrition.suppliers.export-pdf', $supplier) }}"
-                    class="inline-flex items-center gap-2 bg-gray-800 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
-                    <i class="fas fa-file-pdf"></i> تصدير PDF
-                </a>
-                <a href="{{ route('nutrition.invoices.create') }}?supplier={{ $supplier->id }}"
-                    class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
-                    <i class="fas fa-receipt"></i> فاتورة جديدة
-                </a>
+                @if(!$preview)
+                    <a href="{{ route('nutrition.suppliers.export-pdf', $supplier) }}"
+                        class="inline-flex items-center gap-2 bg-gray-800 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
+                        <i class="fas fa-file-pdf"></i> تصدير PDF
+                    </a>
+                    <a href="{{ route('nutrition.invoices.create') }}?supplier={{ $supplier->id }}"
+                        class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
+                        <i class="fas fa-receipt"></i> فاتورة جديدة
+                    </a>
+                @elseif($preview && $previewArchive)
+                    <a href="{{ route('annual-rollover.export-archive-pdf', $previewArchive) }}" target="_blank"
+                        class="inline-flex items-center gap-2 bg-gray-800 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
+                        <i class="fas fa-file-pdf"></i> تصدير PDF
+                    </a>
+                    <a href="{{ route('annual-rollover.index') }}"
+                        class="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
+                        <i class="fas fa-arrow-right"></i> رجوع للقائمة
+                    </a>
+                @endif
             </div>
         </div>
 

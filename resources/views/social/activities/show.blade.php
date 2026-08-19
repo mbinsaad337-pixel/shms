@@ -1,6 +1,11 @@
 @extends('layouts.app')
+@php
+    /** @var \App\Models\Student $student */
+    $preview = $preview ?? false;
+    $previewArchive = $previewArchive ?? null;
+@endphp
 
-@section('title', 'تفاصيل الفعالية')
+@section('title', $preview ? 'معاينة الفعالية' : 'تفاصيل الفعالية')
 
 @section('content')
     <div class="container mx-auto px-6 py-8">
@@ -40,11 +45,19 @@
                         <span>تعديل الفعالية</span>
                     </a>
                 @endif
-                <a href="{{ route('activities.index') }}"
+                @if (!$preview)
+                    <a href="{{ route('activities.index') }}"
                     class="px-6 py-3 bg-gray-50 text-navy rounded-2xl hover:bg-gray-100 font-cairo font-bold transition-all flex items-center gap-2 border border-gray-100">
                     <i class="fas fa-arrow-right"></i>
                     <span>رجوع للقائمة</span>
                 </a>
+                @elseif($preview && $previewArchive)
+                    <a href="{{ route('annual-rollover.index', $previewArchive) }}"
+                            class="px-4 py-2 bg-white hover:bg-gray-50 text-navy rounded-xl text-xs font-bold font-cairo flex items-center gap-2 transition-all border border-gray-200">
+                            <i class="fas fa-arrow-right"></i> العودة للأرشيف
+                        </a>
+                @endif
+                
             </div>
         </div>
 
@@ -299,11 +312,14 @@
                                     طالب مستهدف لم يحضر</span>
                             </div>
                             <div class="flex gap-3">
+                              @if(!$preview)
                                 <a href="{{ route('activities.export-absentees', $activity->id) }}"
                                     class="px-4 py-2 bg-white text-red-600 border border-red-200 rounded-xl text-xs font-black shadow-sm hover:bg-red-600 hover:text-white transition-all flex items-center gap-2">
                                     <i class="fas fa-file-pdf"></i>
                                     <span>تصدير كـ PDF</span>
                                 </a>
+                                @endif
+                          
                                 <span
                                     class="hidden md:inline-flex px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-black items-center">
                                     سجل الغياب
