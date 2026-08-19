@@ -8,28 +8,41 @@
 
         <div class="flex items-center justify-between mb-6 no-print">
             <div class="flex items-center gap-4">
+              @if(!$preview)
                 <a href="{{ route('nutrition.invoices.index') }}" class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-arrow-right text-xl"></i>
                 </a>
+                @endif
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 font-cairo">{{ $invoice->invoice_number }}</h2>
-                    <p class="text-gray-400 font-cairo text-sm">{{ $invoice->supplier->name }}</p>
+                    <p class="text-gray-400 font-cairo text-sm">{{ $archivedSupplierName ?? $invoice->supplier?->name ?? '—' }}</p>
                 </div>
             </div>
             <div class="flex gap-2 no-print">
-                <a href="{{ route('nutrition.invoices.export-pdf', $invoice) }}"
-                    class="inline-flex items-center gap-2 bg-gray-800 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
-                    <i class="fas fa-file-pdf"></i> تصدير PDF
-                </a>>
-                @if($invoice->status === 'approved')
-                    <form action="{{ route('nutrition.invoices.cancel', $invoice) }}" method="POST"
-                        data-confirm="هل تريد إلغاء هذه الفاتورة؟">
-                        @csrf
-                        <button type="submit"
-                            class="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
-                            <i class="fas fa-ban"></i> إلغاء
-                        </button>
-                    </form>
+                @if(!$preview)
+                    <a href="{{ route('nutrition.invoices.export-pdf', $invoice) }}"
+                        class="inline-flex items-center gap-2 bg-gray-800 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
+                        <i class="fas fa-file-pdf"></i> تصدير PDF
+                    </a>
+                    @if($invoice->status === 'approved')
+                        <form action="{{ route('nutrition.invoices.cancel', $invoice) }}" method="POST"
+                            data-confirm="هل تريد إلغاء هذه الفاتورة؟">
+                            @csrf
+                            <button type="submit"
+                                class="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
+                                <i class="fas fa-ban"></i> إلغاء
+                            </button>
+                        </form>
+                    @endif
+                @elseif($preview && $previewArchive)
+                    <a href="{{ route('annual-rollover.export-archive-pdf', $previewArchive) }}" target="_blank"
+                        class="inline-flex items-center gap-2 bg-gray-800 text-white px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
+                        <i class="fas fa-file-pdf"></i> تصدير PDF
+                    </a>
+                    <a href="{{ route('annual-rollover.index') }}"
+                        class="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-xl font-bold font-cairo text-sm">
+                        <i class="fas fa-arrow-right"></i> رجوع للقائمة
+                    </a>
                 @endif
             </div>
         </div>
@@ -38,7 +51,7 @@
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
             <div class="bg-orange-50 border border-orange-100 rounded-2xl p-4">
                 <p class="text-[10px] font-bold text-orange-400 font-cairo uppercase mb-1">المورد</p>
-                <p class="font-bold text-orange-800 font-cairo truncate">{{ $invoice->supplier->name }}</p>
+                <p class="font-bold text-orange-800 font-cairo truncate">{{ $archivedSupplierName ?? $invoice->supplier?->name ?? '—' }}</p>
             </div>
             <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4">
                 <p class="text-[10px] font-bold text-gray-400 font-cairo uppercase mb-1">تاريخ الفاتورة</p>

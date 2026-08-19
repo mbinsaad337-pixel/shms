@@ -305,20 +305,7 @@
             </div>
 
             {{-- Recent Activity Log (Simplified for Manager) --}}
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-gray-50 text-gray-400 rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-history"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-gray-800 text-sm">سجل العمليات العام</h4>
-                        <p class="text-[10px] text-gray-400">تتبع كافة التحركات الإدارية والمالية عبر النظام</p>
-                    </div>
-                </div>
-                <a href="#"
-                    class="px-4 py-2 bg-gray-50 text-gray-600 rounded-xl text-xs font-bold font-cairo hover:bg-gray-100 transition-colors">عرض
-                    السجل الكامل</a>
-            </div>
+            
         </div>
     </div>
 @endsection

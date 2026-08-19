@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\ValidationException;
 
 class Voucher extends Model
 {
+    use SoftDeletes;
     protected static function booted(): void
     {
         $ensureSettlementIsNotApproved = function (Voucher $voucher): void {
@@ -57,12 +59,12 @@ class Voucher extends Model
 
     public function fund()
     {
-        return $this->belongsTo(Fund::class);
+        return $this->belongsTo(Fund::class)->withTrashed();
     }
 
     public function targetFund()
     {
-        return $this->belongsTo(Fund::class, 'target_fund_id');
+        return $this->belongsTo(Fund::class, 'target_fund_id')->withTrashed();
     }
 
     public function creator()

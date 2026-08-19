@@ -12,25 +12,36 @@
                 <h2 class="text-2xl font-black text-navy font-cairo">سجل التصفية الشهرية</h2>
             </div>
             <div class="flex gap-3">
-                @if ($settlement->status !== 'approved')
-                    <form action="{{ route('nutrition.settlements.recalculate', $settlement) }}" method="POST">
+                @if(!$preview)
+                    @if ($settlement->status !== 'approved')
+                        <form action="{{ route('nutrition.settlements.recalculate', $settlement) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="bg-white text-navy border border-navy px-6 py-2.5 rounded-xl font-bold font-cairo shadow-sm flex items-center gap-2 hover:bg-gray-50 transition-all">
+                                <i class="fas fa-sync-alt"></i> تحديث الأرقام
+                            </button>
+                        </form>
+                    @endif
+                    <a href="{{ route('nutrition.settlements.export-pdf', $settlement) }}" class="bg-navy text-white px-6 py-2.5 rounded-xl font-bold font-cairo shadow-lg flex items-center gap-2 hover:bg-navy/90 transition-all">
+                        <i class="fas fa-file-pdf"></i> تصدير PDF
+                    </a>
+                    <form action="{{ route('nutrition.settlements.destroy', $settlement) }}" method="POST"
+                        data-confirm="هل أنت متأكد من حذف هذه التصفية نهائياً؟ لا يمكن التراجع.">
                         @csrf
-                        <button type="submit" class="bg-white text-navy border border-navy px-6 py-2.5 rounded-xl font-bold font-cairo shadow-sm flex items-center gap-2 hover:bg-gray-50 transition-all">
-                            <i class="fas fa-sync-alt"></i> تحديث الأرقام
+                        @method('DELETE')
+                        <button type="submit" class="bg-rose-50 text-rose-600 border border-rose-200 px-6 py-2.5 rounded-xl font-bold font-cairo shadow-sm flex items-center gap-2 hover:bg-rose-100 transition-all">
+                            <i class="fas fa-trash-alt"></i> حذف التصفية
                         </button>
                     </form>
+                @elseif($preview && $previewArchive)
+                    <a href="{{ route('annual-rollover.export-archive-pdf', $previewArchive) }}" target="_blank"
+                        class="bg-navy text-white px-6 py-2.5 rounded-xl font-bold font-cairo shadow-lg flex items-center gap-2 hover:bg-navy/90 transition-all">
+                        <i class="fas fa-file-pdf"></i> تصدير PDF
+                    </a>
+                    <a href="{{ route('annual-rollover.index') }}"
+                        class="bg-gray-100 text-gray-700 px-6 py-2.5 rounded-xl font-bold font-cairo flex items-center gap-2 hover:bg-gray-200 transition-all">
+                        <i class="fas fa-arrow-right"></i> رجوع للقائمة
+                    </a>
                 @endif
-                <a href="{{ route('nutrition.settlements.export-pdf', $settlement) }}" class="bg-navy text-white px-6 py-2.5 rounded-xl font-bold font-cairo shadow-lg flex items-center gap-2 hover:bg-navy/90 transition-all">
-                    <i class="fas fa-file-pdf"></i> تصدير PDF
-                </a>
-                <form action="{{ route('nutrition.settlements.destroy', $settlement) }}" method="POST"
-                    data-confirm="هل أنت متأكد من حذف هذه التصفية نهائياً؟ لا يمكن التراجع.">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="bg-rose-50 text-rose-600 border border-rose-200 px-6 py-2.5 rounded-xl font-bold font-cairo shadow-sm flex items-center gap-2 hover:bg-rose-100 transition-all">
-                        <i class="fas fa-trash-alt"></i> حذف التصفية
-                    </button>
-                </form>
             </div>
         </div>
 
@@ -139,10 +150,10 @@
                             <tr>
                                 <td class="text-center text-gray-400  ">{{ $index + 1 }}</td>
                                 <td class="  text-xs font-bold">{{ $invoice->invoice_number }}</td>
-                                <td class="font-bold text-gray-800">{{ $invoice->supplier?->name ?? '---' }}</td>
+                                <td class="font-bold text-gray-800">{{ ($supplierNames ?? collect())[$invoice->supplier_id] ?? $invoice->supplier?->name ?? '---' }}</td>
                                 <td class="text-center">
                                     <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold {{ $invoice->payment_type === 'cash' ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-orange-100 text-orange-700 border border-orange-200' }}">
-                                        {{ $invoice->payment_type_label }}
+                                        {{ $invoice->payment_type === 'cash' ? 'نقدي' : 'آجل' }}
                                     </span>
                                 </td>
                                 <td class="text-xs text-gray-500  ">{{ $invoice->invoice_date->format('Y-m-d') }}</td>
@@ -175,7 +186,7 @@
                             <tr>
                                 <td class="text-center text-gray-400  ">{{ $index + 1 }}</td>
                                 <td class="  text-xs font-bold">#{{ $payment->voucher_number }}</td>
-                                <td class="font-bold text-gray-800">{{ $payment->supplier?->name ?? '---' }}</td>
+                                <td class="font-bold text-gray-800">{{ ($supplierNames ?? collect())[$payment->supplier_id] ?? $payment->supplier?->name ?? '---' }}</td>
                                 <td class="text-xs text-gray-500  ">{{ $payment->voucher_date->format('Y-m-d') }}</td>
                                 <td class="text-left font-black text-cyan-600  ">{{ number_format($payment->amount, 2) }}</td>
                             </tr>
@@ -224,7 +235,7 @@
             @include('partials.print_footer')
         </div>
 
-        @if ($settlement->status === 'rejected' && $settlement->rejection_reason)
+        @if (!$preview && $settlement->status === 'rejected' && $settlement->rejection_reason)
             <div class="mt-8 bg-rose-50 border-2 border-rose-200 rounded-3xl p-6 no-print">
                 <h4 class="font-black text-rose-700 font-cairo flex items-center gap-2 mb-2">
                     <i class="fas fa-exclamation-triangle"></i> سبب رفض التصفية:
@@ -300,7 +311,7 @@
         }
     </style>
 
-@if ($settlement->status === 'submitted' && (auth()->user()->hasRole('center-manager') || auth()->user()->hasRole('super-admin')))
+@if (!$preview && $settlement->status === 'submitted' && (auth()->user()->hasRole('center-manager') || auth()->user()->hasRole('super-admin')))
     <div class="flex items-center gap-4 no-print mt-8 mb-12">
         <div class="h-12 w-px bg-gray-200 mx-2"></div>
         <form action="{{ route('nutrition.settlements.approve', $settlement) }}" method="POST">
@@ -336,6 +347,7 @@
     </div>
 @endif
 
+@if (!$preview)
     <!-- Reject Modal (Keep functional) -->
     <div id="rejectModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
@@ -352,4 +364,5 @@
             </form>
         </div>
     </div>
+@endif
 @endsection

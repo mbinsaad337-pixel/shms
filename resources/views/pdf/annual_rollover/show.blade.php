@@ -8,6 +8,11 @@
             margin-bottom: 14px;
             background: #f8fafc;
         }
+        .record-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
         .record-title {
             font-size: 16px;
@@ -17,15 +22,16 @@
         }
 
         .record-sub {
-            font-size: 10px;
-            color: #64748b;
+          
+            font-size: 13px;
+            color: #ce9300;
         }
 
         .badge-module {
             display: inline-block;
             background: #004274;
             color: #ffffff;
-            padding: 3px 10px;
+            padding: 5px;
             font-size: 10px;
             font-weight: bold;
             border-radius: 3px;
@@ -36,7 +42,7 @@
             display: inline-block;
             background: #D4A044;
             color: #ffffff;
-            padding: 3px 10px;
+            padding: 5px;
             font-size: 10px;
             font-weight: bold;
             border-radius: 3px;
@@ -50,7 +56,7 @@
         }
 
         .archive-ref .num {
-            font-size: 15px;
+            font-size: 10px;
             font-weight: bold;
         }
 
@@ -74,19 +80,21 @@
             border: 1px solid #e2e8f0;
             padding: 7px 10px;
             vertical-align: top;
-            font-size: 10.5px;
+            font-size: 12px;
         }
 
         .detail-table .key {
             width: 22%;
             background: #f8fafc;
-            color: #64748b;
+            color: #00060e;
+            font-size: 18px;
             font-weight: bold;
         }
 
         .detail-table .value {
             color: #0f172a;
             font-weight: bold;
+            font-size: 18px;
         }
 
         .detail-table .value.full {
@@ -192,8 +200,8 @@
         'released_at' => 'تاريخ الإخلاء',
         'published_at' => 'تاريخ النشر',
         'resolved_at' => 'تاريخ المعالجة والحل',
-        'student_id' => 'معرف الطالب',
-        'teacher_id' => 'معرف المعلم',
+        'student_id' => 'الطالب',
+        'teacher_id' => 'المعلم',
         'teacher_name' => 'اسم المعلم',
         'payee_or_payer' => 'الطرف المستفيد / الدافع',
         'payment_method' => 'طريقة الدفع / الصرف',
@@ -206,7 +214,7 @@
         'apartment' => 'الشقة',
         'floor' => 'الطابق',
         'room_number' => 'رقم الغرفة',
-        'room_id' => 'معرف الغرفة',
+        'room_id' => 'الغرفة',
         'sura' => 'السورة القرآنية',
         'verse' => 'الآية',
         'verse_from' => 'من الآية',
@@ -226,6 +234,119 @@
         'absent_count' => 'عدد الغائبين',
         'location' => 'المكان / الموقع',
         'views_count' => 'عدد المشاهدات',
+        'club_id' => 'النادي',
+        'activity_id' => 'النشاط',
+        'session_id' => 'الجلسة',
+        'center_id' => 'المركز',
+        'fund_id' => 'الصندوق',
+        'role' => 'الدور / الوظيفة',
+        'joined_at' => 'تاريخ الانضمام',
+        'student_number' => 'رقم الطالب',
+        'national_id' => 'رقم الهوية',
+        'surname' => 'اللقب',
+        'major' => 'التخصص',
+        'level' => 'المستوى',
+        'phone' => 'الهاتف',
+        'email' => 'البريد الإلكتروني',
+        'is_graduated' => 'متخرج',
+        'gpa' => 'المعدل',
+        'total_remaining' => 'المتبقي',
+        'marital_status' => 'الحالة الاجتماعية',
+        'blood_type' => 'فصيلة الدم',
+        'university' => 'الجامعة',
+        'college' => 'الكلية',
+        'academic_level' => 'المستوى الأكاديمي',
+        'permanent_address' => 'العنوان الدائم',
+        'emergency_name' => 'اسم جهة الطوارئ',
+        'emergency_phone' => 'هاتف جهة الطوارئ',
+        'emergency_relation' => 'صلة القرابة مع جهة الطوارئ',
+        'program_name' => 'اسم البرنامج',
+        'place_of_birth' => 'مكان الميلاد',
+        'id_card_number' => 'رقم بطاقة الهوية',
+        'id_card_source' => 'جهة إصدار البطاقة',
+        'id_card_date' => 'تاريخ إصدار البطاقة',
+        'nationality' => 'الجنسية',
+        'health_status' => 'الحالة الصحية',
+        'city' => 'المدينة',
+        'dependents_count' => 'عدد المعالين',
+        'governorate' => 'المحافظة',
+        'district' => 'المديرية',
+        'village' => 'القرية',
+        'home_phone' => 'الهاتف المنزلي',
+        'last_certificate' => 'آخر شهادة حصل عليها',
+        'last_cert_major' => 'تخصص آخر شهادة',
+        'last_cert_grade' => 'درجة آخر شهادة',
+        'graduation_year' => 'سنة التخرج',
+        'graduated_school' => 'مدرسة التخرج',
+        'enrollment_date' => 'تاريخ الالتحاق',
+        'study_duration' => 'مدة الدراسة',
+        'remaining_period' => 'الفترة المتبقية',
+        'expected_graduation' => 'تاريخ التخرج المتوقع',
+        'current_academic_year' => 'السنة الأكاديمية الحالية',
+        'skills' => 'المهارات',
+        'guardian_name' => 'اسم ولي الأمر',
+        'guardian_relation' => 'صلة القرابة مع ولي الأمر',
+        'guardian_education' => 'تعليم ولي الأمر',
+        'guardian_phone' => 'هاتف ولي الأمر',
+        'guardian_job' => 'وظيفة ولي الأمر',
+        'family_males' => 'ذكور الأسرة',
+        'family_females' => 'إناث الأسرة',
+        'family_avg_income' => 'متوسط دخل الأسرة',
+        'family_workers' => 'عمال الأسرة',
+        'barcode' => 'الباركود',
+        'annual_fees' => 'الرسوم السنوية',
+        'registration_date' => 'تاريخ التسجيل',
+        'is_profile_approved' => 'الملف معتمد',
+        'can_edit_profile' => 'يمكنه تعديل الملف',
+        'profile_step' => 'خطوة الملف الشخصي',
+        'profile_completion' => 'اكتمال الملف الشخصي',
+        'graduation_request_status' => 'حالة طلب التخرج',
+        'job_title' => 'المسمى الوظيفي',
+        'graduation_rejection_reason' => 'سبب رفض التخرج',
+        'graduation_requested_at' => 'تاريخ طلب التخرج',
+        'room_number' => 'رقم الغرفة',
+        'id card number' => 'رقم بطاقة الهوية',
+        'date of birth' => 'تاريخ الميلاد',
+    ];
+
+    $allFlatRows = [];
+    foreach ($complexData as $subItems) {
+        if (is_array($subItems) && isset($subItems[0]) && is_array($subItems[0])) {
+            $allFlatRows = array_merge($allFlatRows, $subItems);
+        }
+    }
+
+    $resolvedStudents = [];
+    $allStudentIds = collect($allFlatRows)->pluck('student_id')->filter()->unique()->values()->all();
+    if (!empty($allStudentIds)) {
+        $resolvedStudents = \App\Models\Student::withoutGlobalScopes()
+            ->whereIn('id', $allStudentIds)
+            ->pluck('name_ar', 'id')
+            ->toArray();
+    }
+
+    $resolvedClubs = [];
+    $allClubIds = collect($allFlatRows)->pluck('club_id')->filter()->unique()->values()->all();
+    if (!empty($allClubIds)) {
+        $resolvedClubs = \App\Models\Club::withoutGlobalScopes()
+            ->whereIn('id', $allClubIds)
+            ->pluck('name', 'id')
+            ->toArray();
+    }
+
+    $resolvedActivities = [];
+    $allActivityIds = collect($allFlatRows)->pluck('activity_id')->filter()->unique()->values()->all();
+    if (!empty($allActivityIds)) {
+        $resolvedActivities = \App\Models\Activity::withoutGlobalScopes()
+            ->whereIn('id', $allActivityIds)
+            ->pluck('name', 'id')
+            ->toArray();
+    }
+
+    $resolveByField = [
+        'student_id' => $resolvedStudents,
+        'club_id' => $resolvedClubs,
+        'activity_id' => $resolvedActivities,
     ];
 @endphp
 
@@ -233,20 +354,20 @@
 
     {{-- ════ RECORD IDENTITY ════ --}}
     <div class="record-identity">
-        <div class="archive-ref">
-            <div>معرف الأرشيف المرجعي</div>
-            <div class="num">#ARC-{{ str_pad($archive->id, 6, '0', STR_PAD_LEFT) }}</div>
-        </div>
-        <div>
+        
+        <div >
             <span class="badge-module">{{ $moduleName }}</span>
             <span class="badge-year">سنة {{ $archive->year }}</span>
         </div>
-        <div class="record-title">{{ $archive->title }}</div>
+
+        <div class="record-info">
+                <div class="record-title">{{ $archive->title }}</div>
         <div class="record-sub">
             المركز: {{ optional($archive->center)->name ?? 'المركز العام' }}
             @if ($archive->student_name || optional($archive->student)->name_ar)
                 &nbsp;|&nbsp; الطالب: {{ $archive->student_name ?: optional($archive->student)->name_ar }}
             @endif
+        </div>
         </div>
     </div>
 
@@ -254,18 +375,18 @@
     <div class="section-header">معلومات السجل الأساسية</div>
     <table class="detail-table">
         <tr>
-            <td class="key">تاريخ السجل الأصلي</td>
-            <td class="value">{{ $archive->record_date ? $archive->record_date->format('Y/m/d H:i') : '-' }}</td>
-            <td class="key">تاريخ الأرشفة</td>
-            <td class="value">{{ $archive->created_at->format('Y/m/d H:i') }}</td>
+            <td class="key" style="font-size: 12px">تاريخ السجل الأصلي</td>
+            <td class="value" style="font-size: 12px">{{ $archive->record_date ? $archive->record_date->format('Y/m/d H:i') : '-' }}</td>
+            <td class="key" style="font-size: 12px">تاريخ الأرشفة</td>
+            <td class="value" style="font-size: 12px">{{ $archive->created_at->format('Y/m/d H:i') }}</td>
         </tr>
-        <tr>
-            <td class="key">الطالب المعني</td>
+        {{-- <tr>
+            {{-- <td class="key">الطالب المعني</td>
             <td class="value">
-                {{ $archive->student_name ?: (optional($archive->student)->name_ar ?: 'غير محدد / سجل عام') }}</td>
-            <td class="key">المنفذ للترحيل</td>
+                {{ $archive->student_name ?: (optional($archive->student)->name_ar ?: 'غير محدد / سجل عام') }}</td> --}}
+          {{-- <td class="key">المنفذ للترحيل</td>
             <td class="value">{{ optional(optional($archive->rollover)->user)->name ?? 'النظام' }}</td>
-        </tr>
+        </tr> --}}
         @if ($archive->amount > 0)
             <tr>
                 <td class="key">المبلغ المالي</td>
@@ -278,6 +399,7 @@
 
     @php
         $isAmountKey = fn($k) => preg_match('/(amount|cost|budget|fine|income|expense|balance|price)/i', $k);
+        $isDateKey = fn($k) => str_ends_with($k, '_at') || str_ends_with($k, '_date') || $k === 'date' || in_array($k, ['start_date', 'end_date']);
         $isLongKey = fn($k) => in_array($k, ['description', 'body', 'notes', 'reason', 'response', 'subject', 'title']);
         $pairs = [];
         $i = 0;
@@ -310,8 +432,14 @@
                                 {{ $val ? 'نعم' : 'لا' }}
                             @elseif($isAmountKey($key) && is_numeric($val))
                                 <span class="value-amount">{{ number_format((float) $val, 2) }} ريال</span>
-                            @else
-                                {{ $val }}
+                            @elseif(str_ends_with($key, '_id') && isset($resolveByField[$key][$val]))
+                                {{ $resolveByField[$key][$val] }}
+                                @elseif($isDateKey($key) && is_string($val))
+                                {{ \Carbon\Carbon::parse($val)->format('Y/m/d') }}
+                            @elseif(is_array($val))
+                                                    {{ json_encode($val, JSON_UNESCAPED_UNICODE) }}
+                                                @else
+                                                    {{ $val }}
                             @endif
                         </td>
                     </tr>
@@ -327,6 +455,12 @@
                                     {{ $val ? 'نعم' : 'لا' }}
                                 @elseif($isAmountKey($key) && is_numeric($val))
                                     <span class="value-amount">{{ number_format((float) $val, 2) }} ريال</span>
+                                @elseif(str_ends_with($key, '_id') && isset($resolveByField[$key][$val]))
+                                    {{ $resolveByField[$key][$val] }}
+                                @elseif($isDateKey($key) && is_string($val))
+                                    {{ \Carbon\Carbon::parse($val)->format('Y/m/d') }}
+                                @elseif(is_array($val))
+                                    {{ json_encode($val, JSON_UNESCAPED_UNICODE) }}
                                 @else
                                     {{ $val }}
                                 @endif
@@ -340,6 +474,12 @@
                                     {{ $val ? 'نعم' : 'لا' }}
                                 @elseif($isAmountKey($key) && is_numeric($val))
                                     <span class="value-amount">{{ number_format((float) $val, 2) }} ريال</span>
+                                @elseif(str_ends_with($key, '_id') && isset($resolveByField[$key][$val]))
+                                    {{ $resolveByField[$key][$val] }}
+                                @elseif($isDateKey($key) && is_string($val))
+                                    {{ \Carbon\Carbon::parse($val)->format('Y/m/d') }}
+                                @elseif(is_array($val))
+                                    {{ json_encode($val, JSON_UNESCAPED_UNICODE) }}
                                 @else
                                     {{ $val }}
                                 @endif
@@ -394,6 +534,10 @@
                                                 @elseif(is_numeric($cellVal) && preg_match('/(amount|price|cost|total|balance)/i', $colKey))
                                                     <span class="value-amount">{{ number_format((float) $cellVal, 2) }}
                                                         ريال</span>
+                                                @elseif(str_ends_with($colKey, '_id') && isset($resolveByField[$colKey][$cellVal]))
+                                                    {{ $resolveByField[$colKey][$cellVal] }}
+                                                @elseif($isDateKey($colKey) && is_string($cellVal))
+                                                    {{ \Carbon\Carbon::parse($cellVal)->format('Y/m/d') }}
                                                 @else
                                                     {{ $cellVal }}
                                                 @endif
@@ -439,16 +583,16 @@
         <div class="section-header">بيانات عملية الترحيل السنوي المرتبطة</div>
         <table class="detail-table">
             <tr>
-                <td class="key">السنة المرحلة</td>
-                <td class="value">{{ $archive->rollover->year }}</td>
-                <td class="key">تاريخ ووقت التنفيذ</td>
-                <td class="value">{{ $archive->rollover->created_at->format('Y/m/d - H:i:s') }}</td>
+                <td class="key" style="font-size: 8px">السنة المرحلة</td>
+                <td class="value" style="font-size: 8px">{{ $archive->rollover->year }}</td>
+                <td class="key" style="font-size: 8px">تاريخ ووقت التنفيذ</td>
+                <td class="value" style="font-size: 8px">{{ $archive->rollover->created_at->format('Y/m/d - H:i:s') }}</td>
             </tr>
             <tr>
-                <td class="key">المستخدم المنفذ للعملية</td>
-                <td class="value">{{ optional($archive->rollover->user)->name ?? 'النظام' }}</td>
-                <td class="key"></td>
-                <td class="value"></td>
+                <td class="key" style="font-size: 8px">المستخدم المنفذ للعملية</td>
+                <td class="value" style="font-size: 8px">{{ optional($archive->rollover->user)->name ?? 'النظام' }}</td>
+                <td class="key" style="font-size: 8px"></td>
+                <td class="value" style="font-size: 8px"></td>
             </tr>
         </table>
         @if ($archive->rollover->notes)

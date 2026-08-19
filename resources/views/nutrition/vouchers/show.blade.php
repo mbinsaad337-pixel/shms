@@ -7,28 +7,43 @@
 
         <div class="flex items-center justify-between mb-6 no-print">
             <div class="flex items-center gap-4">
+              @if(!$preview)
                 <a href="{{ route('nutrition.vouchers.index') }}" class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-arrow-right text-xl"></i>
                 </a>
+                @elseif($preview && $previewArchive)
+                <a href="{{ route('annual-rollover.index') }}" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-arrow-right text-xl"></i>
+                </a>
+                @endif
+                <h2 class="text-2xl font-bold text-gray-800 font-cairo">{{ $voucher->getTypeLabel() }}</h2>
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 font-cairo">{{ $voucher->getTypeLabel() }}</h2>
                     <p class="text-gray-400   text-sm">{{ $voucher->voucher_number }}</p>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <a href="{{ route('nutrition.vouchers.export-pdf', $voucher) }}"
-                    class="w-9 h-9 bg-gray-800 text-white rounded-xl flex items-center justify-center">
-                    <i class="fas fa-file-pdf text-sm"></i>
-                </a>
-                @if($voucher->status === 'active')
-                    <form action="{{ route('nutrition.vouchers.cancel', $voucher) }}" method="POST"
-                        data-confirm="هل تريد إلغاء هذا السند؟">
-                        @csrf
-                        <button type="submit"
-                            class="w-9 h-9 bg-red-100 text-red-600 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-ban text-sm"></i>
-                        </button>
-                    </form>
+            <div class="flex gap-2 no-print">
+                @if(!$preview)
+                    <a href="{{ route('nutrition.vouchers.export-pdf', $voucher) }}"
+                        class="w-9 h-9 bg-gray-800 text-white rounded-xl flex items-center justify-center">
+                        <i class="fas fa-file-pdf text-sm"></i>
+                    </a>
+                    @if($voucher->status === 'active')
+                        <form action="{{ route('nutrition.vouchers.cancel', $voucher) }}" method="POST"
+                            data-confirm="هل تريد إلغاء هذا السند؟">
+                            @csrf
+                            <button type="submit"
+                                class="w-9 h-9 bg-red-100 text-red-600 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-ban text-sm"></i>
+                            </button>
+                        </form>
+                    @endif
+                @elseif($preview && $previewArchive)
+                    <a href="{{ route('annual-rollover.export-archive-pdf', $previewArchive) }}" target="_blank"
+                        class="w-9 h-9 bg-gray-800 text-white rounded-xl flex items-center justify-center">
+                        <i class="fas fa-file-pdf text-sm"></i>
+                    </a>
+                  
                 @endif
             </div>
         </div>
@@ -74,7 +89,7 @@
                 @if($voucher->supplier)
                     <div class="bg-orange-50 border border-orange-100 rounded-2xl p-4">
                         <p class="text-xs font-bold text-orange-400 font-cairo mb-1">المورد</p>
-                        <p class="font-bold text-orange-800 font-cairo text-lg">{{ $voucher->supplier->name }}</p>
+                        <p class="font-bold text-orange-800 font-cairo text-lg">{{ $archivedSupplierName ?? $voucher->supplier?->name ?? '—' }}</p>
                     </div>
                 @endif
                 @if($voucher->student)

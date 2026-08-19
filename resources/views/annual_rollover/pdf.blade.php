@@ -21,7 +21,7 @@
     <table class="data-table">
         <thead>
             <tr>
-                <th style="width: 5%;" class="text-center">#</th>
+                <th style="width: 5%;" class="text-center">م</th>
                 <th style="width: 8%;" class="text-center">السنة</th>
                 <th style="width: 14%;">القسم والقطاع</th>
                 <th style="width: 32%;">عنوان وتفاصيل السجل المؤرشف</th>

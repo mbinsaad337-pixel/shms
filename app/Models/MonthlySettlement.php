@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MonthlySettlement extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'center_id',
         'month',

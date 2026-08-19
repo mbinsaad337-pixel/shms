@@ -1,6 +1,11 @@
 @extends('layouts.app')
+@php
+    /** @var \App\Models\Student $student */
+    $preview = $preview ?? false;
+    $previewArchive = $previewArchive ?? null;
+@endphp
 
-@section('title', 'تفاصيل المخالفة')
+@section('title',!$preview ? 'معاينة تفاصيل المخالفة ' : ' تفاصيل المخالفة')
 
 @section('content')
     <div class="container mx-auto px-6 py-8">
@@ -11,6 +16,7 @@
                 <p class="text-gray-400 font-almarai text-sm mt-2 text-right">متابعة حالة المخالفة المسجلة للطالب: {{ $violation->student->name_ar }}</p>
             </div>
             <div class="flex gap-4">
+              @if(!$preview)
                 <a href="{{ route('violations.export', $violation->id) }}" target="_blank"
                     class="px-6 py-3 bg-red-50 text-red-600 rounded-2xl hover:bg-red-500 hover:text-white font-cairo font-bold transition-all flex items-center gap-2 border border-red-100 shadow-sm">
                     <i class="fas fa-file-pdf"></i>
@@ -21,6 +27,18 @@
                     <i class="fas fa-arrow-right"></i>
                     <span>رجوع للقائمة</span>
                 </a>
+                @elseif($preview && $previewArchive)
+                <a href="{{ route('annual-rollover.export-archive-pdf', $previewArchive) }}" target="_blank"
+                    class="px-6 py-3 bg-red-50 text-red-600 rounded-2xl hover:bg-red-500 hover:text-white font-cairo font-bold transition-all flex items-center gap-2 border border-red-100 shadow-sm">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>تصدير تفاصيل المخالفة PDF</span>
+                </a>
+                <a href="{{ route('annual-rollover.index', $previewArchive) }}"
+                    class="px-6 py-3 bg-gray-50 text-navy rounded-2xl hover:bg-gray-100 font-cairo font-bold transition-all flex items-center gap-2 border border-gray-100">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>رجوع للقائمة</span>
+                </a>
+                @endif
             </div>
         </div>
 
@@ -104,7 +122,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @else
+                            @elseif(!$preview)
                             <div class="mt-12 pt-10 border-t-2 border-dashed border-gray-100">
                                 <h3 class="text-xl font-black text-navy font-cairo mb-6 flex items-center gap-3">
                                     <i class="fas fa-balance-scale text-orange-500"></i>
@@ -284,10 +302,12 @@
                         <form action="{{ route('violations.destroy', $violation->id) }}" method="POST" data-confirm="هل أنت متأكد من حذف هذه المخالفة نهائياً؟">
                             @csrf
                             @method('DELETE')
+                            @if(!$preview)
                             <button type="submit" class="w-full py-4 bg-red-50 text-red-500 rounded-2xl font-bold font-cairo hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2">
                                 <i class="fas fa-trash-alt text-xs"></i>
                                 <span>حذف من السجل</span>
                             </button>
+                            @endif
                         </form>
                     </div>
                 </div>

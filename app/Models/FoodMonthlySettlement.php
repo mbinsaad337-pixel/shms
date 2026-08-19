@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FoodMonthlySettlement extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'center_id',
         'budget_id',

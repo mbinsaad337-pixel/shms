@@ -1,13 +1,24 @@
 @extends('layouts.app')
+@php
+    /** @var \App\Models\Student $student */
+    $preview = $preview ?? false;
+    $previewArchive = $previewArchive ?? null;
+@endphp
 @section('title', $news->title)
 
 @section('content')
     <div class="max-w-4xl mx-auto">
         <div class="flex items-center gap-3 mb-8 no-print">
+          @if(!$preview)
             <a href="{{ route('news.index') }}"
                 class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all">
                 <i class="fas fa-arrow-right"></i>
             </a>
+          @elseif($preview && $previewArchive)
+          <a href="{{ route('annual-rollover.index', $previewArchive) }}"
+                class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all">
+                <i class="fas fa-arrow-right"></i>
+            </a>  @endif
             <h2 class="text-xl font-bold text-navy font-cairo">الأخبار والإعلانات</h2>
         </div>
 

@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'تفاصيل التصفية الشهرية')
+@php
+    /** @var \App\Models\Student $student */
+    $preview = $preview ?? false;
+    $previewArchive = $previewArchive ?? null;
+@endphp
+
+@section('title',$preview ? 'معاينة تفاصيل التصفية الشهرية' :  'تفاصيل التصفية الشهرية')
 
 @section('content')
 <div class="container mx-auto px-4 py-8 max-w-7xl">
@@ -32,17 +38,34 @@
                 </div>
             </div>
         </div>
-        
-        <div class="flex gap-3">
-            @if($settlement->status !== 'approved')
-                <form action="{{ route('settlements.recalculate', $settlement) }}" method="POST" class="no-print">
-                    @csrf
-                    <button type="submit" class="bg-amber-500 text-white hover:bg-amber-600 px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-bold font-cairo shadow-sm transition-all" title="إعادة حساب الأرصدة بناءً على السندات المسجلة">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>تحديث الحسابات</span>
-                    </button>
-                </form>
-            @endif
+        @if ($preview && $previewArchive)
+                <div class="mb-6 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                            <i class="fas fa-archive text-amber-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-black text-amber-800 font-cairo">وضع المعاينة — سجل مؤرشف</h3>
+                            <p class="text-xs text-amber-600 font-almarai">
+                                بيانات هذه التصفية مؤرشفة من السنة {{ $previewArchive->year }}
+                                &bull; الأرشيف #{{ str_pad($previewArchive->id, 6, '0', STR_PAD_LEFT) }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <a href="{{ route('annual-rollover.export-archive-pdf', $previewArchive) }}" target="_blank"
+                            class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl text-xs font-bold font-cairo flex items-center gap-2 transition-all border border-red-200">
+                            <i class="fas fa-file-pdf"></i> تصدير أرشيف PDF
+                        </a>
+                        <a href="{{ route('annual-rollover.index', $previewArchive) }}"
+                            class="px-4 py-2 bg-white hover:bg-gray-50 text-navy rounded-xl text-xs font-bold font-cairo flex items-center gap-2 transition-all border border-gray-200">
+                            <i class="fas fa-arrow-right"></i> العودة للأرشيف
+                        </a>
+                    </div>
+                </div>
+                @elseif (!$preview)
+                  <div class="flex gap-3">
+          
             <a href="{{ route('settlements.index') }}" class="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-bold font-cairo shadow-sm transition-all">
                 <i class="fas fa-arrow-right"></i>
                 <span>العودة للتصفيات</span>
@@ -50,8 +73,12 @@
             <a href="{{ route('settlements.export-pdf', $settlement) }}" class="bg-primary text-white hover:bg-primary-dark px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-bold font-cairo shadow-sm transition-all">
                 <i class="fas fa-file-pdf"></i>
                 <span>تصدير PDF</span>
-            </a>>
+            </a>
         </div>
+                
+            @endif
+        </div>
+      
     </div>
 
     <!-- Overview Stats -->
@@ -329,7 +356,7 @@
                 </form>
             @endif
 
-            @if(auth()->user()->hasRole('super-admin'))
+            @if(auth()->user()->hasRole('super-admin')&&!$preview)
                 <form action="{{ route('settlements.destroy', $settlement) }}" method="POST" data-confirm="{{ $settlement->status === 'approved' ? 'تحذير أمني: هذه التصفية معتمدة ومؤرشفة. هل أنت متأكد بصفة استثنائية من رغبتك بحذفها كمدير عام؟!' : 'هل أنت متأكد من حذف هذه التصفية؟ لا يمكن التراجع عن هذا الإجراء.' }}" class="mr-auto">
                     @csrf
                     @method('DELETE')

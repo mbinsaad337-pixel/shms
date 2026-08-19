@@ -31,7 +31,7 @@
                                 <option value="receipt_housing">سند قبض (تسكين)</option>
                                 <option value="receipt_deposit">سند قبض (إيداع عام)</option>
                                 <option value="payment">سند صرف (دفع)</option>
-                                <option value="transfer">سند تحويل (بين الصناديق)</option>
+                                {{-- <option value="transfer">سند تحويل (بين الصناديق)</option> --}}
                                 <option value="salary">سند رواتب</option>
                             </select>
                             <input type="hidden" name="type" id="hidden_type" value="receipt">

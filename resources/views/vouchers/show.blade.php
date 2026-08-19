@@ -1,6 +1,11 @@
 @extends('layouts.app')
+@php
+    /** @var \App\Models\Student $student */
+    $preview = $preview ?? false;
+    $previewArchive = $previewArchive ?? null;
+@endphp
 
-@section('title', 'تفاصيل السند المالي')
+@section('title',($preview?'معاينة السند المالي':'تفاصيل السند المالي').$voucher->voucher_number)
 
 @section('content')
     <div class="container mx-auto px-4 py-8 max-w-5xl">
@@ -35,7 +40,35 @@
                 </div>
             </div>
             
-            <div class="flex gap-3">
+            
+            
+            @if ($preview && $previewArchive)
+                <div class="mb-6 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                            <i class="fas fa-archive text-amber-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-black text-amber-800 font-cairo">وضع المعاينة — سجل مؤرشف</h3>
+                            <p class="text-xs text-amber-600 font-almarai">
+                                بيانات هذا السند مؤرشفة من السنة {{ $previewArchive->year }}
+                                &bull; الأرشيف #{{ str_pad($previewArchive->id, 6, '0', STR_PAD_LEFT) }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <a href="{{ route('annual-rollover.export-archive-pdf', $previewArchive) }}" target="_blank"
+                            class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl text-xs font-bold font-cairo flex items-center gap-2 transition-all border border-red-200">
+                            <i class="fas fa-file-pdf"></i> تصدير أرشيف PDF
+                        </a>
+                        <a href="{{ route('annual-rollover.index', $previewArchive) }}"
+                            class="px-4 py-2 bg-white hover:bg-gray-50 text-navy rounded-xl text-xs font-bold font-cairo flex items-center gap-2 transition-all border border-gray-200">
+                            <i class="fas fa-arrow-right"></i> العودة للأرشيف
+                        </a>
+                    </div>
+                </div>
+                @elseif (!$preview)
+                <div class="flex gap-3">
                 
 
                 <a href="{{ route('vouchers.export-pdf', $voucher) }}" target="_blank"
@@ -44,6 +77,7 @@
                     <span>تصدير كـ PDF</span>
                 </a>
             </div>
+            @endif
         </div>
 
         <!-- Main Card -->
@@ -187,13 +221,14 @@
             </div>
             
         </div>
-        
-        <div class="flex justify-center no-print mt-8">
-             <a href="{{ route('vouchers.index') }}" class="text-gray-500 hover:text-gray-700 font-bold font-cairo text-sm transition-colors flex items-center gap-2">
-                 <i class="fas fa-arrow-right"></i>
-                 <span>العودة لقائمة السندات</span>
-             </a>
-        </div>
+        @if(!$preview)
+            <div class="flex justify-center no-print mt-8">
+                <a href="{{ route('vouchers.index') }}" class="text-gray-500 hover:text-gray-700 font-bold font-cairo text-sm transition-colors flex items-center gap-2">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>العودة لقائمة السندات</span>
+                </a>
+            </div>
+        @endif
         @include('partials.print_footer')
     </div>
 @endsection

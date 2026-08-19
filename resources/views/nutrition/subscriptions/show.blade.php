@@ -16,11 +16,22 @@
                     <p class="text-gray-400   text-sm">{{ $subscription->student?->university_id }}</p>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <a href="{{ route('nutrition.subscriptions.export-pdf') }}?status={{ $subscription->status }}"
-                    class="w-9 h-9 bg-gray-800 text-white rounded-xl flex items-center justify-center" title="تصدير PDF">
-                    <i class="fas fa-file-pdf text-sm"></i>
-                </a>
+            <div class="flex gap-2 no-print">
+                @if(!$preview)
+                    <a href="{{ route('nutrition.subscriptions.export-pdf') }}?status={{ $subscription->status }}"
+                        class="w-9 h-9 bg-gray-800 text-white rounded-xl flex items-center justify-center" title="تصدير PDF">
+                        <i class="fas fa-file-pdf text-sm"></i>
+                    </a>
+                @elseif($preview && $previewArchive)
+                    <a href="{{ route('annual-rollover.export-archive-pdf', $previewArchive) }}" target="_blank"
+                        class="w-9 h-9 bg-gray-800 text-white rounded-xl flex items-center justify-center" title="تصدير PDF">
+                        <i class="fas fa-file-pdf text-sm"></i>
+                    </a>
+                    <a href="{{ route('annual-rollover.index') }}"
+                        class="w-9 h-9 bg-gray-100 text-gray-700 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-arrow-right text-sm"></i>
+                    </a>
+                @endif
             </div>
         </div>
 
