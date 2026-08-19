@@ -474,26 +474,6 @@
 
             <!-- Engagement -->
             <div class="engagement-bar">
-                @auth
-                    <form action="{{ route('news.like', $news) }}" method="POST" class="inline">
-                        @csrf
-                        <button type="submit" class="action-btn {{ $isLiked ? 'liked' : '' }}">
-                            <i class="{{ $isLiked ? 'fas' : 'far' }} fa-heart"></i>
-                            <span>{{ $likesCount }} إعجاب</span>
-                        </button>
-                    </form>
-                @else
-                    <div class="action-btn" onclick="alert('يرجى تسجيل الدخول للإعجاب')">
-                        <i class="far fa-heart"></i>
-                        <span>{{ $likesCount }} إعجاب</span>
-                    </div>
-                @endauth
-                
-                <div class="action-btn">
-                    <i class="far fa-comment"></i>
-                    <span>{{ count($news->comments) }} تعليق</span>
-                </div>
-                
                 <button class="action-btn mr-auto" onclick="navigator.share({title: '{{ $news->title }}', url: window.location.href})">
                     <i class="fas fa-share-alt"></i>
                     <span>مشاركة</span>

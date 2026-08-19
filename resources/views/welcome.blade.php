@@ -182,7 +182,18 @@ $slides = [
 </script>
 
 <!-- CENTERS SECTION -->
-<section id="centers" class="py-12 md:py-24 bg-[#f8fafc]" x-data="{sel:null,open(c){this.sel=c;document.body.style.overflow='hidden'},close(){this.sel=null;document.body.style.overflow=''}}">
+<section id="centers" class="py-12 md:py-24 bg-[#f8fafc]" x-data="{
+    sel: null,
+    centersData: {{ Js::from($centers) }},
+    openById(id) {
+        this.sel = this.centersData.find(c => c.id === id);
+        document.body.style.overflow = 'hidden';
+    },
+    close() {
+        this.sel = null;
+        document.body.style.overflow = '';
+    }
+}">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-8 md:mb-16">
             <h2 class="text-2xl md:text-4xl font-black text-navy mb-3">مراكزنا الطلابية</h2>
@@ -208,9 +219,9 @@ $slides = [
                     <div class="flex items-center gap-3 text-xs font-bold mb-6 text-gray-500">
                         <span><i class="fas fa-user-graduate text-navy/50 mr-1"></i> {{ $center->students_count }} طالب</span>
                     </div>
-                    <button type="button" @click='open(@json($center))' class="center-details-button mt-auto w-full py-3 font-bold rounded-xl transition-colors">
-                        عرض تفاصيل المركز <i class="fas fa-arrow-left mr-2 text-sm"></i>
-                    </button>
+                    <a href="{{ route('centers.public-show', $center->id) }}" target="_blank" class="center-details-button mt-auto w-full py-3 font-bold rounded-xl transition-colors text-center block">
+                        عرض تفاصيل المركز <i class="fas fa-external-link-alt mr-2 text-sm"></i>
+                    </a>
                 </div>
             </div>
             @empty
@@ -663,19 +674,7 @@ $slides = [
                 </div>
                 <h3 style="font-size:1.05rem;font-weight:900;color:#004274;line-height:1.4;margin-bottom:8px;font-family:Cairo">${item.title}</h3>
                 <p style="color:#6b7280;font-size:0.82rem;font-family:Almarai;line-height:1.7;flex:1">${excerpt}</p>
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px">
-                    <div style="display:flex;align-items:center;gap:12px">
-                        ${!isJob ? `
-                        <span style="display:flex;align-items:center;gap:4px;font-size:0.78rem;color:#ef4444;font-weight:700;background:#fef2f2;padding:4px 10px;border-radius:999px">
-                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                            ${item.likes_count||0}
-                        </span>
-                        <span style="display:flex;align-items:center;gap:4px;font-size:0.78rem;color:#6b7280;font-weight:700;background:#f3f4f6;padding:4px 10px;border-radius:999px">
-                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
-                            ${item.comments_count||0}
-                        </span>
-                        ` : ''}
-                    </div>
+                <div style="display:flex;align-items:center;justify-content:flex-end;margin-top:14px">
                     <a href="${BASE}/news/public/${item.id}" class="read-more-btn" style="margin-top:0">
                         <i class="fas fa-book-open" style="font-size:0.75rem"></i> قراءة المزيد
                     </a>
