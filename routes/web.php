@@ -22,6 +22,9 @@ Route::get('api/public-news-filter', [NewsController::class, 'publicNewsFilter']
 // Public News Detail (no login required, read only)
 Route::get('news/public/{news}', [NewsController::class, 'publicShow'])->name('news.public-show');
 
+// Public Center Detail (no login required)
+Route::get('centers/public/{center}', [NewsController::class, 'publicShowCenter'])->name('centers.public-show');
+
 Route::middleware('guest')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [LoginController::class, 'login']);
@@ -133,6 +136,18 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
         Route::get('annual-rollover/archive/{archive}', [\App\Http\Controllers\AnnualRolloverController::class, 'showArchive'])->name('annual-rollover.show-archive');
         Route::get('annual-rollover/archive/{archive}/export-pdf', [\App\Http\Controllers\AnnualRolloverController::class, 'exportArchivePdf'])->name('annual-rollover.export-archive-pdf');
         Route::get('annual-rollover/export-pdf', [\App\Http\Controllers\AnnualRolloverController::class, 'exportPdf'])->name('annual-rollover.export-pdf');
+
+        // System Backup (النسخ الاحتياطي للنظام)
+        Route::post('backup/create', [\App\Http\Controllers\BackupController::class, 'createBackup'])->name('backup.create');
+        Route::get('backup/download', [\App\Http\Controllers\BackupController::class, 'downloadBackup'])->name('backup.download');
+        Route::post('backup/delete', [\App\Http\Controllers\BackupController::class, 'deleteBackup'])->name('backup.delete');
+        Route::get('backup/list', [\App\Http\Controllers\BackupController::class, 'listBackups'])->name('backup.list');
+
+        // Annual Reports (التقارير السنوية)
+        Route::get('annual-reports', [\App\Http\Controllers\AnnualReportController::class, 'index'])->name('annual-reports.index');
+        Route::post('annual-reports', [\App\Http\Controllers\AnnualReportController::class, 'store'])->name('annual-reports.store');
+        Route::get('annual-reports/{annualReport}/download', [\App\Http\Controllers\AnnualReportController::class, 'download'])->name('annual-reports.download');
+        Route::delete('annual-reports/{annualReport}', [\App\Http\Controllers\AnnualReportController::class, 'destroy'])->name('annual-reports.destroy');
     });
 
     // Students Resource - access control is handled inside the controller methods

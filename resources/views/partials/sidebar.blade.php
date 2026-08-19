@@ -237,6 +237,11 @@
                             <i class="fas fa-archive h-5 w-5 ml-3 text-amber-400"></i>
                             الترحيل السنوي والأرشيف
                         </a>
+                        <a href="{{ route('annual-reports.index') }}"
+                            class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('annual-reports.*') ? 'bg-white/10 text-gold font-bold shadow-sm' : 'text-gray-300 hover:bg-white/5 transition' }}">
+                            <i class="fas fa-file-alt h-5 w-5 ml-3 text-emerald-400"></i>
+                            التقارير السنوية
+                        </a>
                     @endif
                     @if(auth()->user()->can('view-assets') || auth()->user()->hasRole('super-admin'))
                         <a href="{{ route('assets.index') }}"

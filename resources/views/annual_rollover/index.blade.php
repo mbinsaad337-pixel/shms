@@ -6,9 +6,75 @@
     <div x-data="{
         activeTab: '{{ request()->hasAny(['archived_year', 'module', 'date_from', 'date_to', 'search', 'page']) ? 'archives' : 'rollover' }}',
         selectAll: true,
+        showBackupModal: false,
+        backups: [],
+        backupLoading: false,
+        creatingBackup: false,
+        backupProgress: '',
+        backupResult: null,
         toggleAllModules(val) {
             let checkboxes = document.querySelectorAll('.module-checkbox');
             checkboxes.forEach(cb => cb.checked = val);
+        },
+        async loadBackups() {
+            this.backupLoading = true;
+            try {
+                const response = await fetch('{{ route('backup.list') }}');
+                const data = await response.json();
+                this.backups = data.backups || [];
+            } catch (e) {
+                this.backups = [];
+            }
+            this.backupLoading = false;
+        },
+        async createBackup() {
+            this.creatingBackup = true;
+            this.backupProgress = 'جاري إنشاء النسخة الاحتياطية...';
+            this.backupResult = null;
+            try {
+                const response = await fetch('{{ route('backup.create') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    this.backupResult = data;
+                    this.backupProgress = '';
+                    await this.loadBackups();
+                } else {
+                    this.backupProgress = 'حدث خطأ: ' + (data.error || 'غير معروف');
+                }
+            } catch (e) {
+                this.backupProgress = 'حدث خطأ في الاتصال بالخادم';
+            }
+            this.creatingBackup = false;
+        },
+        downloadBackup(filename) {
+            window.location.href = '{{ route('backup.download') }}?file=' + encodeURIComponent(filename);
+        },
+        async deleteBackup(filename) {
+            if (!confirm('هل أنت متأكد من حذف هذه النسخة الاحتياطية؟')) return;
+            try {
+                const response = await fetch('{{ route('backup.delete') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ filename: filename })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    await this.loadBackups();
+                }
+            } catch (e) {
+                alert('حدث خطأ أثناء الحذف');
+            }
         }
     }" class="space-y-6 pb-12">
 
@@ -42,6 +108,11 @@
                         class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-gold rounded-2xl text-xs font-bold font-cairo backdrop-blur transition-all flex items-center gap-2">
                         <i class="fas fa-search"></i>
                         <span>تصفح الأرشيف</span>
+                    </button>
+                    <button @click="showBackupModal = true; loadBackups()"
+                        class="px-4 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 rounded-2xl text-navy font-bold font-cairo backdrop-blur transition-all flex items-center gap-2 border border-emerald-400/30">
+                        <i class="fas fa-database"></i>
+                        <span>نسخة احتياطية</span>
                     </button>
                 </div>
             </div>
@@ -843,6 +914,149 @@
                         </table>
                     </div>
                 @endif
+            </div>
+        </div>
+
+        <!-- Backup Modal -->
+        <div x-show="showBackupModal" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            style="display: none;">
+            <div @click.away="showBackupModal = false"
+                class="bg-white rounded-[2.5rem] p-8 max-w-2xl w-full shadow-2xl transform transition-all max-h-[90vh] overflow-y-auto">
+
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-600">
+                            <i class="fas fa-database text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-black text-navy font-cairo">النسخ الاحتياطي للنظام</h2>
+                            <p class="text-xs text-gray-400 font-almarai">إنشاء وتنزيل نسخ احتياطية من قاعدة البيانات</p>
+                        </div>
+                    </div>
+                    <button @click="showBackupModal = false"
+                        class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-red-50 text-gray-400 hover:text-red-500 flex items-center justify-center transition-all">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Create Backup Button -->
+                <div class="mb-6">
+                    <button @click="createBackup()" :disabled="creatingBackup"
+                        class="w-full px-6 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-gold font-black text-sm rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <template x-if="!creatingBackup">
+                            <span class="flex items-center gap-3">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>إنشاء نسخة احتياطية جديدة</span>
+                            </span>
+                        </template>
+                        <template x-if="creatingBackup">
+                            <span class="flex items-center gap-3">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <span x-text="backupProgress"></span>
+                            </span>
+                        </template>
+                    </button>
+                </div>
+
+                <!-- Backup Result -->
+                <template x-if="backupResult">
+                    <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-emerald-500 text-lg mt-0.5"></i>
+                            <div class="flex-1">
+                                <p class="text-sm font-bold text-emerald-800 font-cairo" x-text="backupResult.message">
+                                </p>
+                                <div class="mt-2 flex flex-wrap gap-3 text-xs text-emerald-600">
+                                    <span class="flex items-center gap-1">
+                                        <i class="fas fa-file"></i>
+                                        <span x-text="backupResult.filename"></span>
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <i class="fas fa-weight-hanging"></i>
+                                        <span x-text="backupResult.size"></span>
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <i class="fas fa-table"></i>
+                                        <span x-text="backupResult.tables_count + ' جدول'"></span>
+                                    </span>
+                                </div>
+                                <button @click="downloadBackup(backupResult.filename)"
+                                    class="mt-3 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-2">
+                                    <i class="fas fa-download"></i> تنزيل النسخة الآن
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Backups List -->
+                <div>
+                    <h3 class="text-sm font-black text-navy font-cairo mb-3 flex items-center gap-2">
+                        <i class="fas fa-list text-gold"></i>
+                        <span>النسخ الاحتياطية المحفوظة</span>
+                    </h3>
+
+                    <template x-if="backupLoading">
+                        <div class="text-center py-8">
+                            <i class="fas fa-spinner fa-spin text-2xl text-gray-300 mb-2"></i>
+                            <p class="text-xs text-gray-400 font-almarai">جاري تحميل القائمة...</p>
+                        </div>
+                    </template>
+
+                    <template x-if="!backupLoading && backups.length === 0">
+                        <div class="text-center py-8 bg-gray-50 rounded-2xl">
+                            <i class="fas fa-archive text-3xl text-gray-200 mb-2"></i>
+                            <p class="text-xs text-gray-400 font-almarai">لا توجد نسخ احتياطية محفوظة بعد</p>
+                        </div>
+                    </template>
+
+                    <template x-if="!backupLoading && backups.length > 0">
+                        <div class="space-y-3">
+                            <template x-for="backup in backups" :key="backup.filename">
+                                <div
+                                    class="flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all border border-gray-100">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-xl bg-navy/10 flex items-center justify-center">
+                                            <i class="fas fa-file-code text-navy text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-bold text-gray-800 font-cairo"
+                                                x-text="backup.filename"></p>
+                                            <div class="flex items-center gap-3 mt-1 text-[10px] text-gray-400">
+                                                <span class="flex items-center gap-1">
+                                                    <i class="fas fa-weight-hanging"></i>
+                                                    <span x-text="backup.size"></span>
+                                                </span>
+                                                <span class="flex items-center gap-1">
+                                                    <i class="fas fa-clock"></i>
+                                                    <span x-text="backup.created_at"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <button @click="downloadBackup(backup.filename)"
+                                            class="px-3 py-1.5 bg-navy/10 hover:bg-navy text-navy hover:text-gold text-xs font-bold rounded-xl transition-all flex items-center gap-1.5">
+                                            <i class="fas fa-download text-[10px]"></i>
+                                            <span>تنزيل</span>
+                                        </button>
+                                        <button @click="deleteBackup(backup.filename)"
+                                            class="px-3 py-1.5 bg-red-50 hover:bg-red-500 text-red-500 hover:text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5">
+                                            <i class="fas fa-trash text-[10px]"></i>
+                                            <span>حذف</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
             </div>
         </div>
 

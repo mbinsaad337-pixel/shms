@@ -27,7 +27,6 @@ class NewsController extends Controller
         // Recent published news
         $recentNews = News::where('is_published', true)
             ->with('center:id,name')
-            ->withCount(['likes', 'comments'])
             ->latest('published_at')
             ->take(6)
             ->get();
@@ -53,11 +52,21 @@ class NewsController extends Controller
         return response()->json($centers);
     }
 
+    public function publicShowCenter(Center $center)
+    {
+        $center->loadCount(['students' => fn ($q) => $q->where('status', 'residing')]);
+
+        $reports = \App\Models\AnnualReport::where('center_id', $center->id)
+            ->orderByDesc('year')
+            ->get();
+
+        return view('center_public_show', compact('center', 'reports'));
+    }
+
     public function publicNewsFilter(Request $request)
     {
         $query = News::where('is_published', true)
-            ->with('center:id,name')
-            ->withCount(['likes', 'comments']);
+            ->with('center:id,name');
 
         if ($request->filled('center_id')) {
             $query->where('center_id', $request->center_id);
