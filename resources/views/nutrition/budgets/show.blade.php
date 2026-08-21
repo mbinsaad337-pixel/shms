@@ -74,7 +74,7 @@
             <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 text-center">
                 <p class="text-[10px] text-blue-500 font-bold uppercase font-cairo mb-1">إجمالي الميزانية</p>
                 <p class="text-2xl font-black text-blue-700  ">{{ number_format($budget->total_amount, 2) }}</p>
-                <p class="text-xs text-blue-400">ر.ي</p>
+                <p class="text-xs text-blue-400">{{ currency_symbol() }}</p>
             </div>
             <div class="bg-purple-50 border border-purple-100 rounded-2xl p-4 text-center">
                 <p class="text-[10px] text-purple-500 font-bold uppercase font-cairo mb-1">عدد المشتركين</p>
@@ -86,13 +86,13 @@
                 <p class="text-2xl font-black text-green-700  ">
                     {{ number_format($budget->cost_per_student ?? 0, 2) }}
                 </p>
-                <p class="text-xs text-green-400">ر.ي</p>
+                <p class="text-xs text-green-400">{{ currency_symbol() }}</p>
             </div>
             <div class="bg-orange-50 border border-orange-100 rounded-2xl p-4 text-center">
                 <p class="text-[10px] text-orange-500 font-bold uppercase font-cairo mb-1">الاشتراك اليومي</p>
                 <p class="text-2xl font-black text-orange-700  ">{{ number_format($budget->daily_rate ?? 0, 2) }}
                 </p>
-                <p class="text-xs text-orange-400">ر.ي/يوم</p>
+                <p class="text-xs text-orange-400">{{ currency_symbol() }}/يوم</p>
             </div>
         </div>
 
@@ -112,7 +112,7 @@
                     @if(!empty($supplierName))
                     <div class="border border-gray-100 rounded-xl p-3 flex flex-col items-center justify-center bg-gray-50/50">
                         <span class="text-xs font-bold text-gray-500 font-cairo text-center mb-1">{{ $supplierName }}</span>
-                        <span class="font-black text-navy  ">{{ number_format($total, 2) }} <span class="text-[10px] text-gray-400 font-cairo">ر.ي</span></span>
+                        <span class="font-black text-navy  ">{{ number_format($total, 2) }} <span class="text-[10px] text-gray-400 font-cairo">{{ currency_symbol() }}</span></span>
                     </div>
                     @endif
                 @endforeach
@@ -159,7 +159,7 @@
                                 {{ $line->unit_price ? number_format($line->unit_price, 2) : '—' }}
                             </td>
                             <td class="px-4 py-3 text-center font-bold text-green-700  ">
-                                {{ number_format($line->total, 2) }} ر.ي
+                                {{ number_format($line->total, 2) }} {{ currency_symbol() }}
                             </td>
                             <td class="px-4 py-3 text-gray-500 text-sm font-cairo">{{ $line->supplier_name ?? '—' }}</td>
                         </tr>
@@ -170,7 +170,7 @@
                         <td colspan="5" class="px-4 py-3 text-right font-black text-blue-800 font-cairo">الإجمالي الكلي:
                         </td>
                         <td class="px-4 py-3 text-center font-black text-blue-800   text-lg">
-                            {{ number_format($budget->total_amount, 2) }} ر.ي
+                            {{ number_format($budget->total_amount, 2) }} {{ currency_symbol() }}
                         </td>
                         <td></td>
                     </tr>

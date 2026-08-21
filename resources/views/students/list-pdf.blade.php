@@ -78,7 +78,7 @@
     @include('partials.pdf_header', [
         'title' => 'سجل الطلاب (جديد)',
         'number' => 'STU-LIST-' . date('Ymd'),
-        'department' => 'إدارة الإسكان وشؤون الطلاب',
+        'department' => 'إدارة شؤون الطلاب',
     ])
 
     <table>

@@ -113,7 +113,8 @@ class AnnualRolloverController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-        $centerId = $user->hasRole('super-admin') ? ($request->get('center_id') ?: $user->center_id) : $user->center_id;
+        $canFilterCenter = $user->hasAnyRole(['super-admin', 'executive-manager']);
+        $centerId = $canFilterCenter ? ($request->get('center_id') ?: $user->center_id) : $user->center_id;
 
         $currentCounts = [
             'administrative' => [
@@ -222,7 +223,8 @@ class AnnualRolloverController extends Controller
             'rollovers',
             'availableYears',
             'centers',
-            'centerId'
+            'centerId',
+            'canFilterCenter'
         ));
     }
 
@@ -264,8 +266,9 @@ class AnnualRolloverController extends Controller
             if (in_array('administrative', $selectedModules)) {
                 $count = 0;
 
-                $violations = Violation::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                Violation::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($violations) use ($rollover, $year, &$count) {
                 foreach ($violations as $item) {
                     $files = $this->collectFilesFromRecord($item, 'violation');
                     $arc = AnnualArchive::create([
@@ -288,9 +291,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end violations chunk
 
                 $penalties = Penalty::whereHas('student', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($penalties) use ($rollover, $year, &$count) {
                 foreach ($penalties as $item) {
                     $arc = AnnualArchive::create([
                         'rollover_id' => $rollover->id,
@@ -308,9 +313,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end penalties chunk
 
-                $commitments = Commitment::whereHas('student', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                Commitment::whereHas('student', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($commitments) use ($rollover, $year, &$count) {
                 foreach ($commitments as $item) {
                     $files = $this->collectFilesFromRecord($item, 'commitment');
                     $arc = AnnualArchive::create([
@@ -333,9 +340,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end commitments chunk
 
-                $leaves = Leave::whereHas('student', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                Leave::whereHas('student', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($leaves) use ($rollover, $year, &$count) {
                 foreach ($leaves as $item) {
                     $arc = AnnualArchive::create([
                         'rollover_id' => $rollover->id,
@@ -353,9 +362,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end leaves chunk
 
-                $absences = Absence::whereHas('student', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                Absence::whereHas('student', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($absences) use ($rollover, $year, &$count) {
                 foreach ($absences as $item) {
                     $arc = AnnualArchive::create([
                         'rollover_id' => $rollover->id,
@@ -373,14 +384,16 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end absences chunk
 
                 $summary['administrative'] = $count;
             }
 
             if (in_array('activities', $selectedModules)) {
                 $count = 0;
-                $activities = Activity::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                Activity::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($activities) use ($rollover, $year, &$count) {
 
                 foreach ($activities as $item) {
                     $files = $this->collectFilesFromRecord($item, 'activity');
@@ -404,9 +417,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end activities chunk
 
-                $newsList = News::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                News::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($newsList) use ($rollover, $year, &$count) {
                 foreach ($newsList as $item) {
                     $files = $this->collectFilesFromRecord($item, 'news');
                     $arc = AnnualArchive::create([
@@ -427,6 +442,7 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end news chunk
 
                 $summary['activities'] = $count;
             }
@@ -434,9 +450,10 @@ class AnnualRolloverController extends Controller
             if (in_array('financial', $selectedModules)) {
                 $count = 0;
 
-                $vouchers = Voucher::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                Voucher::when($centerId, fn($q) => $q->where('center_id', $centerId))
                     ->where('status', 'approved')
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($vouchers) use ($rollover, $year, &$count) {
                 foreach ($vouchers as $item) {
                     $files = $this->collectFilesFromRecord($item, 'voucher');
                     $arc = AnnualArchive::create([
@@ -465,9 +482,11 @@ class AnnualRolloverController extends Controller
                     ]);
                     $count++;
                 }
+                }); // end vouchers chunk
 
-                $budgets = MonthlyBudget::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                MonthlyBudget::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($budgets) use ($rollover, $year, &$count) {
                 foreach ($budgets as $item) {
                     $arc = AnnualArchive::create([
                         'rollover_id' => $rollover->id,
@@ -484,9 +503,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end budgets chunk
 
-                $settlements = MonthlySettlement::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                MonthlySettlement::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($settlements) use ($rollover, $year, &$count) {
                 foreach ($settlements as $item) {
                     $arc = AnnualArchive::create([
                         'rollover_id' => $rollover->id,
@@ -502,9 +523,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end settlements chunk
 
-                $expenses = CenterExpense::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                CenterExpense::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($expenses) use ($rollover, $year, &$count) {
                 foreach ($expenses as $item) {
                     $files = $this->collectFilesFromRecord($item, 'expense');
                     $arc = AnnualArchive::create([
@@ -513,7 +536,7 @@ class AnnualRolloverController extends Controller
                         'year' => $year,
                         'module' => 'financial',
                         'sub_type' => 'expense',
-                        'title' => 'مصروف مركز: ' . $item->title,
+                        'title' => 'مصروف مركز: ' . $item->type_label . ' (' . str_pad($item->month, 2, '0', STR_PAD_LEFT) . '/' . $item->year . ')',
                         'record_id' => $item->id,
                         'record_date' => $item->created_at,
                         'amount' => $item->amount,
@@ -526,6 +549,7 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end expenses chunk
 
                 $summary['financial'] = $count;
             }
@@ -533,8 +557,9 @@ class AnnualRolloverController extends Controller
             if (in_array('nutrition', $selectedModules)) {
                 $count = 0;
 
-                $foodBudgets = FoodBudget::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                FoodBudget::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($foodBudgets) use ($rollover, $year, &$count) {
                 foreach ($foodBudgets as $item) {
                     $arc = AnnualArchive::create([
                         'rollover_id' => $rollover->id,
@@ -551,9 +576,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end foodBudgets chunk
 
-                $foodVouchers = FoodVoucher::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                FoodVoucher::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($foodVouchers) use ($rollover, $year, &$count) {
                 foreach ($foodVouchers as $item) {
                     $files = $this->collectFilesFromRecord($item, 'food_voucher');
                     $arc = AnnualArchive::create([
@@ -575,9 +602,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end foodVouchers chunk
 
-                $invoices = FoodPurchaseInvoice::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                FoodPurchaseInvoice::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($invoices) use ($rollover, $year, &$count) {
                 foreach ($invoices as $item) {
                     $files = $this->collectFilesFromRecord($item, 'food_invoice');
                     $arc = AnnualArchive::create([
@@ -599,9 +628,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end invoices chunk
 
-                $foodSettlements = FoodMonthlySettlement::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                FoodMonthlySettlement::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($foodSettlements) use ($rollover, $year, &$count) {
                 foreach ($foodSettlements as $item) {
                     $arc = AnnualArchive::create([
                         'rollover_id' => $rollover->id,
@@ -617,9 +648,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end foodSettlements chunk
 
-                $subscriptions = FoodSubscription::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                FoodSubscription::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($subscriptions) use ($rollover, $year, &$count) {
                 foreach ($subscriptions as $item) {
                     $arc = AnnualArchive::create([
                         'rollover_id' => $rollover->id,
@@ -638,9 +671,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end subscriptions chunk
 
-                $foodSuppliers = FoodSupplier::when($centerId, fn($q) => $q->where('center_id', $centerId))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
+                FoodSupplier::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($foodSuppliers) use ($rollover, $year, &$count) {
                 foreach ($foodSuppliers as $item) {
                     $arc = AnnualArchive::create([
                         'rollover_id' => $rollover->id,
@@ -657,13 +692,15 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end foodSuppliers chunk
 
                 $summary['nutrition'] = $count;
             }
 
             if (in_array('quran', $selectedModules)) {
                 $count = 0;
-                $circles = QuranCircle::when($centerId, fn($q) => $q->where('center_id', $centerId))->get();
+                QuranCircle::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->orderBy('id')->chunk(200, function ($circles) use ($rollover, $year, &$count) {
 
                 foreach ($circles as $circle) {
                     $sessionIds = $circle->sessions()->pluck('id');
@@ -675,14 +712,15 @@ class AnnualRolloverController extends Controller
                     $circle->delete();
                     $count++;
                 }
+                }); // end quran circles chunk
                 $summary['quran'] = $count;
             }
 
             if (in_array('academic', $selectedModules)) {
                 $count = 0;
-                $grades = StudentGrade::whereHas('student', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
-
+                StudentGrade::whereHas('student', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($grades) use ($rollover, $year, &$count) {
                 foreach ($grades as $item) {
                     $files = $this->collectFilesFromRecord($item, 'grade');
                     $arc = AnnualArchive::create([
@@ -705,10 +743,11 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end grades chunk
 
-                $achievements = StudentAchievement::whereHas('student', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
-
+                StudentAchievement::whereHas('student', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($achievements) use ($rollover, $year, &$count) {
                 foreach ($achievements as $item) {
                     $files = $this->collectFilesFromRecord($item, 'achievement');
                     $arc = AnnualArchive::create([
@@ -731,14 +770,15 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end achievements chunk
                 $summary['academic'] = $count;
             }
 
             if (in_array('rooms', $selectedModules)) {
                 $count = 0;
-                $assignments = RoomAssignment::whereNull('released_at')
-                    ->whereHas('room', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))->get();
-
+                RoomAssignment::whereNull('released_at')
+                    ->whereHas('room', fn($q) => $q->when($centerId, fn($sq) => $sq->where('center_id', $centerId)))
+                    ->orderBy('id')->chunk(200, function ($assignments) use ($rollover, $year, &$count) {
                 foreach ($assignments as $item) {
                     AnnualArchive::create([
                         'rollover_id' => $rollover->id,
@@ -756,44 +796,46 @@ class AnnualRolloverController extends Controller
                     $item->update(['released_at' => now(), 'release_reason' => 'الترحيل السنوي']);
                     $count++;
                 }
+                }); // end rooms chunk
                 $summary['rooms'] = $count;
             }
 
             if (in_array('vehicles', $selectedModules)) {
                 $count = 0;
-                $vehicles = Vehicle::when($centerId, fn($q) => $q->where('center_id', $centerId))->get();
-
+                Vehicle::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                    ->orderBy('id')->chunk(200, function ($vehicles) use ($rollover, $year, &$count) {
                 foreach ($vehicles as $vehicle) {
                     VehicleViolation::where('vehicle_id', $vehicle->id)->delete();
                     $vehicle->delete();
                     $count++;
                 }
+                }); // end vehicles chunk
                 $summary['vehicles'] = $count;
             }
 
             if (in_array('complaints', $selectedModules)) {
                 $count = 0;
-                $complaints = Complaint::when($centerId, fn($q) => $q->where(fn($sq) => $sq->where('sender_center_id', $centerId)->orWhere('receiver_center_id', $centerId)->orWhereHas('sender', fn($ssq) => $ssq->where('center_id', $centerId))))
-                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))->get();
-
+                Complaint::when($centerId, fn($q) => $q->where(fn($sq) => $sq->where('sender_center_id', $centerId)->orWhere('receiver_center_id', $centerId)->orWhereHas('sender', fn($ssq) => $ssq->where('center_id', $centerId))))
+                    ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
+                    ->orderBy('id')->chunk(200, function ($complaints) use (&$count) {
                 foreach ($complaints as $item) {
                     $item->delete();
                     $count++;
                 }
+                }); // end complaints chunk
                 $summary['complaints'] = $count;
             }
 
             if (in_array('graduates', $selectedModules)) {
                 $count = 0;
-                $graduates = Student::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                Student::when($centerId, fn($q) => $q->where('center_id', $centerId))
                     ->where(function ($q) {
                         $q->where('is_graduate', true)
                           ->orWhere('status', 'graduated');
                     })
                     ->when($cutoffDate, fn($q) => $q->whereDate('updated_at', '<=', $cutoffDate))
                     ->with(['center', 'activeRoomAssignment.room', 'program'])
-                    ->get();
-
+                    ->orderBy('id')->chunk(200, function ($graduates) use ($rollover, $year, &$count) {
                 foreach ($graduates as $student) {
                     AnnualArchive::create([
                         'rollover_id' => $rollover->id,
@@ -823,16 +865,16 @@ class AnnualRolloverController extends Controller
                     $student->delete();
                     $count++;
                 }
+                }); // end graduates chunk
                 $summary['الطلاب الخريجون'] = $count;
             }
 
             if (in_array('funds', $selectedModules)) {
                 $count = 0;
-                $funds = Fund::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                Fund::when($centerId, fn($q) => $q->where('center_id', $centerId))
                     ->where('is_system', false)
                     ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
-                    ->get();
-
+                    ->orderBy('id')->chunk(200, function ($funds) use ($rollover, $year, &$count) {
                 foreach ($funds as $item) {
                     AnnualArchive::create([
                         'rollover_id' => $rollover->id,
@@ -849,15 +891,15 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end funds chunk
                 $summary['funds'] = $count;
             }
 
             if (in_array('clubs', $selectedModules)) {
                 $count = 0;
-                $clubs = Club::when($centerId, fn($q) => $q->where('center_id', $centerId))
+                Club::when($centerId, fn($q) => $q->where('center_id', $centerId))
                     ->when($cutoffDate, fn($q) => $q->whereDate('created_at', '<=', $cutoffDate))
-                    ->get();
-
+                    ->orderBy('id')->chunk(200, function ($clubs) use ($rollover, $year, &$count) {
                 foreach ($clubs as $item) {
                     $files = $this->collectFilesFromRecord($item, 'club');
                     $arc = AnnualArchive::create([
@@ -879,6 +921,7 @@ class AnnualRolloverController extends Controller
                     $item->delete();
                     $count++;
                 }
+                }); // end clubs chunk
                 $summary['clubs'] = $count;
             }
 
@@ -1211,6 +1254,7 @@ class AnnualRolloverController extends Controller
                 'voucher' => [Voucher::class, ['fund', 'targetFund', 'creator', 'approver', 'center'], 'vouchers.show', 'voucher'],
                 'budget' => [MonthlyBudget::class, ['items.fund', 'submitter', 'approver', 'center'], 'budgets.show', 'budget'],
                 'settlement' => [MonthlySettlement::class, ['details.fund', 'submitter', 'approver', 'center'], 'settlements.show', 'settlement'],
+                'expense' => [CenterExpense::class, ['center'], 'admin.expenses.show', 'expense'],
             ],
             'clubs' => [
                 'club' => [Club::class, ['members.student', 'center'], 'social.clubs.show', 'club'],
@@ -1248,7 +1292,7 @@ class AnnualRolloverController extends Controller
             // Settlement records are soft-deleted during the annual rollover.
             // Include the archived original so its saved details remain available
             // when previewing it from the archive.
-            if ($subType === 'settlement' && $module === 'financial') {
+            if ($module === 'financial' && in_array($subType, ['settlement', 'expense'], true)) {
                 $modelQuery->withTrashed();
             }
             if ($subType === 'food_settlement' && $module === 'nutrition') {
@@ -1262,7 +1306,9 @@ class AnnualRolloverController extends Controller
             unset($cleanData['id'], $cleanData['created_at'], $cleanData['updated_at'], $cleanData['deleted_at']);
             $model = $modelClass::withoutGlobalScopes()->create($cleanData);
             foreach ($relations as $relation) {
-                try { $model->loadMissing($relation); } catch (\Exception $e) {}
+                try { $model->loadMissing($relation); } catch (\Exception $e) {
+                    \Log::warning("AnnualRollover: failed to load relation '{$relation}' on " . get_class($model) . " #{$model->id}: " . $e->getMessage());
+                }
             }
         }
 
@@ -1275,6 +1321,14 @@ class AnnualRolloverController extends Controller
 
         if ($subType === 'settlement' && $module === 'financial') {
             $viewData['vouchers'] = $this->archivedSettlementVouchers($archive, $model);
+        }
+
+        if ($subType === 'expense' && $module === 'financial') {
+            $receiptPath = data_get($data, 'receipt');
+            $archivedPath = $receiptPath ? (($archive->archived_files ?? [])[$receiptPath] ?? null) : null;
+            $viewData['receiptUrl'] = $archivedPath && Storage::disk('public')->exists($archivedPath)
+                ? asset('storage/' . $archivedPath)
+                : ($model->receipt_url ?? null);
         }
 
         if ($subType === 'food_supplier' && $module === 'nutrition') {
@@ -1738,6 +1792,19 @@ class AnnualRolloverController extends Controller
             return $this->exportGraduateProfilePdf($archive, $pdfService);
         }
 
+        if ($module === 'financial' && $subType === 'expense') {
+            return $this->exportArchivedModelPdf(
+                $originalId,
+                CenterExpense::class,
+                ['center'],
+                'pdf.expenses.show',
+                'expense',
+                $archive,
+                $pdfService,
+                'تفاصيل مصروف مركز'
+            );
+        }
+
         if (isset($modelMap[$module][$subType])) {
             $definition = $modelMap[$module][$subType];
             [$modelClass, $relations, $blade, $varName, $title] = $definition;
@@ -1764,7 +1831,7 @@ class AnnualRolloverController extends Controller
 
         if ($originalId) {
             $modelQuery = $modelClass::withoutGlobalScopes()->with($relations);
-            if ($archive->module === 'financial' && $archive->sub_type === 'settlement') {
+            if ($archive->module === 'financial' && in_array($archive->sub_type, ['settlement', 'expense'], true)) {
                 $modelQuery->withTrashed();
             }
             $model = $modelQuery->find($originalId);
@@ -1775,7 +1842,9 @@ class AnnualRolloverController extends Controller
             unset($data['id'], $data['created_at'], $data['updated_at'], $data['deleted_at']);
             $model = $modelClass::withoutGlobalScopes()->create($data);
             foreach ($relations as $relation) {
-                try { $model->loadMissing($relation); } catch (\Exception $e) {}
+                try { $model->loadMissing($relation); } catch (\Exception $e) {
+                    \Log::warning("AnnualRollover: failed to load relation '{$relation}' on " . get_class($model) . " #{$model->id}: " . $e->getMessage());
+                }
             }
         }
 
@@ -1785,6 +1854,14 @@ class AnnualRolloverController extends Controller
 
         if ($archive->module === 'financial' && $archive->sub_type === 'settlement') {
             $viewData['vouchers'] = $this->archivedSettlementVouchers($archive, $model);
+        }
+
+        if ($archive->module === 'financial' && $archive->sub_type === 'expense') {
+            $receiptPath = data_get($archive->data, 'receipt');
+            $archivedPath = $receiptPath ? (($archive->archived_files ?? [])[$receiptPath] ?? null) : null;
+            $viewData['receiptUrl'] = $archivedPath && Storage::disk('public')->exists($archivedPath)
+                ? asset('storage/' . $archivedPath)
+                : ($model->receipt_url ?? null);
         }
 
         if ($archive->module === 'nutrition' && $archive->sub_type === 'food_supplier') {

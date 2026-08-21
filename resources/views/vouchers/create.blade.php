@@ -87,7 +87,7 @@
                                 <option value="">--- اختر الطالب ---</option>
                                 @foreach($students as $student)
                                     <option value="{{ $student->id }}" data-name="{{ $student->name_ar }}" data-remaining="{{ $student->remaining_fees }}">
-                                        {{ $student->name_ar }} (المتبقي: {{ number_format($student->remaining_fees, 2) }} ر.ي)
+                                        {{ $student->name_ar }} (المتبقي: {{ number_format($student->remaining_fees, 2) }} {{ $student->annual_fee_currency_symbol }})
                                     </option>
                                 @endforeach
                             </select>
@@ -168,7 +168,7 @@
     const fundId = fundSelect.value;
     const amount = parseFloat(amountInput.value) || 0;
     const balance = parseFloat(fundBalances[fundId]) || 0;
-    const currencySymbol = fundCurrencies[fundId] || 'ر.ي';
+    const currencySymbol = fundCurrencies[fundId] || '{{ currency_symbol() }}';
 
     // إزالة التنبيه السابق
     amountInput.classList.remove(
@@ -226,7 +226,7 @@
         //         const errorDiv = document.createElement('div');
         //         errorDiv.id = 'balance-error';
         //         errorDiv.className = 'text-red-500 text-xs mt-2 font-almarai font-bold';
-        //         errorDiv.innerText = '⚠️ الرصيد غير كافٍ! الرصيد المتاح: ' + balance.toLocaleString() + ' ر.ي';
+        //     errorDiv.innerText = '⚠️ الرصيد غير كافٍ! الرصيد المتاح: ' + balance.toLocaleString() + ' {{ currency_symbol() }}';
         //         amountInput.parentNode.appendChild(errorDiv);
         //         return false;
         //     }

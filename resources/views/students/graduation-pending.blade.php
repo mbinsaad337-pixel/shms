@@ -6,9 +6,14 @@
 
     {{-- Header --}}
     <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border-r-8 border-navy shadow-sm">
-        <div>
-            <h1 class="text-2xl md:text-3xl font-black text-navy font-cairo">طلبات التخرج المعلقة</h1>
-            <p class="text-gray-400 font-almarai text-xs mt-1">مراجعة واعتماد طلبات التخرج المقدمة من الطلاب</p>
+        <div class="flex items-center gap-4">
+            <a href="{{ route('students.index') }}" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all border border-gray-100">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            <div>
+                <h1 class="text-2xl md:text-3xl font-black text-navy font-cairo">طلبات التخرج المعلقة</h1>
+                <p class="text-gray-400 font-almarai text-xs mt-1">مراجعة واعتماد طلبات التخرج المقدمة من الطلاب</p>
+            </div>
         </div>
         <div class="flex gap-3">
             <a href="{{ route('students.alumni') }}"

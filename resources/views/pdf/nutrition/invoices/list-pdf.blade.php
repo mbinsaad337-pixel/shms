@@ -7,7 +7,7 @@
             <th style="width: 5%;">#</th>
             <th>رقم الفاتورة</th>
             <th>المورد</th>
-            <th>المبلغ (ر.ي)</th>
+            <th>المبلغ ({{ currency_symbol() }})</th>
             <th class="text-center">تاريخ الفاتورة</th>
             <th class="text-center">الحالة</th>
         </tr>

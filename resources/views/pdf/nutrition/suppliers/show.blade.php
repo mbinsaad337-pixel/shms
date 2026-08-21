@@ -25,7 +25,7 @@
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">الرصيد المتبقي (له)</div>
-                        <div class="detail-value   text-danger font-bold text-lg">{{ number_format($supplier->balance, 2) }} ر.ي</div>
+                        <div class="detail-value   text-danger font-bold text-lg">{{ number_format($supplier->balance, 2) }} {{ currency_symbol() }}</div>
                     </div>
                 </td>
             </tr>
@@ -41,9 +41,9 @@
             <th style="width: 5%;">#</th>
             <th>رقم الفاتورة</th>
             <th class="text-center">التاريخ</th>
-            <th class="text-center">المبلغ الكلي (ر.ي)</th>
-            <th class="text-center">المدفوع (ر.ي)</th>
-            <th class="text-center">المتبقي (ر.ي)</th>
+            <th class="text-center">المبلغ الكلي ({{ currency_symbol() }})</th>
+            <th class="text-center">المدفوع ({{ currency_symbol() }})</th>
+            <th class="text-center">المتبقي ({{ currency_symbol() }})</th>
             <th class="text-center">الحالة</th>
         </tr>
     </thead>

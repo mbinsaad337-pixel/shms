@@ -73,7 +73,7 @@
     @include('partials.pdf_header', [
         'title' => 'تقرير مخالفة انضباطية',
         'number' => 'VIO-' . $violation->id,
-        'department' => 'إدارة الإسكان وشؤون الطلاب'
+        'department' => 'إدارة شؤون الطلاب'
     ])
 
     <div class="section">

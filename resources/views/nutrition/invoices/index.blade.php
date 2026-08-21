@@ -41,7 +41,7 @@
                                         </span>
                                     </td>
                                     <td class="px-5 py-4 text-center font-bold text-orange-600   text-sm">
-                                        {{ number_format($invoice->total_amount, 2) }} ر.ي</td>
+                                        {{ number_format($invoice->total_amount, 2) }} {{ currency_symbol() }}</td>
                                     <td class="px-5 py-4 text-center">
                                         <span
                                             class="px-2 py-1 rounded-lg text-xs font-bold

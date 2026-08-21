@@ -107,7 +107,7 @@
                                 {{ str_pad($expense->month, 2, '0', STR_PAD_LEFT) }} / {{ $expense->year }}
                             </td>
                             <td class="p-4">
-                                <span class="font-bold text-navy ">{{ number_format($expense->amount, 2) }}</span> <span class="text-xs text-gray-400">ريال يمني</span>
+                                <span class="font-bold text-navy ">{{ number_format($expense->amount, 2) }}</span> <span class="text-xs text-gray-400">{{ $expense->currency_symbol }}</span>
                             </td>
                             <td class="p-4">
                                 <div class="text-xs text-gray-500 "><span class="text-gray-400 font-almarai">مستحق:</span> {{ $expense->due_date->format('Y-m-d') }}</div>
@@ -131,6 +131,10 @@
                             </td>
                             <td class="p-4 text-center">
                                 <div class="flex items-center justify-center gap-2">
+                                    <a href="{{ route('center-expenses.show', $expense) }}" class="w-8 h-8 rounded-xl bg-violet-50 text-violet-600 hover:bg-violet-500 hover:text-white transition-all flex items-center justify-center" title="عرض التفاصيل">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+
                                     {{-- If pending, quick pay button --}}
                                     @if($expense->status === 'pending')
                                         <button type="button" x-data @click="$dispatch('open-pay-modal', { id: {{ $expense->id }}, amount: '{{ number_format($expense->amount, 2) }}' })"

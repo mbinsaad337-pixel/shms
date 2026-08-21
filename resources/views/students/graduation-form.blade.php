@@ -6,6 +6,9 @@
 
     {{-- Header --}}
     <div class="mb-8 flex items-center gap-4">
+        <a href="{{ route('student.dashboard') }}" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all border border-gray-100">
+            <i class="fas fa-arrow-right"></i>
+        </a>
         <div class="w-14 h-14 rounded-2xl bg-navy flex items-center justify-center shadow-lg">
             <i class="fas fa-graduation-cap text-gold text-2xl"></i>
         </div>

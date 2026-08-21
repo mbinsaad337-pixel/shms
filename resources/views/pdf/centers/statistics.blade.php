@@ -48,8 +48,8 @@
     <table class="stats-row">
         <tr>
             <td class="stat-card" style="border-bottom: 3px solid #004274;">
-                <div class="stat-label">إجمالي الطلاب</div>
-                <div class="stat-value text-navy">{{ number_format($center->students_count) }}</div>
+                <div class="stat-label">إجمالي الساكنين</div>
+                <div class="stat-value text-navy">{{ number_format($center->residents_count) }}</div>
             </td>
             <td class="stat-card" style="border-bottom: 3px solid #D4A044;">
                 <div class="stat-label">عدد الغرف</div>

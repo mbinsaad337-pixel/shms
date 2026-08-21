@@ -120,6 +120,13 @@ class AbsenceController extends Controller
 
     public function destroy(Absence $absence)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager')) {
+            if ($user->center_id && optional($absence->student)->center_id !== $user->center_id) {
+                abort(403, 'غير مصرح لك بحذف سجلات الغياب لهذا المركز.');
+            }
+        }
+
         $absence->delete();
         return back()->with('success', 'تم حذف سجل الغياب بنجاح.');
     }

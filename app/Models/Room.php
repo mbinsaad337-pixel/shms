@@ -31,6 +31,6 @@ class Room extends Model
     public function students()
     {
         return $this->hasManyThrough(Student::class, RoomAssignment::class, 'room_id', 'id', 'id', 'student_id')
-            ->whereNull('released_at');
+            ->whereNull('room_assignments.released_at');
     }
 }

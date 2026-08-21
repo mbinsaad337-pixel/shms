@@ -398,7 +398,7 @@
                     <span>أخبار المراكز السكنية</span>
                 </div>
                 <h2 class="text-4xl font-black text-navy">آخر الأخبار والفعاليات</h2>
-                <p class="text-gray-400 font-almarai mt-3">تابع أحدث أنشطة وأخبار مراكز الإسكان الطلابي</p>
+                <p class="text-gray-400 font-almarai mt-3">تابع أحدث أنشطة وأخبار مراكزالطلابية</p>
             </div>
 
             <!-- News Grid -->

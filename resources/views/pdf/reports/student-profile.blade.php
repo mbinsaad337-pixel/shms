@@ -587,7 +587,7 @@
         @else
             <div class="empty-state-card">
                 <h4>الطالب غير مسكن حالياً بالوحدات الداخلية</h4>
-                <p>لم يتم العثور على سجلات سارية لتخصيص أو حجز غرف للطالب في نظام الإسكان الطلابي الحالي.</p>
+                <p>لم يتم العثور على سجلات سارية لتخصيص أو حجز غرف للطالب في المنصة.</p>
             </div>
         @endif
     </div>
@@ -606,15 +606,15 @@
             <tr>
                 <td class="financial-card primary">
                     <span class="label">إجمالي الرسوم السنوية</span>
-                    <span class="amount">{{ number_format($student->annual_fees, 2) }} ر.ي</span>
+                    <span class="amount">{{ number_format($student->annual_fees, 2) }} {{ $student->annual_fee_currency_symbol }}</span>
                 </td>
                 <td class="financial-card">
                     <span class="label" style="color: #15803d; font-weight: 800;">المبالغ المودعة والمسددة</span>
-                    <span class="amount" style="color: #15803d;">{{ number_format($totalPaid, 2) }} ر.ي</span>
+                    <span class="amount" style="color: #15803d;">{{ number_format($totalPaid, 2) }} {{ $student->annual_fee_currency_symbol }}</span>
                 </td>
                 <td class="financial-card">
                     <span class="label" style="color: #b91c1c; font-weight: 800;">المبالغ المستحقة والمتبقية</span>
-                    <span class="amount" style="color: #b91c1c;">{{ number_format($remainingFees, 2) }} ر.ي</span>
+                    <span class="amount" style="color: #b91c1c;">{{ number_format($remainingFees, 2) }} {{ $student->annual_fee_currency_symbol }}</span>
                 </td>
             </tr>
         </table>
@@ -664,8 +664,8 @@
                         <td style="font-weight: 700;">باقة التغذية الموحدة للمركز</td>
                         <td>{{ $student->mealSubscription->start_date?->format('Y-m-d') }}</td>
                         <td>{{ $student->mealSubscription->end_date?->format('Y-m-d') }}</td>
-                        <td>{{ number_format($student->mealSubscription->total_due, 2) }} ر.ي</td>
-                        <td>{{ number_format($student->mealSubscription->total_paid, 2) }} ر.ي</td>
+                        <td>{{ number_format($student->mealSubscription->total_due, 2) }} {{ currency_symbol() }}</td>
+                        <td>{{ number_format($student->mealSubscription->total_paid, 2) }} {{ currency_symbol() }}</td>
                         <td>
                             @php
                                 $status = $student->mealSubscription->status;
@@ -748,7 +748,7 @@
                             <tr><td class="key">عدد الذكور في الأسرة:</td><td class="value">{{ $student->family_males }} أفراد</td></tr>
                             <tr><td class="key">عدد الإناث في الأسرة:</td><td class="value">{{ $student->family_females }} أفراد</td></tr>
                             <tr><td class="key">إجمالي التابعين والمعالين:</td><td class="value">{{ $student->dependents_count }} أفراد معالين</td></tr>
-                            <tr><td class="key">متوسط الدخل الشهري التقريبي:</td><td class="value">{{ number_format($student->family_avg_income, 2) }} ر.ي</td></tr>
+                            <tr><td class="key">متوسط الدخل الشهري التقريبي:</td><td class="value">{{ number_format($student->family_avg_income, 2) }} {{ currency_symbol() }}</td></tr>
                         </table>
                     </div>
                 </td>

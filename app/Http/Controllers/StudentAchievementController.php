@@ -85,7 +85,7 @@ class StudentAchievementController extends Controller
             }
         }
 
-        $data = $request->except('certificate_file');
+        $data = $request->only(['student_id', 'title', 'description', 'achievement_date']);
 
         if ($request->hasFile('certificate_file')) {
             $data['certificate_file'] = $request->file('certificate_file')->store('students/achievements', 'public');
@@ -142,7 +142,7 @@ class StudentAchievementController extends Controller
             'certificate_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
-        $data = $request->except('certificate_file');
+        $data = $request->only(['student_id', 'title', 'description', 'achievement_date']);
 
         if ($request->hasFile('certificate_file')) {
             if ($studentAchievement->certificate_file) {

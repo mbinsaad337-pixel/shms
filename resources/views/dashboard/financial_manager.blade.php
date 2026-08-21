@@ -21,7 +21,7 @@
             </form>
             <span
                 class="bg-gold/10 text-gold border border-gold/20 px-4 py-2 rounded-xl text-sm font-bold font-almarai shadow-sm">
-                {{ auth()->user()->getRoleNames()->first() }}
+                المسؤول المالي
             </span>
         </div>
     </div>

@@ -76,7 +76,7 @@
                                 <p class="text-[10px] text-gray-400 font-cairo">القيمة التقديرية</p>
                                 <p class="text-sm font-bold text-gray-700 font-almarai">
                                     {{ number_format($asset->value, 2) }}
-                                    ر.ي</p>
+                                    {{ $asset->currency_symbol }}</p>
                             </div>
                             <div class="p-3 bg-gray-50 rounded-xl">
                                 <p class="text-[10px] text-gray-400 font-cairo">تاريخ التسجيل</p>

@@ -51,7 +51,7 @@
                             class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-navy">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5" id="rateLabel">قيمة الاشتراك اليومي (ر.ي)</label>
+                        <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5" id="rateLabel">قيمة الاشتراك اليومي ({{ currency_symbol() }})</label>
                         <input type="number" name="daily_rate" id="dailyRate" step="0.01" min="0" required
                             onchange="calcTotal()" oninput="calcTotal()"
                             class="w-full border border-gray-200 rounded-xl px-3 py-2.5   text-sm focus:ring-2 focus:ring-navy"
@@ -84,9 +84,9 @@
                 <!-- Total Preview -->
                 <div id="totalPreview" class="mt-4 bg-navy/5 border border-navy/10 rounded-xl p-4 hidden">
                     <p class="text-sm text-navy font-cairo font-bold">
-                        تكلفة الاشتراك للطالب الواحد: <span id="totalText" class="font-black text-lg">0.00 ر.ي</span>
+                        تكلفة الاشتراك للطالب الواحد: <span id="totalText" class="font-black text-lg">0.00 {{ currency_symbol() }}</span>
                         <span class="text-xs text-gray-400 mr-2" id="formulaText">(<span id="daysText">0</span> يوم × <span
-                                id="rateText">0</span> ر.ي/يوم)</span>
+                                id="rateText">0</span> {{ currency_symbol() }}/يوم)</span>
                     </p>
                 </div>
             </div>
@@ -213,14 +213,14 @@
                 } else if (type === 'daily') {
                     rateInput.value = budgetDailyRate.toFixed(2);
                     rateInput.readOnly = false;
-                    document.getElementById('rateLabel').textContent = 'قيمة اليوم الواحد (ر.ي)';
+                    document.getElementById('rateLabel').textContent = 'قيمة اليوم الواحد ({{ currency_symbol() }})';
                 }
             } else if (type === 'daily') {
                 rateInput.readOnly = false;
                 rateInput.classList.remove('bg-gray-50');
-                document.getElementById('rateLabel').textContent = 'قيمة اليوم الواحد (ر.ي)';
+                document.getElementById('rateLabel').textContent = 'قيمة اليوم الواحد ({{ currency_symbol() }})';
             } else {
-                document.getElementById('rateLabel').textContent = 'قيمة الاشتراك (ر.ي)';
+                document.getElementById('rateLabel').textContent = 'قيمة الاشتراك ({{ currency_symbol() }})';
             }
 
             calcTotal();
@@ -239,7 +239,7 @@
             }
             
             if (days > 0 && inputVal > 0) {
-                document.getElementById('totalText').textContent = total.toFixed(2) + ' ر.ي';
+                document.getElementById('totalText').textContent = total.toFixed(2) + ' {{ currency_symbol() }}';
                 document.getElementById('daysText').textContent = Math.round(days);
                 document.getElementById('rateText').textContent = (type === 'daily' ? inputVal.toFixed(2) : (total / days).toFixed(2));
                 document.getElementById('totalPreview').classList.remove('hidden');
@@ -249,7 +249,7 @@
                 } else if (type === 'semi_monthly') {
                     document.getElementById('formulaText').innerHTML = `(نصف قيمة الاشتراك الشهري)`;
                 } else {
-                    document.getElementById('formulaText').innerHTML = `(${Math.round(days)} يوم × ${inputVal.toFixed(2)} ر.ي/يوم)`;
+                    document.getElementById('formulaText').innerHTML = `(${Math.round(days)} يوم × ${inputVal.toFixed(2)} {{ currency_symbol() }}/يوم)`;
                 }
             } else {
                 document.getElementById('totalPreview').classList.add('hidden');

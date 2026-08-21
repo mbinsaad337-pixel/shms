@@ -30,14 +30,17 @@ class VoucherController extends Controller
             });
         }
 
-        $selectedPeriod = null;
+        $selectedPeriod = $request->filled('period') ? $request->period : now()->format('Y-m');
 
-        if ($request->filled('period') && preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $request->period)) {
-            [$year, $month] = array_map('intval', explode('-', $request->period));
+        if ($selectedPeriod !== 'all') {
+            if (!preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $selectedPeriod)) {
+                $selectedPeriod = now()->format('Y-m');
+            }
+
+            [$year, $month] = array_map('intval', explode('-', $selectedPeriod));
             $query->whereMonth('date', $month)->whereYear('date', $year);
-            $selectedPeriod = $request->period;
-        } elseif ($request->filled('month')) {
-            $query->whereMonth('date', $request->month);
+        } else {
+            $selectedPeriod = null;
         }
 
         if ($request->filled('year')) {
@@ -213,9 +216,15 @@ class VoucherController extends Controller
     }
     public function destroy(Voucher $voucher)
     {
-        // if ($voucher->isLockedByApprovedSettlement()) {
-        //     return back()->with('error', 'لا يمكن حذف سند ضمن شهر تم اعتماد تصفيته المالية.');
-        // }
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager')) {
+            if ($user->center_id && $voucher->center_id !== $user->center_id) {
+                abort(403, 'غير مصرح لك بحذف هذا السند.');
+            }
+            if (!$user->hasRole('financial-manager')) {
+                abort(403, 'غير مصرح لك بحذف السندات.');
+            }
+        }
 
         DB::transaction(function () use ($voucher) {
             if ($voucher->status === 'approved') {

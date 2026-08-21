@@ -110,6 +110,14 @@ class FoodSupplierController extends Controller
 
     public function destroy(FoodSupplier $supplier)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager') && !$user->hasRole('nutrition-manager')) {
+            abort(403, 'غير مصرح لك بحذف الموردين.');
+        }
+        if (!$user->hasRole('super-admin') && $user->center_id && $supplier->center_id !== $user->center_id) {
+            abort(403, 'غير مصرح لك بالتعامل مع موردي هذا المركز.');
+        }
+
         if ($supplier->invoices()->exists() || $supplier->vouchers()->exists()) {
             return back()->with('error', 'لا يمكن حذف مورد لديه معاملات مالية.');
         }

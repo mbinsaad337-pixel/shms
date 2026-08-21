@@ -754,7 +754,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold text-gray-700 font-cairo mb-1.5">متوسط دخل الفرد
-                                        (ر.ي)</label>
+                                        ({{ currency_symbol() }})</label>
                                     <input type="number" name="family_avg_income"
                                         value="{{ old('family_avg_income', $student->family_avg_income) }}"
                                         min="0" step="100" placeholder="0"

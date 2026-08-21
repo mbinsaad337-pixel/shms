@@ -12,7 +12,7 @@
             <div style="width: 45px; height: 2px; background-color: #D4A044; margin-bottom: 10px; float: right;"></div>
             <div style="clear: both;"></div>
             <p style="margin: 0; font-size: 12px; color: #64748b; font-weight: bold;">
-                {{ $department ?? 'قسم الإسكان وشؤون الطلاب' }}
+                {{ $department ?? 'قسم شؤون الطلاب' }}
             </p>
         </td>
 

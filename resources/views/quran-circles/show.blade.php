@@ -5,6 +5,9 @@
 @section('content')
     <div class="mb-8 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center bg-white p-6 rounded-2xl border-l-8 border-gold shadow-sm">
         <div class="flex items-center gap-4">
+            <a href="{{ route('quran-circles.index') }}" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all border border-gray-100">
+                <i class="fas fa-arrow-right"></i>
+            </a>
             <div class="bg-navy p-4 rounded-xl text-gold shadow-md">
                 <i class="fas fa-quran text-3xl"></i>
             </div>

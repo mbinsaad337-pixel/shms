@@ -11,7 +11,7 @@
                     الإدارة المركزية
                 </div>
                 <h1 id="centers-heading" class="text-2xl font-black text-navy font-cairo md:text-3xl">المراكز الطلابية</h1>
-                <p class="mt-2 text-sm leading-6 text-gray-500">نظرة سريعة على مراكز السكن والموارد التابعة لها.</p>
+                <p class="mt-2 text-sm leading-6 text-gray-500">نظرة سريعة على المراكز  الطلابية والموارد التابعة لها.</p>
             </div>
 
             <a href="{{ route('centers.create') }}"
@@ -61,15 +61,15 @@
 
                         <dl class="mt-5 grid grid-cols-3 divide-x divide-x-reverse divide-gray-100 border-y border-gray-100 bg-gray-50/70 py-3">
                             <div class="px-2 text-center">
-                                <dt class="text-[11px] text-gray-500">الطلاب</dt>
-                                <dd class="mt-1 text-lg font-black tabular-nums text-navy font-cairo">{{ $center->students_count }}</dd>
+                                <dt class="text-[11px] text-gray-500">الساكنين</dt>
+                                <dd class="mt-1 text-lg font-black tabular-nums text-navy font-cairo">{{ $center->residents_count }}</dd>
                             </div>
                             <div class="px-2 text-center">
                                 <dt class="text-[11px] text-gray-500">الغرف</dt>
                                 <dd class="mt-1 text-lg font-black tabular-nums text-navy font-cairo">{{ $center->rooms_count }}</dd>
                             </div>
                             <div class="px-2 text-center">
-                                <dt class="text-[11px] text-gray-500">الموظفون</dt>
+                                <dt class="text-[11px] text-gray-500">الطاقم الإداري</dt>
                                 <dd class="mt-1 text-lg font-black tabular-nums text-navy font-cairo">{{ $center->staff_count }}</dd>
                             </div>
                         </dl>

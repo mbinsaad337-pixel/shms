@@ -42,13 +42,13 @@
             <div class="bg-red-50 border border-red-100 rounded-2xl p-5 text-center">
                 <p class="text-[10px] font-bold text-red-400 uppercase font-cairo mb-1">مدين (يستحق)</p>
                 <p class="text-3xl font-black text-red-700  ">{{ number_format($subscription->total_due, 2) }}</p>
-                <p class="text-xs text-red-400 font-cairo">ر.ي</p>
+                <p class="text-xs text-red-400 font-cairo">{{ currency_symbol() }}</p>
             </div>
             <div class="bg-green-50 border border-green-100 rounded-2xl p-5 text-center">
                 <p class="text-[10px] font-bold text-green-500 uppercase font-cairo mb-1">دائن (مدفوع)</p>
                 <p class="text-3xl font-black text-green-700  ">{{ number_format($subscription->total_paid, 2) }}
                 </p>
-                <p class="text-xs text-green-400 font-cairo">ر.ي</p>
+                <p class="text-xs text-green-400 font-cairo">{{ currency_symbol() }}</p>
             </div>
             <div
                 class="{{ $balance >= 0 ? 'bg-blue-50 border-blue-100' : 'bg-orange-50 border-orange-100' }} border rounded-2xl p-5 text-center">
@@ -59,7 +59,7 @@
                 <p class="text-3xl font-black {{ $balance >= 0 ? 'text-blue-700' : 'text-orange-700' }}  ">
                     {{ number_format(abs($balance), 2) }}
                 </p>
-                <p class="text-xs {{ $balance >= 0 ? 'text-blue-400' : 'text-orange-400' }} font-cairo">ر.ي</p>
+                <p class="text-xs {{ $balance >= 0 ? 'text-blue-400' : 'text-orange-400' }} font-cairo">{{ currency_symbol() }}</p>
             </div>
         </div>
 
@@ -95,7 +95,7 @@
                 </div>
                 <div>
                     <p class="text-gray-400 font-cairo text-xs mb-1">اشتراك يومي</p>
-                    <p class="font-bold   text-gray-800">{{ number_format($subscription->daily_rate, 2) }} ر.ي</p>
+                    <p class="font-bold   text-gray-800">{{ number_format($subscription->daily_rate, 2) }} {{ currency_symbol() }}</p>
                 </div>
                 @if ($subscription->last_payment_date)
                     <div>

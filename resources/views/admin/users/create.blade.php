@@ -96,7 +96,7 @@
             </div>
 
             <!-- Permissions Section -->
-            <div class="mb-8">
+            {{-- <div class="mb-8">
                 <h3 class="text-lg font-bold text-gray-800 mb-4 font-cairo border-b pb-2">الصلاحيات المباشرة (اختياري)</h3>
                 <p class="text-sm text-gray-500 font-almarai mb-6">سيحصل الموظف تلقائياً على صلاحيات الدور المختار، يمكنك
                     إضافة صلاحيات إضافية هنا.</p>
@@ -124,7 +124,7 @@
                         </div>
                     @endforeach
                 </div>
-            </div>
+            </div> --}}
 
             <div class="flex justify-end pt-6 border-t font-cairo">
                 <button type="submit"

@@ -45,10 +45,21 @@
 
             {{-- Amount --}}
             <div>
-                <label class="block text-sm font-bold text-navy font-cairo mb-2">المبلغ (ريال سعودي) <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-bold text-navy font-cairo mb-2">المبلغ <span class="text-red-500">*</span></label>
                 <input type="number" step="0.01" name="amount" required value="{{ old('amount', $centerExpense->amount) }}"
                        class="w-full px-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50  text-sm focus:ring-4 focus:ring-navy/10 focus:border-navy transition-all @error('amount') border-red-500 @enderror">
                 @error('amount')<p class="text-red-500 text-xs mt-1 font-almarai">{{ $message }}</p>@enderror
+            </div>
+
+            {{-- Currency --}}
+            <div>
+                <label class="block text-sm font-bold text-navy font-cairo mb-2">العملة <span class="text-red-500">*</span></label>
+                <select name="currency" required class="w-full px-4 py-3.5 rounded-2xl border border-gray-100 bg-gray-50 font-almarai text-sm focus:ring-4 focus:ring-navy/10 focus:border-navy transition-all @error('currency') border-red-500 @enderror">
+                    @foreach(\App\Models\Fund::CURRENCIES as $code => $label)
+                        <option value="{{ $code }}" {{ old('currency', $centerExpense->currency ?? 'YER') === $code ? 'selected' : '' }}>{{ $label }} ({{ \App\Models\Fund::CURRENCY_SYMBOLS[$code] }})</option>
+                    @endforeach
+                </select>
+                @error('currency')<p class="text-red-500 text-xs mt-1 font-almarai">{{ $message }}</p>@enderror
             </div>
 
             {{-- Due Date --}}

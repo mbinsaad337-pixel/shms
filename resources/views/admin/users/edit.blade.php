@@ -98,7 +98,7 @@
         </div>
 
         <!-- Permissions Section -->
-        <div class="mb-8">
+        {{-- <div class="mb-8">
             <h3 class="text-lg font-bold text-gray-800 mb-4 font-cairo border-b pb-2">الصلاحيات المباشرة</h3>
             <p class="text-sm text-gray-500 font-almarai mb-6">يمكنك منح صلاحيات إضافية خارج نطاق الدور الوظيفي المختار.</p>
             
@@ -123,7 +123,7 @@
                     </div>
                 @endforeach
             </div>
-        </div>
+        </div> --}}
 
         <div class="flex justify-end pt-6 border-t font-cairo gap-4">
             <a href="{{ route('admin.users.index') }}" class="px-8 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-50 transition-all">إلغاء</a>

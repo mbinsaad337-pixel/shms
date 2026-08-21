@@ -4,6 +4,14 @@
 
 @section('content')
     <div class="container mx-auto px-6 py-8">
+        <div class="max-w-3xl mx-auto">
+            <div class="mb-6">
+                <a href="{{ route('assets.index') }}" class="px-6 py-3 bg-gray-50 text-navy rounded-2xl hover:bg-gray-100 font-cairo font-bold transition-all inline-flex items-center gap-2 border border-gray-100">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>رجوع للقائمة</span>
+                </a>
+            </div>
+        </div>
         <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
             <div class="bg-primary px-10 py-8 text-white relative">
                 <h2 class="text-2xl font-bold font-cairo">تسجيل أصل جديد في العهدة</h2>
@@ -26,7 +34,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div>
                         <label class="block text-gray-700 font-cairo font-bold mb-2">نوع الأصل</label>
                         <input type="text" name="type" required placeholder="أجهزة كهربائية"
@@ -45,8 +53,21 @@
                     </div>
                     <div>
                         <label class="block text-gray-700 font-cairo font-bold mb-2">القيمة التقديرية</label>
-                        <input type="number" name="value" step="0.01" placeholder="0.00"
-                            class="w-full px-5 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none font-almarai transition-all">
+                        <div class="relative">
+                            <input type="number" name="value" step="0.01" placeholder="0.00"
+                                class="w-full px-5 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none font-almarai transition-all">
+                            <span id="currency_suffix"
+                                class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 font-almarai text-xs">{{ currency_symbol() }}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-cairo font-bold mb-2">العملة</label>
+                        <select name="currency" id="currency_select" required
+                            class="w-full px-5 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none font-almarai bg-white transition-all">
+                            @foreach (\App\Models\Fund::CURRENCIES as $code => $label)
+                                <option value="{{ $code }}" {{ $code == \App\Support\Currency::defaultCode() ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
@@ -81,6 +102,17 @@
                         class="px-10 py-3 bg-secondary text-white rounded-xl hover:bg-orange-600 shadow-lg font-cairo font-bold transition-all transform hover:-translate-y-1 text-sm">إكمال
                         التسجيل</button>
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const select = document.getElementById('currency_select');
+                        const suffix = document.getElementById('currency_suffix');
+                        const symbols = @json(\App\Models\Fund::CURRENCY_SYMBOLS);
+                        const update = () => { suffix.textContent = symbols[select.value] || '{{ currency_symbol() }}'; };
+                        select.addEventListener('change', update);
+                        update();
+                    });
+                </script>
             </form>
         </div>
     </div>

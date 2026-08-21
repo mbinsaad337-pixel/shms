@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+
+
 @section('title', 'تفاصيل المركز - ' . $center->name)
 
 @section('content')
@@ -36,8 +38,8 @@
             <div class="w-16 h-16 bg-navy/5 text-navy rounded-2xl flex items-center justify-center mb-4 group-hover:bg-navy group-hover:text-gold transition-all">
                 <i class="fas fa-user-graduate text-2xl"></i>
             </div>
-            <h3 class="text-gray-400 font-bold font-cairo mb-1">إجمالي الطلاب</h3>
-            <p class="text-4xl font-black text-navy">{{ $center->students_count }}</p>
+            <h3 class="text-gray-400 font-bold font-cairo mb-1">إجمالي الساكنين</h3>
+            <p class="text-4xl font-black text-navy">{{ $center->residents_count }}</p>
         </div>
 
         <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center text-center group hover:border-gold transition-colors">

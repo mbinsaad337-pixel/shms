@@ -71,9 +71,9 @@
                     <tbody>
                         <tr>
                             <td class="font-bold text-navy">{{ $settlement->month_name }} {{ $settlement->year }}</td>
-                            <td class="  text-emerald-700 font-black">{{ number_format($settlement->total_revenue, 2) }} ر.ي</td>
-                            <td class="  text-rose-700 font-black">{{ number_format($settlement->total_expenses, 2) }} ر.ي</td>
-                            <td class="  text-indigo-700 font-black bg-indigo-50/30">{{ number_format($settlement->total_debt, 2) }} ر.ي</td>
+                            <td class="  text-emerald-700 font-black">{{ number_format($settlement->total_revenue, 2) }} {{ currency_symbol() }}</td>
+                            <td class="  text-rose-700 font-black">{{ number_format($settlement->total_expenses, 2) }} {{ currency_symbol() }}</td>
+                            <td class="  text-indigo-700 font-black bg-indigo-50/30">{{ number_format($settlement->total_debt, 2) }} {{ currency_symbol() }}</td>
                             <td class="text-center">
                                 <span class="px-4 py-1.5 rounded-lg font-black text-sm {{ $settlement->net_result >= 0 ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200' }}">
                                     {{ number_format(abs($settlement->net_result), 2) }} 

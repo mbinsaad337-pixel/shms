@@ -204,7 +204,7 @@
                     </tr>
                     <tr>
                         <th style="color:#112a6f;">إجمالي المطلوب</th>
-                        <td style="color:#112a6f; font-weight:bold;">{{ number_format($budget->total_amount, 2) }} ر.ي
+                        <td style="color:#112a6f; font-weight:bold;">{{ number_format($budget->total_amount, 2) }} {{ currency_symbol() }}
                         </td>
                     </tr>
                     @if($budget->status === 'approved')
@@ -245,7 +245,7 @@
             @endforeach
             <tr class="total-row">
                 <td colspan="2">الإجمالي الكلي</td>
-                <td>{{ number_format($budget->total_amount, 2) }} ر.ي</td>
+                <td>{{ number_format($budget->total_amount, 2) }} {{ currency_symbol() }}</td>
                 <td>-</td>
             </tr>
         </tbody>

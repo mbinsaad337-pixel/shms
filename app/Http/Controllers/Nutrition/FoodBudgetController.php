@@ -249,6 +249,14 @@ class FoodBudgetController extends Controller
 
     public function destroy(FoodBudget $budget)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager') && !$user->hasRole('nutrition-manager')) {
+            abort(403, 'غير مصرح لك بحذف ميزانيات التغذية.');
+        }
+        if (!$user->hasRole('super-admin') && $user->center_id && $budget->center_id !== $user->center_id) {
+            abort(403, 'غير مصرح لك بالتعامل مع ميزانيات هذا المركز.');
+        }
+
         if (!in_array($budget->status, ['draft', 'rejected'])) {
             return back()->with('error', 'لا يمكن حذف ميزانية تم إرسالها للاعتماد أو تم اعتمادها بالفعل.');
         }

@@ -99,7 +99,7 @@
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('media-officers.edit', $officer) }}"
-                                            class="w-9 h-9 bg-gold/10 text-gold hover:bg-gold hover:text-white rounded-xl transition-all flex items-center justify-center text-sm"
+                                            class="w-9 h-9 bg-gold/10 text-gold hover:bg-amber-600 hover:text-white rounded-xl transition-all flex items-center justify-center text-sm"
                                             title="تعديل">
                                             <i class="fas fa-pencil"></i>
                                         </a>

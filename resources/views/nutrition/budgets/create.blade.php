@@ -120,7 +120,7 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <span id="grandTotal" class="font-black text-navy   text-lg">0.00</span>
-                                    <span class="text-xs text-navy font-cairo">ر.ي</span>
+                                    <span class="text-xs text-navy font-cairo">{{ currency_symbol() }}</span>
                                 </td>
                                 <td colspan="2"></td>
                             </tr>

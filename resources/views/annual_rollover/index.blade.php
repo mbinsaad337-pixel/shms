@@ -628,7 +628,22 @@
                 <form action="{{ route('annual-rollover.index') }}" method="GET" class="space-y-4">
                     <input type="hidden" name="tab" value="archives">
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                        @if($canFilterCenter)
+                        <div>
+                            <label class="block text-xs font-bold text-navy font-cairo mb-1">المركز</label>
+                            <select name="center_id"
+                                class="w-full text-xs font-cairo border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50/50">
+                                <option value="">جميع المراكز</option>
+                                @foreach ($centers as $center)
+                                    <option value="{{ $center->id }}" {{ request('center_id', $centerId) == $center->id ? 'selected' : '' }}>
+                                        {{ $center->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @endif
+
                         <div>
                             <label class="block text-xs font-bold text-navy font-cairo mb-1">السنة المؤرخة</label>
                             <select name="archived_year"
@@ -804,6 +819,13 @@
                                                     
                                                     if ($budgetMonth && $budgetYear) {
                                                         $archiveTitle = 'موازنة شهر: ' . $budgetMonth . ' / ' . $budgetYear;
+                                                    }
+                                                }
+                                                if ($arc->module === 'financial' && $arc->sub_type === 'expense') {
+                                                    $expenseMonth = data_get($arc->data, 'month');
+                                                    $expenseYear = data_get($arc->data, 'year');
+                                                    if ($expenseMonth && $expenseYear) {
+                                                        $archiveTitle = 'مصروف مركز : ' . $expenseMonth . ' / ' . $expenseYear;
                                                     }
                                                 }
                                                 

@@ -182,7 +182,7 @@
                                         @if ($activity->total_cost)
                                             <span class="text-sm font-black text-emerald-700 font-cairo">
                                                 {{ number_format($activity->total_cost, 2) }}
-                                                <span class="text-xs font-normal text-gray-400">ر.ي</span>
+                                                <span class="text-xs font-normal text-gray-400">{{ currency_symbol() }}</span>
                                             </span>
                                         @else
                                             <span class="text-xs text-gray-300">—</span>
@@ -405,7 +405,7 @@
                                     placeholder="0.00"
                                     class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right transition-all font-almarai">
                                 <span
-                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-cairo">ر.ي</span>
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-cairo">{{ currency_symbol() }}</span>
                             </div>
                         </div>
 
@@ -457,7 +457,7 @@
                                     <i class="fas fa-search absolute right-5 top-1/2 -translate-y-1/2 text-gold/50"></i>
                                 </div>
 
-                                <div class="space-y-2 max-h-80 overflow-y-auto px-2 custom-scrollbar-v2"
+                                <div class="space-y-2 max-h-80 overflow-y-auto px-2 custom-scrollbar"
                                     id="student_list">
                                     @foreach ($students as $student)
                                         <label
@@ -484,25 +484,7 @@
                         </div>
                     </div>
 
-                    <style>
-                        .custom-scrollbar-v2::-webkit-scrollbar {
-                            width: 6px;
-                        }
 
-                        .custom-scrollbar-v2::-webkit-scrollbar-track {
-                            background: transparent;
-                        }
-
-                        .custom-scrollbar-v2::-webkit-scrollbar-thumb {
-                            background: #E5E7EB;
-                            border-radius: 10px;
-                            border: 2px solid transparent;
-                        }
-
-                        .custom-scrollbar-v2::-webkit-scrollbar-thumb:hover {
-                            background: #D1D5DB;
-                        }
-                    </style>
 
                     <div class="flex gap-4 pt-4">
                         <button type="submit"

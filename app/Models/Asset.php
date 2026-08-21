@@ -14,6 +14,7 @@ class Asset extends Model
         'code',
         'status',
         'value',
+        'currency',
         'notes',
         'photo',
     ];
@@ -21,6 +22,16 @@ class Asset extends Model
     protected $casts = [
         'value' => 'decimal:2',
     ];
+
+    public function getCurrencyLabelAttribute(): string
+    {
+        return \App\Support\Currency::label($this->currency ?? null);
+    }
+
+    public function getCurrencySymbolAttribute(): string
+    {
+        return \App\Support\Currency::symbol($this->currency ?? null);
+    }
 
     public function center()
     {

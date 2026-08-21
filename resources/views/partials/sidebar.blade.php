@@ -10,15 +10,15 @@
         <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform">
             <i class="fas fa-university text-7xl text-gold"></i>
         </div>
-        <span class="text-lg font-black text-gold relative z-10">منصة السكن الطلابي</span>
-        <span class="text-[9px] text-gray-400 font-almarai relative z-10">جمعية رعاية طالب العلم</span>
+        <span class="text-15px font-black text-gold relative z-10">منصة إدارة المراكز الطلابية </span>
+        <span class="text-[13px] text-gray-400 font-almarai relative z-10">جمعية رعاية طالب العلم</span>
     </div>
 
     @php
         $isGraduateStudent = auth()->user()->student && auth()->user()->student->is_graduate;
     @endphp
 
-    <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto custom-scrollbar">
+    <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto sidebar-scrollbar">
         <!-- Dashboard -->
         <a href="{{ route('dashboard') }}"
             class="flex items-center px-4 py-3 text-sm font-medium rounded-2xl transition-all {{ request()->routeIs('dashboard') ? 'bg-gold text-navy font-black shadow-lg shadow-gold/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
@@ -67,7 +67,7 @@
                 </a>
                 <a href="{{ route('graduation.pending') }}"
                     class="flex items-center px-4 py-3 text-sm font-medium rounded-2xl {{ request()->routeIs('graduation.*') ? 'bg-white/10 text-gold font-bold shadow-sm' : 'text-gray-300 hover:bg-white/5' }} transition-all">
-                    <i class="fas fa-hourglass-half h-5 w-5 ml-3 text-amber-400/80"></i>
+                    <i class="fas fa-hourglass-half h-5 w-5 ml-3 "></i>
                     <span class="flex-1">طلبات التخرج</span>
                     @php
                         $sidebarPendingGradCount = \App\Models\Student::where('graduation_request_status', 'pending')
@@ -97,7 +97,7 @@
                     {{-- Unified Administrative Actions Hub --}}
                     <a href="{{ route('administrative.index') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-2xl {{ request()->routeIs('administrative.*') || request()->routeIs('violations.*') || request()->routeIs('penalties.*') || request()->routeIs('commitments.*') || request()->routeIs('absences.*') || request()->routeIs('leaves.*') ? 'bg-white/10 text-gold font-bold shadow-sm' : 'text-gray-300 hover:bg-white/5' }} transition-all">
-                        <i class="fas fa-clipboard-list h-5 w-5 ml-3 text-amber-400/70"></i>
+                        <i class="fas fa-clipboard-list h-5 w-5 ml-3"></i>
                         <span class="flex-1">الإجراءات الإدارية</span>
                         @php
                             $pendingLeaves = \App\Models\Leave::whereHas('student', fn($q) => $q->when(auth()->user()->center_id, fn($sq) => $sq->where('center_id', auth()->user()->center_id)))->where('status', 'pending')->count();
@@ -196,7 +196,7 @@
                             @endphp
                             <a href="{{ route('news.pending') }}"
                                 class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('news.pending') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5' }} transition-all">
-                                <i class="fas fa-bullhorn h-5 w-5 ml-3 text-amber-400"></i>
+                                <i class="fas fa-bullhorn h-5 w-5 ml-3 "></i>
                                 <span class="flex-1">اعتمادات مسؤول الإعلام</span>
                                 @if($sidebarPendingNewsCount > 0)
                                     <span class="bg-amber-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
@@ -234,12 +234,14 @@
                     @if(auth()->user()->hasRole('center-manager') || auth()->user()->hasRole('super-admin'))
                         <a href="{{ route('annual-rollover.index') }}"
                             class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('annual-rollover.*') ? 'bg-white/10 text-gold font-bold shadow-sm' : 'text-gray-300 hover:bg-white/5 transition' }}">
-                            <i class="fas fa-archive h-5 w-5 ml-3 text-amber-400"></i>
+                            <i class="fas fa-archive h-5 w-5 ml-3 "></i>
                             الترحيل السنوي والأرشيف
                         </a>
+                        @endif
+                    @if(!auth()->user()->hasRole('super-admin'))
                         <a href="{{ route('annual-reports.index') }}"
                             class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('annual-reports.*') ? 'bg-white/10 text-gold font-bold shadow-sm' : 'text-gray-300 hover:bg-white/5 transition' }}">
-                            <i class="fas fa-file-alt h-5 w-5 ml-3 text-emerald-400"></i>
+                            <i class="fas fa-file-alt h-5 w-5 ml-3"></i>
                             التقارير السنوية
                         </a>
                     @endif
@@ -371,7 +373,7 @@
                     </a>
                     <a href="{{ route('student.leave-requests.index') }}"
                         class="flex items-center px-4 py-2.5 text-sm font-medium rounded-2xl {{ request()->routeIs('student.leave-requests.*') ? 'bg-white/10 text-gold font-bold' : 'text-gray-300 hover:bg-white/5 transition' }}">
-                        <i class="fas fa-door-open h-5 w-5 ml-3 text-blue-400/70"></i>
+                        <i class="fas fa-door-open h-5 w-5 ml-3 "></i>
                         <span class="flex-1">طلبات الاستئذان</span>
                         @php
                             $myPendingLeaves = auth()->user()->student

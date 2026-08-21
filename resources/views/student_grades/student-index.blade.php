@@ -6,9 +6,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
-            <div>
-                <h1 class="text-3xl font-black text-gray-900 font-cairo">بيانات درجاتي الجامعية</h1>
-                <p class="mt-2 text-sm text-gray-500 font-almarai">يمكنك هنا رفع صور بيان الدرجات الخاص بك لكل فصل أو سنة دراسية.</p>
+            <div class="flex items-center gap-4">
+                <a href="{{ route('student.dashboard') }}" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all border border-gray-100">
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <div>
+                    <h1 class="text-3xl font-black text-gray-900 font-cairo">بيانات درجاتي الجامعية</h1>
+                    <p class="mt-2 text-sm text-gray-500 font-almarai">يمكنك هنا رفع صور بيان الدرجات الخاص بك لكل فصل أو سنة دراسية.</p>
+                </div>
             </div>
             <a href="{{ route('student-grades.create') }}" 
                 class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-bold rounded-2xl text-white bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20 transition-all transform hover:-translate-y-0.5">

@@ -26,6 +26,9 @@ class RoomController extends Controller
                     $q->whereNull('released_at');
                 }
             ])
+            ->with(['students' => function ($q) {
+                $q->whereNull('room_assignments.released_at')->select('students.id', 'students.name_ar');
+            }])
             ->get();
 
         // Get unique options for filters for this center

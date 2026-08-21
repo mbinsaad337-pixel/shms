@@ -5,9 +5,14 @@
 @section('content')
     <div
         class="mb-8 flex flex-col md:flex-row justify-between items-center bg-white p-6 rounded-2xl border-l-8 border-gold shadow-sm">
-        <div>
-            <h1 class="text-3xl font-black text-navy font-cairo lowercase">حلقاتي القرآنية</h1>
-            <p class="text-gray-400 font-almarai text-sm mt-1">متابعة إحصائيات الحضور والتقدم في حفظ القرآن</p>
+        <div class="flex items-center gap-4">
+            <a href="{{ route('student.dashboard') }}" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all border border-gray-100">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            <div>
+                <h1 class="text-3xl font-black text-navy font-cairo lowercase">حلقاتي القرآنية</h1>
+                <p class="text-gray-400 font-almarai text-sm mt-1">متابعة إحصائيات الحضور والتقدم في حفظ القرآن</p>
+            </div>
         </div>
         <div class="mt-4 md:mt-0">
             <div class="h-10 w-10 flex items-center justify-center bg-navy/5 text-navy rounded-full shadow-inner">

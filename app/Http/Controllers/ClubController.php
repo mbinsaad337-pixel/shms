@@ -136,6 +136,13 @@ class ClubController extends Controller
 
     public function destroy(Club $club)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager')) {
+            if ($user->center_id && $club->center_id !== $user->center_id) {
+                abort(403, 'غير مصرح لك بحذف هذا النادي.');
+            }
+        }
+
         $club->members()->delete();
         $club->delete();
 

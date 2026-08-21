@@ -23,7 +23,7 @@ class FoodDistributionController extends Controller
     /** API: validate & process QR scan */
     public function processScan(Request $request)
     {
-        Log::info('FoodDistribution::processScan', $request->all());
+        Log::info('FoodDistribution::processScan', ['qr_code' => substr($request->qr_code, 0, 30)]);
         $request->validate(['qr_code' => 'required|string']);
 
         $qrCode = trim($request->qr_code);
@@ -106,6 +106,20 @@ class FoodDistributionController extends Controller
             }
 
             $memberData = [];
+            $memberStudentIds = $group->members->pluck('student_id')->toArray();
+
+            $existingDistributions = FoodDistribution::whereIn('student_id', $memberStudentIds)
+                ->where('meal_type', $mealType)
+                ->where('distribution_type', '!=', 'extra')
+                ->whereDate('distributed_at', today())
+                ->pluck('student_id')
+                ->flip();
+
+            $attendanceReports = \App\Models\FoodAttendanceReport::whereIn('student_id', $memberStudentIds)
+                ->where('meal_date', today())
+                ->where('meal_type', $mealType)
+                ->keyBy('student_id');
+
             foreach ($group->members as $member) {
                 $sub = $member->subscription;
                 if ($sub) {
@@ -113,16 +127,9 @@ class FoodDistributionController extends Controller
                     $sub->refresh();
                 }
 
-                $alreadyDist = FoodDistribution::where('student_id', $member->student_id)
-                    ->where('meal_type', $mealType)
-                    ->where('distribution_type', '!=', 'extra')
-                    ->whereDate('distributed_at', today())
-                    ->exists();
+                $alreadyDist = $existingDistributions->has($member->student_id);
 
-                $attendance = \App\Models\FoodAttendanceReport::where('student_id', $member->student_id)
-                    ->where('meal_date', today())
-                    ->where('meal_type', $mealType)
-                    ->first();
+                $attendance = $attendanceReports->get($member->student_id);
 
                 $status = 'ready';
                 if ($alreadyDist) {
@@ -206,6 +213,19 @@ class FoodDistributionController extends Controller
 
             $allStudents = collect([$group->primaryStudent])->merge($group->students);
             $memberData = [];
+            $allStudentIds = $allStudents->filter()->pluck('id')->toArray();
+
+            $existingDistributions2 = FoodDistribution::whereIn('student_id', $allStudentIds)
+                ->where('meal_type', $mealType)
+                ->where('distribution_type', '!=', 'extra')
+                ->whereDate('distributed_at', today())
+                ->pluck('student_id')
+                ->flip();
+
+            $attendanceReports2 = \App\Models\FoodAttendanceReport::whereIn('student_id', $allStudentIds)
+                ->where('meal_date', today())
+                ->where('meal_type', $mealType)
+                ->keyBy('student_id');
 
             foreach ($allStudents as $st) {
                 if (!$st)
@@ -217,16 +237,9 @@ class FoodDistributionController extends Controller
                     $sub->refresh();
                 }
 
-                $alreadyDist = FoodDistribution::where('student_id', $st->id)
-                    ->where('meal_type', $mealType)
-                    ->where('distribution_type', '!=', 'extra')
-                    ->whereDate('distributed_at', today())
-                    ->exists();
+                $alreadyDist = $existingDistributions2->has($st->id);
 
-                $attendance = \App\Models\FoodAttendanceReport::where('student_id', $st->id)
-                    ->where('meal_date', today())
-                    ->where('meal_type', $mealType)
-                    ->first();
+                $attendance = $attendanceReports2->get($st->id);
 
                 $status = 'ready';
                 if ($alreadyDist) {
@@ -268,7 +281,11 @@ class FoodDistributionController extends Controller
     /** API: record distribution after confirmation */
     public function distribute(Request $request)
     {
-        Log::info('FoodDistribution::distribute payload', $request->all());
+        Log::info('FoodDistribution::distribute', [
+            'student_count' => count($request->students),
+            'meal_type' => $request->meal_type,
+            'type' => $request->type,
+        ]);
 
         $request->validate([
             'students' => 'required|array',

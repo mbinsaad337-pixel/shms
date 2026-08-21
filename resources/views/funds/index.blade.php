@@ -10,11 +10,11 @@
                 <p class="text-gray-600 font-almarai mt-2">إدارة الحسابات والصناديق التابعة للمركز</p>
             </div>
             @if(auth()->user()->hasRole('super-admin'))
-            <button onclick="openCreateModal()"
+            <a href="{{ route('funds.create') }}"
                 class="btn-primary flex items-center gap-2 px-6 py-3 rounded-2xl shadow-lg transform hover:-translate-y-1 transition-all">
                 <i class="fas fa-plus"></i>
                 <span>إضافة صندوق جديد</span>
-            </button>
+            </a>
             @endif
         </div>
 
@@ -53,11 +53,11 @@
                         </div>
                         <div class="flex gap-3">
                             @if(auth()->user()->hasRole('super-admin'))
-                            <button onclick="openEditModal({{ json_encode($fund) }})"
+                            <a href="{{ route('funds.edit', $fund) }}"
                                 class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-xl font-bold font-cairo transition-all text-sm">
                                 <i class="fas fa-edit"></i>
                                 <span>تعديل</span>
-                            </button>
+                            </a>
                             @if(!$fund->is_system)
                                 <form action="{{ route('funds.destroy', $fund) }}" method="POST"
                                     data-confirm="هل أنت متأكد من حذف هذا الصندوق؟ لا يمكن التراجع عن هذا الإجراء.">
@@ -110,189 +110,9 @@
                         <i class="fas fa-wallet text-3xl text-gray-200"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-400 font-cairo">لا توجد صناديق مضافة</h3>
-                    <p class="text-gray-300 font-almarai mt-2">ابدأ بإضافة أول صندوق مالي لمركزك</p>
+                    <p class="text-gray-300 font-almarai mt-2">ابدأ بإضافة أول صندوق مالي للمراكز الطلابية</p>
                 </div>
             @endif
         </div>
     </div>
-
-    <!-- Create Modal -->
-    @if(auth()->user()->hasRole('super-admin'))
-    <div id="createModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-[2.5rem] p-10 max-w-md w-full shadow-2xl transform transition-all">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
-                    <i class="fas fa-plus-circle text-xl"></i>
-                </div>
-                <h2 class="text-2xl font-bold font-cairo text-gray-800">صندوق جديد</h2>
-            </div>
-
-            <form action="{{ route('funds.store') }}" method="POST" class="space-y-6">
-                @csrf
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">المركز التابع له الصندوق</label>
-                    <select name="center_id" required
-                        class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-right transition-all">
-                        <option value="">-- حدد المركز --</option>
-                        @foreach($centers as $center)
-                            <option value="{{ $center->id }}">{{ $center->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">مسمى الصندوق</label>
-                    <input type="text" name="name" required placeholder="مثال: الصندوق الرئيسي"
-                        class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-right transition-all">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">وصف الصندوق</label>
-                    <textarea name="description" placeholder="حدد الغرض من الصندوق..."
-                        class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-right transition-all"
-                        rows="3"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">عملة الصندوق</label>
-                    <select name="currency" id="create_currency" required
-                        class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-right transition-all">
-                        <option value="YER" selected>ريال يمني</option>
-                        <option value="SAR">ريال سعودي</option>
-                        <option value="USD">دولار أمريكي</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">الرصيد الحالي</label>
-                    <div class="relative">
-                        <input type="number" name="balance" step="0.01" required placeholder="0.00"
-                            class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-center font-bold text-xl text-primary   transition-all">
-                        <span id="create_currency_suffix" class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 font-almarai text-xs">ر.ي</span>
-                    </div>
-                </div>
-                <div class="flex gap-4 pt-6">
-                    <button type="submit" class="flex-[2] btn-primary py-4 rounded-2xl font-bold text-lg shadow-lg">حفظ
-                        البيانات</button>
-                    <button type="button" onclick="closeCreateModal()"
-                        class="flex-1 bg-gray-100 text-gray-500 py-4 rounded-2xl font-bold font-cairo hover:bg-gray-200 transition-colors">إلغاء</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Edit Modal -->
-    <div id="editModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-[2.5rem] p-10 max-w-md w-full shadow-2xl transform transition-all">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-12 h-12 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary">
-                    <i class="fas fa-edit text-xl"></i>
-                </div>
-                <h2 class="text-2xl font-bold font-cairo text-gray-800">تعديل الصندوق</h2>
-            </div>
-
-            <form id="editForm" method="POST" class="space-y-6">
-                @csrf
-                @method('PUT')
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">المركز التابع له الصندوق</label>
-                    <select name="center_id" id="edit_center_id" required
-                        class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-right transition-all">
-                        <option value="">-- حدد المركز --</option>
-                        @foreach($centers as $center)
-                            <option value="{{ $center->id }}">{{ $center->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">مسمى الصندوق</label>
-                    <input type="text" name="name" id="edit_name" required
-                        class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-right transition-all">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">وصف الصندوق</label>
-                    <textarea name="description" id="edit_description"
-                        class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-right transition-all"
-                        rows="3"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">عملة الصندوق</label>
-                    <select name="currency" id="edit_currency" required
-                        class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-right transition-all">
-                        <option value="YER">ريال يمني</option>
-                        <option value="SAR">ريال سعودي</option>
-                        <option value="USD">دولار أمريكي</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-3 font-cairo text-right">الرصيد (للمراجعة
-                        فقط)</label>
-                    <div class="relative">
-                        <input type="number" name="balance" id="edit_balance" step="0.01" required
-                            class="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-center font-bold text-xl text-primary   transition-all">
-                        <span id="edit_currency_suffix" class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 font-almarai text-xs">ر.ي</span>
-                    </div>
-                </div>
-                <div class="flex gap-4 pt-6">
-                    <button type="submit"
-                        class="flex-[2] bg-secondary text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:bg-orange-600 transition-all">تحديث
-                        الصندوق</button>
-                    <button type="button" onclick="closeEditModal()"
-                        class="flex-1 bg-gray-100 text-gray-500 py-4 rounded-2xl font-bold font-cairo hover:bg-gray-200 transition-colors">إلغاء</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    @endif
-
-    <script>
-        const currencySymbols = { YER: 'ر.ي', SAR: 'ر.س', USD: '$' };
-
-        function updateCurrencySuffix(selectId, suffixId) {
-            const select = document.getElementById(selectId);
-            const suffix = document.getElementById(suffixId);
-            if (select && suffix) suffix.textContent = currencySymbols[select.value] || 'ر.ي';
-        }
-
-        function openCreateModal() {
-            showModal('createModal');
-            updateCurrencySuffix('create_currency', 'create_currency_suffix');
-        }
-        function closeCreateModal() {
-            hideModal('createModal');
-        }
-
-        document.getElementById('create_currency').addEventListener('change', function () {
-            updateCurrencySuffix('create_currency', 'create_currency_suffix');
-        });
-
-        function openEditModal(fund) {
-            document.getElementById('edit_center_id').value = fund.center_id;
-            document.getElementById('edit_name').value = fund.name;
-            document.getElementById('edit_description').value = fund.description || '';
-            document.getElementById('edit_balance').value = fund.balance;
-            document.getElementById('edit_currency').value = fund.currency || 'YER';
-            updateCurrencySuffix('edit_currency', 'edit_currency_suffix');
-            
-            // Generate the URL using Laravel's route helper to ensure correct pathing (especially in subfolders)
-            let actionUrl = "{{ route('funds.update', ':id') }}";
-            document.getElementById('editForm').action = actionUrl.replace(':id', fund.id);
-            
-            showModal('editModal');
-        }
-        function closeEditModal() {
-            hideModal('editModal');
-        }
-
-        document.getElementById('edit_currency').addEventListener('change', function () {
-            updateCurrencySuffix('edit_currency', 'edit_currency_suffix');
-        });
-
-        function showModal(id) {
-            const m = document.getElementById(id);
-            m.classList.remove('hidden');
-            m.classList.add('flex');
-        }
-        function hideModal(id) {
-            const m = document.getElementById(id);
-            m.classList.add('hidden');
-            m.classList.remove('flex');
-        }
-    </script>
 @endsection

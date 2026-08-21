@@ -106,6 +106,8 @@ class StudentController extends Controller
             'national_id'    => 'nullable|string|unique:students,national_id',
             'student_number' => 'nullable|string|unique:students,student_number',
             'program_id'     => 'required|exists:programs,id',
+            'annual_fees' => 'nullable|numeric|min:0',
+            'annual_fee_currency' => 'nullable|in:YER,SAR,USD',
         ]);
 
         // Enforce program restriction for supervisors (student-supervisor bypasses this check)
@@ -148,7 +150,8 @@ class StudentController extends Controller
                 'email'          => $validated['email'] ?? null,
                 'national_id'    => $validated['national_id'] ?? null,
                 'student_number' => $validated['student_number'] ?? null,
-                'annual_fees'    => $request->annual_fees ?? 0,
+                'annual_fees'    => $validated['annual_fees'] ?? 0,
+                'annual_fee_currency' => $validated['annual_fee_currency'] ?? 'YER',
                 'barcode'        => 'ST-' . strtoupper(Str::random(8)),
                 'status'         => 'registered',
             ]);
@@ -224,12 +227,22 @@ class StudentController extends Controller
     }
     public function edit(Student $student)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && $student->center_id !== $user->center_id) {
+            abort(403, 'غير مصرح لك بتعديل بيانات هذا الطالب.');
+        }
+
         $programs = \App\Models\Program::active()->get();
         return view('students.edit', compact('student', 'programs'));
     }
 
     public function update(Request $request, Student $student)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && $student->center_id !== $user->center_id) {
+            abort(403, 'غير مصرح لك بتعديل بيانات هذا الطالب.');
+        }
+
         $validated = $request->validate([
             'name_ar' => 'nullable|string|max:255',
             'username' => 'nullable|string|unique:users,username,' . $student->user_id,
@@ -240,6 +253,7 @@ class StudentController extends Controller
             'student_number' => 'nullable|string|unique:students,student_number,' . $student->id,
             'status' => 'nullable|in:registered,residing,left,graduated,suspended',
             'annual_fees' => 'nullable|numeric|min:0',
+            'annual_fee_currency' => 'nullable|in:YER,SAR,USD',
             'date_of_birth' => 'nullable|date',
             'id_card_date' => 'nullable|date',
             'enrollment_date' => 'nullable|date',
@@ -256,7 +270,7 @@ class StudentController extends Controller
             'id_card_number', 'id_card_source', 'id_card_date',
             'home_phone', 'governorate', 'district', 'village', 'permanent_address',
             'status', 'student_number', 'university', 'college', 'major', 
-            'academic_level', 'enrollment_date', 'expected_graduation', 'annual_fees',
+            'academic_level', 'enrollment_date', 'expected_graduation', 'annual_fees', 'annual_fee_currency',
             'last_certificate', 'graduated_school', 'last_cert_major', 'graduation_year', 'last_cert_grade',
             'guardian_name', 'guardian_relation', 'guardian_phone', 'guardian_job', 'guardian_education',
             'family_males', 'family_females', 'family_avg_income', 'dependents_count',
@@ -457,6 +471,7 @@ class StudentController extends Controller
                 $activeAssignment->update([
                     'released_at' => now(),
                     'release_reason' => 'تخرج'
+                    
                 ]);
                 $notices[] = "تم إخلاء الطالب من الغرفة رقم ({$roomNumber}) تلقائياً.";
             }
@@ -486,6 +501,7 @@ class StudentController extends Controller
             }
 
             $message = "تم نقل الطالب إلى قائمة الخريجين بنجاح. \n" . implode("\n", $notices);
+
             return redirect()->route('students.index')->with('success', $message);
         });
     }
@@ -566,6 +582,11 @@ class StudentController extends Controller
 
     public function toggleEditPermission(Student $student)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && $student->center_id !== $user->center_id) {
+            abort(403, 'غير مصرح لك بتعديل صلاحيات هذا الطالب.');
+        }
+
         $student->update([
             'can_edit_profile' => !$student->can_edit_profile
         ]);
@@ -626,15 +647,21 @@ class StudentController extends Controller
         $validated = $request->validate([
             'amount' => 'required|numeric|min:0',
             'program_id' => 'required',
+            'center_id' => $user->hasRole('super-admin') ? 'required|exists:centers,id' : 'nullable',
+            'currency' => 'required|in:YER,SAR,USD',
         ]);
+
+        if (!$user->hasRole('super-admin') && !$user->center_id) {
+            abort(403, 'يجب أن يكون المستخدم مرتبطًا بمركز لتعميم الرسوم.');
+        }
+
+        $centerId = $user->hasRole('super-admin') ? $validated['center_id'] : $user->center_id;
+        $centerName = Center::find($centerId)?->name ?? 'المركز المحدد';
 
         $query = Student::query()
             ->where('is_graduate', false)
-            ->where('status', '!=', 'left');
-
-        if ($user->center_id) {
-            $query->where('center_id', $user->center_id);
-        }
+            ->where('status', '!=', 'left')
+            ->where('center_id', $centerId);
 
         if ($validated['program_id'] !== 'all') {
             $query->where('program_id', $validated['program_id']);
@@ -644,9 +671,13 @@ class StudentController extends Controller
             $msgTarget = "جميع الطلاب";
         }
 
-        $query->update(['annual_fees' => $validated['amount']]);
+        $query->update([
+            'annual_fees' => $validated['amount'],
+            'annual_fee_currency' => $validated['currency'],
+        ]);
 
-        return redirect()->route('students.index')->with('success', 'تم تعميم الرسوم السنوية (' . number_format($validated['amount'], 2) . ') على ' . $msgTarget . ' بنجاح.');
+        $currencySymbol = \App\Models\Fund::CURRENCY_SYMBOLS[$validated['currency']];
+        return redirect()->route('students.index')->with('success', 'تم تعميم الرسوم السنوية (' . number_format($validated['amount'], 2) . ' ' . $currencySymbol . ') على ' . $msgTarget . ' في مركز ' . $centerName . ' بنجاح.');
     }
 
     public function destroy(Student $student)

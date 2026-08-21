@@ -163,7 +163,7 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <span id="grandTotal" class="font-black text-navy   text-lg">{{ number_format($budget->total_amount, 2, '.', '') }}</span>
-                                    <span class="text-xs text-navy font-cairo">ر.ي</span>
+                                    <span class="text-xs text-navy font-cairo">{{ currency_symbol() }}</span>
                                 </td>
                                 <td colspan="2"></td>
                             </tr>

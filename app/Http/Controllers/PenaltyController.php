@@ -85,6 +85,13 @@ class PenaltyController extends Controller
 
     public function destroy(Penalty $penalty)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager')) {
+            if ($user->center_id && optional($penalty->student)->center_id !== $user->center_id) {
+                abort(403, 'غير مصرح لك بحذف العقوبات لهذا المركز.');
+            }
+        }
+
         $penalty->delete();
         return back()->with('success', 'تم إلغاء العقوبة بنجاح.');
     }

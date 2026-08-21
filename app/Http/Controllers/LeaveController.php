@@ -128,6 +128,13 @@ class LeaveController extends Controller
 
     public function destroy(Leave $leave)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager')) {
+            if ($user->center_id && optional($leave->student)->center_id !== $user->center_id) {
+                abort(403, 'غير مصرح لك بحذف الاستئذانات لهذا المركز.');
+            }
+        }
+
         $leave->delete();
         return back()->with('success', 'تم حذف الاستئذان بنجاح.');
     }

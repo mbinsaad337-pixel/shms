@@ -37,10 +37,10 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
             @php
                 $cards = [
-                    ['label' => 'إجمالي الميزانيات', 'value' => number_format($stats['total_budgets'], 0), 'unit' => 'ر.ي', 'icon' => 'fa-file-invoice-dollar', 'bg' => 'bg-navy', 'iconColor' => 'text-gold'],
-                    ['label' => 'إجمالي الإيرادات', 'value' => number_format($stats['total_collected'], 0), 'unit' => 'ر.ي', 'icon' => 'fa-hand-holding-dollar', 'bg' => 'bg-gold', 'iconColor' => 'text-navy'],
-                    ['label' => 'إجمالي المصروفات', 'value' => number_format($stats['total_expenses'], 0), 'unit' => 'ر.ي', 'icon' => 'fa-cart-shopping', 'bg' => 'bg-navy', 'iconColor' => 'text-gold'],
-                    ['label' => 'صافي النتيجة', 'value' => number_format($stats['net_result'], 0), 'unit' => 'ر.ي', 'icon' => 'fa-scale-balanced', 'bg' => 'bg-gold', 'iconColor' => 'text-navy'],
+                    ['label' => 'إجمالي الميزانيات', 'value' => number_format($stats['total_budgets'], 0), 'unit' => currency_symbol(), 'icon' => 'fa-file-invoice-dollar', 'bg' => 'bg-navy', 'iconColor' => 'text-gold'],
+                    ['label' => 'إجمالي الإيرادات', 'value' => number_format($stats['total_collected'], 0), 'unit' => currency_symbol(), 'icon' => 'fa-hand-holding-dollar', 'bg' => 'bg-gold', 'iconColor' => 'text-navy'],
+                    ['label' => 'إجمالي المصروفات', 'value' => number_format($stats['total_expenses'], 0), 'unit' => currency_symbol(), 'icon' => 'fa-cart-shopping', 'bg' => 'bg-navy', 'iconColor' => 'text-gold'],
+                    ['label' => 'صافي النتيجة', 'value' => number_format($stats['net_result'], 0), 'unit' => currency_symbol(), 'icon' => 'fa-scale-balanced', 'bg' => 'bg-gold', 'iconColor' => 'text-navy'],
                 ];
             @endphp
 
@@ -139,7 +139,7 @@
                                         <p class="font-bold text-navy text-sm font-cairo">{{ $budget->month_name }}
                                             {{ $budget->year }}
                                         </p>
-                                        <p class="text-xs text-gray-400  ">{{ number_format($budget->total_amount, 0) }} ر.ي</p>
+                                        <p class="text-xs text-gray-400  ">{{ number_format($budget->total_amount, 0) }} {{ currency_symbol() }}</p>
                                     </div>
                                     <span
                                         class="px-3 py-1 rounded-lg text-[10px] font-bold
@@ -177,7 +177,7 @@
                                 <p class="text-xs text-gray-400  ">{{ $invoice->invoice_number }}</p>
                             </div>
                             <p class="font-black text-navy   text-sm">{{ number_format($invoice->total_amount, 0) }}
-                                ر.ي</p>
+                                {{ currency_symbol() }}</p>
                         </div>
                         @endforeach
 @else
@@ -205,7 +205,7 @@
                             class="flex items-center justify-between p-4 bg-red-50/20 rounded-2xl border border-red-100 transition-all hover:bg-red-50/40">
                             <p class="font-bold text-navy text-sm font-cairo">{{ $sub->student?->name_ar ?? 'طالب غير موجود' }}</p>
                             <p class="font-black text-red-600   text-xs">
-                                {{ number_format($sub->total_due - $sub->total_paid, 0) }} ر.ي
+                                {{ number_format($sub->total_due - $sub->total_paid, 0) }} {{ currency_symbol() }}
                             </p>
                         </div>
                         @endforeach

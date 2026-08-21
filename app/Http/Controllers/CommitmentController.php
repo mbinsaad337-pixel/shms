@@ -138,6 +138,13 @@ class CommitmentController extends Controller
 
     public function destroy(Commitment $commitment)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager')) {
+            if ($user->center_id && optional($commitment->student)->center_id !== $user->center_id) {
+                abort(403, 'غير مصرح لك بحذف التعهدات لهذا المركز.');
+            }
+        }
+
         $commitment->delete();
         return back()->with('success', 'تم حذف التعهد بنجاح.');
     }

@@ -61,8 +61,8 @@
                 <i class="fas fa-filter ml-1"></i> تطبيق الفلترة
             </button>
             @if(request()->filled('period'))
-                <a href="{{ route('vouchers.index', request()->only('center_id')) }}"
-                    class="px-3 py-2.5 text-sm font-bold text-gray-500 hover:text-navy font-cairo">إلغاء فلترة الشهر</a>
+                <a href="{{ route('vouchers.index', array_merge(request()->only('center_id'), ['period' => 'all'])) }}"
+                    class="px-3 py-2.5 text-sm font-bold text-gray-500 hover:text-navy font-cairo">عرض الكل</a>
             @endif
         </form>
 
@@ -78,7 +78,7 @@
                 <p class="text-[10px] font-bold text-gray-400 font-cairo mb-1 uppercase tracking-wider">المقبوضات</p>
                 <p class="text-3xl font-black text-navy  ">
                     {{ number_format($voucherStats['receipts'], 0) }} <span
-                        class="text-xs font-cairo text-gray-400">ر.ي</span>
+                        class="text-xs font-cairo text-gray-400">{{ currency_symbol() }}</span>
                 </p>
                 <div class="h-1 w-12 bg-gold mt-2 rounded-full"></div>
             </div>
@@ -87,7 +87,7 @@
                 <p class="text-[10px] font-bold text-gray-400 font-cairo mb-1 uppercase tracking-wider">المصروفات</p>
                 <p class="text-3xl font-black text-red-600  ">
                     {{ number_format($voucherStats['expenses'], 0) }} <span
-                        class="text-xs font-cairo text-gray-400">ر.ي</span>
+                        class="text-xs font-cairo text-gray-400">{{ currency_symbol() }}</span>
                 </p>
                 <div class="h-1 w-12 bg-red-500 mt-2 rounded-full"></div>
             </div>

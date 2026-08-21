@@ -78,7 +78,7 @@
                             </div>
                             <div class="flex items-center text-sm text-gray-600 font-almarai">
                                 <i class="fas fa-users w-6 text-gold/60 text-center ml-2"></i>
-                                <span>الطلاب: <span class="font-bold text-navy">{{ $circle->students()->count() }} طالب</span></span>
+                                <span>الطلاب: <span class="font-bold text-navy">{{ $circle->students_count }} طالب</span></span>
                             </div>
                             <div class="flex items-center text-sm text-gray-600 font-almarai">
                                 <i class="fas fa-calendar-check w-6 text-gold/60 text-center ml-2"></i>

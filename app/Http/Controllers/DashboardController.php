@@ -13,7 +13,6 @@ use App\Models\Fund;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RoomAssignment;
-use App\Models\User;
 use App\Models\MealSubscription;
 use App\Models\Leave;
 use App\Models\Activity;
@@ -161,7 +160,7 @@ class DashboardController extends Controller
         $stats = [
             'students_count' => Student::where('center_id', $centerId)->where('status', 'residing')->count(),
             'students_suspended' => Student::where('center_id', $centerId)->where('status', 'graduated')->count(),
-            'staff_count' => User::where('center_id', $centerId)->count(),
+            'staff_count' => Center::find($centerId)?->staff()->count() ?? 0,
             'rooms_count' => Room::where('center_id', $centerId)->count(),
             'total_capacity' => Room::where('center_id', $centerId)->where('status', 'available')->sum('capacity'),
             'occupied_seats' => RoomAssignment::whereHas('room', function ($q) use ($centerId) {
@@ -215,7 +214,7 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        $students = Student::where('center_id', $centerId)->orderBy('name_ar')->get(['id', 'name_ar', 'barcode']);
+        $students = Student::where('center_id', $centerId)->where('status', 'residing')->orderBy('name_ar')->get(['id', 'name_ar', 'barcode']);
 
         $pending_approvals = [
             'students' => Student::where('center_id', $centerId)->where('is_profile_approved', false)->count(),
@@ -266,7 +265,7 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
 
-        $students = Student::where('center_id', $centerId)->orderBy('name_ar')->get(['id', 'name_ar', 'barcode']);
+        $students = Student::where('center_id', $centerId)->where('status', 'residing')->orderBy('name_ar')->get(['id', 'name_ar', 'barcode']);
 
         return \view('dashboard.student_manager', compact('stats', 'recent_violations', 'recent_absences', 'circle_absences', 'students'));
     }

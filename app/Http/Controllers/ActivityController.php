@@ -273,6 +273,13 @@ class ActivityController extends Controller
 
     public function destroy(Activity $activity)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager')) {
+            if ($user->center_id && $activity->center_id !== $user->center_id) {
+                abort(403, 'غير مصرح لك بحذف هذه الفعالية.');
+            }
+        }
+
         $activity->participants()->delete();
         $activity->delete();
         return redirect()->route('activities.index')->with('success', 'تم حذف الفعالية بنجاح.');

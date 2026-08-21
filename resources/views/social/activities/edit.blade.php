@@ -109,7 +109,7 @@
                                 value="{{ $activity->total_cost }}" placeholder="0.00"
                                 class="w-full px-5 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:bg-white focus:ring-4 focus:ring-navy/5 outline-none text-right transition-all font-almarai">
                             <span
-                                class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-cairo">ر.ي</span>
+                                class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-cairo">{{ currency_symbol() }}</span>
                         </div>
                     </div>
 
@@ -175,7 +175,7 @@
                                     class="fas fa-search absolute right-6 top-1/2 -translate-y-1/2 text-gold/50 text-xl"></i>
                             </div>
 
-                            <div class="space-y-3 max-h-96 overflow-y-auto px-4 custom-scrollbar-v2"
+                            <div class="space-y-3 max-h-96 overflow-y-auto px-4 custom-scrollbar"
                                 id="edit_student_list">
                                 @php
                                     $targetedIds = $activity->targetedStudents->pluck('id')->toArray();
@@ -215,25 +215,7 @@
         </div>
     </div>
 
-    <style>
-        .custom-scrollbar-v2::-webkit-scrollbar {
-            width: 8px;
-        }
 
-        .custom-scrollbar-v2::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .custom-scrollbar-v2::-webkit-scrollbar-thumb {
-            background: #E5E7EB;
-            border-radius: 10px;
-            border: 3px solid transparent;
-        }
-
-        .custom-scrollbar-v2::-webkit-scrollbar-thumb:hover {
-            background: #D1D5DB;
-        }
-    </style>
 
     <script>
         function filterEditStudents() {

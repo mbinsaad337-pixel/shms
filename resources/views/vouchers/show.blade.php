@@ -88,7 +88,7 @@
                     <p class="text-sm text-gray-400 font-almarai mb-1">المبلغ الإجمالي</p>
                     <p class="text-2xl font-bold text-gray-800  ">
                         {{ number_format($voucher->amount, 2) }}
-                        <span class="text-sm text-gray-500 font-cairo">{{ $voucher->fund->currency_symbol ?? 'ر.ي' }}</span>
+                        <span class="text-sm text-gray-500 font-cairo">{{ $voucher->fund?->currency_symbol ?? currency_symbol() }}</span>
                     </p>
                 </div>
                 <div class="p-6 border-l border-gray-50 last:border-0">
@@ -136,7 +136,7 @@
                                         </div>
                                         <div class="text-left text-[10px]">
                                             <p class="text-gray-400 font-cairo">المتبقي من الرسوم:</p>
-                                            <p class="font-bold text-red-600">{{ number_format($voucher->student->remaining_fees, 2) }} ر.ي</p>
+                                            <p class="font-bold text-red-600">{{ number_format($voucher->student->remaining_fees, 2) }} {{ $voucher->student->annual_fee_currency_symbol }}</p>
                                         </div>
                                     </div>
                                 @endif

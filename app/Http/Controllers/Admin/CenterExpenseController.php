@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Center;
 use App\Models\CenterExpense;
+use App\Services\PdfService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -48,12 +49,37 @@ class CenterExpenseController extends Controller
         return view('admin.expenses.create', compact('centers'));
     }
 
+    public function show(CenterExpense $centerExpense)
+    {
+        $centerExpense->load('center');
+
+        return view('admin.expenses.show', [
+            'expense' => $centerExpense,
+            'preview' => false,
+            'previewArchive' => null,
+            'receiptUrl' => $centerExpense->receipt_url,
+        ]);
+    }
+
+    public function exportPdf(CenterExpense $centerExpense, PdfService $pdfService)
+    {
+        $centerExpense->load('center');
+
+        return $pdfService->stream(
+            'pdf.expenses.show',
+            ['expense' => $centerExpense, 'receiptUrl' => $centerExpense->receipt_url],
+            'تفاصيل مصروف مركز: ' . $centerExpense->type_label,
+            'center_expense_' . $centerExpense->id . '.pdf'
+        );
+    }
+
     public function store(Request $request)
     {
         $request->validate([
             'center_id' => 'required|exists:centers,id',
             'type' => 'required|in:rent,water,electricity,internet,other',
             'amount' => 'required|numeric|min:0.01',
+            'currency' => 'required|in:YER,SAR,USD',
             'due_date' => 'required|date',
             'month' => 'required|integer|min:1|max:12',
             'year' => 'required|integer|min:2020|max:2100',
@@ -67,7 +93,7 @@ class CenterExpenseController extends Controller
             'receipt.max' => 'الحد الأقصى لحجم المرفق 10 ميجابايت.',
         ]);
 
-        $data = $request->only(['center_id', 'type', 'amount', 'due_date', 'status', 'payment_date', 'month', 'year', 'notes']);
+        $data = $request->only(['center_id', 'type', 'amount', 'currency', 'due_date', 'status', 'payment_date', 'month', 'year', 'notes']);
 
         if ($request->hasFile('receipt')) {
             $file = $request->file('receipt');
@@ -97,6 +123,7 @@ class CenterExpenseController extends Controller
             'center_id' => 'required|exists:centers,id',
             'type' => 'required|in:rent,water,electricity,internet,other',
             'amount' => 'required|numeric|min:0.01',
+            'currency' => 'required|in:YER,SAR,USD',
             'due_date' => 'required|date',
             'month' => 'required|integer|min:1|max:12',
             'year' => 'required|integer|min:2020|max:2100',
@@ -108,7 +135,7 @@ class CenterExpenseController extends Controller
             'payment_date.required_if' => 'يجب إدخال تاريخ الدفع إذا كانت الحالة "تم الدفع".',
         ]);
 
-        $data = $request->only(['center_id', 'type', 'amount', 'due_date', 'status', 'payment_date', 'month', 'year', 'notes']);
+        $data = $request->only(['center_id', 'type', 'amount', 'currency', 'due_date', 'status', 'payment_date', 'month', 'year', 'notes']);
 
         if ($request->hasFile('receipt')) {
             // Delete old file if exists
@@ -134,6 +161,14 @@ class CenterExpenseController extends Controller
 
     public function destroy(CenterExpense $centerExpense)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager') && !$user->hasRole('financial-manager')) {
+            abort(403, 'غير مصرح لك بحذف المصروفات.');
+        }
+        if (!$user->hasRole('super-admin') && $user->center_id && $centerExpense->center_id !== $user->center_id) {
+            abort(403, 'غير مصرح لك بالتعامل مع مصروفات هذا المركز.');
+        }
+
         if ($centerExpense->receipt) {
             Storage::disk('public')->delete($centerExpense->receipt);
         }

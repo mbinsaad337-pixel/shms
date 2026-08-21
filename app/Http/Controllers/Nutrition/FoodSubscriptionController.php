@@ -285,6 +285,14 @@ class FoodSubscriptionController extends Controller
 
     public function destroy(FoodSubscription $subscription)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager') && !$user->hasRole('nutrition-manager')) {
+            abort(403, 'غير مصرح لك بحذف اشتراكات التغذية.');
+        }
+        if (!$user->hasRole('super-admin') && $user->center_id && $subscription->center_id !== $user->center_id) {
+            abort(403, 'غير مصرح لك بالتعامل مع اشتراكات هذا المركز.');
+        }
+
         $subscription->delete();
         return back()->with('success', 'تم حذف الاشتراك بنجاح.');
     }

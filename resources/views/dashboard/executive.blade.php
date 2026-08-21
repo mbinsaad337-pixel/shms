@@ -203,7 +203,7 @@
                                     <div class="flex justify-between items-end">
                                         <div>
                                             <p class="text-[10px] text-gray-500 mb-2">المبلغ:
-                                                {{ number_format($amount, 2) }} ر.ي</p>
+                                                {{ number_format($amount, 2) }} {{ currency_symbol() }}</p>
 
                                         </div>
                                         <span
@@ -241,7 +241,7 @@
                         <thead>
                             <tr class="bg-gray-50 text-[11px] font-bold text-gray-400 uppercase tracking-wider font-cairo">
                                 <th class="px-8 py-4">اسم المركز</th>
-                                <th class="px-8 py-4 text-center">الطلاب المسكنين</th>
+                                <th class="px-8 py-4 text-center">الطلاب المسجلين</th>
                                 <th class="px-8 py-4">السيولة المتاحة</th>
                                 <th class="px-8 py-4">تحديثات النشاط</th>
                                 <th class="px-8 py-4"></th>
@@ -276,7 +276,7 @@
                                         </div>
                                     </td>
                                     <td class="px-8 py-4 font-bold text-gray-700 text-sm">
-                                        {{ number_format($center->funds_sum_balance ?? 0, 2) }} ر.ي
+                                        {{ number_format($center->funds_sum_balance ?? 0, 2) }} {{ currency_symbol() }}
                                     </td>
                                     <td class="px-8 py-4">
                                         <div class="flex items-center gap-1">

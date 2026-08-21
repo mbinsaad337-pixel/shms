@@ -33,12 +33,15 @@
                 </a>
             @endif
 
+            @if(!auth()->user()->hasRole(['super-admin','center-manager']))
+
             @can('manage-news')
                 <a href="{{ route('news.create') }}"
                     class="flex items-center gap-3 bg-navy text-white px-8 py-3.5 rounded-2xl font-bold font-cairo shadow-lg shadow-navy/20 hover:-translate-y-0.5 transition-all">
                     <i class="fas fa-plus"></i> خبر جديد
                 </a>
             @endcan
+            @endif
         </div>
     </div>
 

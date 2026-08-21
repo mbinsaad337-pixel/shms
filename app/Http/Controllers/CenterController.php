@@ -9,7 +9,7 @@ class CenterController extends Controller
 {
     public function index()
     {
-        $centers = Center::withCount(['students', 'rooms', 'staff'])->get();
+        $centers = Center::withCount(['residents', 'rooms', 'staff'])->get();
         return view('centers.index', compact('centers'));
     }
 
@@ -53,13 +53,13 @@ class CenterController extends Controller
 
     public function show(Center $center)
     {
-        $center->loadCount(['students', 'rooms', 'staff']);
+        $center->loadCount(['residents', 'rooms', 'staff']);
         return view('centers.show', compact('center'));
     }
 
     public function exportPdf(Center $center, \App\Services\PdfService $pdfService)
     {
-        $center->loadCount(['students', 'rooms', 'staff']);
+        $center->loadCount(['residents', 'rooms', 'staff']);
 
         return $pdfService->stream(
             'pdf.centers.statistics',

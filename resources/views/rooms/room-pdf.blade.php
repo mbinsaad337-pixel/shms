@@ -70,7 +70,7 @@
     @include('partials.pdf_header', [
         'title' => 'كشف التسكين للمرفق السكني',
         'number' => 'ROOM-' . $room->room_number,
-        'department' => 'إدارة الإسكان والمرافق'
+        'department' => 'إدارة المرافق'
     ])
 
     <div class="section">
@@ -141,7 +141,7 @@
         <table style="width: 100%; border:none;">
             <tr>
                 <td style="width: 50%; border:none; text-align: center;">
-                    <p style="font-weight: bold;">توقيع مشرف الإسكان</p>
+                    <p style="font-weight: bold;">توقيع مشرف الطلاب</p>
                     <br><br>
                     <p>............................</p>
                 </td>

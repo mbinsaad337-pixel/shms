@@ -18,17 +18,17 @@
             <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 text-center">
                 <p class="text-[10px] font-bold text-indigo-500 uppercase font-cairo mb-2">إجمالي مديونية الموردين</p>
                 <p class="text-2xl font-black text-indigo-700  ">{{ number_format($totalDebt, 2) }}</p>
-                <p class="text-xs text-indigo-400 font-cairo">ر.ي</p>
+                <p class="text-xs text-indigo-400 font-cairo">{{ currency_symbol() }}</p>
             </div>
             <div class="bg-green-50 border border-green-100 rounded-2xl p-5 text-center">
                 <p class="text-[10px] font-bold text-green-500 uppercase font-cairo mb-2">إجمالي الإيرادات</p>
                 <p class="text-3xl font-black text-green-700  ">{{ number_format($totalRevenue, 2) }}</p>
-                <p class="text-xs text-green-400 font-cairo">ر.ي</p>
+                <p class="text-xs text-green-400 font-cairo">{{ currency_symbol() }}</p>
             </div>
             <div class="bg-red-50 border border-red-100 rounded-2xl p-5 text-center">
                 <p class="text-[10px] font-bold text-red-500 uppercase font-cairo mb-2">إجمالي المصاريف</p>
                 <p class="text-3xl font-black text-red-700  ">{{ number_format($totalExpenses, 2) }}</p>
-                <p class="text-xs text-red-400 font-cairo">ر.ي</p>
+                <p class="text-xs text-red-400 font-cairo">{{ currency_symbol() }}</p>
             </div>
             <div
                 class="bg-{{ $netResult >= 0 ? 'teal' : 'orange' }}-50 border border-{{ $netResult >= 0 ? 'teal' : 'orange' }}-100 rounded-2xl p-5 text-center">
@@ -39,7 +39,7 @@
                 <p class="text-3xl font-black text-{{ $netResult >= 0 ? 'teal' : 'orange' }}-700  ">
                     {{ number_format(abs($netResult), 2) }}
                 </p>
-                <p class="text-xs text-{{ $netResult >= 0 ? 'teal' : 'orange' }}-400 font-cairo">ر.ي</p>
+                <p class="text-xs text-{{ $netResult >= 0 ? 'teal' : 'orange' }}-400 font-cairo">{{ currency_symbol() }}</p>
             </div>
         </div>
 

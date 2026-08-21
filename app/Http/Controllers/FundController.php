@@ -25,6 +25,15 @@ class FundController extends Controller
         return view('funds.index', compact('funds', 'centers'));
     }
 
+    public function create()
+    {
+        abort_if(!auth()->user()->hasRole('super-admin'), 403, 'غير مصرح لك بإدارة الصناديق.');
+
+        $centers = \App\Models\Center::all();
+
+        return view('funds.create', compact('centers'));
+    }
+
     public function store(Request $request)
     {
         abort_if(!auth()->user()->hasRole('super-admin'), 403, 'غير مصرح لك بإدارة الصناديق.');
@@ -41,7 +50,16 @@ class FundController extends Controller
             'is_system' => false,
         ]));
 
-        return back()->with('success', 'تم إنشاء الصندوق بنجاح.');
+        return redirect()->route('funds.index')->with('success', 'تم إنشاء الصندوق بنجاح.');
+    }
+
+    public function edit(Fund $fund)
+    {
+        abort_if(!auth()->user()->hasRole('super-admin'), 403, 'غير مصرح لك بإدارة الصناديق.');
+
+        $centers = \App\Models\Center::all();
+
+        return view('funds.edit', compact('fund', 'centers'));
     }
 
     public function update(Request $request, Fund $fund)
@@ -58,7 +76,7 @@ class FundController extends Controller
 
         $fund->update($validated);
 
-        return back()->with('success', 'تم تحديث بيانات الصندوق بنجاح.');
+        return redirect()->route('funds.index')->with('success', 'تم تحديث بيانات الصندوق بنجاح.');
     }
 
     public function destroy(Fund $fund)
@@ -69,13 +87,12 @@ class FundController extends Controller
             return back()->with('error', 'لا يمكن حذف صناديق النظام الأساسية.');
         }
 
-        // Use relation directly to check
         if ($fund->vouchers()->exists()) {
             return back()->with('error', 'لا يمكن حذف هذا الصندوق لوجود عمليات مالية مسجلة عليه.');
         }
 
         $fund->delete();
 
-        return back()->with('success', 'تم حذف الصندوق بنجاح.');
+        return redirect()->route('funds.index')->with('success', 'تم حذف الصندوق بنجاح.');
     }
 }

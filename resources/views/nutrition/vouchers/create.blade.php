@@ -1,4 +1,4 @@
-﻿@extends('layouts.nutrition')
+@extends('layouts.nutrition')
 @section('title', 'إنشاء سند')
 
 @section('content')
@@ -45,7 +45,7 @@
                             class="w-full border border-gray-200 rounded-xl px-4 py-3   text-sm focus:ring-2 focus:ring-yellow-400">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">المبلغ (ر.ي) <span
+                        <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">المبلغ ({{ currency_symbol() }}) <span
                                 class="text-red-500">*</span></label>
                         <input type="number" name="amount" step="0.01" min="0.01" required
                             class="w-full border border-gray-200 rounded-xl px-4 py-3   text-sm focus:ring-2 focus:ring-yellow-400"

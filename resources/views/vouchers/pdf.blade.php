@@ -166,7 +166,7 @@
         <tr>
             <td class="summary-card">
                 <div class="label">المبلغ الإجمالي</div>
-                <div class="amount">{{ number_format($voucher->amount, 2) }} <small style="font-size: 10px">{{ $voucher->fund->currency_symbol ?? 'ر.ي' }}</small></div>
+                <div class="amount">{{ number_format($voucher->amount, 2) }} <small style="font-size: 10px">{{ $voucher->fund?->currency_symbol ?? currency_symbol() }}</small></div>
             </td>
             <td style="width: 1%"></td>
             <td class="summary-card">
@@ -215,7 +215,7 @@
                                     </td>
                                     <td style="text-align: left;">
                                         <div class="remaining-label">المتبقي من الرسوم:</div>
-                                        <div style="font-weight: bold; color: #dc2626; font-size: 12px;">{{ number_format($voucher->student->remaining_fees, 2) }} ر.ي</div>
+                                        <div style="font-weight: bold; color: #dc2626; font-size: 12px;">{{ number_format($voucher->student->remaining_fees, 2) }} {{ $voucher->student->annual_fee_currency_symbol }}</div>
                                     </td>
                                 </tr>
                             </table>

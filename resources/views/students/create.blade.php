@@ -4,6 +4,14 @@
 
 @section('content')
     <div class="container mx-auto px-6 py-8">
+        <div class="max-w-2xl mx-auto">
+            <div class="mb-6">
+                <a href="{{ route('students.index') }}" class="px-6 py-3 bg-gray-50 text-navy rounded-2xl hover:bg-gray-100 font-cairo font-bold transition-all inline-flex items-center gap-2 border border-gray-100">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>رجوع للقائمة</span>
+                </a>
+            </div>
+        </div>
         <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
             <div class="bg-primary px-10 py-8 text-white relative text-center">
                 <i class="fas fa-user-plus text-4xl mb-3"></i>
@@ -97,11 +105,16 @@
                         </div>
 
                         <div>
-                            <label class="block text-gray-500 font-cairo font-bold mb-2 text-sm">الرسوم السنوية (ر.ي)</label>
+                            <label class="block text-gray-500 font-cairo font-bold mb-2 text-sm">الرسوم السنوية</label>
                             <input type="number" name="annual_fees" value="{{ old('annual_fees', 0) }}" step="0.01"
                                 class="w-full px-5 py-3 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none font-bold text-emerald-700 font-almarai transition-all"
                                 placeholder="0.00">
                             @error('annual_fees') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                            <select name="annual_fee_currency" class="mt-2 w-full rounded-xl border-gray-100 text-sm">
+                                @foreach(\App\Models\Fund::CURRENCIES as $code => $label)
+                                    <option value="{{ $code }}" {{ old('annual_fee_currency', 'YER') === $code ? 'selected' : '' }}>{{ $label }} ({{ \App\Models\Fund::CURRENCY_SYMBOLS[$code] }})</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>

@@ -4,9 +4,14 @@
 @section('content')
 <div class="p-6 max-w-7xl mx-auto container mt-6">
     <div class="mb-8 flex justify-between items-center bg-white p-6 rounded-2xl border-l-8 border-gold shadow-sm">
-        <div>
-            <h1 class="text-3xl font-black text-navy font-cairo">اشتراكات التغذية الخاصة بي</h1>
-            <p class="text-gray-400 font-almarai text-sm mt-1">تتبع وإدارة طلبات اشتراكك في الوجبات</p>
+        <div class="flex items-center gap-4">
+            <a href="{{ route('student.dashboard') }}" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all border border-gray-100">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            <div>
+                <h1 class="text-3xl font-black text-navy font-cairo">اشتراكات التغذية الخاصة بي</h1>
+                <p class="text-gray-400 font-almarai text-sm mt-1">تتبع وإدارة طلبات اشتراكك في الوجبات</p>
+            </div>
         </div>
     </div>
 
@@ -99,7 +104,7 @@
                                     </li>
                                     <li class="flex justify-between items-center">
                                         <span class="text-gray-600 flex items-center gap-2"><i class="fas fa-tags text-gold"></i> قيمة الاشتراك المطلوبة:</span>
-                                        <span class="font-black text-navy text-lg  "><span id="previewTotal">0</span> <span class="text-xs text-gray-500">ر.ي</span></span>
+                                        <span class="font-black text-navy text-lg  "><span id="previewTotal">0</span> <span class="text-xs text-gray-500">{{ currency_symbol() }}</span></span>
                                     </li>
                                 </ul>
                             </div>
@@ -157,7 +162,7 @@
                                             {{ $sub->end_date->format('Y-m-d') }}
                                         </td>
                                         <td class="px-6 py-4 text-center">
-                                            <p class="font-bold text-navy  ">{{ number_format($sub->total_due, 2) }} <span class="text-[10px] text-gray-400 font-cairo">ر.ي</span></p>
+                                            <p class="font-bold text-navy  ">{{ number_format($sub->total_due, 2) }} <span class="text-[10px] text-gray-400 font-cairo">{{ currency_symbol() }}</span></p>
                                             @if($sub->total_paid > 0)
                                                 <p class="text-[10px] text-emerald-600 font-bold font-almarai mt-1">مدفوع: {{ number_format($sub->total_paid, 2) }}</p>
                                             @endif
@@ -237,7 +242,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <span class="font-bold text-emerald-600  ">{{ number_format($voucher->amount, 2) }}</span>
-                                    <span class="text-[10px] text-gray-400 font-cairo">ر.ي</span>
+                                    <span class="text-[10px] text-gray-400 font-cairo">{{ currency_symbol() }}</span>
                                 </td>
                                 <td class="px-6 py-4 text-gray-700 text-sm font-almarai leading-relaxed">
                                     {{ $voucher->description ?? 'تسديد رسوم' }}

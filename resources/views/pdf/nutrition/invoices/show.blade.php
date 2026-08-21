@@ -51,8 +51,8 @@
             <th style="width: 5%;">#</th>
             <th>الصنف</th>
             <th class="text-center">الكمية</th>
-            <th class="text-center">السعر الإفرادي (ر.ي)</th>
-            <th class="text-center">الإجمالي (ر.ي)</th>
+            <th class="text-center">السعر الإفرادي ({{ currency_symbol() }})</th>
+            <th class="text-center">الإجمالي ({{ currency_symbol() }})</th>
         </tr>
     </thead>
     <tbody>

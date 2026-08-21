@@ -102,7 +102,7 @@
                                     <p class="text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-wider">الطلاب الحاليين:
                                     </p>
                                     <div class="flex flex-wrap gap-2">
-                                        @foreach ($room->students()->get() as $student)
+                                        @foreach ($room->students as $student)
                                             <a href="{{ route('students.show', $student) }}"
                                                 class="bg-gray-50 hover:bg-gray-100 px-2 py-1 rounded text-xs font-bold text-gray-700 border border-gray-100 transition-colors">
                                                 {{ $student->name_ar }}

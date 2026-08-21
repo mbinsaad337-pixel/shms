@@ -97,7 +97,7 @@
                                     الكلي للفاتورة:</td>
                                 <td class="px-4 py-3 text-center">
                                     <span id="grandTotal" class="font-black text-orange-800   text-xl">0.00</span>
-                                    <span class="text-xs text-orange-500 font-cairo">ر.ي</span>
+                                    <span class="text-xs text-orange-500 font-cairo">{{ currency_symbol() }}</span>
                                 </td>
                                 <td></td>
                             </tr>

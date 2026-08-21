@@ -29,7 +29,7 @@
                 <td class="col-left">
                     <div class="detail-row">
                         <div class="detail-label">إجمالي الميزانية</div>
-                        <div class="detail-value large   text-navy">{{ number_format($budget->total_amount, 2) }} ر.ي</div>
+                        <div class="detail-value large   text-navy">{{ number_format($budget->total_amount, 2) }} {{ currency_symbol() }}</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">الحالة</div>
@@ -48,7 +48,7 @@
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">التكلفة اليومية للطالب</div>
-                        <div class="detail-value   text-success">{{ number_format($budget->cost_per_student, 2) }} ر.ي</div>
+                        <div class="detail-value   text-success">{{ number_format($budget->cost_per_student, 2) }} {{ currency_symbol() }}</div>
                     </div>
                 </td>
             </tr>
@@ -68,7 +68,7 @@
     <thead>
         <tr>
             <th>اسم المورد</th>
-            <th class="text-center">إجمالي المبلغ (ر.ي)</th>
+            <th class="text-center">إجمالي المبلغ ({{ currency_symbol() }})</th>
         </tr>
     </thead>
     <tbody>
@@ -94,8 +94,8 @@
             <th class="text-center">المورد</th>
             <th class="text-center">الكمية اليومية</th>
             <th class="text-center">عدد الأيام</th>
-            <th class="text-center">سعر الوحدة (ر.ي)</th>
-            <th class="text-center">الإجمالي (ر.ي)</th>
+            <th class="text-center">سعر الوحدة ({{ currency_symbol() }})</th>
+            <th class="text-center">الإجمالي ({{ currency_symbol() }})</th>
         </tr>
     </thead>
     <tbody>
@@ -114,7 +114,7 @@
     <tfoot>
         <tr>
             <th colspan="6" class="text-left">المجموع الكلي:</th>
-            <th class="text-center font-black   text-success" style="font-size: 14px;">{{ number_format($budget->total_amount, 2) }} ر.ي</th>
+            <th class="text-center font-black   text-success" style="font-size: 14px;">{{ number_format($budget->total_amount, 2) }} {{ currency_symbol() }}</th>
         </tr>
     </tfoot>
 </table>

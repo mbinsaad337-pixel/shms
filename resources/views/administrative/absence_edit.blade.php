@@ -2,6 +2,12 @@
 @section('title', 'تعديل سجل الغياب')
 @section('content')
 <div class="container mx-auto px-4 py-6 max-w-2xl">
+    <div class="mb-6">
+        <a href="{{ route('administrative.index', ['tab' => 'absences']) }}" class="px-6 py-3 bg-gray-50 text-navy rounded-2xl hover:bg-gray-100 font-cairo font-bold transition-all inline-flex items-center gap-2 border border-gray-100">
+            <i class="fas fa-arrow-right"></i>
+            <span>رجوع للقائمة</span>
+        </a>
+    </div>
     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
         <h1 class="text-xl font-black text-navy font-cairo mb-6 flex items-center gap-2">
             <i class="fas fa-edit text-navy/60"></i> تعديل سجل الغياب

@@ -9,8 +9,13 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="mb-10">
-            <h1 class="text-3xl font-black text-gray-900 font-cairo">إنجازاتي الشخصية</h1>
-            <p class="mt-2 text-sm text-gray-500 font-almarai">قائمة بالإنجازات والجوائز التي تم تسجيلها لك من قبل إدارة المركز.</p>
+            <div class="flex items-center gap-4 mb-4">
+                <a href="{{ route('student.dashboard') }}" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all border border-gray-100">
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <h1 class="text-3xl font-black text-gray-900 font-cairo">إنجازاتي الشخصية</h1>
+            </div>
+            <p class="mt-2 text-sm text-gray-500 font-almarai mr-14">قائمة بالإنجازات والجوائز التي تم تسجيلها لك من قبل إدارة المركز.</p>
         </div>
 
         @if ($achievements->isEmpty())

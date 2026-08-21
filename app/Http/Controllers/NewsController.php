@@ -315,6 +315,13 @@ class NewsController extends Controller
 
     public function destroy(News $news)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager')) {
+            if ($user->center_id && $news->center_id !== $user->center_id) {
+                abort(403, 'غير مصرح لك بحذف هذا الخبر.');
+            }
+        }
+
         if ($news->cover_image)
             Storage::disk('public')->delete($news->cover_image);
         if ($news->gallery) {

@@ -17,7 +17,7 @@ class QuranCircleController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $query = QuranCircle::with(['teacher', 'center']);
+        $query = QuranCircle::with(['teacher', 'center'])->withCount('students');
 
         // Teachers only see their own circles, unless they have management/report permissions
         if ($user->hasRole('circle-teacher') && !$user->can('manage-quran-circles') && !$user->can('view-circle-reports')) {
@@ -182,7 +182,7 @@ class QuranCircleController extends Controller
         }
 
         $center_id = $user->center_id;
-        $circles = QuranCircle::where('center_id', $center_id)->get();
+        $circles = QuranCircle::where('center_id', $center_id)->withCount('students')->get();
 
         // Build date/circle scoping closure for sessions
         $sessionScope = function ($q) use ($center_id, $request) {
@@ -271,7 +271,7 @@ class QuranCircleController extends Controller
             $circleStats[] = [
                 'circle' => $circle,
                 'sessions_count' => $sessionIds->count(),
-                'students_count' => $circle->students()->count(),
+                'students_count' => $circle->students_count,
                 'present_count' => $cPresent,
                 'absent_count' => $cAbsent,
                 'rate' => $cTotal > 0 ? round(($cPresent / $cTotal) * 100) : 0,
@@ -293,7 +293,7 @@ class QuranCircleController extends Controller
         }
 
         $center_id = $user->center_id;
-        $allCircles = QuranCircle::where('center_id', $center_id)->get();
+        $allCircles = QuranCircle::where('center_id', $center_id)->withCount('students')->get();
 
         $sessionScope = function ($q) use ($center_id, $request) {
             $q->whereHas('circle', function ($cq) use ($center_id, $request) {
@@ -366,7 +366,7 @@ class QuranCircleController extends Controller
                 'teacher' => $circle->teacher->name ?? '—',
                 'type' => $circle->type == 'memorization' ? 'تحفيظ' : 'تلاوة',
                 'sessions_count' => $sessionIds->count(),
-                'students_count' => $circle->students()->count(),
+                'students_count' => $circle->students_count,
                 'present_count' => $cPresent,
                 'absent_count' => $cAbsent,
                 'rate' => $cTotal > 0 ? round(($cPresent / $cTotal) * 100) : 0,

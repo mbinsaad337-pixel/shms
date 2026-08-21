@@ -88,19 +88,19 @@
                             <i class="fas fa-building ml-1"></i> مركز طلابي
                         </span>
                         <span
-                            class="text-xs font-bold px-3 py-1 rounded-full {{ $center->is_active ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30' : 'bg-red-500/20 text-red-300 border border-red-400/30' }}">
+                            class="text-xs font-bold px-3 py-1 rounded-full {{ $center->is_active ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-green-500' : 'bg-red-500/20 text-red-300 border border-red-400/30 text-red-500' }}">
                             <i
-                                class="fas {{ $center->is_active ? 'fa-check-circle' : 'fa-times-circle' }} ml-1"></i>{{ $center->is_active ? 'نشط' : 'مغلق' }}
+                                class="fas {{ $center->is_active ? 'fa-check-circle text-emerald-500' : 'fa-times-circle text-red-500' }} ml-1 "></i>{{ $center->is_active ? 'نشط' : 'مغلق' }}
                         </span>
                     </div>
                     <h1 class="text-3xl md:text-4xl font-black text-gold font-cairo mb-2">{{ $center->name }}</h1>
                     <p class="text-gray-400 font-almarai flex items-center justify-center md:justify-start gap-2">
                         <i class="fas fa-map-marker-alt text-gold"></i> {{ $center->address }}
                     </p>
-                    <div class="flex items-center justify-center md:justify-start gap-4 mt-4 text-sm">
-                        <span class="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl">
+                    <div class="flex items-center justify-center md:justify-start gap-4 mt-4 text-sm ">
+                        <span class="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl text-black font-bold">
                             <i class="fas fa-user-graduate text-gold"></i>
-                            <span class="font-bold">{{ $center->students_count }}</span> طالب نشط
+                            <span class="font-bold text-black">{{ $center->students_count }}</span> طالب نشط
                         </span>
                     </div>
                 </div>

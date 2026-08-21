@@ -50,7 +50,7 @@
                             <td class="px-5 py-4 text-center font-black   text-lg
                                 {{ $voucher->type === 'payment' ? 'text-red-600' : 'text-green-600' }}">
                                 {{ number_format($voucher->amount, 2) }} <span
-                                    class="text-xs font-cairo font-normal text-gray-400">ر.ي</span>
+                                    class="text-xs font-cairo font-normal text-gray-400">{{ currency_symbol() }}</span>
                             </td>
                             <td class="px-5 py-4 text-center   text-gray-600 text-sm">
                                 {{ $voucher->voucher_date->format('Y-m-d') }}</td>

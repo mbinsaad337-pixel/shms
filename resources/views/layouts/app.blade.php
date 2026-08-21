@@ -220,7 +220,7 @@
 
 <body class="bg-gray-50 font-sans text-gray-900 antialiased">
     <!-- Global Loader -->
-    {{-- <div id="global-loader">
+     <div id="global-loader">
         <div class="flex flex-col items-center">
             <img src="{{ asset('images/logos/scs_logo.png') }}" alt="SCS Logo" class="logo-loader logo-blue">
             <div class="loading-dots">
@@ -228,9 +228,9 @@
                 <span class="dot"></span>
                 <span class="dot"></span>
             </div>
-            {{-- <p class="font-cairo text-navy font-bold text-lg animate-pulse">جاري المعالجة...</p> --}}
-        {{-- </div>
-    </div>  --}}
+            {{-- <p class="font-cairo text-navy font-bold text-lg animate-pulse">جاري المعالجة...</p> --}} --}}
+         </div>
+    </div>  
 
     <div class="h-screen flex overflow-hidden" x-data="{ sidebarOpen: false }">
         <!-- Sidebar -->

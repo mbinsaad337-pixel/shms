@@ -103,6 +103,10 @@ class MediaOfficerController extends Controller
 
     public function destroy(User $mediaOfficer)
     {
+        if (!auth()->user()->hasRole('super-admin')) {
+            abort(403, 'فقط المدير العام يمكنه حذف حسابات المستخدمين.');
+        }
+
         $mediaOfficer->delete();
         return redirect()->route('media-officers.index')->with('success', 'تم حذف حساب مسؤول الإعلام.');
     }

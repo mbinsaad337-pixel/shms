@@ -55,13 +55,13 @@
                                     <td class="px-6 py-4 text-gray-600 font-cairo text-sm">{{ $budget->title ?? '—' }}</td>
                                     <td class="px-6 py-4">
                                         <span class="font-bold text-blue-700  ">{{ number_format($budget->total_amount, 2) }}
-                                            ر.ي</span>
+                                            {{ currency_symbol() }}</span>
                                     </td>
                                     <td class="px-6 py-4 text-gray-700 font-cairo text-center">{{ $budget->subscribers_count }}</td>
                                     <td class="px-6 py-4">
                                         @if($budget->cost_per_student)
                                             <span class="  text-gray-700 font-bold">{{ number_format($budget->cost_per_student, 2) }}
-                                                ر.ي</span>
+                                                {{ currency_symbol() }}</span>
                                         @else
                                             <span class="text-gray-300">—</span>
                                         @endif
@@ -69,7 +69,7 @@
                                     <td class="px-6 py-4">
                                         @if($budget->daily_rate)
                                             <span class="  text-blue-600 font-bold">{{ number_format($budget->daily_rate, 2) }}
-                                                ر.ي</span>
+                                                {{ currency_symbol() }}</span>
                                         @else
                                             <span class="text-gray-300">—</span>
                                         @endif

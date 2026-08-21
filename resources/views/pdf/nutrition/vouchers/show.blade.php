@@ -56,7 +56,7 @@
     <div class="voucher-amount-box">
         <div style="font-size: 14px; font-weight: bold; margin-bottom: 5px;">{{ $typeLabel }} (تغذية)</div>
         <div class="amount-value {{ $isIncome ? 'text-success' : 'text-danger' }}">
-            {{ number_format($voucher->amount, 2) }} <span style="font-size: 12px; color: #64748b;">ر.ي</span>
+            {{ number_format($voucher->amount, 2) }} <span style="font-size: 12px; color: #64748b;">{{ currency_symbol() }}</span>
         </div>
         <div style="font-size: 11px; margin-top: 5px; color: #94a3b8;">
             @if($voucher->type === 'receipt')

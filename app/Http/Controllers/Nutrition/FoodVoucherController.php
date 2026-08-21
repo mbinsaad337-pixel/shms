@@ -126,6 +126,14 @@ class FoodVoucherController extends Controller
 
     public function destroy(FoodVoucher $voucher)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager') && !$user->hasRole('nutrition-manager')) {
+            abort(403, 'غير مصرح لك بحذف سندات التغذية.');
+        }
+        if (!$user->hasRole('super-admin') && $user->center_id && $voucher->center_id !== $user->center_id) {
+            abort(403, 'غير مصرح لك بالتعامل مع سندات هذا المركز.');
+        }
+
         // If receipt from student → update subscription balance backwards
         if ($voucher->type === 'receipt' && $voucher->student_id && $voucher->status === 'active') {
             $subscription = FoodSubscription::where('student_id', $voucher->student_id)

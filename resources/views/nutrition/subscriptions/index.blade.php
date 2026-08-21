@@ -228,7 +228,7 @@
             <form id="paymentForm" method="POST">
                 @csrf
                 <div class="mb-4">
-                    <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">المبلغ (ر.ي)</label>
+                    <label class="block text-sm font-bold text-gray-600 font-cairo mb-1.5">المبلغ ({{ currency_symbol() }})</label>
                     <input type="number" name="amount" step="0.01" min="0.01" id="paymentAmount"
                         class="w-full border border-gray-200 rounded-xl px-4 py-3   text-lg font-bold focus:ring-2 focus:ring-green-400">
                     <p id="remainingBalance" class="text-xs text-gray-400 font-cairo mt-1"></p>
@@ -275,7 +275,7 @@
         function addPayment(id, remaining) {
             document.getElementById('paymentForm').action = `{{ url('nutrition/subscriptions') }}/${id}/payment`;
             document.getElementById('paymentAmount').value = remaining.toFixed(2);
-            document.getElementById('remainingBalance').textContent = `المتبقي: ${remaining.toFixed(2)} ر.ي`;
+            document.getElementById('remainingBalance').textContent = `المتبقي: ${remaining.toFixed(2)} {{ currency_symbol() }}`;
             document.getElementById('paymentModal').classList.remove('hidden');
         }
     </script>

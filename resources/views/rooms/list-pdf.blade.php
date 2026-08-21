@@ -50,7 +50,7 @@
     @include('partials.pdf_header', [
         'title' => 'تقرير جرد الغرف والمرافق السكنية',
         'number' => 'ROOM-LIST-' . date('Ymd'),
-        'department' => 'إدارة الإسكان والمرافق'
+        'department' => 'إدارة المرافق'
     ])
 
     <table>

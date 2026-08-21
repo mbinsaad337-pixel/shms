@@ -42,7 +42,7 @@
                         </div>
                         <div class="detail-row">
                             <div class="detail-label">النتيجة النهائية</div>
-                            <div class="detail-value   {{ $settlement->net_result >= 0 ? 'text-success' : 'text-danger' }}">{{ number_format(abs($settlement->net_result), 2) }} ر.ي ({{ $settlement->getResultTypeLabel() }})</div>
+                            <div class="detail-value   {{ $settlement->net_result >= 0 ? 'text-success' : 'text-danger' }}">{{ number_format(abs($settlement->net_result), 2) }} {{ currency_symbol() }} ({{ $settlement->getResultTypeLabel() }})</div>
                         </div>
                     </td>
                 </tr>
@@ -54,15 +54,15 @@
         <tr>
             <td class="stat-card" style="border-bottom: 3px solid #15803d;">
                 <div class="stat-label">إجمالي المقبوضات (الإيرادات)</div>
-                <div class="stat-value text-success">{{ number_format($settlement->total_revenue, 2) }} <span class="stat-unit">ر.ي</span></div>
+                <div class="stat-value text-success">{{ number_format($settlement->total_revenue, 2) }} <span class="stat-unit">{{ currency_symbol() }}</span></div>
             </td>
             <td class="stat-card" style="border-bottom: 3px solid #b91c1c;">
                 <div class="stat-label">إجمالي المصروفات التشغيلية</div>
-                <div class="stat-value text-danger">{{ number_format($settlement->total_expenses, 2) }} <span class="stat-unit">ر.ي</span></div>
+                <div class="stat-value text-danger">{{ number_format($settlement->total_expenses, 2) }} <span class="stat-unit">{{ currency_symbol() }}</span></div>
             </td>
             <td class="stat-card" style="border-bottom: 3px solid #4f46e5;">
                 <div class="stat-label">إجمالي مديونية الموردين</div>
-                <div class="stat-value text-navy">{{ number_format($settlement->total_debt, 2) }} <span class="stat-unit">ر.ي</span></div>
+                <div class="stat-value text-navy">{{ number_format($settlement->total_debt, 2) }} <span class="stat-unit">{{ currency_symbol() }}</span></div>
             </td>
         </tr>
     </table>
@@ -76,7 +76,7 @@
                 <th>الطالب / المودع</th>
                 <th class="text-center">التاريخ</th>
                 <th>البيان</th>
-                <th class="text-center">المبلغ (ر.ي)</th>
+                <th class="text-center">المبلغ ({{ currency_symbol() }})</th>
             </tr>
         </thead>
         <tbody>
@@ -110,7 +110,7 @@
                 <th>المورد</th>
                 <th class="text-center">طريقة الدفع</th>
                 <th class="text-center">تاريخ الفاتورة</th>
-                <th class="text-center">المبلغ (ر.ي)</th>
+                <th class="text-center">المبلغ ({{ currency_symbol() }})</th>
             </tr>
         </thead>
         <tbody>
@@ -138,7 +138,7 @@
                 <th>المورد</th>
                 <th class="text-center">التاريخ</th>
                 <th>البيان</th>
-                <th class="text-center">المبلغ (ر.ي)</th>
+                <th class="text-center">المبلغ ({{ currency_symbol() }})</th>
             </tr>
         </thead>
         <tbody>

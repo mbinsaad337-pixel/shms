@@ -310,6 +310,23 @@
                     </select>
                 </div>
 
+                @if (auth()->user()->hasRole('super-admin'))
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 font-cairo mb-2">المركز المستهدف <span class="text-red-500">*</span></label>
+                        <select name="center_id" required class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 font-almarai focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-right">
+                            <option value="">اختر المركز الذي ستطبق عليه الرسوم...</option>
+                            @foreach ($centers ?? [] as $center)
+                                <option value="{{ $center->id }}">{{ $center->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @else
+                    <div class="rounded-xl border border-indigo-100 bg-indigo-50 p-4 text-sm font-cairo text-indigo-800">
+                        <i class="fas fa-building ml-1"></i>
+                        ستطبق الرسوم على طلاب مركزك فقط: <strong>{{ auth()->user()->center?->name ?? 'غير محدد' }}</strong>
+                    </div>
+                @endif
+
                 <div>
                     <label class="block text-sm font-bold text-gray-700 font-cairo mb-2">مبلغ الرسوم السنوية</label>
                     <div class="relative">
@@ -323,7 +340,16 @@
                     </div>
                     <p class="text-xs text-gray-400 mt-2 font-almarai leading-relaxed"><i
                             class="fas fa-info-circle ml-1"></i> سيتم تطبيق هذا المبلغ على جميع الطلاب المسجلين والمقيمين
-                        الحاليين
+                        الحاليين</p>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 font-cairo mb-2">العملة <span class="text-red-500">*</span></label>
+                    <select name="currency" required class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 font-almarai focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-right">
+                        @foreach (\App\Models\Fund::CURRENCIES as $code => $label)
+                            <option value="{{ $code }}" {{ old('currency', 'YER') === $code ? 'selected' : '' }}>{{ $label }} ({{ \App\Models\Fund::CURRENCY_SYMBOLS[$code] }})</option>
+                        @endforeach
+                    </select>
+                </div>
 
                     <div class="flex gap-4 pt-4 border-t border-gray-50">
                         <button type="submit"

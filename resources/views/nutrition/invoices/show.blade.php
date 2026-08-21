@@ -76,7 +76,7 @@
             </div>
             <div class="bg-orange-50 border border-orange-200 rounded-2xl p-4">
                 <p class="text-[10px] font-bold text-orange-400 font-cairo uppercase mb-1">الإجمالي</p>
-                <p class="font-black text-orange-700   text-lg">{{ number_format($invoice->total_amount, 2) }} ر.ي
+                <p class="font-black text-orange-700   text-lg">{{ number_format($invoice->total_amount, 2) }} {{ currency_symbol() }}
                 </p>
             </div>
         </div>
@@ -108,7 +108,7 @@
                             <td class="px-5 py-3 text-center   text-gray-700">{{ number_format($item->unit_price, 2) }}
                             </td>
                             <td class="px-5 py-3 text-center font-bold text-orange-700  ">
-                                {{ number_format($item->total, 2) }} ر.ي
+                                {{ number_format($item->total, 2) }} {{ currency_symbol() }}
                             </td>
                         </tr>
                     @endforeach
@@ -118,7 +118,7 @@
                         <td colspan="5" class="px-5 py-3 text-right font-black text-orange-800 font-cairo">الإجمالي الكلي:
                         </td>
                         <td class="px-5 py-3 text-center font-black text-orange-800   text-xl">
-                            {{ number_format($invoice->total_amount, 2) }} ر.ي
+                            {{ number_format($invoice->total_amount, 2) }} {{ currency_symbol() }}
                         </td>
                     </tr>
                 </tfoot>

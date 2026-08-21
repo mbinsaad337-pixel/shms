@@ -50,7 +50,7 @@ class Student extends Model
         // Family
         'family_males', 'family_females', 'family_avg_income', 'family_workers',
         // System
-        'barcode', 'status', 'annual_fees', 'registration_date',
+        'barcode', 'status', 'annual_fees', 'annual_fee_currency', 'registration_date',
         'is_profile_approved', 'can_edit_profile', 'is_graduate',
         'profile_step', 'profile_completion',
         // Graduation Workflow
@@ -185,6 +185,16 @@ class Student extends Model
     public function getRemainingFeesAttribute()
     {
         return max(0, (float)$this->annual_fees - (float)$this->total_paid);
+    }
+
+    public function getAnnualFeeCurrencyLabelAttribute(): string
+    {
+        return Fund::CURRENCIES[$this->annual_fee_currency ?? 'YER'] ?? Fund::CURRENCIES['YER'];
+    }
+
+    public function getAnnualFeeCurrencySymbolAttribute(): string
+    {
+        return Fund::CURRENCY_SYMBOLS[$this->annual_fee_currency ?? 'YER'] ?? Fund::CURRENCY_SYMBOLS['YER'];
     }
 
     public function scopeActive($query)

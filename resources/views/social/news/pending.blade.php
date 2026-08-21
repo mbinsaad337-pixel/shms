@@ -3,15 +3,16 @@
 
 @section('content')
     <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border-l-8 border-gold shadow-sm">
-        <div>
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-navy/10 rounded-2xl flex items-center justify-center text-navy shadow-sm">
-                    <i class="fas fa-bullhorn text-2xl"></i>
-                </div>
-                <div>
-                    <h1 class="text-2xl md:text-3xl font-black text-navy font-cairo">لوحة اعتمادات مسؤول الإعلام</h1>
-                    <p class="text-gray-400 font-almarai text-sm mt-0.5">مراجعة والبت في الإعلانات والأخبار الواردة من المراكز الطلابية قبل نشرها</p>
-                </div>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('news.index') }}" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all border border-gray-100">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            <div class="w-12 h-12 bg-navy/10 rounded-2xl flex items-center justify-center text-navy shadow-sm">
+                <i class="fas fa-bullhorn text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl md:text-3xl font-black text-navy font-cairo">لوحة اعتمادات مسؤول الإعلام</h1>
+                <p class="text-gray-400 font-almarai text-sm mt-0.5">مراجعة والبت في الإعلانات والأخبار الواردة من المراكز الطلابية قبل نشرها</p>
             </div>
         </div>
         <div class="flex items-center gap-3">

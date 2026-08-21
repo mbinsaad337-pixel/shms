@@ -13,6 +13,7 @@ class CenterExpense extends Model
         'center_id',
         'type',
         'amount',
+        'currency',
         'due_date',
         'payment_date',
         'status',
@@ -37,6 +38,16 @@ class CenterExpense extends Model
     public function getReceiptUrlAttribute()
     {
         return $this->receipt ? asset('storage/' . $this->receipt) : null;
+    }
+
+    public function getCurrencyLabelAttribute(): string
+    {
+        return Fund::CURRENCIES[$this->currency ?? 'YER'] ?? Fund::CURRENCIES['YER'];
+    }
+
+    public function getCurrencySymbolAttribute(): string
+    {
+        return Fund::CURRENCY_SYMBOLS[$this->currency ?? 'YER'] ?? Fund::CURRENCY_SYMBOLS['YER'];
     }
 
     public function getTypeLabelAttribute(): string

@@ -40,16 +40,28 @@ class Center extends Model
     }
 
     /**
-     * حسابات الموظفين التابعة للمركز، باستثناء حسابات الطلاب.
+     * كل طاقم المركز، مع استثناء حسابات الطلاب ووظائف الوحدات المستقلة.
      */
     public function staff()
     {
-        return $this->users()->doesntHave('student');
+        return $this->users()->doesntHave('student')->whereDoesntHave('roles', function ($query) {
+            $query->whereIn('name', [
+                'student',
+                'nutrition-manager',
+                'circle-teacher',
+                'transport-manager',
+            ]);
+        });
     }
 
     public function students()
     {
         return $this->hasMany(Student::class);
+    }
+
+    public function residents()
+    {
+        return $this->students()->whereHas('activeRoomAssignment');
     }
 
     public function rooms()

@@ -138,7 +138,7 @@
                             <div class="flex justify-between">
                                 <span class="text-gray-400">المبلغ الإجمالي</span>
                                 <span class="font-bold text-primary text-lg">{{ number_format($budget->total_amount, 2) }}
-                                    ر.ي</span>
+                                    {{ currency_symbol() }}</span>
                             </div>
                         </div>
                     </div>

@@ -45,6 +45,13 @@ class MealGroupController extends Controller
 
     public function destroy(MealGroup $group)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && !$user->hasRole('executive-manager') && !$user->hasRole('nutrition-manager')) {
+            if ($user->center_id && $group->center_id !== $user->center_id) {
+                abort(403, 'غير مصرح لك بحذف مجموعات التغذية لهذا المركز.');
+            }
+        }
+
         $group->delete();
         return back()->with('success', 'تم حذف المجموعة.');
     }

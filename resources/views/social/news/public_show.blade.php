@@ -481,7 +481,7 @@
             </div>
 
             <!-- Comments -->
-            <div class="comments-section" id="comments">
+            {{-- <div class="comments-section" id="comments">
                 <h3 class="section-title">
                     <i class="fas fa-comments text-gold"></i>
                     التعليقات
@@ -493,7 +493,7 @@
                     </div>
                 @endif
 
-                <div class="comments-list">
+                {{-- <div class="comments-list">
                     @forelse($news->comments as $comment)
                         <div class="comment-item">
                             <div class="comment-avatar">
@@ -525,7 +525,7 @@
                             لا توجد تعليقات حتى الآن. كن أول من يعلق!
                         </div>
                     @endforelse
-                </div>
+                </div> --}}
 
                 @auth
                     <div class="comment-form-container">
@@ -544,10 +544,10 @@
                     </div>
                 @else
                     <div class="login-prompt mt-8">
-                        يرجى <a href="{{ route('login') }}">تسجيل الدخول</a> للمشاركة والتعليق على الخبر.
+                        {{-- يرجى <a href="{{ route('login') }}">تسجيل الدخول</a> للمشاركة والتعليق على الخبر. --}}
                     </div>
                 @endauth
-            </div>
+        {{--    </div> --}}
         </main>
 
         <!-- Sidebar -->
@@ -580,11 +580,11 @@
             <div class="widget" style="background: linear-gradient(135deg, var(--navy), #002a50); color: white; border:none;">
                 <div class="text-center py-4">
                     <i class="fas fa-university text-gold text-4xl mb-4"></i>
-                    <h4 class="font-bold text-lg mb-2">منصة الإسكان الطلابي</h4>
+                    <h4 class="font-bold text-lg mb-2">منصة إدارة المراكز الطلابية</h4>
                     <p class="text-sm text-gray-300 font-almarai mb-4 line-height-1.6">
                         النظام الموحد لإدارة الشؤون الإدارية والمالية والخدمات الطلابية
                     </p>
-                    <a href="{{ route('login') }}" class="inline-block bg-gold text-navy font-bold px-6 py-2 rounded-full hover:bg-white transition-colors text-sm">
+                    <a href="{{ route('login') }}" class="inline-block bg-gold text-navy font-bold px-6 py-2 rounded-full  transition-colors text-sm">
                         دخول المنصة
                     </a>
                 </div>

@@ -114,6 +114,11 @@ class ViolationController extends Controller
 
     public function destroy(Violation $violation)
     {
+        $user = auth()->user();
+        if (!$user->hasRole('super-admin') && $violation->center_id !== $user->center_id) {
+            abort(403, 'غير مصرح لك بحذف هذه المخالفة');
+        }
+
         $violation->delete();
         return back()->with('success', 'تم حذف المخالفة بنجاح.');
     }

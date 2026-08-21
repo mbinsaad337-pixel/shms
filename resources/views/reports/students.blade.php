@@ -7,7 +7,7 @@
         @include('partials.print_header', [
             'title' => 'تقرير بيانات الطلاب وحالات السكن', 
             'number' => 'REP-ST-' . date('Ymd'),
-            'department' => 'قسم الإسكان وشؤون الطلاب'
+            'department' => 'قسم شؤون الطلاب'
         ])
 
         <div

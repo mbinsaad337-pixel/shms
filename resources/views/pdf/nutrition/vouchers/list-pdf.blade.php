@@ -8,7 +8,7 @@
             <th>اسم المشرف</th>
             <th>المركز</th>
             <th>نوع العهدة</th>
-            <th>المبلغ (ر.ي)</th>
+            <th>المبلغ ({{ currency_symbol() }})</th>
             <th class="text-center">تاريخ الصرف</th>
             <th class="text-center">الحالة</th>
         </tr>

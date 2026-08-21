@@ -90,7 +90,7 @@
                 <th>الموقع</th>
                 <th>المشاركون</th>
                 <th>المستهدفون</th>
-                <th>إجمالي التكلفة (ر.ي)</th>
+                <th>إجمالي التكلفة ( {{ currency_symbol() }} )</th>
             </tr>
         </thead>
         <tbody>
@@ -118,7 +118,7 @@
         @if (isset($totalCost) && $totalCost > 0)
             <div class="summary-box">
                 <span class="label">إجمالي التكلفة الكلية للفعاليات المعروضة:&nbsp;</span>
-                <span class="amount">{{ number_format($totalCost, 2) }} ر.ي</span>
+                <span class="amount">{{ number_format($totalCost, 2) }} {{ currency_symbol() }}</span>
             </div>
         @endif
     </div>

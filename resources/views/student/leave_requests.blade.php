@@ -7,9 +7,14 @@
 
     {{-- Header --}}
     <div class="flex flex-col md:flex-row justify-between items-center bg-white p-6 rounded-3xl border-r-8 border-navy shadow-sm gap-4 mb-6">
-        <div>
-            <h1 class="text-2xl font-black text-navy font-cairo">طلبات الاستئذان الخاصة بي</h1>
-            <p class="text-gray-400 font-almarai text-sm mt-1">تقديم طلبات الاستئذان وانتظار موافقة المشرف</p>
+        <div class="flex items-center gap-4">
+            <a href="{{ route('student.dashboard') }}" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all border border-gray-100">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            <div>
+                <h1 class="text-2xl font-black text-navy font-cairo">طلبات الاستئذان الخاصة بي</h1>
+                <p class="text-gray-400 font-almarai text-sm mt-1">تقديم طلبات الاستئذان وانتظار موافقة المشرف</p>
+            </div>
         </div>
         <button @click="showForm = !showForm"
             class="px-6 py-3 bg-navy text-white rounded-2xl font-bold font-cairo hover:bg-[#083358] transition-all flex items-center gap-2 shadow-lg shadow-navy/15">

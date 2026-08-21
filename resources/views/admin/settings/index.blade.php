@@ -39,6 +39,13 @@
                                     <option value="1" {{ $setting->value == '1' ? 'selected' : '' }}>نعم، تفعيل طلب الموافقة</option>
                                     <option value="0" {{ $setting->value == '0' ? 'selected' : '' }}>لا، السماح بالصرف مباشرة</option>
                                 </select>
+                            @elseif($setting->key == 'default_currency')
+                                <select name="settings[{{ $setting->key }}]" class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-navy focus:border-navy block p-3 font-almarai transition-all">
+                                    @foreach(\App\Models\Fund::CURRENCIES as $code => $label)
+                                        <option value="{{ $code }}" {{ $setting->value == $code ? 'selected' : '' }}>{{ $label }} ({{ \App\Support\Currency::symbol($code) }})</option>
+                                    @endforeach
+                                </select>
+                                <p class="text-xs text-gray-400 mt-1 font-almarai">تُستخدم هذه العملة في الصفحات التي لا ترتبط بصندوق أو رسم أو أصل محدد.</p>
                             @else
                                 <input type="text" name="settings[{{ $setting->key }}]" value="{{ old('settings.'.$setting->key, $setting->value) }}" 
                                     class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-navy focus:border-navy block p-3 font-almarai transition-all">

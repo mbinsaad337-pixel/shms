@@ -13,7 +13,7 @@
                 <th class="text-center">تاريخ النهاية</th>
                 <th class="text-center">المستهدفون</th>
                 <th class="text-center">الحالة</th>
-                <th class="text-center">التكلفة (ر.ي)</th>
+                <th class="text-center">التكلفة ( {{ currency_symbol() }} )</th>
             </tr>
         </thead>
         <tbody>
@@ -53,7 +53,7 @@
                         إجمالي التكلفة الكلية للفعاليات المعروضة
                     </td>
                     <td class="text-center" style="color:#15803d; font-size:14px; font-weight:900;">
-                        {{ number_format($totalCost, 2) }} ر.ي
+                        {{ number_format($totalCost, 2) }} {{ currency_symbol() }}
                     </td>
                 </tr>
             </tfoot>

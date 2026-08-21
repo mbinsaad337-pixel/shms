@@ -50,13 +50,13 @@
             <div class="bg-red-50 border border-red-100 rounded-2xl p-5 text-center">
                 <p class="text-[10px] font-bold text-red-400 uppercase font-cairo mb-1">مدين (يستحقه)</p>
                 <p class="text-3xl font-black text-red-700  ">{{ number_format($supplier->balance_debit, 2) }}</p>
-                <p class="text-xs text-red-400 font-cairo">ر.ي</p>
+                <p class="text-xs text-red-400 font-cairo">{{ currency_symbol() }}</p>
             </div>
             <div class="bg-green-50 border border-green-100 rounded-2xl p-5 text-center">
                 <p class="text-[10px] font-bold text-green-500 uppercase font-cairo mb-1">دائن (مدفوع له)</p>
                 <p class="text-3xl font-black text-green-700  ">{{ number_format($supplier->balance_credit, 2) }}
                 </p>
-                <p class="text-xs text-green-400 font-cairo">ر.ي</p>
+                <p class="text-xs text-green-400 font-cairo">{{ currency_symbol() }}</p>
             </div>
             <div
                 class="{{ $net > 0 ? 'bg-orange-50 border-orange-100' : ($net < 0 ? 'bg-blue-50 border-blue-100' : 'bg-gray-50 border-gray-100') }} border rounded-2xl p-5 text-center">
@@ -67,7 +67,7 @@
                 <p
                     class="text-3xl font-black   {{ $net > 0 ? 'text-orange-700' : ($net < 0 ? 'text-blue-700' : 'text-gray-500') }}">
                     {{ number_format(abs($net), 2) }}</p>
-                <p class="text-xs font-cairo {{ $net > 0 ? 'text-orange-400' : 'text-blue-400' }}">ر.ي</p>
+                <p class="text-xs font-cairo {{ $net > 0 ? 'text-orange-400' : 'text-blue-400' }}">{{ currency_symbol() }}</p>
             </div>
         </div>
 

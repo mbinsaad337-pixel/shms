@@ -8,7 +8,7 @@
             <th>رقم السند</th>
             <th>المركز</th>
             <th class="text-center">النوع</th>
-            <th class="text-center">المبلغ (ر.ي)</th>
+            <th class="text-center">المبلغ ({{ currency_symbol() }})</th>
             <th>الصندوق</th>
             <th>البيان</th>
             <th class="text-center">التاريخ</th>
@@ -52,13 +52,13 @@
         <td style="width: 50%; border: none; padding: 8px;">
             <div style="background: #dcfce7; border: 1px solid #bbf7d0; border-radius: 6px; padding: 10px; text-align: center;">
                 <div style="font-size: 9px; color: #15803d; font-weight: bold; margin-bottom: 4px;">إجمالي المقبوضات</div>
-                <div style="font-size: 16px; font-weight: bold; color: #15803d;">{{ number_format($totalReceipts, 2) }} ر.ي</div>
+                <div style="font-size: 16px; font-weight: bold; color: #15803d;">{{ number_format($totalReceipts, 2) }} {{ currency_symbol() }}</div>
             </div>
         </td>
         <td style="width: 50%; border: none; padding: 8px;">
             <div style="background: #fee2e2; border: 1px solid #fecaca; border-radius: 6px; padding: 10px; text-align: center;">
                 <div style="font-size: 9px; color: #b91c1c; font-weight: bold; margin-bottom: 4px;">إجمالي المصروفات</div>
-                <div style="font-size: 16px; font-weight: bold; color: #b91c1c;">{{ number_format($totalPayments, 2) }} ر.ي</div>
+                <div style="font-size: 16px; font-weight: bold; color: #b91c1c;">{{ number_format($totalPayments, 2) }} {{ currency_symbol() }}</div>
             </div>
         </td>
     </tr>

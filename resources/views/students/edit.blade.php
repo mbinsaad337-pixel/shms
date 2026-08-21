@@ -10,12 +10,11 @@
         <div class="max-w-5xl mx-auto">
 
             <div class="mb-6 flex justify-between items-center">
-                <h1 class="text-2xl font-bold font-cairo text-gray-800">تعديل الملف الشخصي للطلب</h1>
-                <div class="flex gap-2">
-                    <a href="{{ route('students.show', $student) }}"
-                        class="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 transition-colors font-almarai text-sm flex items-center gap-2">
-                        <i class="fas fa-times"></i> إلغاء
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('students.show', $student) }}" class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-400 hover:text-navy transition-all">
+                        <i class="fas fa-arrow-right"></i>
                     </a>
+                    <h1 class="text-2xl font-bold font-cairo text-gray-800">تعديل الملف الشخصي للطلب</h1>
                 </div>
             </div>
 
@@ -263,9 +262,14 @@
                         </div>
 
                         <div>
-                            <label class="block text-gray-700 font-bold mb-2">الرسوم السنوية المطلوبة (ر.ي)</label>
+                            <label class="block text-gray-700 font-bold mb-2">الرسوم السنوية المطلوبة</label>
                             <input type="number" name="annual_fees" step="0.01" value="{{ old('annual_fees', $student->annual_fees) }}"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-bold text-blue-700">
+                            <select name="annual_fee_currency" class="mt-2 w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+                                @foreach(\App\Models\Fund::CURRENCIES as $code => $label)
+                                    <option value="{{ $code }}" {{ old('annual_fee_currency', $student->annual_fee_currency ?? 'YER') === $code ? 'selected' : '' }}>{{ $label }} ({{ \App\Models\Fund::CURRENCY_SYMBOLS[$code] }})</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 

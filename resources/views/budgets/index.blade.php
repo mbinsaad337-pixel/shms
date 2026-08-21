@@ -56,7 +56,7 @@
                                     {{ $budget->month }} / {{ $budget->year }}
                                 </td>
                                 <td class="px-6 py-4 font-bold text-primary">
-                                    {{ number_format($budget->total_amount, 2) }} ر.ي
+                                    {{ number_format($budget->total_amount, 2) }} {{ currency_symbol() }}
                                 </td>
                                 <td class="px-6 py-4 text-sm font-almarai">
                                     {{ $budget->submitter->name ?? 'غير محدد' }}

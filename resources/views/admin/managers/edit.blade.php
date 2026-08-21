@@ -4,6 +4,14 @@
 
 @section ('content')
     <div class="container mx-auto px-6 py-8">
+        <div class="max-w-2xl mx-auto">
+            <div class="mb-6">
+                <a href="{{ route('managers.index') }}" class="px-6 py-3 bg-gray-50 text-navy rounded-2xl hover:bg-gray-100 font-cairo font-bold transition-all inline-flex items-center gap-2 border border-gray-100">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>رجوع للقائمة</span>
+                </a>
+            </div>
+        </div>
         <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
             <div class="bg-primary px-10 py-8 text-white relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>

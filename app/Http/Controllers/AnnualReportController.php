@@ -10,8 +10,12 @@ class AnnualReportController extends Controller
 {
     public function index()
     {
-        $reports = AnnualReport::where('center_id', auth()->user()->center_id)
-            ->orderByDesc('year')
+        $query = AnnualReport::query();
+        if (!auth()->user()->hasRole('super-admin')) {
+            $query->where('center_id', auth()->user()->center_id);
+        }
+
+        $reports = $query->orderByDesc('year')
             ->orderByDesc('created_at')
             ->get();
 
@@ -64,6 +68,9 @@ class AnnualReportController extends Controller
 
     private function authorizeReport(AnnualReport $report): void
     {
+        if (auth()->user()->hasRole('super-admin')) {
+            return;
+        }
         if ($report->center_id !== auth()->user()->center_id) {
             abort(403);
         }

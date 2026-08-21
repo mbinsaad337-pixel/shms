@@ -27,7 +27,7 @@ Route::get('centers/public/{center}', [NewsController::class, 'publicShowCenter'
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [LoginController::class, 'login']);
+    Route::post('login', [LoginController::class, 'login'])->middleware('throttle:5,1');
 });
 
 use App\Http\Controllers\Admin\CenterUserController;
@@ -107,6 +107,7 @@ Route::middleware(['auth', 'active', \App\Http\Middleware\EnsurePasswordIsChange
 
         // Center Expenses (Rent, Water, Electricity)
         Route::post('center-expenses/{center_expense}/mark-paid', [\App\Http\Controllers\Admin\CenterExpenseController::class, 'markAsPaid'])->name('center-expenses.mark-paid');
+        Route::get('center-expenses/{center_expense}/export-pdf', [\App\Http\Controllers\Admin\CenterExpenseController::class, 'exportPdf'])->name('center-expenses.export-pdf');
         Route::resource('center-expenses', \App\Http\Controllers\Admin\CenterExpenseController::class);
 
         // ── Programs Management (إدارة البرامج) ──

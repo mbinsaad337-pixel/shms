@@ -103,18 +103,7 @@
                     </select>
                 </div>
 
-                <div>
-                    <label for="academic_level"
-                        class="block text-sm font-bold text-gray-700 mb-2 font-cairo">المستوى عند التخرج</label>
-                    <select name="academic_level" id="academic_level"
-                        class="w-full rounded-xl border-gray-200 focus:border-primary focus:ring-primary shadow-sm bg-gray-50/50">
-                        <option value="">جميع المستويات</option>
-                        @foreach ($academic_levels as $v)
-                            <option value="{{ $v }}" {{ request('academic_level') == $v ? 'selected' : '' }}>{{ $v }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+              
 
                 <div>
                     <label for="graduation_year" class="block text-sm font-bold text-gray-700 mb-2 font-cairo">عام التخرج</label>

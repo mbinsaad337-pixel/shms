@@ -165,7 +165,7 @@
                                     التكلفة</span>
                                 <span
                                     class="text-emerald-700 font-black text-xl">{{ number_format($activity->total_cost, 2) }}
-                                    <span class="text-sm font-normal text-gray-400">ر.ي</span>
+                                    <span class="text-sm font-normal text-gray-400">{{ currency_symbol() }}</span>
                                 </span>
                             </div>
                         </div>
@@ -448,18 +448,4 @@
         </div>
     </div>
 
-    <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-        }
-    </style>
 @endsection

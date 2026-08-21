@@ -21,7 +21,7 @@
                 <td class="col-left">
                     <div class="detail-row">
                         <div class="detail-label">المبلغ الإجمالي للموازنة</div>
-                        <div class="detail-value large   text-navy">{{ number_format($budget->total_amount, 2) }} ر.ي</div>
+                        <div class="detail-value large   text-navy">{{ number_format($budget->total_amount, 2) }} {{ currency_symbol() }}</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">الحالة</div>
@@ -52,9 +52,9 @@
         <tr>
             <th style="width: 5%;">#</th>
             <th>الصندوق / البند</th>
-            <th class="text-center">المبلغ المطلوب (ر.ي)</th>
+            <th class="text-center">المبلغ المطلوب ({{ currency_symbol() }})</th>
             @if($budget->status == 'approved')
-            <th class="text-center">المبلغ المعتمد (ر.ي)</th>
+            <th class="text-center">المبلغ المعتمد ({{ currency_symbol() }})</th>
             @endif
             <th class="text-center">الرصيد الحالي للصندوق</th>
             <th class="text-center">المرفق (PDF)</th>

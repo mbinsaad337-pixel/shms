@@ -514,12 +514,12 @@
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-gray-500">إجمالي الرسوم السنوية:</span>
                                 <span class="font-bold text-gray-800">{{ number_format($student->annual_fees, 2) }}
-                                    ر.ي</span>
+                                    {{ $student->annual_fee_currency_symbol }}</span>
                             </div>
                             <div class="flex justify-between items-center text-sm">
                                 <span class="text-gray-500">إجمالي ما تم سداده:</span>
                                 <span class="font-bold text-emerald-600">{{ number_format($student->total_paid, 2) }}
-                                    ر.ي</span>
+                                    {{ $student->annual_fee_currency_symbol }}</span>
                             </div>
                             <div class="pt-3 border-t border-gray-50 flex justify-between items-center">
                                 <span class="text-gray-800 font-bold">المتبقي:</span>
@@ -530,7 +530,7 @@
                                 @else
                                     <span
                                         class="text-red-600 font-black text-lg">{{ number_format($student->remaining_fees, 2) }}
-                                        <small class="text-[10px]">ر.ي</small></span>
+                                        <small class="text-[10px]">{{ $student->annual_fee_currency_symbol }}</small></span>
                                 @endif
                             </div>
 

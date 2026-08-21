@@ -49,7 +49,7 @@
     @include('partials.pdf_header', [
         'title' => 'سجل المخالفات الانضباطية',
         'number' => 'VIO-LIST-' . date('Ymd'),
-        'department' => 'إدارة الإسكان وشؤون الطلاب'
+        'department' => 'إدارة شؤون الطلاب'
     ])
 
     <table>

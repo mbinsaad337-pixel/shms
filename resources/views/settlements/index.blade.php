@@ -448,7 +448,7 @@
                                     {{ $settlement->submitter->name ?? '-' }}
                                 </td>
                                 <td class="px-6 py-4 font-bold text-red-600  ">
-                                    {{ number_format($settlement->total_spent, 2) }} ر.ي
+                                    {{ number_format($settlement->total_spent, 2) }} {{ currency_symbol() }}
                                 </td>
                                 <td class="px-6 py-4">
                                     @php
